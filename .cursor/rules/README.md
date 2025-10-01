@@ -36,26 +36,34 @@ Most rules - invoked with @ when needed or applied intelligently by Cursor's AI 
 
 ## Usage Patterns
 
+First, set a variable for convenience (adjust path to where you cloned this repo):
+```bash
+AI_CONFIG=~/src/ai-coding-config  # or wherever you cloned it
+```
+
 ### Pattern 1: Symlink Everything (Easiest)
 
 ```bash
-ln -s /path/to/ai-coding-config/.cursor .cursor
+# From your project directory
+ln -s $AI_CONFIG/.cursor .cursor
 ```
 
 ### Pattern 2: Cherry-Pick Directories
 
 ```bash
+# From your project directory
 mkdir -p .cursor/rules
-ln -s /path/to/ai-coding-config/.cursor/rules/python .cursor/rules/python
-ln -s /path/to/ai-coding-config/.cursor/rules/django .cursor/rules/django
+ln -s $AI_CONFIG/.cursor/rules/python .cursor/rules/python
+ln -s $AI_CONFIG/.cursor/rules/django .cursor/rules/django
 ```
 
 ### Pattern 3: Copy What You Need
 
 ```bash
+# From your project directory
 mkdir -p .cursor/rules
-cp /path/to/ai-coding-config/.cursor/rules/*.mdc .cursor/rules/
-cp -r /path/to/ai-coding-config/.cursor/rules/python .cursor/rules/
+cp $AI_CONFIG/.cursor/rules/*.mdc .cursor/rules/
+cp -r $AI_CONFIG/.cursor/rules/python .cursor/rules/
 ```
 
 ## Manual Invocation

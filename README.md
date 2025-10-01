@@ -35,6 +35,11 @@ ai-coding-config/
 
 ## Usage
 
+First, set a variable for convenience (adjust path to where you cloned this repo):
+```bash
+AI_CONFIG=~/src/ai-coding-config  # or wherever you cloned it
+```
+
 ### Selective Copy (Recommended)
 
 Copy only the rules that are relevant to your project:
@@ -44,11 +49,11 @@ Copy only the rules that are relevant to your project:
 mkdir -p .cursor/rules/python
 
 # Copy specific rules
-cp /path/to/ai-coding-config/.cursor/rules/python/python-coding-standards.mdc .cursor/rules/python/
-cp /path/to/ai-coding-config/.cursor/rules/git-commit-message.mdc .cursor/rules/
+cp $AI_CONFIG/.cursor/rules/python/python-coding-standards.mdc .cursor/rules/python/
+cp $AI_CONFIG/.cursor/rules/git-commit-message.mdc .cursor/rules/
 
 # Or let an AI assistant do it for you:
-# "Look at /path/to/ai-coding-config and copy over the rules that make sense for this project"
+# "Look at $AI_CONFIG and copy over the rules that make sense for this project"
 ```
 
 ### Copy Everything
@@ -57,8 +62,8 @@ If you want all the rules:
 
 ```bash
 # From your project directory
-cp -r /path/to/ai-coding-config/.cursor .cursor
-cp -r /path/to/ai-coding-config/.vscode .vscode
+cp -r $AI_CONFIG/.cursor .cursor
+cp -r $AI_CONFIG/.vscode .vscode
 ```
 
 ### Symlink Method
@@ -67,8 +72,8 @@ For shared configurations across multiple projects:
 
 ```bash
 # From your project directory
-ln -s /path/to/ai-coding-config/.cursor .cursor
-ln -s /path/to/ai-coding-config/.vscode .vscode
+ln -s $AI_CONFIG/.cursor .cursor
+ln -s $AI_CONFIG/.vscode .vscode
 ```
 
 ### Git Submodule
