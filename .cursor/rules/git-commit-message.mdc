@@ -2,6 +2,7 @@
 description: When running git commit
 alwaysApply: false
 ---
+
 # Git Commit Message Guidelines
 
 We write commit messages to communicate with our future selves and teammates. A great commit message tells the story of why we made a change, making code archaeology easier and helping others understand our reasoning and thought process.
@@ -20,6 +21,7 @@ We write commit messages to communicate with our future selves and teammates. A 
 For changes that should not trigger deployment (documentation, tests, CI config, etc.), include `[no-deploy]` in the commit message. This signals both humans and CI/CD automation that deployment is unnecessary.
 
 Place the marker either:
+
 - At the end of the summary line if it fits: `Update README with installation steps [no-deploy]`
 - On its own line after the summary for longer messages
 
@@ -28,6 +30,7 @@ Place the marker either:
 You have complete freedom to choose ANY emoji that adds value. Start with gitmoji as your reference - if there's a clear gitmoji match, use it. But feel free to get creative and use any emoji that genuinely enhances meaning or clarity.
 
 Include an emoji when it:
+
 - Makes commit history more scannable at a glance
 - Provides instant visual categorization of the change type
 - Creates useful visual anchors in git log
@@ -50,16 +53,19 @@ Body is optional. Include when explaining why adds value beyond the summary and 
 ## Examples
 
 Simple change (no body needed):
+
 ```
 🐛 Handle null values in user preferences
 ```
 
 Simple documentation change (no deploy):
+
 ```
 Fix typo in API documentation [no-deploy]
 ```
 
 Medium change with context:
+
 ```
 ♻️ Extract validation logic into shared module
 
@@ -70,6 +76,7 @@ future validation changes easier.
 ```
 
 Documentation with body (no deploy on separate line):
+
 ```
 📝 Update deployment guide with environment variables
 [no-deploy]
@@ -80,6 +87,7 @@ difference between development and production configurations.
 ```
 
 Large architectural change (2-3 paragraphs for major changes):
+
 ```
 🏗️ Migrate from REST to event-driven architecture
 

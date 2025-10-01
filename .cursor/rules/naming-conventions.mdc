@@ -1,0 +1,40 @@
+---
+description: When naming things - files, functions, urls, etc
+alwaysApply: false
+---
+
+# Naming Conventions
+
+When in doubt, take time to name things well. It's one of the hardest problems in computer science.
+
+## Importance
+
+- Names are a form of documentation that never goes out of date
+- Good names reduce cognitive load and make code self-documenting
+- Names should reveal intent and provide context
+- Time spent on naming is an investment in future understanding
+
+## When to Pause and Consider Naming Carefully
+
+The more permanent/harder to change, the more time to spend on naming:
+
+- Creating new models or database tables
+- Defining core functions or classes
+- Establishing API endpoints or URLs
+- Naming background jobs or tasks
+- Creating new features or components
+- Defining key variables that appear throughout codebase
+
+Notably, don't spend excessive time on naming for simple things that are easy to change.
+
+## When Names Aren't Obvious
+
+When a name for a new file, function, class, etc. isn't immediately obvious:
+
+- Pause and ask me what we should name it. It's better to ask then to just code and make me change the name.
+- Consider multiple alternatives
+- Evaluate options based on:
+  - Clarity and intuitiveness
+  - Technical accuracy
+  - Future flexibility
+  - Project context
