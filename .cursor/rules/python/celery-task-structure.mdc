@@ -9,23 +9,32 @@ alwaysApply: false
 ## Task Definition
 
 ```python
-@shared_task(max_retries=3, default_retry_delay=60, rate_limit="1/m")
-def process_data(item_id: int):
-    """Process data for the given item
+@shared_task(max_retries=3, default_retry_delay=60)
+def process_order(order_id: int):
+    """Process order and send confirmation email."""
+    logger.info(f"Processing order {order_id}")
+    order = Order.objects.get(id=order_id)
+    order.process_payment()
+    send_confirmation_email(order)
+    logger.info(f"Order {order_id} complete")
+    return {"status": "success", "order_id": order_id}
 
-    Args:
-        item_id: ID of the item to process
+@shared_task(rate_limit="10/m")
+def sync_inventory(product_id: int):
+    """Sync product inventory from external API."""
+    product = Product.objects.get(id=product_id)
+    inventory_data = fetch_inventory_from_api(product.sku)
+    product.stock_count = inventory_data["quantity"]
+    product.save()
+    return {"product_id": product_id, "stock": product.stock_count}
 
-    Returns:
-        dict: Processing results
-    """
-    logger.info(f"Processing item {item_id}")
-
-    item = Item.objects.get(id=item_id)
-    result = item.process()
-
-    logger.info(f"Processing complete: {result}")
-    return result
+@shared_task
+def generate_daily_report(date: str):
+    """Generate and email daily sales report."""
+    report_date = datetime.fromisoformat(date)
+    report = compile_sales_report(report_date)
+    send_report_email(report)
+    return {"date": date, "orders": report.order_count}
 ```
 
 ## Best Practices

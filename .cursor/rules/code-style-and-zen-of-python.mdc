@@ -27,53 +27,61 @@ local session state in Redis for performance. Session tokens expire after
 
 ### Function Comments
 
-Keep function docstrings USEFUL without redundant fluff. Type hints already document parameters and return types, so don't repeat that information.
+Keep function docstrings USEFUL without redundant fluff. Type hints already document parameters and return types, so focus the docstring on what the function does and why.
 
 ```python
-# ❌ BAD: Redundant Args/Returns that just restate type hints
+# Standard pattern for complex functions - explain the what and why
 def create_agent_from_task(self, task_id: str) -> dict:
     """Create a new agent from a ClickUp task description.
-    
-    Args:
-        task_id: ClickUp task ID with agent requirements
-        
-    Returns:
-        Dictionary with PR details and status
-    """
 
-# ✅ GOOD: Useful context about what it does and why
-def create_agent_from_task(self, task_id: str) -> dict:
-    """Create a new agent from a ClickUp task description.
-    
     Parses task description for agent requirements, generates the .agent
     file with system/user prompts, creates PR with the new file, and
     returns PR URL for review.
     """
 
-# ✅ GOOD: Simple function, one line is enough
+# Simple functions need just one clear line
 def validate_email(email: str) -> bool:
     """Check if email format is valid and domain is not blacklisted."""
+
+def process_payment(order_id: str, amount: Decimal) -> Payment:
+    """Charge the customer via Stripe and update order status to paid."""
+
+def send_welcome_email(user: User) -> None:
+    """Send onboarding email with account setup instructions."""
+
+def calculate_shipping_cost(weight: Decimal, destination: str) -> Decimal:
+    """Calculate shipping based on weight and zone rates from ShipStation."""
 ```
+
+Avoid restating type hints in Args/Returns sections - they add no value since types are already declared.
 
 ### Inline Comments
 
 Be SPARSE with inline comments. Only add them when the code is doing something non-obvious or when explaining business logic that isn't clear from the code itself.
 
 ```python
-# ❌ BAD: Obvious
-user = User.objects.get(id=user_id)  # Get the user
-
-# ✅ GOOD: Explains non-obvious business rule
+# When to use inline comments - explains non-obvious business rule
 user = User.objects.get(id=user_id)
 if user.last_login < cutoff_date:
     # Inactive users over 90 days require re-verification per security policy
     send_verification_email(user)
 
-# ✅ GOOD: Section dividers for organization
+# Section dividers for organization
 # ============================================================================
 # Order Processing
 # ============================================================================
+
+# Explaining why something unusual is done
+cache_timeout = 300  # 5 minutes - balance between freshness and API rate limits
+
+# Complex calculations benefit from step comments
+total = base_price
+total += base_price * tax_rate  # Add sales tax
+total -= discount_amount  # Apply promotional discount
+total += shipping_cost  # Shipping calculated by weight and zone
 ```
+
+Skip obvious comments (like "Get the user" on a line that gets a user). Let the code speak for itself.
 
 ### General Guidelines
 

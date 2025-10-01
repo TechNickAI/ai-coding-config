@@ -32,20 +32,34 @@ Use spans for operations that:
 
 ## Span Naming
 
-Create friendly, human-readable span names:
+Create specific, human-readable span names:
 
 ```python
-# ✅ GOOD: Specific and actionable
 with logfire.span(
     f"Processing {strategy_name} for {item.name}",
     item_id=item.id,
     strategy_name=strategy_name,
     operation="strategy_processing"
 ):
+    execute_strategy()
 
-# ❌ BAD: Vague
-with logfire.span("Processing"):
+with logfire.span(
+    f"Syncing orders for {customer.email}",
+    customer_id=customer.id,
+    order_count=len(orders),
+    operation="order_sync"
+):
+    sync_all_orders(orders)
+
+with logfire.span(
+    f"Generating report for {date.isoformat()}",
+    report_type="daily_sales",
+    date=date.isoformat()
+):
+    generate_daily_report(date)
 ```
+
+Span names should immediately tell you what's happening. Include key identifiers to make debugging easier.
 
 ## Logging Levels
 

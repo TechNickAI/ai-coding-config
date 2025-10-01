@@ -13,131 +13,121 @@ alwaysApply: false
 - Use pytest-mock (mocker fixture) instead of unittest.mock for mocking
 - Use monkeypatch fixture instead of unittest.mock.patch, especially for environment variables
 
-## What to Test vs What NOT to Test
+## What to Test
 
-GOLDEN RULE: Test YOUR business logic, not the libraries you depend on.
+Test your business logic, not the libraries you depend on.
 
-### ALWAYS Test These
-
-Your Business Logic:
+### Test Your Business Logic
 
 ```python
-# ✅ Custom business logic
 def test_calculates_discount_correctly():
-    # This is OUR calculation logic
+    """Test our custom discount calculation"""
+    order = Order(subtotal=Decimal("100.00"))
+    discount = calculate_discount(order, coupon_code="SAVE20")
+    assert discount == Decimal("20.00")
 
-# ✅ Custom error handling and recovery
-def test_handles_none_response_gracefully():
-    # This is OUR error handling logic
+def test_handles_invalid_coupon_gracefully():
+    """Test our error handling for invalid coupons"""
+    order = Order(subtotal=Decimal("100.00"))
+    discount = calculate_discount(order, coupon_code="INVALID")
+    assert discount == Decimal("0.00")
 
-# ✅ Workflow and state management
 def test_order_state_transitions():
-    # This is OUR state machine logic
+    """Test our state machine logic"""
+    order = Order(status="pending")
+    order.mark_paid()
+    assert order.status == "paid"
+    assert order.paid_at is not None
 ```
 
-Integration Points:
+### Test Integration Points
 
 ```python
-# ✅ How you call external services
-def test_sends_correct_parameters_to_api():
-    # Test the interface between your code and external APIs
+def test_sends_correct_parameters_to_stripe(mocker):
+    """Test how we call Stripe API"""
+    mock_stripe = mocker.patch("stripe.Charge.create")
+    process_payment(order_id="123", amount=Decimal("50.00"))
+    mock_stripe.assert_called_once_with(
+        amount=5000,  # cents
+        currency="usd",
+        source="tok_visa"
+    )
 
-# ✅ How you handle external responses
-def test_processes_api_response_correctly():
-    # Test how you transform external data into internal models
+def test_processes_stripe_response_correctly():
+    """Test how we transform Stripe data"""
+    stripe_response = {"id": "ch_123", "status": "succeeded"}
+    payment = Payment.from_stripe_response(stripe_response)
+    assert payment.external_id == "ch_123"
+    assert payment.status == "completed"
 ```
 
-### NEVER Test These
+### Skip Library Testing
 
-Library Code:
+Don't test that Pydantic validates, Django filters work, or httpx makes requests. These libraries test themselves. Focus on your logic that uses these tools.
 
-```python
-# 🚫 Don't test pydantic validation
-def test_pydantic_model_validation():
-    # Pydantic already tests this extensively
+### Decision Framework
 
-# 🚫 Don't test HTTP client configuration
-def test_httpx_client_headers():
-    # This is testing httpx library behavior
+Test when:
 
-# 🚫 Don't test Django ORM behavior
-def test_objects_filter_works():
-    # Django already tests this
-```
+- You wrote the logic
+- It could break if you change your code
+- You're testing how you use a library
 
-### Ask Yourself: "Is This MY Code?"
+Skip when:
 
-Decision Framework:
+- A library is doing what it's designed to do
+- You're testing if the library works
+- It would break only if the library has a bug
 
-1. Did I write this logic? → ✅ Test it
-2. Is this a library doing what it's supposed to do? → 🚫 Don't test it
-3. Could this break if I change MY code? → ✅ Test it
-4. Would this break if the library has a bug? → 🚫 Not your responsibility to test
-5. Is this testing HOW I use a library? → ✅ Test it
-6. Is this testing IF the library works? → 🚫 Don't test it
+## When to Mock vs When to Fix
 
-## Thoughtful Mocking - When to Mock vs When to Fix
+Mocking should isolate your code from external dependencies, not hide internal problems.
 
-CRITICAL PRINCIPLE: Mocking should isolate your code from external dependencies, NOT hide internal problems.
-
-### Good Mocking - External Dependencies
+### Mock External Dependencies
 
 ```python
-# ✅ GOOD: Mock external API calls
-def test_data_fetch(mocker):
+def test_fetches_exchange_rates(mocker):
+    """Mock external API calls"""
+    mock_response = {"USD": 1.0, "EUR": 0.85}
     mocker.patch("requests.get", return_value=mock_response)
-    result = fetch_data()
-    assert result.status == "success"
+    rates = fetch_exchange_rates()
+    assert rates["EUR"] == 0.85
 
-# ✅ GOOD: Mock time-dependent operations
-def test_expiry_check(mocker):
+def test_checks_expiry_correctly(mocker):
+    """Mock time-dependent operations"""
     fixed_time = datetime(2024, 1, 1, 12, 0, 0)
     mocker.patch("django.utils.timezone.now", return_value=fixed_time)
-    # ... rest of test
+    order = Order(expires_at=datetime(2024, 1, 1, 13, 0, 0))
+    assert not order.is_expired()
+
+def test_generates_unique_codes(mocker):
+    """Mock non-deterministic operations"""
+    mocker.patch("secrets.token_hex", return_value="abc123")
+    code = generate_order_code()
+    assert code == "ORDER-abc123"
 ```
 
-### Bad Mocking - Covering Up Problems
+### Don't Mock Internal Logic
 
-```python
-# 🚫 BAD: Mocking to hide validation errors
-def test_user_creation(mocker):
-    # This hides the fact that our validation is broken!
-    mocker.patch("helpers.validate_email", return_value=True)
+If you're mocking your own code, the internal code should work. If a test is failing because of your internal logic, fix the logic or test data rather than mocking it away.
 
-# 🚫 BAD: Mocking internal logic that should work
-def test_calculate(mocker):
-    # This hides the fact that our calculation is broken!
-    mocker.patch("myapp.calculate_total", return_value=100)
-```
+### Good Reasons to Mock
 
-### How to Know If You're Mocking Wrong
+- External API calls (Stripe, AWS, third-party services)
+- Time operations (timezone.now, datetime.now)
+- Random/non-deterministic operations (uuid, secrets)
+- File system or network operations
+- Expensive database queries in unit tests
 
-ASK YOURSELF:
+### When a Test Fails
 
-- Am I mocking because the test is failing? → 🚨 RED FLAG - Fix the root cause instead
-- Am I mocking internal code that I wrote? → 🚨 RED FLAG - The internal code should work
-- Am I mocking to avoid setting up proper test data? → 🚨 RED FLAG - Create proper fixtures
-- Would this code work in production without the mock? → If no, you're hiding a bug
+1. External dependency issue? Mock it
+2. Invalid test data? Fix the test data
+3. Missing fixture? Create proper fixtures
+4. Validation error? Fix validation or use valid data
+5. Configuration issue? Fix configuration
 
-GOOD REASONS TO MOCK:
-
-- External API calls
-- Time-dependent operations (timezone.now)
-- Expensive operations (database queries in unit tests)
-- Non-deterministic operations (random values)
-- Infrastructure dependencies (file system, network)
-
-### The Right Way to Handle Test Failures
-
-When a test fails, follow this decision tree:
-
-1. Is this an external dependency? → Mock it
-2. Is this invalid test data? → Fix the test data
-3. Is this a missing database record? → Create proper fixtures
-4. Is this a validation error? → Fix the validation logic or use valid data
-5. Is this a configuration issue? → Fix the configuration
-
-NEVER mock away the error - understand why it's happening and fix the root cause.
+Don't mock away errors. Understand the root cause and fix it.
 
 ## Rules
 

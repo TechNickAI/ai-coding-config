@@ -12,21 +12,17 @@ We use `ruff` for linting. If there are lint errors, or if the user says "fix li
 
 ## Using Targeted Ignores
 
-For legitimate exceptions where the error would be better handled with an ignore:
+For legitimate exceptions, use targeted ignores with specific rule codes and explanations:
 
-1. Always use targeted ignores with the specific rule(s):
+```python
+# Include the rule code and why you're ignoring it
+process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)  # noqa: S603 S607 - Needed for clipboard access
 
-   - `# ruff: ignore=RULE_CODE` - For the new format (preferred)
-   - `# noqa: RULE_CODE` - For compatibility with other linters
+result = eval(user_formula)  # noqa: S307 - Safe: formula validated by parser
 
-2. Always include a brief explanation of why the rule is being ignored:
+api_key = os.getenv("SECRET_KEY")  # noqa: S105 - Environment variable, not hardcoded secret
+```
 
-   ```python
-   # Good
-   process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)  # noqa: S603 S607 - Needed for clipboard access
-
-   # Bad - missing explanation
-   process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)  # noqa: S603 S607
-   ```
+Use `# ruff: ignore=RULE_CODE` for the new format or `# noqa: RULE_CODE` for compatibility with other linters.
 
 When you fix all errors, celebrate! 🌟

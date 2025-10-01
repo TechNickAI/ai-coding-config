@@ -5,10 +5,56 @@ alwaysApply: false
 
 # Python Guidelines
 
-## Imports
+## Imports - CRITICAL RULE
 
-- Imports ALWAYS go to the top of the file - NEVER import within functions, unless it would create circular import
-- Don't abbreviate packages (use "pandas" not "pd", "numpy" not "np")
+**⚠️ ALL IMPORTS AT THE TOP OF THE FILE ⚠️**
+
+Place all import statements at the top of the file. Never put imports inside functions or methods.
+
+### Standard Pattern (Always Do This)
+
+```python
+from decimal import Decimal
+from pathlib import Path
+import json
+import requests
+from django.db import models
+
+def process_payment(amount: str):
+    decimal_amount = Decimal(amount)
+    return decimal_amount * 2
+
+def load_config():
+    config_path = Path("config.json")
+    return json.loads(config_path.read_text())
+
+def fetch_data(url: str):
+    response = requests.get(url)
+    return response.json()
+
+def save_user(email: str):
+    user = models.User.objects.create(email=email)
+    return user
+```
+
+Every file follows this pattern: imports at top, then functions. No imports inside functions.
+
+### Other Import Rules
+
+- Group imports: stdlib → third-party → local application imports
+- Don't abbreviate packages (write "pandas" not "pd", "numpy" not "np")
+- One import per line for clarity
+
+### Exception: Circular Import Issues
+
+Only import inside a function if you have a circular import problem (rare):
+
+```python
+# models.py
+def create_team_for_user(user):
+    from apps.teams.models import Team  # Avoids circular import
+    return Team.objects.create(owner=user)
+```
 
 ## Modern Python
 
@@ -62,38 +108,105 @@ def sync_wrapper(param: str) -> dict:
 
 ## Exception Handling - CRITICAL
 
-**try/except is FORBIDDEN except in these EXACT 2 scenarios:**
+**⚠️ DEFAULT: LET EXCEPTIONS BUBBLE UP ⚠️**
 
-**SCENARIO 1: Handling a SPECIFIC exception type with actual handling logic**
+We use Honeybadger for centralized error tracking. Exceptions bubble up automatically. **Write code that crashes on errors - no try/except blocks in 99% of functions.**
+
+### How to Write Functions (The Default Pattern)
+
+Write straightforward code with no error handling. Let operations fail naturally:
 
 ```python
-# ✅ ALLOWED: Specific exception + real handling
-try:
-    result = process_transaction(data)
-except InvalidTransactionError as e:
-    logger.error(f"Transaction failed: {e}")
-    return {"status": "failed", "reason": "validation_error"}
+def process_payment(order_id: str):
+    order = Order.objects.get(id=order_id)
+    result = stripe.charge(order.amount)
+    order.status = "paid"
+    order.save()
+    return result
+
+def load_config():
+    config_path = Path("config.json")
+    return json.loads(config_path.read_text())
+
+def update_user_email(user_id: str, new_email: str):
+    user = User.objects.get(id=user_id)
+    user.email = new_email
+    user.save()
+    return user
+
+def fetch_exchange_rate(currency: str):
+    response = requests.get(f"https://api.example.com/rates/{currency}")
+    return response.json()
+
+def calculate_total(order: Order):
+    subtotal = sum(item.price * item.quantity for item in order.items.all())
+    tax = subtotal * order.tax_rate
+    return subtotal + tax
 ```
 
-**SCENARIO 2: Processing loop where you want to continue on errors**
+Notice: No try/except anywhere. Operations that can fail (database queries, API calls, file operations) are written directly. Honeybadger catches and reports any exceptions.
+
+### The Only 2 Times You Use try/except
+
+**SCENARIO 1: You have actual alternative logic**
+
+Only use try/except when you have meaningful alternative behavior:
 
 ```python
-# ✅ ALLOWED: Loop processing where individual failures shouldn't stop the loop
-for item in items:
+def get_or_create_user(email: str):
     try:
-        process_item(item)
-    except ProcessingError as e:
-        logger.error(f"Failed to process {item.id}: {e}")
-        continue
+        return User.objects.get(email=email)
+    except User.DoesNotExist:
+        return User.objects.create(email=email)
+
+def api_endpoint(request):
+    try:
+        result = process_transaction(request.data)
+    except InvalidTransactionError as e:
+        return JsonResponse({"error": "validation_failed"}, status=400)
 ```
 
-**DEFAULT APPROACH - 99% of the time:**
+**SCENARIO 2: Bulk processing loops**
+
+When processing multiple items and one failure shouldn't stop others:
 
 ```python
-# ✅ PREFERRED: Let exceptions bubble up
-result = process_transaction(data)  # No try/except at all!
-user = User.objects.get(id=user_id)  # Let it crash if user doesn't exist!
+def sync_all_orders():
+    for order_id in order_ids:
+        try:
+            sync_order(order_id)
+        except SyncError as e:
+            logger.error(f"Failed to sync {order_id}: {e}")
+            continue
 ```
+
+**SCENARIO 3: Adding Honeybadger context**
+
+Catch only to add context, then immediately re-raise:
+
+```python
+try:
+    result = external_api.call()
+except APIException as e:
+    honeybadger.notify(e, error_class="ExternalAPIError", context={"operation": "payment"})
+    raise
+```
+
+### The Decision Rule
+
+Ask: **"Do I have specific alternative behavior for this error?"**
+
+- NO → Write the function with zero try/except blocks
+- YES → Use try/except with specific exception type and alternative logic
+
+### What NOT To Do
+
+Avoid these patterns (described, not shown):
+
+- Wrapping functions in generic `except Exception`
+- Catching exceptions just to log and return None
+- Using try/except "just in case" without specific handling
+- Catching `DoesNotExist` exceptions without alternative logic
 
 ## Defensive Programming - FORBIDDEN
 
