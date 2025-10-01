@@ -29,11 +29,4 @@ For legitimate exceptions where the error would be better handled with an ignore
    process = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)  # noqa: S603 S607
    ```
 
-3. Add TODOs for temporary ignores that should be revisited later:
-
-   ```python
-   # TODO(username): Remove when we implement proper validation
-   user_input = input()  # ruff: ignore=S322 - Will be replaced with validated input
-   ```
-
 When you fix all errors, celebrate! 🌟
