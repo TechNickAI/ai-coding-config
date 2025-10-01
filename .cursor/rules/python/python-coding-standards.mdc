@@ -20,6 +20,46 @@ We use python 3.13+ and follow modern best practices:
 - Use modern union syntax `X | Y` instead of `Union[X, Y]`
 - Use underscore separators in large numbers: `Decimal(1_000_000)` not `Decimal("1000000")`
 
+## Async vs Sync
+
+**Default to synchronous code.** We use Celery for background jobs with multiple workers, so we don't need async to free up CPU. Synchronous code is simpler, easier to debug, and easier to maintain.
+
+**When given a choice between sync and async, always choose sync.**
+
+```python
+# ✅ GOOD: Sync by default
+def fetch_data(url: str) -> dict:
+    response = requests.get(url)
+    return response.json()
+
+# ❌ AVOID: Async unless necessary
+async def fetch_data(url: str) -> dict:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.json()
+```
+
+**If async is the ONLY option** (library only provides async API):
+
+1. Consider using `asyncio.run()` to call it from sync code:
+
+```python
+import asyncio
+
+def sync_wrapper(param: str) -> dict:
+    """Synchronous wrapper for async-only library"""
+    return asyncio.run(async_library_call(param))
+```
+
+2. Ask for confirmation before introducing async patterns
+3. Document why async is necessary
+
+**Exceptions where async is appropriate:**
+
+- WebSocket connections that need concurrent handling
+- Libraries that are async-only (and can't be wrapped easily)
+- Specific performance-critical paths where async provides clear, measured benefits
+
 ## Exception Handling - CRITICAL
 
 **try/except is FORBIDDEN except in these EXACT 2 scenarios:**
