@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    // Python
+    "charliermarsh.ruff",
+
+    // JavaScript/TypeScript
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+
+    // Shell/Docker
+    "foxundermoon.shell-format",
+
+    // Config files
+    "tamasfe.even-better-toml",
+
+    // Django/HTML
+    "batisteo.vscode-django",
+    "monosans.djlint",
+
+    // Utilities
+    "streetsidesoftware.code-spell-checker",
+    "github.vscode-github-actions",
+    "johnpapa.vscode-peacock"
+  ]
+}
