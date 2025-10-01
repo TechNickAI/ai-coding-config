@@ -11,12 +11,76 @@ alwaysApply: false
 
 ## Comments
 
+### File-Level Comments
+
+Be THOROUGH at the top of files. Explain what the file does, why it exists, and how it fits into the larger system. This helps both humans and AI understand context quickly.
+
+```python
+"""User authentication and session management.
+
+Handles user login, logout, token generation, and session validation.
+Integrates with external OAuth providers (Google, GitHub) and maintains
+local session state in Redis for performance. Session tokens expire after
+24 hours but can be refreshed up to 7 days from initial login.
+"""
+```
+
+### Function Comments
+
+Keep function docstrings USEFUL without redundant fluff. Type hints already document parameters and return types, so don't repeat that information.
+
+```python
+# ❌ BAD: Redundant Args/Returns that just restate type hints
+def create_agent_from_task(self, task_id: str) -> dict:
+    """Create a new agent from a ClickUp task description.
+    
+    Args:
+        task_id: ClickUp task ID with agent requirements
+        
+    Returns:
+        Dictionary with PR details and status
+    """
+
+# ✅ GOOD: Useful context about what it does and why
+def create_agent_from_task(self, task_id: str) -> dict:
+    """Create a new agent from a ClickUp task description.
+    
+    Parses task description for agent requirements, generates the .agent
+    file with system/user prompts, creates PR with the new file, and
+    returns PR URL for review.
+    """
+
+# ✅ GOOD: Simple function, one line is enough
+def validate_email(email: str) -> bool:
+    """Check if email format is valid and domain is not blacklisted."""
+```
+
+### Inline Comments
+
+Be SPARSE with inline comments. Only add them when the code is doing something non-obvious or when explaining business logic that isn't clear from the code itself.
+
+```python
+# ❌ BAD: Obvious
+user = User.objects.get(id=user_id)  # Get the user
+
+# ✅ GOOD: Explains non-obvious business rule
+user = User.objects.get(id=user_id)
+if user.last_login < cutoff_date:
+    # Inactive users over 90 days require re-verification per security policy
+    send_verification_email(user)
+
+# ✅ GOOD: Section dividers for organization
+# ============================================================================
+# Order Processing
+# ============================================================================
+```
+
+### General Guidelines
+
 - Explain the "why", not the "what"
-- File header: 1-2 line purpose
-- Functions: 1-3 lines for intent and non-obvious logic
-- Use section dividers; inline comments only for complex rules
 - Don't state the obvious; prefer self-documenting code
-- Emojis when clarifying; tasteful humor welcome
+- Emojis when they add clarity; tasteful humor welcome
+- Write for humans AND AI - good comments help both understand context
 
 ## Zen of Python
 
