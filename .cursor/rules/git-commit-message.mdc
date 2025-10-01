@@ -1,0 +1,103 @@
+---
+description: When running git commit
+alwaysApply: false
+---
+# Git Commit Message Guidelines
+
+We write commit messages to communicate with our future selves and teammates. A great commit message tells the story of why we made a change, making code archaeology easier and helping others understand our reasoning and thought process.
+
+## Core Principles
+
+- Reflect on the full change before writing the message
+- Focus on motivation and reasoning, not just what changed (the diff shows that)
+- Scale message length to change importance and size - simple changes get one line, major architectural changes deserve 2-3 paragraphs
+- Use imperative mood ("Add feature" not "Added feature")
+- Summary line under 72 characters, no period at the end
+- Capitalize the first word after any emoji
+
+## No-Deploy Marker
+
+For changes that should not trigger deployment (documentation, tests, CI config, etc.), include `[no-deploy]` in the commit message. This signals both humans and CI/CD automation that deployment is unnecessary.
+
+Place the marker either:
+- At the end of the summary line if it fits: `Update README with installation steps [no-deploy]`
+- On its own line after the summary for longer messages
+
+## Emoji Usage
+
+You have complete freedom to choose ANY emoji that adds value. Start with gitmoji as your reference - if there's a clear gitmoji match, use it. But feel free to get creative and use any emoji that genuinely enhances meaning or clarity.
+
+Include an emoji when it:
+- Makes commit history more scannable at a glance
+- Provides instant visual categorization of the change type
+- Creates useful visual anchors in git log
+- Adds personality or context that words alone miss
+
+Skip the emoji entirely when it would feel forced or add no real value. Many excellent commit messages need no emoji at all.
+
+Trust your judgment on which emoji fits best, or whether to use one at all.
+
+## Structure
+
+```
+[optional emoji] Summary line under 72 characters
+
+[Optional body when context is needed]
+```
+
+Body is optional. Include when explaining why adds value beyond the summary and diff. When included: explain motivation, problem being solved, impact, trade-offs, or alternatives considered. Wrap at 72 characters. For large/important changes, write 2-3 paragraphs if needed.
+
+## Examples
+
+Simple change (no body needed):
+```
+🐛 Handle null values in user preferences
+```
+
+Simple documentation change (no deploy):
+```
+Fix typo in API documentation [no-deploy]
+```
+
+Medium change with context:
+```
+♻️ Extract validation logic into shared module
+
+Validation was duplicated across registration, profile updates, and
+admin tools with slight variations causing inconsistent behavior.
+Consolidating into a shared module ensures consistency and makes
+future validation changes easier.
+```
+
+Documentation with body (no deploy on separate line):
+```
+📝 Update deployment guide with environment variables
+[no-deploy]
+
+Added missing DATABASE_POOL_SIZE and CACHE_TTL variables that were
+causing confusion during staging deployments. Also clarified the
+difference between development and production configurations.
+```
+
+Large architectural change (2-3 paragraphs for major changes):
+```
+🏗️ Migrate from REST to event-driven architecture
+
+Replace synchronous REST endpoints with event-driven processing to
+support real-time features and improve system resilience...
+
+Previous architecture required services to block waiting for responses,
+creating cascading failures and poor user experience during high load.
+Events allow asynchronous processing and natural retry mechanisms...
+
+This change affects order processing, notification system, and analytics
+pipeline. Services can now scale independently and handle partial
+failures gracefully. Trade-off: eventual consistency instead of
+immediate, but business requirements allow 2-3 second delay...
+```
+
+## Guidelines
+
+Write messages that future developers will thank you for. Use present tense imperative mood. Skip conventional commit prefixes like feat: or fix: (gitmoji serves this purpose when needed). Include body text only when it adds meaningful context. Write clearly and directly for human readers.
+
+The goal is clarity and kindness to our future selves and teammates. Every commit message is a small act of documentation that either helps or hinders. We choose to help.
