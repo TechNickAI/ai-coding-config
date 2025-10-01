@@ -66,6 +66,54 @@ We use python 3.13+ and follow modern best practices:
 - Use modern union syntax `X | Y` instead of `Union[X, Y]`
 - Use underscore separators in large numbers: `Decimal(1_000_000)` not `Decimal("1000000")`
 
+## Attribute and Method Naming
+
+Make everything public by default. We're all consenting adults here.
+
+```python
+class OrderProcessor:
+    def __init__(self):
+        self.cache = {}
+        self.retry_count = 3
+        self.api_client = APIClient()
+
+    def process_order(self, order_id: str):
+        return self.validate_and_process(order_id)
+
+    def validate_and_process(self, order_id: str):
+        if order_id in self.cache:
+            return self.cache[order_id]
+        result = self.api_client.fetch(order_id)
+        self.cache[order_id] = result
+        return result
+
+class PaymentHandler:
+    def __init__(self):
+        self.processor = StripeProcessor()
+        self.webhook_secret = get_secret()
+
+    def handle_payment(self, amount: Decimal):
+        return self.processor.charge(amount)
+
+    def verify_webhook(self, signature: str):
+        return hmac.compare_digest(signature, self.webhook_secret)
+```
+
+Only use underscore prefix (`_internal`) when accessing something would genuinely break functionality. This should be extremely rare - maybe once per thousand attributes.
+
+```python
+class DatabasePool:
+    def __init__(self):
+        self.max_connections = 10
+        self._lock = threading.Lock()  # Direct access would break thread safety
+
+    def get_connection(self):
+        with self._lock:  # Must use lock, not access directly
+            return self.create_connection()
+```
+
+If you're tempted to add an underscore, ask: "Would accessing this directly actually break something, or am I just signaling intent?" If it's just intent, skip the underscore.
+
 ## Async vs Sync
 
 **Default to synchronous code.** We use Celery for background jobs with multiple workers, so we don't need async to free up CPU. Synchronous code is simpler, easier to debug, and easier to maintain.
