@@ -10,6 +10,7 @@ This guide is for AI agents working without human supervision to complete tasks 
 ## Philosophy
 
 You're being trusted to complete a task autonomously. This means:
+
 - Write quality code that follows all cursor rules
 - Test thoroughly before submitting
 - Fix issues proactively
@@ -27,19 +28,19 @@ You're being trusted to complete a task autonomously. This means:
 ## Step 1: Understand the Task
 
 Before writing any code:
+
 - Read the full task description
-- Review relevant cursor rules with @
+- Review relevant cursor rules in `.cursor/rules/` directory
 - Understand acceptance criteria
 - Identify what files need to change
 
 ## Step 2: Implement the Solution
 
-Write code following all applicable cursor rules:
-- Use @ to pull in relevant rules (e.g., @python-coding-standards)
-- Follow naming conventions
-- Add thorough file-level comments
-- Use type hints appropriately
-- Write useful function docstrings (no redundant Args/Returns)
+Write code following all applicable cursor rules found in `.cursor/rules/`:
+
+- Check root level rules: code-style-and-zen-of-python.mdc, naming-conventions.mdc
+- Check language-specific rules in subdirectories: python/, django/, frontend/
+- Follow all patterns and standards defined in those rules
 
 ## Step 3: Replicate CI/CD Steps Locally
 
@@ -48,17 +49,23 @@ Write code following all applicable cursor rules:
 ### Find the CI workflow
 
 ```bash
-# Look for the main CI workflow file
-cat .github/workflows/ci.yml
-# or
-cat .github/workflows/test.yml
-# or
-ls .github/workflows/
+# Check for build workflow (most common name)
+if [ -f .github/workflows/build.yml ]; then
+    cat .github/workflows/build.yml
+elif [ -f .github/workflows/ci.yml ]; then
+    cat .github/workflows/ci.yml
+elif [ -f .github/workflows/test.yml ]; then
+    cat .github/workflows/test.yml
+else
+    # List all workflows
+    ls .github/workflows/
+fi
 ```
 
-### Extract the validation steps
+### Extract and run validation steps
 
-Common steps you'll find:
+Read the workflow file and identify the validation steps. Common steps:
+
 - Install dependencies
 - Run linter (usually `ruff check`)
 - Run formatter (usually `ruff format --check`)
@@ -66,24 +73,30 @@ Common steps you'll find:
 - Run type checker (usually `mypy`)
 - Build/compile checks
 
-### Run those steps locally
+### Check for pre-commit
+
+```bash
+if [ -f .pre-commit-config.yaml ]; then
+    pre-commit run --all-files
+fi
+```
+
+If pre-commit exists, run it FIRST. It often includes ruff formatting and linting, so it may handle multiple validation steps at once.
+
+### Run validation steps
 
 Execute each step from the workflow file in order:
 
 ```bash
 # Example based on typical workflow:
-ruff check --fix .              # Fix linting issues
+ruff check --fix .              # Fix linting issues automatically
 ruff format .                   # Format code
 pytest                          # Run tests
 ```
 
-If the project uses pre-commit, run it:
+**Use ruff's auto-fix capabilities** - Don't manually fix linting errors when `ruff check --fix` and `ruff format` can do it automatically.
 
-```bash
-pre-commit run --all-files
-```
-
-**Fix any issues that arise.** Don't move forward until all checks pass.
+**Fix any remaining issues.** Don't move forward until all checks pass locally.
 
 ## Step 4: Self-Review
 
@@ -91,15 +104,16 @@ Before submitting, review your own work:
 
 ### Check Against Cursor Rules
 
-Review your changes and ensure they follow:
-- @code-style-and-zen-of-python
-- @python-coding-standards (if Python)
-- @pytest-what-to-test-and-mocking (if tests)
-- Language-specific rules for the code you wrote
+Review your changes and ensure they follow the rules in `.cursor/rules/`:
+
+- Core rules: code-style-and-zen-of-python.mdc, naming-conventions.mdc
+- Language-specific rules for the code you wrote (python/, django/, frontend/)
+- Read the actual rule files to verify compliance
 
 ### Code Quality Checklist
 
 Ask yourself:
+
 - Does the code solve the stated problem?
 - Are there edge cases I didn't handle?
 - Did I add tests for new functionality?
@@ -114,6 +128,7 @@ git diff
 ```
 
 Read through EVERY line of your changes critically. Look for:
+
 - Debugging code left behind
 - Commented out code
 - TODOs that should be addressed now
@@ -212,6 +227,7 @@ Before creating the PR, verify:
 ## Success Criteria
 
 A successful autonomous task completion means:
+
 - Human reviewer can understand what you did and why from the PR
 - All automated checks pass
 - Code quality matches what a senior developer would write
