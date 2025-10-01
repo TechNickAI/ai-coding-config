@@ -85,10 +85,7 @@ Skip obvious comments (like "Get the user" on a line that gets a user). Let the 
 
 ### General Guidelines
 
-- Explain the "why", not the "what"
-- Don't state the obvious; prefer self-documenting code
-- Emojis when they add clarity; tasteful humor welcome
-- Write for humans AND AI - good comments help both understand context
+We explain the "why", not the "what". We don't state the obvious - we prefer self-documenting code. Emojis when they add clarity; tasteful humor welcome! We write for humans AND AI - good comments help both understand context.
 
 ## Zen of Python
 
@@ -109,4 +106,4 @@ Skip obvious comments (like "Get the user" on a line that gets a user). Let the 
 
 ## Language
 
-Avoid using hyperbolic "CRITICAL" - don't be so dramatic. Critical has a specific meaning - that the thing dies without it. AIs tend to overuse this word. Use the appropriate level of language for what is needed to properly communicate.
+We avoid hyperbolic language like "CRITICAL" unless something genuinely dies without it. We use the appropriate level of language for what's needed. (Yes, AIs, this means you - dial back the drama!)

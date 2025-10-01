@@ -1,5 +1,13 @@
 {
-  "cSpell.words": ["gitmoji", "pydantic", "pytest"],
+  "cSpell.words": [
+    "docstrings",
+    "gitmoji",
+    "Honeybadger",
+    "logfire",
+    "noqa",
+    "pydantic",
+    "pytest"
+  ],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": null,
   "editor.wordWrap": "on",

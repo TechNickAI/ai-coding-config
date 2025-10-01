@@ -9,11 +9,11 @@ These guidelines ensure consistent, reliable, and maintainable API clients.
 
 ## Core Principles
 
-- Return None on API errors (don't raise exceptions)
-- Use type hints consistently
-- Document all methods with comprehensive docstrings
-- Use appropriate logging levels
-- Let exceptions bubble up unless you're truly handling them
+- We return None on API errors (don't raise exceptions)
+- We use type hints consistently
+- We document methods with helpful docstrings (skip redundant Args/Returns)
+- We use appropriate logging levels
+- We let exceptions bubble up unless we're truly handling them
 
 ## Method Pattern
 
@@ -21,11 +21,7 @@ These guidelines ensure consistent, reliable, and maintainable API clients.
 def get_something(self, param: str) -> dict | None:
     """Fetch something from the API.
 
-    Args:
-        param: Description of parameter
-
-    Returns:
-        Dict containing data or None if not found/error
+    Returns None if the API returns no data or encounters an error.
     """
     logger.info(f"Fetching something for {param}")
 
@@ -39,10 +35,7 @@ def get_something(self, param: str) -> dict | None:
 
 ## Error Handling
 
-- Let base HTTP client handle HTTP/network errors
-- Only use try/except for specific scenarios with actual handling
-- Always include context in error logs
-- Validate response structure before access
+We let the base HTTP client handle HTTP/network errors. We only use try/except for specific scenarios with actual handling. We validate response structure before access.
 
 ## Validation Pattern
 
@@ -55,15 +48,8 @@ if not response or "data" not in response:
 
 ## Response Processing
 
-- Validate response structure before access
-- Convert to standard types (use Decimal for financial data)
-- Clean and normalize data
-- Handle missing data gracefully
-- Return None for errors, not empty dicts
+We validate response structure before access, convert to standard types (Decimal for financial data), clean and normalize data, and return None for errors (not empty dicts).
 
 ## Testing
 
-- Mock all external calls in unit tests
-- Use @pytest.mark.flaky for live API tests
-- Test both success and error cases
-- Verify response processing
+We mock all external calls in unit tests, use @pytest.mark.flaky for live API tests, and test both success and error cases.

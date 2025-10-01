@@ -39,40 +39,45 @@ def generate_daily_report(date: str):
 
 ## Best Practices
 
+We:
+
 - Use type hints for parameters
-- Include comprehensive docstrings
+- Include helpful docstrings
 - Log start and completion
-- Use appropriate retry settings
+- Set appropriate retry settings
 - Consider rate limits for external APIs
 - Pass IDs, not objects (objects can't be serialized)
 - Return serializable data (dicts, not model instances)
 
 ## Error Handling
 
+Default: let exceptions bubble up. Celery will retry based on max_retries setting.
+
+For specific retry behavior:
+
 ```python
 @shared_task(max_retries=3, default_retry_delay=60)
-def risky_operation(data_id: int):
-    """Operation that might fail and should retry"""
+def sync_external_data(data_id: int):
+    """Sync data from external API with retry on transient failures."""
+    data = Data.objects.get(id=data_id)  # Let it crash if data doesn't exist
     try:
-        data = Data.objects.get(id=data_id)
         result = external_api_call(data)
         return result
     except ExternalAPIError as exc:
-        # Retry on API errors
-        logger.warning(f"API error, will retry: {exc}")
+        # Retry on transient API errors
         raise self.retry(exc=exc)
-    except Data.DoesNotExist:
-        # Don't retry on data errors
-        logger.error(f"Data {data_id} not found")
-        return None
 ```
 
+Honeybadger/Sentry will alert us on failures. Let tasks crash on real problems.
+
 ## Task Organization
+
+We organize tasks thoughtfully:
 
 - Group related tasks in the same file
 - Use clear, action-oriented names: `update_`, `process_`, `sync_`
 - Keep tasks focused - one clear responsibility
-- Extract complex logic into helper functions
+- Extract complex logic into helper functions (easier to test too!)
 
 ## Testing
 

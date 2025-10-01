@@ -8,13 +8,13 @@ alwaysApply: false
 
 ## Core Requirements
 
-Every model should:
+For every model, we:
 
 - Use explicit `db_table` names (pluralized)
-- Include comprehensive docstrings
-- Implement proper field types for financial data
-- Use help_text only when it's not immediately clear what the field is for
-- Use helpful verbose_names where needed
+- Include helpful docstrings
+- Use proper field types for financial data (DecimalField for money)
+- Use help_text only when the field purpose isn't immediately clear
+- Add verbose_names where they improve readability
 
 ## Model Structure
 
@@ -52,20 +52,12 @@ class Order(models.Model):
 
 ## Financial Fields
 
-- Always use `DecimalField` for amounts
-- Set appropriate `max_digits` and `decimal_places`
-- Use `max_digits=18, decimal_places=8` for crypto
-- Use `max_digits=18, decimal_places=2` for fiat
+We always use `DecimalField` for amounts: `max_digits=18, decimal_places=8` for crypto, `max_digits=18, decimal_places=2` for fiat.
 
 ## Query Optimization
 
-- Use `select_related()` for foreign keys
-- Use `prefetch_related()` for reverse relations
-- Add indexes for frequently queried fields
+We use `select_related()` for foreign keys, `prefetch_related()` for reverse relations, and add indexes for frequently queried fields.
 
 ## Field Guidelines
 
-- Use `auto_now_add=True` for creation timestamps
-- Use `auto_now=True` for update timestamps
-- Use `default` for optional fields with sensible defaults
-- Use `blank=True, null=True` for truly optional fields
+We use `auto_now_add=True` for creation timestamps, `auto_now=True` for update timestamps, and `blank=True, null=True` for truly optional fields.

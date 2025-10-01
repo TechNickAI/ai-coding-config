@@ -31,7 +31,7 @@ Notably, don't spend excessive time on naming for simple things that are easy to
 
 When a name for a new file, function, class, etc. isn't immediately obvious:
 
-- Pause and ask me what we should name it. It's better to ask then to just code and make me change the name.
+- Pause and ask what we should name it. It's better to ask than to guess and have to rename later.
 - Consider multiple alternatives
 - Evaluate options based on:
   - Clarity and intuitiveness

@@ -19,7 +19,7 @@ Write code following all cursor rules. Reference specific rules by reading the f
 
 ## Validation - Use the Tooling
 
-The project has tooling configured. Use it instead of manually trying to comply.
+The project has tooling configured. We use it instead of manually trying to comply.
 
 Check for pre-commit and run if exists:
 
@@ -35,17 +35,17 @@ ruff format .         # Auto-format code
 pytest                # Run tests
 ```
 
-If you added functionality, add tests following project patterns. Your goal is 95% coverage (don't aim for 100% with excessive edge case tests)
+If we added functionality, we add tests following project patterns. Aim for 95% coverage - solid testing without obsessing over every edge case.
 
-Do not commit or push until all validation passes. Only push code where automated checks are all green.
+Only commit and push when all validation passes. Green checks make for happy merges! ✅
 
 ## Self-Review
 
 Run `git diff` and review every change, as a senior developer would.
 
-Read through ALL cursor rules again and verify your code follows each applicable guidelines.
+Read through ALL cursor rules again and verify our code follows each applicable guideline.
 
-Would you approve this in code review? If not, keep iterating until you are pleased with it.
+Would we approve this in code review? If not, keep iterating until it's something we're pleased with.
 
 ## Submission
 
@@ -61,4 +61,4 @@ Ask first: major architectural changes, changes that would result in data loss, 
 
 ## Success
 
-A successful autonomous PR means: all automated checks pass, code follows all cursor rules, tests are green, and the developer merges it without requesting changes. Use the tooling to get there.
+A successful autonomous PR means: all automated checks pass, code follows all cursor rules, tests are green, and the developer merges it without requesting changes. Use the tooling to get there - it's our friend! 🎉

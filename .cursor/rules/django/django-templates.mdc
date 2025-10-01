@@ -8,9 +8,7 @@ alwaysApply: false
 
 ## Overview
 
-- Use base templates for shared layouts
-- Create partial templates for reusable components
-- Keep logic minimal - complex logic belongs in views
+We use base templates for shared layouts, create partials for reusable components, and keep logic minimal (complex logic belongs in views or the model).
 
 ## Template Structure
 
@@ -42,15 +40,11 @@ alwaysApply: false
 
 ## Comments
 
-- Use Django template comments for developer notes
-- For multi-line comments, use `{% comment %}` and `{% endcomment %}` tags
-- HTML comments (`<!-- -->`) are sent to the browser, template comments are not
+We use Django template comments `{% comment %}...{% endcomment %}` for developer notes. HTML comments (`<!-- -->`) are sent to the browser, template comments are not.
 
 ## Template Tags and Filters
 
-- Use built-in tags when possible
-- Create custom tags for complex reusable logic
-- Keep filters simple and focused
+We use built-in tags when possible and create custom tags for complex reusable logic. We keep filters simple and focused.
 
 ## Partials
 
@@ -72,8 +66,4 @@ Include with:
 
 ## Best Practices
 
-- Keep templates simple and readable
-- Extract repeated HTML into partials
-- Use template inheritance for layout consistency
-- Name partials with leading underscore
-- Test templates with various data states (empty lists, missing data, etc.)
+We keep templates simple and readable, extract repeated HTML into partials (named with leading underscore), use template inheritance for consistency, and test with various data states (empty lists, missing data, etc.).

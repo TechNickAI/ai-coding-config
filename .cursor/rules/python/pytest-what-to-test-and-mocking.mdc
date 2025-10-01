@@ -7,11 +7,7 @@ alwaysApply: false
 
 ## Core Requirements
 
-- Mock external API calls, unless the test is explicitly set to be "live", in which case mark it with `@pytest.mark.flaky()`
-- Re-use fixtures from conftest.py files, request if not provided
-- Always use pytest as testing framework. Don't import unittest under any circumstances
-- Use pytest-mock (mocker fixture) instead of unittest.mock for mocking
-- Use monkeypatch fixture instead of unittest.mock.patch, especially for environment variables
+We mock external API calls (mark live tests with `@pytest.mark.flaky()`). We reuse fixtures from conftest.py. We always use pytest as testing framework - never import unittest. We use pytest-mock (mocker fixture) and monkeypatch for mocking, not unittest.mock.
 
 ## What to Test
 
@@ -63,25 +59,17 @@ def test_processes_stripe_response_correctly():
 
 ### Skip Library Testing
 
-Don't test that Pydantic validates, Django filters work, or httpx makes requests. These libraries test themselves. Focus on your logic that uses these tools.
+We don't test that Pydantic validates, Django filters work, or httpx makes requests. These libraries test themselves. We focus on our logic that uses these tools.
 
 ### Decision Framework
 
-Test when:
+Test when: we wrote the logic, it could break if we change our code, or we're testing how we use a library.
 
-- You wrote the logic
-- It could break if you change your code
-- You're testing how you use a library
-
-Skip when:
-
-- A library is doing what it's designed to do
-- You're testing if the library works
-- It would break only if the library has a bug
+Skip when: a library is doing what it's designed to do, or it would only break if the library has a bug.
 
 ## When to Mock vs When to Fix
 
-Mocking should isolate your code from external dependencies, not hide internal problems.
+Mocking should isolate our code from external dependencies, not hide internal problems.
 
 ### Mock External Dependencies
 
@@ -127,13 +115,10 @@ If you're mocking your own code, the internal code should work. If a test is fai
 4. Validation error? Fix validation or use valid data
 5. Configuration issue? Fix configuration
 
-Don't mock away errors. Understand the root cause and fix it.
+We don't mock away errors. We understand the root cause and fix it.
 
-## Rules
+## Philosophy
 
-- When there is a test failure - think first: is this a test problem or a code problem?
-- Never "fix" a broken test by mocking a python call that hides the error
-- Be extremely thoughtful about when to use mocking - confirm it's actually the best solution and not a hack
-- Don't overzealously test for exact text - keep tests resilient
-- FOCUS ON YOUR BUSINESS LOGIC - Test what you wrote, not what libraries do
-- Quality over quantity - 10 focused tests that test your logic are better than 100 tests that test everything
+When a test fails, we think first: is this a test problem or a code problem? We never "fix" a broken test by mocking away the error. We're thoughtful about mocking - is this the best solution or a hack?
+
+We don't test for exact text - we keep tests resilient. We focus on our business logic - test what we wrote, not what libraries do. Quality over quantity - 10 focused tests beat 100 tests that test everything.

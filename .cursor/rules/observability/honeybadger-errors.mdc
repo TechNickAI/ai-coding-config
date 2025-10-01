@@ -55,39 +55,18 @@ context = {
 
 ### Use Human-Friendly Identifiers
 
+We use email addresses and names, not database IDs:
+
 ```python
-# ✅ GOOD: Human-readable
 context = {
     "user_email": user.email,
     "order_number": order.number,
-}
-
-# ❌ BAD: Database IDs aren't helpful
-context = {
-    "user_id": 12345,  # Who is this?
-    "order_id": 67890,
 }
 ```
 
 ## What to Avoid
 
-### Never Use Tags
-
-```python
-# ❌ DON'T
-honeybadger.notify(error, tags={"env": "prod"})
-
-# ✅ DO
-honeybadger.notify(error, error_class="APIError",
-                   context={"environment": "prod"})
-```
-
-### Avoid These Anti-Patterns
-
-- Generic error classes: `Error`, `Exception`
-- Non-essential context: timestamps, debug logs
-- Sensitive data: API keys, passwords, PII
-- Redundant info: error message already in exception
+We don't use tags (use context instead). We avoid generic error classes (`Error`, `Exception`), sensitive data (API keys, passwords), and redundant info.
 
 ## Implementation Example
 
@@ -111,13 +90,4 @@ except APIException as e:
 
 ## Error Class Naming
 
-- Use `PascalCase`
-- End with `Error`
-- Be specific enough to group similar issues
-- Be general enough to avoid too many unique classes
-
-## Consistency Rules
-
-- Same error class for same failure type across codebase
-- Consistent context field names
-- Use existing error classes before creating new ones
+We use `PascalCase` ending with `Error`. We're specific enough to group similar issues, but general enough to avoid too many unique classes. We use the same error class for the same failure type across the codebase, and we check existing error classes before creating new ones.

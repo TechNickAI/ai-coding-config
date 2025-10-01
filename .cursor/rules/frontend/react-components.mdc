@@ -42,14 +42,7 @@ export function Component({
 
 ## Best Practices
 
-- Use TypeScript for all components
-- Use Tailwind CSS for styling
-- Use `cn()` utility for conditional classes
-- Define clear prop interfaces
-- Provide sensible defaults for optional props
-- Keep components focused and small
-- Use composition over inheritance
-- Implement proper loading and error states
+We use TypeScript and Tailwind CSS. We use `cn()` for conditional classes, define clear prop interfaces with sensible defaults, keep components focused and small, use composition over inheritance, and implement proper loading and error states.
 
 ## Props Pattern
 
@@ -108,7 +101,4 @@ return <DataDisplay data={data} />;
 
 ## Testing
 
-- Test component rendering
-- Test user interactions
-- Test different states (loading, error, empty, success)
-- Test accessibility
+We test component rendering, user interactions, different states (loading, error, empty, success), and accessibility.

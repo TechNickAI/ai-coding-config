@@ -5,56 +5,13 @@ alwaysApply: false
 
 # Python Guidelines
 
-## Imports - CRITICAL RULE
+## Imports - NON-NEGOTIABLE
 
-**⚠️ ALL IMPORTS AT THE TOP OF THE FILE ⚠️**
+ALL imports go at the top of the file. Every single one. If you're even thinking about putting an import inside a function, stop.
 
-Place all import statements at the top of the file. Never put imports inside functions or methods.
+Exception: circular import issues (genuinely rare).
 
-### Standard Pattern (Always Do This)
-
-```python
-from decimal import Decimal
-from pathlib import Path
-import json
-import requests
-from django.db import models
-
-def process_payment(amount: str):
-    decimal_amount = Decimal(amount)
-    return decimal_amount * 2
-
-def load_config():
-    config_path = Path("config.json")
-    return json.loads(config_path.read_text())
-
-def fetch_data(url: str):
-    response = requests.get(url)
-    return response.json()
-
-def save_user(email: str):
-    user = models.User.objects.create(email=email)
-    return user
-```
-
-Every file follows this pattern: imports at top, then functions. No imports inside functions.
-
-### Other Import Rules
-
-- Group imports: stdlib → third-party → local application imports
-- Don't abbreviate packages (write "pandas" not "pd", "numpy" not "np")
-- One import per line for clarity
-
-### Exception: Circular Import Issues
-
-Only import inside a function if you have a circular import problem (rare):
-
-```python
-# models.py
-def create_team_for_user(user):
-    from apps.teams.models import Team  # Avoids circular import
-    return Team.objects.create(owner=user)
-```
+Don't abbreviate packages ("pandas" not "pd", "numpy" not "np").
 
 ## Modern Python
 
@@ -68,74 +25,23 @@ We use python 3.13+ and follow modern best practices:
 
 ## Attribute and Method Naming
 
-Make everything public by default. We're all consenting adults here.
+We make everything public by default. We're all consenting adults here.
 
-```python
-class OrderProcessor:
-    def __init__(self):
-        self.cache = {}
-        self.retry_count = 3
-        self.api_client = APIClient()
-
-    def process_order(self, order_id: str):
-        return self.validate_and_process(order_id)
-
-    def validate_and_process(self, order_id: str):
-        if order_id in self.cache:
-            return self.cache[order_id]
-        result = self.api_client.fetch(order_id)
-        self.cache[order_id] = result
-        return result
-
-class PaymentHandler:
-    def __init__(self):
-        self.processor = StripeProcessor()
-        self.webhook_secret = get_secret()
-
-    def handle_payment(self, amount: Decimal):
-        return self.processor.charge(amount)
-
-    def verify_webhook(self, signature: str):
-        return hmac.compare_digest(signature, self.webhook_secret)
-```
-
-Only use underscore prefix (`_internal`) when accessing something would genuinely break functionality. This should be extremely rare - maybe once per thousand attributes.
-
-```python
-class DatabasePool:
-    def __init__(self):
-        self.max_connections = 10
-        self._lock = threading.Lock()  # Direct access would break thread safety
-
-    def get_connection(self):
-        with self._lock:  # Must use lock, not access directly
-            return self.create_connection()
-```
-
-If you're tempted to add an underscore, ask: "Would accessing this directly actually break something, or am I just signaling intent?" If it's just intent, skip the underscore.
+Only use underscore prefix (`_internal`) when accessing something would genuinely break functionality - like thread locks or internal state that must be accessed through methods. This is extremely rare.
 
 ## Async vs Sync
 
-**Default to synchronous code.** We use Celery for background jobs with multiple workers, so we don't need async to free up CPU. Synchronous code is simpler, easier to debug, and easier to maintain.
+Default to synchronous code. We use Celery for background jobs with multiple workers, so we don't need async to free up CPU. Synchronous code is simpler, easier to debug, and easier to maintain.
 
-**When given a choice between sync and async, always choose sync.**
+When given a choice between sync and async, we choose sync.
 
 ```python
-# ✅ GOOD: Sync by default
 def fetch_data(url: str) -> dict:
     response = requests.get(url)
     return response.json()
-
-# ❌ AVOID: Async unless necessary
-async def fetch_data(url: str) -> dict:
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        return response.json()
 ```
 
-**If async is the ONLY option** (library only provides async API):
-
-1. Consider using `asyncio.run()` to call it from sync code:
+If a library only provides async API, we can wrap it with `asyncio.run()`:
 
 ```python
 import asyncio
@@ -145,94 +51,48 @@ def sync_wrapper(param: str) -> dict:
     return asyncio.run(async_library_call(param))
 ```
 
-2. Ask for confirmation before introducing async patterns
-3. Document why async is necessary
+Async is appropriate for WebSocket connections, async-only libraries that can't be easily wrapped, or specific performance-critical paths where async provides clear, measured benefits. Ask for confirmation before introducing async patterns.
 
-**Exceptions where async is appropriate:**
+## Exception Handling - READ THIS COMPLETELY
 
-- WebSocket connections that need concurrent handling
-- Libraries that are async-only (and can't be wrapped easily)
-- Specific performance-critical paths where async provides clear, measured benefits
+DO NOT SWALLOW ERRORS. This is the hill we die on.
 
-## Exception Handling - CRITICAL
-
-**⚠️ DEFAULT: LET EXCEPTIONS BUBBLE UP ⚠️**
-
-We use Honeybadger for centralized error tracking. Exceptions bubble up automatically. **Write code that crashes on errors - no try/except blocks in 99% of functions.**
-
-### How to Write Functions (The Default Pattern)
-
-Write straightforward code with no error handling. Let operations fail naturally:
+Default: let exceptions bubble up. We use Sentry/Honeybadger for centralized error tracking, so exceptions that bubble up get caught and reported automatically - we get alerted and can fix them. Write functions with NO try/except:
 
 ```python
 def process_payment(order_id: str):
     order = Order.objects.get(id=order_id)
     result = stripe.charge(order.amount)
-    order.status = "paid"
     order.save()
     return result
-
-def load_config():
-    config_path = Path("config.json")
-    return json.loads(config_path.read_text())
-
-def update_user_email(user_id: str, new_email: str):
-    user = User.objects.get(id=user_id)
-    user.email = new_email
-    user.save()
-    return user
-
-def fetch_exchange_rate(currency: str):
-    response = requests.get(f"https://api.example.com/rates/{currency}")
-    return response.json()
-
-def calculate_total(order: Order):
-    subtotal = sum(item.price * item.quantity for item in order.items.all())
-    tax = subtotal * order.tax_rate
-    return subtotal + tax
 ```
 
-Notice: No try/except anywhere. Operations that can fail (database queries, API calls, file operations) are written directly. Honeybadger catches and reports any exceptions.
+See? No try/except. If it fails, it crashes, Sentry/Honeybadger alerts us, and we fix the actual problem.
 
-### The Only 2 Times You Use try/except
+WHY THIS MATTERS: When you catch an exception and just log it, we don't get alerted. The error gets buried in logs that nobody reads. Meanwhile, the system continues running in a broken state, producing wrong results, corrupting data, or silently failing operations. We don't find out until much later when the damage is done.
 
-**SCENARIO 1: You have actual alternative logic**
+Broken and visible is WAY better than broken, wrong, and invisible.
 
-Only use try/except when you have meaningful alternative behavior:
+### The ONLY times to use try/except
+
+Use try/except ONLY when you have specific alternative behavior:
 
 ```python
+# Alternative behavior: create if doesn't exist
 def get_or_create_user(email: str):
     try:
         return User.objects.get(email=email)
     except User.DoesNotExist:
         return User.objects.create(email=email)
 
-def api_endpoint(request):
+# Loop processing: continue on individual failures
+for order_id in order_ids:
     try:
-        result = process_transaction(request.data)
-    except InvalidTransactionError as e:
-        return JsonResponse({"error": "validation_failed"}, status=400)
-```
+        sync_order(order_id)
+    except SyncError:
+        continue
 
-**SCENARIO 2: Bulk processing loops**
-
-When processing multiple items and one failure shouldn't stop others:
-
-```python
-def sync_all_orders():
-    for order_id in order_ids:
-        try:
-            sync_order(order_id)
-        except SyncError as e:
-            logger.error(f"Failed to sync {order_id}: {e}")
-            continue
-```
-
-**SCENARIO 3: Adding Honeybadger context**
-
-Catch only to add context, then immediately re-raise:
-
-```python
+# Add context before re-raising
 try:
     result = external_api.call()
 except APIException as e:
@@ -240,55 +100,26 @@ except APIException as e:
     raise
 ```
 
-### The Decision Rule
+Ask ourselves: "Do we have specific alternative behavior for this error?" If yes, use try/except with specific exception type. If no, write the function with no try/except.
 
-Ask: **"Do I have specific alternative behavior for this error?"**
+If you catch an exception and just log it, or return None, or pass silently - you're doing it wrong. That's hiding errors, not handling them. Let it crash so we can fix the actual problem.
 
-- NO → Write the function with zero try/except blocks
-- YES → Use try/except with specific exception type and alternative logic
+## Defensive Programming
 
-### What NOT To Do
+We avoid hasattr() and getattr(). Trust that attributes and methods exist - just call them directly.
 
-Avoid these patterns (described, not shown):
+We avoid dict.get() with default values for data that should exist. Use bracket access `data["key"]` for required fields.
 
-- Wrapping functions in generic `except Exception`
-- Catching exceptions just to log and return None
-- Using try/except "just in case" without specific handling
-- Catching `DoesNotExist` exceptions without alternative logic
+WHY: .get() with defaults silently hides missing data. Missing price becomes 0 (free!), missing quantity becomes 0 (invisible positions!), missing fee becomes 0 (wrong profit!). The system keeps running with corrupted data and we don't find out until we've lost money.
 
-## Defensive Programming - FORBIDDEN
+Broken and visible is WAY better than broken and wrong.
 
-**NEVER use hasattr() or getattr() unless there's a REALLY good reason**
-
-```python
-# ❌ BAD: Checking if methods exist
-if hasattr(self, "create_trade"):
-    self.create_trade()
-
-# ✅ GOOD: Just call it - it exists!
-self.create_trade()
-```
-
-**NEVER use dict.get() with default values for critical data that SHOULD exist**
-
-```python
-# ❌ BAD: Silent failures that hide bugs
-filled_size = Decimal(str(order_data.get("filledSz", "0")))  # Hides missing data!
-
-# ✅ GOOD: Fail fast on missing data
-filled_size = Decimal(str(order_data["filledSz"]))  # Crashes if data is malformed
-```
-
-Only use `.get()` with defaults for:
-
-- Optional configuration
-- Optional metadata
-- Legitimate optional fields
+Use .get() with defaults only for genuinely optional data: configuration settings, optional metadata.
 
 ## Financial Data
 
-- Use Decimal for financial calculations - never use float for money/prices
+We use Decimal for financial calculations. Float loses precision with money/prices.
 
 ## DRY Principle
 
-Follow DRY (Don't Repeat Yourself) principles. Extract repeated logic into shared methods.
+We follow DRY (Don't Repeat Yourself). When we see the same logic twice, we extract it into a shared method. Future us will thank us!
