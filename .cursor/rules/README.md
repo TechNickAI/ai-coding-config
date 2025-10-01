@@ -37,6 +37,7 @@ Most rules - invoked with @ when needed or applied intelligently by Cursor's AI 
 ## Usage Patterns
 
 First, set a variable for convenience (adjust path to where you cloned this repo):
+
 ```bash
 AI_CONFIG=~/src/ai-coding-config  # or wherever you cloned it
 ```
