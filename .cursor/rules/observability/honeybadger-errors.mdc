@@ -1,0 +1,123 @@
+---
+description: When using Honeybadger for error tracking
+alwaysApply: false
+---
+
+# Honeybadger Error Tracking
+
+## Standard Pattern
+
+```python
+from honeybadger import honeybadger
+
+honeybadger.notify(
+    exception,
+    error_class="DescriptiveErrorCategory",
+    context={
+        "operation": "what_was_being_attempted",
+        "user_id": user.id,
+        "item_id": item.id,
+    }
+)
+```
+
+## Error Classification
+
+Use meaningful error_class values for grouping:
+
+### General Categories
+
+- `APIError` - External API failures
+- `ValidationError` - Input validation failures
+- `DatabaseError` - Database operation failures
+- `ConfigurationError` - Missing or invalid configuration
+- `AuthenticationError` - Auth/permission failures
+
+### Specific When Needed
+
+For high-volume errors, use vendor-specific classes:
+
+- `StripeAPIError` - Stripe API failures
+- `AWSServiceError` - AWS service failures
+- `RedisConnectionError` - Redis connection issues
+
+## Context Best Practices
+
+### Always Include
+
+```python
+context = {
+    "operation": "what_was_being_attempted",
+    "retry_attempt": 1,
+    "user_input": relevant_input_data,
+}
+```
+
+### Use Human-Friendly Identifiers
+
+```python
+# ✅ GOOD: Human-readable
+context = {
+    "user_email": user.email,
+    "order_number": order.number,
+}
+
+# ❌ BAD: Database IDs aren't helpful
+context = {
+    "user_id": 12345,  # Who is this?
+    "order_id": 67890,
+}
+```
+
+## What to Avoid
+
+### Never Use Tags
+
+```python
+# ❌ DON'T
+honeybadger.notify(error, tags={"env": "prod"})
+
+# ✅ DO
+honeybadger.notify(error, error_class="APIError", 
+                   context={"environment": "prod"})
+```
+
+### Avoid These Anti-Patterns
+
+- Generic error classes: `Error`, `Exception`
+- Non-essential context: timestamps, debug logs
+- Sensitive data: API keys, passwords, PII
+- Redundant info: error message already in exception
+
+## Implementation Example
+
+```python
+try:
+    result = external_api.call()
+except APIException as e:
+    honeybadger.notify(
+        e,
+        error_class="ExternalAPIError",
+        context={
+            "api": "stripe",
+            "operation": "create_payment",
+            "customer_id": customer.id,
+            "amount": str(amount),
+            "status_code": getattr(e, 'status_code', None),
+        }
+    )
+    raise
+```
+
+## Error Class Naming
+
+- Use `PascalCase`
+- End with `Error`
+- Be specific enough to group similar issues
+- Be general enough to avoid too many unique classes
+
+## Consistency Rules
+
+- Same error class for same failure type across codebase
+- Consistent context field names
+- Use existing error classes before creating new ones

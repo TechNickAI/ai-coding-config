@@ -1,0 +1,83 @@
+---
+description: When using Logfire for logging and observability
+alwaysApply: false
+---
+
+# Logfire Logging
+
+## Core Pattern
+
+```python
+from helpers.observability import logfire
+
+# Basic logging
+logfire.info("Operation completed", 
+             operation="data_processing",
+             item_count=123)
+
+# Spans for duration tracking
+with logfire.span("Processing batch", batch_id=batch.id):
+    result = process_batch(batch)
+    logfire.info("Batch complete", items_processed=result.count)
+```
+
+## When to Use Spans
+
+Use spans for operations that:
+- Have duration you want to track
+- Have nested sub-operations
+- Group related logs together
+- Make debugging easier with hierarchy
+
+## Span Naming
+
+Create friendly, human-readable span names:
+
+```python
+# ✅ GOOD: Specific and actionable
+with logfire.span(
+    f"Processing {strategy_name} for {item.name}",
+    item_id=item.id,
+    strategy_name=strategy_name,
+    operation="strategy_processing"
+):
+
+# ❌ BAD: Vague
+with logfire.span("Processing"):
+```
+
+## Logging Levels
+
+- `logfire.info()` - Normal operations, important events
+- `logfire.error()` - Serious problems
+- `logfire.warning()` - Concerning but recoverable
+- `logfire.debug()` - Detailed info for development
+
+## Context Attributes
+
+Include searchable, meaningful attributes:
+
+```python
+logfire.info(
+    "Order processed successfully",
+    order_id=order.id,
+    customer_id=customer.id,
+    total_amount=float(order.total),
+    operation="order_processing"
+)
+```
+
+## What NOT to Log
+
+- Sensitive data: API keys, passwords, private keys
+- High-frequency noise: Every loop iteration
+- Obvious operations: "Starting function"
+- Debugging artifacts: Raw API responses (use debug level)
+
+## Best Practices
+
+- First line of message should be immediately useful
+- Include specific values, not just "processing"
+- Use consistent attribute naming (snake_case)
+- Convert Decimals to floats for JSON serialization
+- Be thoughtful about volume - you pay per message
