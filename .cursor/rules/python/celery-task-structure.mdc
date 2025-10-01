@@ -1,0 +1,73 @@
+---
+description: When writing Celery tasks
+globs: **/tasks.py
+alwaysApply: false
+---
+
+# Celery Task Structure
+
+## Task Definition
+
+```python
+@shared_task(max_retries=3, default_retry_delay=60, rate_limit="1/m")
+def process_data(item_id: int):
+    """Process data for the given item
+    
+    Args:
+        item_id: ID of the item to process
+        
+    Returns:
+        dict: Processing results
+    """
+    logger.info(f"Processing item {item_id}")
+    
+    item = Item.objects.get(id=item_id)
+    result = item.process()
+    
+    logger.info(f"Processing complete: {result}")
+    return result
+```
+
+## Best Practices
+
+- Use type hints for parameters
+- Include comprehensive docstrings
+- Log start and completion
+- Use appropriate retry settings
+- Consider rate limits for external APIs
+- Pass IDs, not objects (objects can't be serialized)
+- Return serializable data (dicts, not model instances)
+
+## Error Handling
+
+```python
+@shared_task(max_retries=3, default_retry_delay=60)
+def risky_operation(data_id: int):
+    """Operation that might fail and should retry"""
+    try:
+        data = Data.objects.get(id=data_id)
+        result = external_api_call(data)
+        return result
+    except ExternalAPIError as exc:
+        # Retry on API errors
+        logger.warning(f"API error, will retry: {exc}")
+        raise self.retry(exc=exc)
+    except Data.DoesNotExist:
+        # Don't retry on data errors
+        logger.error(f"Data {data_id} not found")
+        return None
+```
+
+## Task Organization
+
+- Group related tasks in the same file
+- Use clear, action-oriented names: `update_`, `process_`, `sync_`
+- Keep tasks focused - one clear responsibility
+- Extract complex logic into helper functions
+
+## Testing
+
+- Mock external dependencies
+- Test task logic, not Celery internals
+- Test retry behavior for expected failures
+- Verify logging outputs

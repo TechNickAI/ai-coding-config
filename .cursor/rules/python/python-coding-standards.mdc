@@ -1,0 +1,93 @@
+---
+description: when writing python code or running python commands
+alwaysApply: false
+---
+
+# Python Guidelines
+
+## Imports
+
+- Imports ALWAYS go to the top of the file - NEVER import within functions, unless it would create circular import
+- Don't abbreviate packages (use "pandas" not "pd", "numpy" not "np")
+
+## Modern Python
+
+We use python 3.13+ and follow modern best practices:
+
+- Use `Path` lib for files instead of `open`
+- Use `var!s` instead of `str(var)`
+- Prefer walrus operator (:=) to reduce repetition in code
+- Use modern union syntax `X | Y` instead of `Union[X, Y]`
+- Use underscore separators in large numbers: `Decimal(1_000_000)` not `Decimal("1000000")`
+
+## Exception Handling - CRITICAL
+
+**try/except is FORBIDDEN except in these EXACT 2 scenarios:**
+
+**SCENARIO 1: Handling a SPECIFIC exception type with actual handling logic**
+
+```python
+# ✅ ALLOWED: Specific exception + real handling
+try:
+    result = process_transaction(data)
+except InvalidTransactionError as e:
+    logger.error(f"Transaction failed: {e}")
+    return {"status": "failed", "reason": "validation_error"}
+```
+
+**SCENARIO 2: Processing loop where you want to continue on errors**
+
+```python
+# ✅ ALLOWED: Loop processing where individual failures shouldn't stop the loop
+for item in items:
+    try:
+        process_item(item)
+    except ProcessingError as e:
+        logger.error(f"Failed to process {item.id}: {e}")
+        continue
+```
+
+**DEFAULT APPROACH - 99% of the time:**
+
+```python
+# ✅ PREFERRED: Let exceptions bubble up
+result = process_transaction(data)  # No try/except at all!
+user = User.objects.get(id=user_id)  # Let it crash if user doesn't exist!
+```
+
+## Defensive Programming - FORBIDDEN
+
+**NEVER use hasattr() or getattr() unless there's a REALLY good reason**
+
+```python
+# ❌ BAD: Checking if methods exist
+if hasattr(self, "create_trade"):
+    self.create_trade()
+
+# ✅ GOOD: Just call it - it exists!
+self.create_trade()
+```
+
+**NEVER use dict.get() with default values for critical data that SHOULD exist**
+
+```python
+# ❌ BAD: Silent failures that hide bugs
+filled_size = Decimal(str(order_data.get("filledSz", "0")))  # Hides missing data!
+
+# ✅ GOOD: Fail fast on missing data
+filled_size = Decimal(str(order_data["filledSz"]))  # Crashes if data is malformed
+```
+
+Only use `.get()` with defaults for:
+
+- Optional configuration
+- Optional metadata
+- Legitimate optional fields
+
+## Financial Data
+
+- Use Decimal for financial calculations - never use float for money/prices
+
+## DRY Principle
+
+Follow DRY (Don't Repeat Yourself) principles. Extract repeated logic into shared methods.

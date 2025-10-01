@@ -1,0 +1,149 @@
+---
+description: When writing tests
+alwaysApply: false
+---
+
+# Pytest: What to Test and Mocking
+
+## Core Requirements
+
+- Mock external API calls, unless the test is explicitly set to be "live", in which case mark it with `@pytest.mark.flaky()`
+- Re-use fixtures from conftest.py files, request if not provided
+- Always use pytest as testing framework. Don't import unittest under any circumstances
+- Use pytest-mock (mocker fixture) instead of unittest.mock for mocking
+- Use monkeypatch fixture instead of unittest.mock.patch, especially for environment variables
+
+## What to Test vs What NOT to Test
+
+GOLDEN RULE: Test YOUR business logic, not the libraries you depend on.
+
+### ALWAYS Test These
+
+Your Business Logic:
+
+```python
+# ✅ Custom business logic
+def test_calculates_discount_correctly():
+    # This is OUR calculation logic
+
+# ✅ Custom error handling and recovery
+def test_handles_none_response_gracefully():
+    # This is OUR error handling logic
+
+# ✅ Workflow and state management
+def test_order_state_transitions():
+    # This is OUR state machine logic
+```
+
+Integration Points:
+
+```python
+# ✅ How you call external services
+def test_sends_correct_parameters_to_api():
+    # Test the interface between your code and external APIs
+
+# ✅ How you handle external responses
+def test_processes_api_response_correctly():
+    # Test how you transform external data into internal models
+```
+
+### NEVER Test These
+
+Library Code:
+
+```python
+# 🚫 Don't test pydantic validation
+def test_pydantic_model_validation():
+    # Pydantic already tests this extensively
+
+# 🚫 Don't test HTTP client configuration
+def test_httpx_client_headers():
+    # This is testing httpx library behavior
+
+# 🚫 Don't test Django ORM behavior
+def test_objects_filter_works():
+    # Django already tests this
+```
+
+### Ask Yourself: "Is This MY Code?"
+
+Decision Framework:
+
+1. Did I write this logic? → ✅ Test it
+2. Is this a library doing what it's supposed to do? → 🚫 Don't test it
+3. Could this break if I change MY code? → ✅ Test it
+4. Would this break if the library has a bug? → 🚫 Not your responsibility to test
+5. Is this testing HOW I use a library? → ✅ Test it
+6. Is this testing IF the library works? → 🚫 Don't test it
+
+## Thoughtful Mocking - When to Mock vs When to Fix
+
+CRITICAL PRINCIPLE: Mocking should isolate your code from external dependencies, NOT hide internal problems.
+
+### Good Mocking - External Dependencies
+
+```python
+# ✅ GOOD: Mock external API calls
+def test_data_fetch(mocker):
+    mocker.patch("requests.get", return_value=mock_response)
+    result = fetch_data()
+    assert result.status == "success"
+
+# ✅ GOOD: Mock time-dependent operations
+def test_expiry_check(mocker):
+    fixed_time = datetime(2024, 1, 1, 12, 0, 0)
+    mocker.patch("django.utils.timezone.now", return_value=fixed_time)
+    # ... rest of test
+```
+
+### Bad Mocking - Covering Up Problems
+
+```python
+# 🚫 BAD: Mocking to hide validation errors
+def test_user_creation(mocker):
+    # This hides the fact that our validation is broken!
+    mocker.patch("helpers.validate_email", return_value=True)
+
+# 🚫 BAD: Mocking internal logic that should work
+def test_calculate(mocker):
+    # This hides the fact that our calculation is broken!
+    mocker.patch("myapp.calculate_total", return_value=100)
+```
+
+### How to Know If You're Mocking Wrong
+
+ASK YOURSELF:
+
+- Am I mocking because the test is failing? → 🚨 RED FLAG - Fix the root cause instead
+- Am I mocking internal code that I wrote? → 🚨 RED FLAG - The internal code should work
+- Am I mocking to avoid setting up proper test data? → 🚨 RED FLAG - Create proper fixtures
+- Would this code work in production without the mock? → If no, you're hiding a bug
+
+GOOD REASONS TO MOCK:
+
+- External API calls
+- Time-dependent operations (timezone.now)
+- Expensive operations (database queries in unit tests)
+- Non-deterministic operations (random values)
+- Infrastructure dependencies (file system, network)
+
+### The Right Way to Handle Test Failures
+
+When a test fails, follow this decision tree:
+
+1. Is this an external dependency? → Mock it
+2. Is this invalid test data? → Fix the test data
+3. Is this a missing database record? → Create proper fixtures
+4. Is this a validation error? → Fix the validation logic or use valid data
+5. Is this a configuration issue? → Fix the configuration
+
+NEVER mock away the error - understand why it's happening and fix the root cause.
+
+## Rules
+
+- When there is a test failure - think first: is this a test problem or a code problem?
+- Never "fix" a broken test by mocking a python call that hides the error
+- Be extremely thoughtful about when to use mocking - confirm it's actually the best solution and not a hack
+- Don't overzealously test for exact text - keep tests resilient
+- FOCUS ON YOUR BUSINESS LOGIC - Test what you wrote, not what libraries do
+- Quality over quantity - 10 focused tests that test your logic are better than 100 tests that test everything
