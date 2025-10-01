@@ -1,0 +1,114 @@
+---
+description: When writing React components
+globs: **/*.tsx, **/*.jsx
+alwaysApply: false
+---
+
+# React Components
+
+## Component Structure
+
+```tsx
+import { cn } from "@/lib/utils"
+
+interface ComponentProps {
+  className?: string
+  children: React.ReactNode
+  variant?: "default" | "primary" | "secondary"
+}
+
+export function Component({ 
+  className, 
+  children, 
+  variant = "default" 
+}: ComponentProps) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg bg-background p-4",
+        "hover:bg-muted/50 transition-colors",
+        {
+          "border-blue-500": variant === "primary",
+          "border-gray-300": variant === "default",
+        },
+        className
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+```
+
+## Best Practices
+
+- Use TypeScript for all components
+- Use Tailwind CSS for styling
+- Use `cn()` utility for conditional classes
+- Define clear prop interfaces
+- Provide sensible defaults for optional props
+- Keep components focused and small
+- Use composition over inheritance
+- Implement proper loading and error states
+
+## Props Pattern
+
+```tsx
+interface Props {
+  // Required props first
+  id: string
+  title: string
+  
+  // Optional props with defaults
+  className?: string
+  variant?: "default" | "primary"
+  disabled?: boolean
+  
+  // Functions and callbacks
+  onClick?: () => void
+  onSubmit?: (data: FormData) => Promise<void>
+  
+  // Children and render props
+  children?: React.ReactNode
+  renderHeader?: () => React.ReactNode
+}
+```
+
+## State Management
+
+```tsx
+// Use hooks for state
+const [isOpen, setIsOpen] = useState(false)
+const [data, setData] = useState<Data | null>(null)
+
+// Use useEffect for side effects
+useEffect(() => {
+  fetchData().then(setData)
+}, [dependency])
+
+// Custom hooks for reusable logic
+const { user, loading, error } = useAuth()
+```
+
+## Conditional Rendering
+
+```tsx
+// Loading state
+if (loading) return <Spinner />
+
+// Error state
+if (error) return <ErrorMessage error={error} />
+
+// Empty state
+if (!data.length) return <EmptyState />
+
+// Success state
+return <DataDisplay data={data} />
+```
+
+## Testing
+
+- Test component rendering
+- Test user interactions
+- Test different states (loading, error, empty, success)
+- Test accessibility
