@@ -1,0 +1,71 @@
+---
+description: When writing Django models
+globs: **/models.py
+alwaysApply: false
+---
+
+# Django Models
+
+## Core Requirements
+
+Every model should:
+
+- Use explicit `db_table` names (pluralized)
+- Include comprehensive docstrings
+- Implement proper field types for financial data
+- Use help_text only when it's not immediately clear what the field is for
+- Use helpful verbose_names where needed
+
+## Model Structure
+
+```python
+from django.db import models
+from decimal import Decimal
+
+class Order(models.Model):
+    """Represents a customer order
+    
+    Tracks order details, payment status, and fulfillment
+    """
+    
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_amount = models.DecimalField(
+        max_digits=18,
+        decimal_places=2,
+        help_text="Total order amount in USD"
+    )
+    status = models.CharField(max_length=20, default='pending')
+    
+    class Meta:
+        db_table = "orders"
+        verbose_name_plural = "orders"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Order #{self.id} - {self.customer}"
+    
+    @property
+    def is_complete(self) -> bool:
+        return self.status == 'fulfilled'
+```
+
+## Financial Fields
+
+- Always use `DecimalField` for amounts
+- Set appropriate `max_digits` and `decimal_places`
+- Use `max_digits=18, decimal_places=8` for crypto
+- Use `max_digits=18, decimal_places=2` for fiat
+
+## Query Optimization
+
+- Use `select_related()` for foreign keys
+- Use `prefetch_related()` for reverse relations
+- Add indexes for frequently queried fields
+
+## Field Guidelines
+
+- Use `auto_now_add=True` for creation timestamps
+- Use `auto_now=True` for update timestamps
+- Use `default` for optional fields with sensible defaults
+- Use `blank=True, null=True` for truly optional fields

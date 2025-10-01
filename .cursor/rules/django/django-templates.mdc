@@ -1,0 +1,79 @@
+---
+description: When writing Django templates
+globs: **/*.html, **/*.django
+alwaysApply: false
+---
+
+# Django Templates
+
+## Overview
+
+- Use base templates for shared layouts
+- Create partial templates for reusable components
+- Keep logic minimal - complex logic belongs in views
+
+## Template Structure
+
+```django
+{% extends "base.html" %}
+
+{% block title %}Page Title{% endblock %}
+
+{% block content %}
+  <div class="container">
+    {% comment %}
+    Developer note: This section shows order details
+    {% endcomment %}
+    
+    <h1>{{ order.title }}</h1>
+    
+    {% if order.items %}
+      <ul>
+        {% for item in order.items %}
+          <li>{{ item.name }} - ${{ item.price }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No items in this order.</p>
+    {% endif %}
+  </div>
+{% endblock %}
+```
+
+## Comments
+
+- Use Django template comments for developer notes
+- For multi-line comments, use `{% comment %}` and `{% endcomment %}` tags
+- HTML comments (`<!-- -->`) are sent to the browser, template comments are not
+
+## Template Tags and Filters
+
+- Use built-in tags when possible
+- Create custom tags for complex reusable logic
+- Keep filters simple and focused
+
+## Partials
+
+Create reusable components as partials:
+
+```django
+{# _order_item.html #}
+<div class="order-item">
+  <h3>{{ item.name }}</h3>
+  <p>${{ item.price }}</p>
+</div>
+```
+
+Include with:
+
+```django
+{% include "_order_item.html" with item=order_item %}
+```
+
+## Best Practices
+
+- Keep templates simple and readable
+- Extract repeated HTML into partials
+- Use template inheritance for layout consistency
+- Name partials with leading underscore
+- Test templates with various data states (empty lists, missing data, etc.)

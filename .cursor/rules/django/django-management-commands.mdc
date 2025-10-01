@@ -1,0 +1,91 @@
+---
+description: When writing Django management commands
+globs: **/management/commands/*.py
+alwaysApply: false
+---
+
+# Django Management Commands
+
+## Command Structure
+
+### Core structure
+
+- `handle()` must be first method in Command class
+- Keep logic inline within `handle()` by default, only split up into helper functions if they could be re-usable
+- Helper methods go below `handle()`, never above
+- Include clear docstring explaining command purpose
+- Add help text for arguments, but skip the obvious ones
+
+### Example Structure
+
+```python
+from django.core.management.base import BaseCommand
+
+class Command(BaseCommand):
+    """Process pending orders and update inventory.
+    
+    Analyzes order queue and updates stock levels accordingly.
+    """
+    help = "Process pending orders"
+    
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Show what would be done without making changes',
+        )
+    
+    def handle(self, *args, **options):
+        """Execute the command."""
+        dry_run = options['dry_run']
+        
+        self.stdout.write(self.style.SUCCESS('Starting order processing...'))
+        
+        # Command logic here...
+        processed_count = self.process_orders(dry_run)
+        
+        self.stdout.write(
+            self.style.SUCCESS(f'Successfully processed {processed_count} orders')
+        )
+    
+    def process_orders(self, dry_run):
+        """Helper methods below handle()."""
+        # Helper logic here
+        pass
+```
+
+## Handle Method Guidelines
+
+### Stats Dictionary Pattern
+
+```python
+stats = {
+    "total": 0,
+    "processed": 0,
+    "skipped": {
+        "reason_1": 0,
+        "reason_2": 0,
+    },
+    "errors": [],
+}
+```
+
+Return stats at the end for logging and monitoring.
+
+## Testing
+
+### Test Structure
+
+- Test with `call_command`
+- Mock external services
+- Verify stats dictionary structure
+
+```python
+from django.core.management import call_command
+from io import StringIO
+
+def test_command():
+    out = StringIO()
+    call_command('your_command', stdout=out)
+    assert 'Success' in out.getvalue()
+```
