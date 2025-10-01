@@ -24,10 +24,10 @@ from decimal import Decimal
 
 class Order(models.Model):
     """Represents a customer order
-    
+
     Tracks order details, payment status, and fulfillment
     """
-    
+
     customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(
@@ -36,15 +36,15 @@ class Order(models.Model):
         help_text="Total order amount in USD"
     )
     status = models.CharField(max_length=20, default='pending')
-    
+
     class Meta:
         db_table = "orders"
         verbose_name_plural = "orders"
         ordering = ['-created_at']
-    
+
     def __str__(self):
         return f"Order #{self.id} - {self.customer}"
-    
+
     @property
     def is_complete(self) -> bool:
         return self.status == 'fulfilled'

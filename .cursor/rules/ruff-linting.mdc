@@ -15,6 +15,7 @@ We use `ruff` for linting. If there are lint errors, or if the user says "fix li
 For legitimate exceptions where the error would be better handled with an ignore:
 
 1. Always use targeted ignores with the specific rule(s):
+
    - `# ruff: ignore=RULE_CODE` - For the new format (preferred)
    - `# noqa: RULE_CODE` - For compatibility with other linters
 

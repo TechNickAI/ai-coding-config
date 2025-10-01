@@ -23,31 +23,31 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     """Process pending orders and update inventory.
-    
+
     Analyzes order queue and updates stock levels accordingly.
     """
     help = "Process pending orders"
-    
+
     def add_arguments(self, parser):
         parser.add_argument(
             '--dry-run',
             action='store_true',
             help='Show what would be done without making changes',
         )
-    
+
     def handle(self, *args, **options):
         """Execute the command."""
         dry_run = options['dry_run']
-        
+
         self.stdout.write(self.style.SUCCESS('Starting order processing...'))
-        
+
         # Command logic here...
         processed_count = self.process_orders(dry_run)
-        
+
         self.stdout.write(
             self.style.SUCCESS(f'Successfully processed {processed_count} orders')
         )
-    
+
     def process_orders(self, dry_run):
         """Helper methods below handle()."""
         # Helper logic here

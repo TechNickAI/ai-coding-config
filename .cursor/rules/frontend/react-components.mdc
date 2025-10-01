@@ -9,18 +9,18 @@ alwaysApply: false
 ## Component Structure
 
 ```tsx
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface ComponentProps {
-  className?: string
-  children: React.ReactNode
-  variant?: "default" | "primary" | "secondary"
+  className?: string;
+  children: React.ReactNode;
+  variant?: "default" | "primary" | "secondary";
 }
 
-export function Component({ 
-  className, 
-  children, 
-  variant = "default" 
+export function Component({
+  className,
+  children,
+  variant = "default",
 }: ComponentProps) {
   return (
     <div
@@ -36,7 +36,7 @@ export function Component({
     >
       {children}
     </div>
-  )
+  );
 }
 ```
 
@@ -56,21 +56,21 @@ export function Component({
 ```tsx
 interface Props {
   // Required props first
-  id: string
-  title: string
-  
+  id: string;
+  title: string;
+
   // Optional props with defaults
-  className?: string
-  variant?: "default" | "primary"
-  disabled?: boolean
-  
+  className?: string;
+  variant?: "default" | "primary";
+  disabled?: boolean;
+
   // Functions and callbacks
-  onClick?: () => void
-  onSubmit?: (data: FormData) => Promise<void>
-  
+  onClick?: () => void;
+  onSubmit?: (data: FormData) => Promise<void>;
+
   // Children and render props
-  children?: React.ReactNode
-  renderHeader?: () => React.ReactNode
+  children?: React.ReactNode;
+  renderHeader?: () => React.ReactNode;
 }
 ```
 
@@ -78,32 +78,32 @@ interface Props {
 
 ```tsx
 // Use hooks for state
-const [isOpen, setIsOpen] = useState(false)
-const [data, setData] = useState<Data | null>(null)
+const [isOpen, setIsOpen] = useState(false);
+const [data, setData] = useState<Data | null>(null);
 
 // Use useEffect for side effects
 useEffect(() => {
-  fetchData().then(setData)
-}, [dependency])
+  fetchData().then(setData);
+}, [dependency]);
 
 // Custom hooks for reusable logic
-const { user, loading, error } = useAuth()
+const { user, loading, error } = useAuth();
 ```
 
 ## Conditional Rendering
 
 ```tsx
 // Loading state
-if (loading) return <Spinner />
+if (loading) return <Spinner />;
 
 // Error state
-if (error) return <ErrorMessage error={error} />
+if (error) return <ErrorMessage error={error} />;
 
 // Empty state
-if (!data.length) return <EmptyState />
+if (!data.length) return <EmptyState />;
 
 // Success state
-return <DataDisplay data={data} />
+return <DataDisplay data={data} />;
 ```
 
 ## Testing

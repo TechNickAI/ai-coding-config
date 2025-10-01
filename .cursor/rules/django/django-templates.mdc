@@ -24,9 +24,9 @@ alwaysApply: false
     {% comment %}
     Developer note: This section shows order details
     {% endcomment %}
-    
+
     <h1>{{ order.title }}</h1>
-    
+
     {% if order.items %}
       <ul>
         {% for item in order.items %}

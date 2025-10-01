@@ -12,18 +12,18 @@ alwaysApply: false
 @shared_task(max_retries=3, default_retry_delay=60, rate_limit="1/m")
 def process_data(item_id: int):
     """Process data for the given item
-    
+
     Args:
         item_id: ID of the item to process
-        
+
     Returns:
         dict: Processing results
     """
     logger.info(f"Processing item {item_id}")
-    
+
     item = Item.objects.get(id=item_id)
     result = item.process()
-    
+
     logger.info(f"Processing complete: {result}")
     return result
 ```

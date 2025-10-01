@@ -78,7 +78,7 @@ context = {
 honeybadger.notify(error, tags={"env": "prod"})
 
 # ✅ DO
-honeybadger.notify(error, error_class="APIError", 
+honeybadger.notify(error, error_class="APIError",
                    context={"environment": "prod"})
 ```
 

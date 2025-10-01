@@ -15,6 +15,7 @@ When creating code snippet functions:
 - Edit Python directly and test it separately
 
 Example structure:
+
 ```
 workflows/
   my-workflow/
@@ -32,21 +33,25 @@ Put agent prompts in separate `.md` files for easy editing:
 # Agent: Data Processor
 
 ## System Prompt
+
 You are a data processing agent...
 
 ## User Prompt
+
 Process the following data: {{ data }}
 ```
 
 ## Workflow Assembly
 
 Only at the end of a session, assemble the final `.json` workflow file by including:
+
 - Python snippets where appropriate
 - Agent prompts in the right nodes
 
 ## Node Positioning
 
 Pay attention to positioning nodes in the UI for good UX:
+
 - Group related nodes together
 - Use consistent spacing
 - Create logical left-to-right flow
@@ -55,6 +60,7 @@ Pay attention to positioning nodes in the UI for good UX:
 ## Testing
 
 Before assembling into JSON:
+
 - Unit test all Python functions
 - Validate all agent prompts
 - Test error handling paths

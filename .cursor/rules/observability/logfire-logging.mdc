@@ -11,7 +11,7 @@ alwaysApply: false
 from helpers.observability import logfire
 
 # Basic logging
-logfire.info("Operation completed", 
+logfire.info("Operation completed",
              operation="data_processing",
              item_count=123)
 
@@ -24,6 +24,7 @@ with logfire.span("Processing batch", batch_id=batch.id):
 ## When to Use Spans
 
 Use spans for operations that:
+
 - Have duration you want to track
 - Have nested sub-operations
 - Group related logs together
