@@ -5,7 +5,6 @@ Shared AI coding assistant configurations that I reuse across projects. Feel fre
 ## What's Here
 
 - **`.cursor/rules/`** - Individual `.mdc` files for different domains/topics
-- **`CLAUDE.md`** - Claude system prompts and instructions
 - **`.vscode/`** - VS Code settings and AI assistant preferences
 
 This mirrors the structure you'd have in an actual project, so you can easily copy or symlink these into your repos.
@@ -17,7 +16,6 @@ ai-coding-config/
 ├── .cursor/
 │   └── rules/
 │       └── *.mdc              # Individual rule files
-├── CLAUDE.md                  # Claude configuration
 └── .vscode/
     └── settings.json          # VS Code settings
 ```
@@ -31,7 +29,6 @@ ai-coding-config/
 ```bash
 # From your project directory
 ln -s /path/to/ai-coding-config/.cursor .cursor
-ln -s /path/to/ai-coding-config/CLAUDE.md CLAUDE.md
 ln -s /path/to/ai-coding-config/.vscode .vscode
 ```
 
@@ -40,7 +37,6 @@ ln -s /path/to/ai-coding-config/.vscode .vscode
 ```bash
 # From your project directory
 cp -r /path/to/ai-coding-config/.cursor .cursor
-cp /path/to/ai-coding-config/CLAUDE.md .
 cp -r /path/to/ai-coding-config/.vscode .vscode
 ```
 
@@ -49,7 +45,7 @@ cp -r /path/to/ai-coding-config/.vscode .vscode
 ```bash
 git submodule add <repository-url> .ai-config
 ln -s .ai-config/.cursor .cursor
-ln -s .ai-config/CLAUDE.md CLAUDE.md
+ln -s .ai-config/.vscode .vscode
 ```
 
 ## Customization
