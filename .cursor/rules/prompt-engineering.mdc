@@ -1,0 +1,98 @@
+---
+description: When we are creating prompts that will be used by an LLM for agents
+alwaysApply: false
+---
+
+# Prompt Engineering Best Practices
+
+## Understanding LLM Token Prediction
+
+### How LLMs Actually Process Prompts
+
+Understanding the mechanics of LLM processing is crucial for effective prompt design:
+
+#### Sequential Token Prediction
+
+- LLMs read left to right, predicting each token based on everything before it
+- Early tokens shape all that follows—creating a "first impression" that persists
+- Each token's prediction is influenced by ALL previous tokens, creating cascading effects
+
+#### Attention Mechanisms
+
+- Earlier tokens receive more attention passes during processing
+- The model repeatedly references early context when interpreting later content
+- This creates a foundation effect where initial framing heavily influences all subsequent reasoning
+
+#### Context Window Effects
+
+- Primacy: Information at the beginning is strongly encoded and influences everything
+- Recency: Information near the end is fresh in "working memory" for decisions
+- Middle Fade: Information in the middle can get "lost" if not properly structured
+
+#### Priming & Anchoring
+
+- Early statements act as anchors that bias interpretation of everything else
+- The model's "persona" crystallizes early and remains consistent throughout
+- Initial framing determines the lens through which all data is viewed
+
+### Implications for Prompt Design
+
+SYSTEM PROMPT (Static Foundation) - the agent's DNA:
+
+- Identity First: Who the agent IS fundamentally shapes HOW it thinks
+- Core Principles: Unwavering rules or beliefs that guide decisions
+- Operational Framework: Methodology for the task
+- Capabilities & Constraints: What the agent can and cannot do
+
+USER PROMPT (Dynamic Context) - real-time inputs:
+
+- Current Context: Immediate situation or environment
+- Specific Data: The information to process
+- Task Request: Clear ask with expected output format
+
+## Core Principles
+
+### Define Clear Objectives
+
+- State the exact purpose at the beginning
+- Specify expected outputs and format
+- Establish clear boundaries of responsibility
+
+### Provide Relevant Context
+
+- Include only details needed for the task
+- Structure complex info into digestible sections
+- Use concrete examples for abstract concepts
+
+### Specify Output Format
+
+- Define exact response structure
+- Name components for complex outputs
+- Add limits (words, items) where helpful
+
+## System Prompt Construction
+
+- Agent Identity: role + expertise
+- Knowledge Framework: domain facts, constraints
+- Response Guidelines: style, tone, completeness
+- Output Requirements: what must be present/absent
+
+## User Prompt Construction
+
+- Current State: what we're analyzing now
+- Specific Data: parameters, metrics, context objects
+- Decision Ask: clear, prioritized deliverables
+
+## Optimization Techniques
+
+- Role/persona engineering
+- (Optional) step-by-step reasoning requests
+- Few-shot examples for complex formats
+- Keep system stable; vary user prompt per request
+- Token economy: concise but complete; avoid redundancy
+
+## Common Pitfalls
+
+- Ambiguous asks ("analyze thoroughly")
+- Vague quality criteria ("good analysis")
+- Excessive formatting that wastes tokens
