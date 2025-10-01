@@ -1,0 +1,99 @@
+---
+description: When the Github Actions build is broken
+alwaysApply: false
+---
+
+# Fixing Broken GitHub Actions Builds
+
+## Purpose
+
+This guide documents the process for diagnosing and fixing broken GitHub Actions builds using the `gh` CLI.
+
+## Prerequisites
+
+### Check if gh is installed
+
+First, verify the GitHub CLI is installed:
+
+```bash
+gh --version
+```
+
+### If gh is not installed
+
+Politely stop and guide the developer:
+
+> The GitHub CLI (`gh`) is not installed. Let's get that set up first!
+>
+> Installation (macOS):
+>
+> ```bash
+> brew install gh
+> gh auth login
+> ```
+>
+> Follow the prompts to authenticate with GitHub. Once complete, we can proceed with debugging the build!
+
+## Diagnostic Workflow
+
+### Step 1: List Recent Workflow Runs
+
+```bash
+gh run list --limit 5
+```
+
+Identify the failed run (marked with `X` or `failure` status). Note the run ID.
+
+### Step 2: Get Failed Logs
+
+```bash
+gh run view <run-id> --log-failed | cat
+```
+
+This shows ONLY the logs from failed steps. Analyze these logs to identify the root cause.
+
+### Step 3: Reproduce Locally
+
+Based on the error in the logs, reproduce the failure locally to verify the fix.
+
+### Step 4: Make the Fix
+
+Edit the relevant files to fix the issue identified in the logs.
+
+### Step 5: Verify Locally
+
+Test the fix thoroughly to ensure it resolves the issue.
+
+### Step 6: Report to Developer
+
+DO NOT commit or push changes!
+
+Report to the developer:
+
+> Build issue fixed!
+>
+> Changes made:
+>
+> - `path/to/file`: Description of change
+>
+> Next steps:
+>
+> 1. Review the changes with `git status` and `git diff`
+> 2. Test locally if desired
+> 3. Commit and push when ready
+> 4. Monitor the new build with `gh run watch`
+
+## Integration with Cursor
+
+When a developer says "the build is broken" or "fix the GitHub Actions build":
+
+1. Run `gh --version` to verify installation (stop if not installed)
+2. Run `gh run list --limit 5` to see recent runs
+3. Identify the failed run ID
+4. Run `gh run view <run-id> --log-failed | cat` to get error details
+5. Analyze the logs and identify root cause
+6. Fix the issue locally
+7. Verify the fix works
+8. Report back to developer with changes and next steps
+
+Remember: We diagnose and fix, the developer commits and pushes!
