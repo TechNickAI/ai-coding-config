@@ -1,0 +1,64 @@
+---
+description: When creating or editing .agent files
+alwaysApply: false
+---
+
+# Agent File Format
+
+## Structure
+
+```
+---
+SYSTEM PROMPT
+---
+
+## Identity and Capabilities
+
+Define who the agent IS and what it can do...
+
+---
+USER PROMPT
+---
+
+## Current Context
+
+Dynamic context with {{ template_variables }}...
+```
+
+## Prompt Engineering for Agents
+
+Based on LLM token prediction mechanics:
+
+### System Prompt (Static DNA)
+
+1. Identity: Who the agent IS fundamentally
+2. Philosophy: Core beliefs that guide decisions
+3. Framework: Analytical methodology
+4. Capabilities: What the agent can and cannot do
+
+### User Prompt (Dynamic Context)
+
+1. Current State: Present environment/context
+2. Specific Data: The actual information to process
+3. Decision Ask: Clear output request with format
+
+## Best Practices
+
+- All agents must specify their model explicitly
+- Fail fast - let errors bubble up
+- Use structured output with Pydantic models when possible
+- Track evolution in evolution_history when prompts improve
+- Use proper template syntax for variables
+
+## Testing
+
+```python
+from pydantic_ai.testing import TestModel
+
+agent = BaseAgent(model_override=TestModel())
+agent.test_model.set_response({"result": "test"})
+```
+
+## Remember
+
+Agents are AI employees - define their identity clearly and let them excel at their specialized roles.
