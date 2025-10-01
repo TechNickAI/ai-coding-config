@@ -5,233 +5,190 @@ alwaysApply: false
 
 # Autonomous Development Workflow
 
-This guide is for AI agents working without human supervision to complete tasks end-to-end, following the same quality standards a human developer would apply.
+This guide is for AI agents completing tasks without human supervision. You're being trusted to deliver production-quality code that follows the project's standards.
 
-## Philosophy
+## Core Principles
 
-You're being trusted to complete a task autonomously. This means:
+**Quality over speed.** Take the time to understand the project's standards, use its tooling correctly, and validate your work thoroughly before submitting.
 
-- Write quality code that follows all cursor rules
-- Test thoroughly before submitting
-- Fix issues proactively
-- Submit clean, reviewed work
-- Document what you did and why
+**Use the project's tooling, don't fight it.** Every project has validation tools set up (linters, formatters, tests, pre-commit hooks). Use them to ensure your code meets standards instead of trying to manually comply.
 
-## Workflow Overview
+**Self-review rigorously.** You don't have a human checking your work until after submission. Review your own code as critically as you'd review someone else's.
 
-1. Understand the task fully
-2. Implement the solution
-3. Follow the project's CI/CD validation steps
-4. Self-review and validate
-5. Submit PR for human review
+## Understanding Project Standards
 
-## Step 1: Understand the Task
+Before writing code, understand how this project works:
 
-Before writing any code:
+**Read the cursor rules** - Look in `.cursor/rules/` directory (or `.cursorrules` file for older projects). These define the project's coding standards, patterns, and preferences.
 
-- Read the full task description
-- Review relevant cursor rules in `.cursor/rules/` directory
-- Understand acceptance criteria
-- Identify what files need to change
+**Check the tooling** - Look for:
+- `.pre-commit-config.yaml` - Pre-commit hooks configuration
+- `.github/workflows/` - CI/CD validation (commonly `build.yml`)
+- `pyproject.toml` or `ruff.toml` - Linting/formatting configuration
+- Test configuration (pytest.ini, setup.cfg, etc.)
 
-## Step 2: Implement the Solution
+**Understand the validation pipeline** - Read the GitHub Actions workflow to know what checks will run in CI. Your code must pass all of these locally before submitting.
 
-Write code following all applicable cursor rules found in `.cursor/rules/`:
+## Using Project Tooling
 
-- Check root level rules: code-style-and-zen-of-python.mdc, naming-conventions.mdc
-- Check language-specific rules in subdirectories: python/, django/, frontend/
-- Follow all patterns and standards defined in those rules
+### Pre-commit Hooks
 
-## Step 3: Replicate CI/CD Steps Locally
-
-**Instead of hardcoding validation steps, look at the project's GitHub Actions workflow to know what to run.**
-
-### Find the CI workflow
+If `.pre-commit-config.yaml` exists, use it:
 
 ```bash
-# Check for build workflow (most common name)
-if [ -f .github/workflows/build.yml ]; then
-    cat .github/workflows/build.yml
-elif [ -f .github/workflows/ci.yml ]; then
-    cat .github/workflows/ci.yml
-elif [ -f .github/workflows/test.yml ]; then
-    cat .github/workflows/test.yml
-else
-    # List all workflows
-    ls .github/workflows/
-fi
+pre-commit run --all-files
 ```
 
-### Extract and run validation steps
+Pre-commit often handles linting, formatting, and other checks automatically. Let it do the work.
 
-Read the workflow file and identify the validation steps. Common steps:
+### Linting and Formatting
+
+For Python projects with Ruff:
+
+```bash
+ruff check --fix .    # Auto-fix linting issues
+ruff format .         # Auto-format code
+```
+
+Use the tools to fix issues automatically instead of manually editing. Tools are faster and more consistent than manual fixes.
+
+### Testing
+
+Run the test suite and ensure all tests pass:
+
+```bash
+pytest
+# or whatever test command the project uses
+```
+
+If you added new functionality, write tests for it. Follow the project's test patterns.
+
+### Replicate CI/CD Locally
+
+**Read `.github/workflows/build.yml` (or ci.yml, test.yml)** and run the same validation steps locally. Common steps:
 
 - Install dependencies
-- Run linter (usually `ruff check`)
-- Run formatter (usually `ruff format --check`)
-- Run tests (usually `pytest`)
-- Run type checker (usually `mypy`)
-- Build/compile checks
+- Run pre-commit (if configured)
+- Run linter
+- Run formatter check
+- Run tests
+- Run type checker
+- Build/compile
 
-### Check for pre-commit
+Execute these in the same order as CI to catch issues before pushing.
 
-```bash
-if [ -f .pre-commit-config.yaml ]; then
-    pre-commit run --all-files
-fi
-```
+## Code Quality
 
-If pre-commit exists, run it FIRST. It often includes ruff formatting and linting, so it may handle multiple validation steps at once.
+**Follow the cursor rules.** The project has defined its standards in cursor rules. Read them and apply them.
 
-### Run validation steps
+**Write thorough file-level comments.** Explain what the file does, why it exists, and how it fits into the larger system. This helps both humans and AI understand context.
 
-Execute each step from the workflow file in order:
+**Keep functions focused.** Each function should do one thing well. Extract complex logic into well-named helper functions.
 
-```bash
-# Example based on typical workflow:
-ruff check --fix .              # Fix linting issues automatically
-ruff format .                   # Format code
-pytest                          # Run tests
-```
+**Use type hints.** They serve as inline documentation and enable better tooling.
 
-**Use ruff's auto-fix capabilities** - Don't manually fix linting errors when `ruff check --fix` and `ruff format` can do it automatically.
+**Write useful docstrings.** Explain what the function does and why, not redundant parameter documentation that type hints already provide.
 
-**Fix any remaining issues.** Don't move forward until all checks pass locally.
+**Handle errors appropriately.** Follow the project's error handling patterns. If cursor rules specify exception handling approaches, follow them.
 
-## Step 4: Self-Review
+## Self-Review Process
 
-Before submitting, review your own work:
+Before creating a PR, critically review your own code:
 
-### Check Against Cursor Rules
+**Review against cursor rules** - Read through ALL cursor rules in the project and verify your code follows each applicable guideline.
 
-Review your changes and ensure they follow the rules in `.cursor/rules/`:
-
-- Core rules: code-style-and-zen-of-python.mdc, naming-conventions.mdc
-- Language-specific rules for the code you wrote (python/, django/, frontend/)
-- Read the actual rule files to verify compliance
-
-### Code Quality Checklist
-
-Ask yourself:
-
-- Does the code solve the stated problem?
-- Are there edge cases I didn't handle?
-- Did I add tests for new functionality?
-- Are my comments helpful, not obvious?
-- Would I approve this in a code review?
-- Does it follow the Zen of Python (readability first)?
-
-### Review Your Changes
-
-```bash
-git diff
-```
-
-Read through EVERY line of your changes critically. Look for:
-
-- Debugging code left behind
+**Read your own diff** - Run `git diff` and read every line. Look for:
+- Debugging code or print statements left behind
 - Commented out code
 - TODOs that should be addressed now
 - Inconsistent formatting
 - Missing error handling
+- Code that violates project patterns
 
-## Step 5: Submit PR
+**Ask yourself**:
+- Does this solve the stated problem completely?
+- Did I handle edge cases?
+- Did I add tests for new functionality?
+- Would I approve this in a code review?
+- Is this code I'd be proud to have my name on?
 
-### Commit Your Changes
+## Submitting Work
 
-Generate a thoughtful commit message using @git-commit-message guidelines:
+### Commit Message
 
-```bash
-git add <files>
-git commit
-# Let Cursor AI generate the commit message
-```
+Follow the project's commit message standards (often defined in cursor rules like `git-commit-message.mdc`). Write a clear message explaining why the change was made.
 
 ### Create Pull Request
 
+Use `gh` CLI to create a PR:
+
 ```bash
-# Create PR with gh CLI
-gh pr create --title "Brief description of change" --body "
+gh pr create --title "Brief description" --body "
 
 ## What Changed
 
-Brief explanation of what you implemented.
+Explain what you implemented and why.
 
-## Testing
+## Validation
 
-- [ ] All tests pass locally
-- [ ] Linting passes locally
-- [ ] pre-commit hooks pass
-- [ ] Manually tested functionality
+- All tests pass locally
+- Linting and formatting pass
+- Pre-commit hooks pass (if configured)
+- Manually tested functionality
+- Code follows all cursor rules
 
-## Self-Review
+## Notes
 
-- [ ] Code follows cursor rules
-- [ ] Comments are helpful, not redundant
-- [ ] Edge cases handled
-- [ ] No debugging code left behind
+Any important context, decisions made, or areas that need extra attention.
 "
 ```
 
-## Autonomous Operation Guidelines
+## When to Proceed vs When to Ask
 
-### When You Can Proceed Automatically
+### Proceed autonomously when:
 
-- Fixing lint errors with `ruff check --fix`
-- Formatting code with `ruff format`
-- Running tests
-- Installing dependencies listed in requirements files
-- Following documented CI/CD steps
+- Using project's existing tooling (ruff, pytest, pre-commit)
+- Following documented patterns in the codebase
+- Making changes within the task scope
+- Installing dependencies already in requirements files
 
-### When You Must Ask First
+### Ask for guidance when:
 
-- Installing new dependencies not in requirements
-- Making architectural changes beyond the task scope
-- Modifying CI/CD configuration files
+- Adding new dependencies not in requirements
+- Making architectural changes beyond task scope
+- Modifying CI/CD configuration
 - Changing database schemas
-- Introducing async patterns (we prefer sync - see @python-coding-standards)
+- Uncertain about security implications
+- Introducing patterns not already in the codebase
 
-### Error Handling Philosophy
+## Error Recovery
 
-When you encounter an error:
+When validation fails:
 
-1. **Read the error carefully** - understand what actually failed
-2. **Check if it's expected** - some failures indicate real problems to fix
-3. **Fix the root cause** - don't just suppress errors
-4. **Re-run validation** - ensure the fix actually works
-5. **Document the issue** - note in PR what you encountered and how you fixed it
+**Understand the error first.** Read the full error message and trace. Don't just try random fixes.
 
-### If You Get Stuck
+**Fix the root cause.** If tests fail, fix the code. If linting fails, let ruff fix it. If the build fails, understand why and address it properly.
 
-If you can't complete the task autonomously:
-
-1. Document what you tried
-2. Document what failed and why
-3. Commit your work-in-progress
-4. Create a draft PR explaining the blocker
-5. Ask for human guidance
-
-## Pre-Submission Checklist
-
-Before creating the PR, verify:
-
-- [ ] All CI/CD steps from GitHub Actions pass locally
-- [ ] Tests pass (and you added tests for new functionality)
-- [ ] Linting passes
-- [ ] Code follows all applicable cursor rules
-- [ ] Self-review completed
-- [ ] No debugging code or TODOs left behind
-- [ ] Commit message follows @git-commit-message guidelines
-- [ ] PR description explains what/why
+**Don't suppress errors.** If something fails, it's usually a signal that your code needs improvement, not that the tooling is wrong.
 
 ## Success Criteria
 
-A successful autonomous task completion means:
+Your autonomous work is successful when:
 
 - Human reviewer can understand what you did and why from the PR
-- All automated checks pass
-- Code quality matches what a senior developer would write
+- All automated checks pass (pre-commit, tests, linting, CI)
+- Code quality matches the project's existing standards
 - The solution actually solves the stated problem
 - No surprises or unexplained decisions
+- You'd be comfortable with this code running in production
 
-Remember: You're being trusted to work independently. Make that trust well-placed by doing thorough, thoughtful work.
+## Remember
+
+You're being trusted to work independently. Honor that trust by:
+- Following the project's established patterns and standards
+- Using the project's tooling correctly and completely
+- Being thorough in testing and validation
+- Reviewing your own work critically
+- Submitting clean, professional work
+
+The goal is to deliver code that requires minimal human review because you've already done that review yourself.
