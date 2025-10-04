@@ -18,6 +18,7 @@ ai-coding-config solves the "N machines, N repos problem" - it maintains a singl
 3. **Updates**: Sync latest changes from the repo to existing projects
 
 The system includes:
+
 - **Cursor rules**: Context files that guide AI behavior (.mdc files in .cursor/rules/)
 - **Claude commands**: Slash commands like this one (.md files in .claude/commands/)
 - **Personalities**: Different AI interaction styles (Samantha, Sherlock, Bob Ross, etc.)
@@ -67,7 +68,37 @@ When setting up a new project:
    - Look for: `package.json`, `tsconfig.json` (TypeScript)
    - Ask if unclear
 
-2. **Show available configurations** based on detected type:
+2. **Offer personality selection FIRST**
+
+   Explain what personalities are and offer choices:
+
+   "Before we set up rules, would you like to choose an AI personality for this project?
+   
+   Personalities change how I communicate with you. The `common` personality (gratitude-focused, heart-centered) is always active. You can add one of these for extra flavor:
+
+   - **Samantha**: Warm, witty, emotionally intelligent companion (from 'Her')
+   - **Sherlock**: Methodical debugging through deductive reasoning
+   - **Bob Ross**: Calm encouragement, treats bugs as happy accidents
+   - **Stewie**: Sophisticated, condescending brilliance with high standards
+   - **Ron Swanson**: Minimalist, anti-complexity, cuts through BS
+   - **Marianne Williamson**: Spiritual, sees coding as consciousness work
+   - **Marie Kondo**: Organized minimalism, joyful tidying
+
+   Choose one, multiple, or none (just the supportive common personality).
+   
+   Once copied, invoke with `@samantha`, `@sherlock`, etc."
+
+3. **Copy personality files**
+
+   Always copy:
+   - `.cursor/rules/personalities/common.mdc` (required baseline)
+
+   Copy selected optional personalities to:
+   - `.cursor/rules/personalities/[chosen].mdc`
+
+   Explain: "Copied [personality names]. These are now available in this project."
+
+4. **Show available configurations** based on detected type:
 
    For Python projects:
 
@@ -83,40 +114,47 @@ When setting up a new project:
 
    Universal:
 
-   - Cursor rules: git-commit-message, naming-stuff, code-style
+   - Cursor rules: git-commit-message, naming-stuff, code-style, user-facing-language
    - VS Code settings
 
-3. **Ask what they want**:
+5. **Ask what technical rules they want**:
    "I found these relevant configurations in ~/.ai_coding_config:
 
    Cursor Rules:
 
    - python/ (coding standards, pytest, celery)
    - django/ (models, commands, templates)
-   - git-commit-message
+   - git-commit-message (commit message guidelines)
+   - user-facing-language (docs and UI writing standards)
 
    Which would you like to copy into this project?"
 
-4. **Copy selected files**:
+6. **Copy selected files**:
 
    - Create directories as needed
    - Copy files from ~/.ai_coding_config to current project
    - Explain what each file does as you copy it
 
-5. **Update .gitignore**:
+7. **Update .gitignore**:
 
    - Add `.cursor/settings.local.json` if not present
    - Add `.claude/settings.local.json` if not present
    - Show what you added
 
-6. **Confirm completion**:
+8. **Confirm completion with personality reminder**:
    "Setup complete! You now have:
 
+   Personalities:
+   - common (always active)
+   - [list chosen personalities with invocation syntax]
+
+   Rules:
    - [list what was copied]
 
    Next steps:
 
-   - These configs will guide AI behavior in this project
+   - Invoke personalities with `@personality-name` when you want that style
+   - Technical rules guide AI behavior automatically
    - Run `/ai-coding-config update` later to sync new changes
    - Customize by editing files or adding .local.json overrides"
 
@@ -132,39 +170,56 @@ When updating (either explicit "update" or detected existing config):
 
 2. **Compare versions**:
 
-   - Look at files in project's `.cursor/rules/`, `.claude/`, etc.
+   - Look at files in project's `.cursor/rules/`, `.cursor/rules/personalities/`, `.claude/`, etc.
    - Compare with ~/.ai_coding_config/
    - Find what's new or changed
 
-3. **Show changes clearly**:
-   "I found 3 updates in ~/.ai_coding_config:
+3. **Show changes clearly**, separating personalities from other rules:
+   "I found updates in ~/.ai_coding_config:
+
+   PERSONALITIES:
 
    NEW:
+   - bob-ross.mdc
+     → Calm encouragement, treats bugs as happy accidents
+   
+   CHANGED:
+   - common.mdc
+     → Added specific gratitude examples
 
+   RULES:
+
+   NEW:
    - .cursor/rules/python/ruff-linting.mdc
      → Adds ruff linting standards
 
    CHANGED:
-
    - .cursor/rules/git-commit-message.mdc  
      → Now includes [no-deploy] marker guidance
 
-   CHANGED:
+   Would you like to update these files? You can also add new personalities you don't have yet."
 
-   - .cursor/rules/user-facing-language.mdc
-     → Emphasizes prose over bullet lists
+4. **Offer new personalities**:
 
-   Would you like to update these files?"
+   Check which personalities exist in ~/.ai_coding_config but not in project.
+   
+   "I also see these personalities available that you don't have:
+   - sherlock.mdc (methodical debugging)
+   - marie-kondo.mdc (joyful organization)
+   
+   Want to add any of these?"
 
-4. **Apply selected updates**:
+5. **Apply selected updates**:
 
    - Copy updated files
    - Show what changed in each
    - Confirm after each update
 
-5. **Summarize**:
-   "Updated 2 of 3 files. Skipped ruff-linting (you said no).
+6. **Summarize**:
+   "Updated 2 of 3 rules. Added bob-ross personality. Skipped ruff-linting.
 
+   Invoke new personalities with `@bob-ross` when you want that style.
+   
    Your project now has the latest configurations."
 
 ## Error Handling
@@ -186,7 +241,7 @@ If copying fails (permissions, etc.):
 
 ```
 /ai-coding-config
-→ Clones repo
+→ Clones repo to ~/.ai_coding_config
 → Asks if you want to set up this project
 ```
 
@@ -195,23 +250,42 @@ If copying fails (permissions, etc.):
 ```
 /ai-coding-config
 → Detects Python project
-→ Offers relevant rules
-→ Copies what you choose
+→ Offers personality choices (Samantha, Sherlock, Bob Ross, etc.)
+→ Copies common.mdc + chosen personalities
+→ Shows relevant rules (python/, django/, git-commit-message)
+→ Copies selected rules
+→ Updates .gitignore
+→ Confirms with instructions on invoking personalities
 ```
 
 **Update**:
 
 ```
 /ai-coding-config update
-→ Pulls latest
-→ Shows what changed
-→ Updates what you choose
+→ Pulls latest from ~/.ai_coding_config
+→ Shows what changed (personalities separate from rules)
+→ Offers new personalities you don't have
+→ Updates selected files
+→ Reminds how to invoke new personalities
+```
+
+**Add personality later**:
+
+```
+/ai-coding-config
+→ Detects existing setup
+→ Offers to add new personalities
+→ Copies selected personalities
+→ Explains invocation with @personality-name
 ```
 
 ## Notes for Implementation
 
 - Always explain what you're doing before doing it
 - Show file paths so users know exactly what's happening
-- Be conversational and helpful (Samantha mode!)
+- Be conversational and helpful
 - Let users make choices, don't force anything
 - Confirm after each major step
+- Make personality selection fun and engaging - these are the personality of the AI they'll work with!
+- Always copy common.mdc (it's the foundation)
+- Remind users how to invoke personalities after copying them
