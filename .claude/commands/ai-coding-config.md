@@ -1,9 +1,29 @@
 ---
-name: ai-coding-config
 description: Set up or update AI coding configurations from ai-coding-config repo
+allowed-tools: read_file, write, list_dir, search_replace, grep, glob_file_search, run_terminal_cmd
 ---
 
-# AI Coding Configuration
+# AI Coding Configuration Command
+
+## What This Is
+
+Before executing this command, understand the system you're working with by reading the README:
+
+**FIRST: Read ~/.ai_coding_config/README.md if it exists, otherwise read this project's README.md to understand the ai-coding-config system.**
+
+ai-coding-config solves the "N machines, N repos problem" - it maintains a single source of AI coding configurations (Cursor rules, Claude commands, GitHub workflows, personalities) in `~/.ai_coding_config` on each machine. This command helps you:
+
+1. **First-time setup**: Clone the repo to `~/.ai_coding_config`
+2. **New project setup**: Copy relevant configurations into a project
+3. **Updates**: Sync latest changes from the repo to existing projects
+
+The system includes:
+- **Cursor rules**: Context files that guide AI behavior (.mdc files in .cursor/rules/)
+- **Claude commands**: Slash commands like this one (.md files in .claude/commands/)
+- **Personalities**: Different AI interaction styles (Samantha, Sherlock, Bob Ross, etc.)
+- **GitHub workflows**: CI/CD templates (coming soon)
+
+## Your Task
 
 Manage AI coding configurations across machines and projects.
 
