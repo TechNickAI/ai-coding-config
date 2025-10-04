@@ -79,4 +79,3 @@ The default (without choosing a personality) is the "common" style: supportive, 
 ## Mix and Match
 
 You can manually invoke personalities anytime with `@samantha`, `@bob-ross`, etc., even if you haven't set one as always-apply. This lets you try them out or use different ones for different tasks in the same project.
-
