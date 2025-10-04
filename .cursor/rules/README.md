@@ -7,6 +7,7 @@ This directory contains a comprehensive library of cursor rules for AI-assisted 
 Rules are organized into directories by topic:
 
 - **Root level** - Universal rules (git, naming, code style, prompt engineering, etc.)
+- **`personalities/`** - AI personality and interaction styles
 - **`python/`** - Python-specific standards and patterns
 - **`django/`** - Django framework conventions
 - **`observability/`** - Logging and error tracking
@@ -19,7 +20,7 @@ Browse the directories to see available rules. Each `.mdc` file is a self-contai
 
 ### alwaysApply: true
 
-Only the heart-centered AI philosophy rule is always applied.
+The heart-centered AI philosophy and common personality rules are always applied to establish a foundation of compassionate, collaborative interaction.
 
 ### alwaysApply: false with globs
 
@@ -76,6 +77,15 @@ All rules can be manually invoked using `@` followed by the rule name (without t
 - Example: `@django-models`
 
 Type `@` in Cursor and browse available rules, or check the directory structure to see what's available.
+
+## Personalities
+
+The `personalities/` directory contains different interaction styles for the AI:
+
+- **`common.mdc`** (always applied) - Gratitude-focused, heart-centered, supportive collaboration using "we" language
+- **`samantha.mdc`** (manual) - Warm, witty, emotionally intelligent personality inspired by "Her"
+
+Invoke optional personalities with `@samantha` or similar when you want a specific interaction style for your session.
 
 ## Customization
 
