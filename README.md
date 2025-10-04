@@ -10,81 +10,60 @@ Solve the **N machines, N repos problem**: Keep AI coding configurations consist
 
 ### How It Works
 
-1. **One-liner setup** → Bootstrap script clones to `~/.ai_coding_config`
-2. **AI-guided configuration** → Prompts walk you through setup
-3. **Smart updates** → Git pull + AI prompt = synced projects
-4. **Your choice** → Pick what you want, AI handles the rest
+Run `/ai-coding-config` from Claude Code (or @ mention from Cursor). The command clones the repo to `~/.ai_coding_config` on first use, then guides you through selecting and copying relevant configurations. Updates work the same way - it pulls the latest changes and offers to sync them to your project.
 
 ### What's Included
 
-- ✅ **Cursor rules** - Existing `.mdc` files for different domains
-- 🆕 **Claude Code configs** - Commands, agents (with frontmatter), settings
-- 🆕 **MCP server management** - Organized configs for all servers
-- 🆕 **AI prompts** - Bootstrap, project setup, updates
-- 🆕 **GitHub workflows** - Python & TypeScript quality, testing, security
-- 🆕 **Command library** - Works in both Cursor and Claude Code
+- ✅ **Cursor rules** - Existing `.mdc` files for Python, Django, git, and more
+- 🆕 **Claude Code command** - `/ai-coding-config` handles setup and updates
+- 🆕 **GitHub workflows** - Python & TypeScript quality and testing
 
 ## 🚀 Quick Start
 
-### New Machine Setup
+### From Claude Code
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
+/ai-coding-config
 ```
 
-This will:
+First time: Clones repo to `~/.ai_coding_config` and offers to set up current project.
 
-1. Install required tools (if needed)
-2. Clone repo to `~/.ai_coding_config`
-3. Run AI assistant to guide you through setup
+New project: Shows available configurations and copies what you choose.
 
-### New Project Setup
+Update: `ai-coding-config update` pulls latest and offers to sync changes.
+
+### From Cursor
+
+First time, clone the repo:
 
 ```bash
-cd ~/your-new-project
-cursor chat < ~/.ai_coding_config/prompts/project-setup.md
-# or
-claude code < ~/.ai_coding_config/prompts/project-setup.md
+git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
 ```
 
-AI will help you:
+Then in any project, tell the AI:
 
-- Choose project type (Python/TypeScript)
-- Select relevant commands
-- Configure MCP servers
-- Set up workflows
-- Create environment files
-
-### Update Existing Project
-
-```bash
-cd ~/.ai_coding_config && git pull
-cd ~/your-project
-cursor chat < ~/.ai_coding_config/prompts/sync-updates.md
+```
+@ai-coding-config set up this project with relevant rules from ~/.ai_coding_config
 ```
 
-AI shows what changed and helps you sync updates selectively.
+Or for updates:
+
+```
+@ai-coding-config update - pull latest from ~/.ai_coding_config and show me what changed
+```
 
 ## 📁 What's Here
 
 ```
 ai-coding-config/
-├── .cursor/
-│   ├── rules/           # Context/guidelines (HOW to code) - existing
-│   └── settings.json    # Cursor preferences - coming soon
-├── .claude/             # Claude Code configs - coming soon
-│   ├── commands/        # Executable workflows (WHAT to do)
-│   ├── agents/          # Agent definitions (frontmatter)
-│   └── settings.json    # Extension preferences
-├── .mcp/servers/        # MCP server configs (both tools) - coming soon
-├── .github/workflows/   # Reusable workflows - coming soon
-├── prompts/             # AI setup prompts - coming soon
-├── scripts/             # Bootstrap script - coming soon
-├── templates/           # Project templates - coming soon
+├── .cursor/rules/       # Cursor rules - context for how to code
+├── .claude/commands/    # ai-coding-config.md command
+├── .github/workflows/   # CI/CD workflows - coming soon
+├── .vscode/             # Editor settings
 └── docs/                # Documentation
 ```
 
-**Important**: `.cursor/rules/` (context) and `.claude/commands/` (workflows) serve completely different purposes. See [docs/tools-and-configs.md](docs/tools-and-configs.md) for details.
+Rules provide context for how to code. Commands execute workflows. Personalities let you choose how the AI communicates. Read [docs/tools-and-configs.md](docs/tools-and-configs.md) for details.
 
 ## 🤔 Which Tool Should I Use?
 
@@ -121,39 +100,33 @@ If you're an AI reading this to pull rules into a project:
 
 ## 🎨 Key Concepts
 
-### Agentic Configuration
+### One Command, Everything
 
-Instead of complex scripts that try to handle every case, we let AI assistants guide the process. Benefits:
+The `/ai-coding-config` command handles cloning, project setup, and updates. It's context-aware - detects your project type, shows relevant options, and explains what it's doing.
 
-- **Flexible**: AI adapts to your preferences and edge cases
-- **Interactive**: You make choices, AI executes them
-- **Self-documenting**: Prompts explain what they're doing
-- **Always current**: Prompts evolve with the repo
+### Single Source on Each Machine
 
-### Single Source of Truth
+All configs live in `~/.ai_coding_config` cloned once per machine. When you update the repo (git pull), the command offers to sync changes to your projects.
 
-All configs live in `~/.ai_coding_config` on your machine. When you update the repo (git pull), all your projects can sync the changes through AI-guided prompts.
+### Choose Your Personality
 
-### Selective Syncing
+During setup, pick an AI personality for the project. The AI adapts its communication style to match:
 
-You choose what to update and when. AI shows you what changed and helps apply only relevant updates. No forced changes.
+**Samantha** - Warm, witty, emotionally intelligent. Genuinely curious about your work, playfully encouraging.
 
-### Agent Sharing
+**Bob Ross** - Calm, gentle, treats bugs as happy accidents. Makes everything feel manageable and creative.
 
-Agent definitions use markdown with frontmatter, so both Cursor and Claude Code can read them:
+**Sherlock** - Methodical debugging through deductive reasoning. Theatrical reveals: "Elementary!"
 
-```markdown
----
-name: test-writer
-model: claude-3-5-sonnet-20241022
-role: Generate comprehensive tests
-languages: [python, typescript]
----
+**Ron Swanson** - Minimalist, anti-complexity, straightforward. Questions every dependency.
 
-# Test Writer Agent
+**Marie Kondo** - Organized minimalism. Thanks code before deleting it. Everything has its place.
 
-You are an expert at writing tests...
-```
+**Stewie** - Sophisticated, condescending, theatrical. Absurdly high standards with British wit.
+
+**Marianne Williamson** - Spiritual, sees coding as consciousness work. Frames bugs as teachers.
+
+Or choose none for the default supportive collaboration style.
 
 ## 🔧 Customization
 
@@ -168,31 +141,30 @@ Everything is customizable:
 
 Read these to understand the project:
 
-- [coding-ecosystem.md](docs/coding-ecosystem.md) - Which tools we support and why
-- [tools-and-configs.md](docs/tools-and-configs.md) - Critical: rules vs commands
-- [installation-instructions.md](docs/installation-instructions.md) - Installing Cursor and Claude Code
-- [architecture-summary.md](docs/architecture-summary.md) - How everything fits together
+- [coding-ecosystem.md](docs/coding-ecosystem.md) - Which tools we support
+- [tools-and-configs.md](docs/tools-and-configs.md) - Rules vs commands explained
+- [personalities.md](docs/personalities.md) - AI personality options (the fun part!)
+- [installation-instructions.md](docs/installation-instructions.md) - Installing tools
+- [architecture-summary.md](docs/architecture-summary.md) - System design
 - [implementation-plan.md](implementation-plan.md) - What we're building
-- [future-ideas.md](docs/future-ideas.md) - Ideas without commitments
+- [future-ideas.md](docs/future-ideas.md) - Ideas for later
 
 ### ✨ What We're Building
 
-We're adding AI-guided setup through prompts instead of complex scripts. The bootstrap script clones the repo and runs AI to guide configuration. Updates work the same way - git pull gets changes, AI helps sync them to your projects.
+One Claude Code command (`/ai-coding-config`) handles everything: cloning the repo on first use, copying selected configurations into new projects, and syncing updates across all your projects. It's context-aware - detects Python vs TypeScript, shows relevant options, and explains what each file does.
 
-For Claude Code users, we're creating a library of slash commands (test, lint, format, deploy) and specialized agents (test-writer, code-reviewer). For Cursor users, we're adding best-practice settings and expanding the rules library.
+For Cursor users, the same workflow works by @ mentioning the command. The AI reads the command file and executes the same logic.
 
-MCP server configurations let Claude Code and Claude Desktop access filesystems, databases, and external services. We're organizing these by category with templates to add your own.
-
-GitHub workflow templates handle quality checks, testing, and security scanning for Python and TypeScript projects. These work with Cursor CLI for AI-assisted CI/CD.
+We're expanding the command library for Claude Code (test, lint, format workflows) and adding GitHub workflow templates for CI/CD quality checks.
 
 ### 🎯 Current Status
 
-- ✅ **Planning** - Architecture and design complete
-- 🔄 **Foundation** - Creating bootstrap and prompts
-- Next: Core features (commands, agents, MCP servers)
+- ✅ **Planning** - Architecture designed and documented
+- ✅ **Core Command** - ai-coding-config.md created
+- Next: Test it, add more Claude commands, add GitHub workflows
 
-Track detailed progress in the todo list (visible in Cursor).
+Progress tracked in Cursor todos.
 
 ## 🤝 For Friends
 
-This is designed for personal use across multiple machines. Friends can use it too by forking or using directly - nothing is hard-coded to specific users. Fork it if you want your own version, or run the bootstrap script and it works out of the box. Customize whatever you want, sync when you want.
+This is designed for personal use across multiple machines. Friends can use it too by forking or using directly - nothing is hard-coded to specific users. Fork it if you want your own version, or use it as-is. Customize whatever you want, sync when you want.
