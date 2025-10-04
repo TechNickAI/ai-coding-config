@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+
+# Editor/IDE
+*.swp
+*.local.json
+
+# Python (for testing/examples)
+*.pyc
+__pycache__/
+.pytest_cache/
+.venv/
+.ruff_cache/
+
+# Node.js (for testing/examples)
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+bin/
+lib/
+dist/
+build/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
