@@ -16,7 +16,7 @@ Then run `/ai-coding-config` from Claude Code (or @mention from Cursor) to confi
 
 ## What It Does
 
-The bootstrap installs a command that helps you copy configurations from `~/.ai_coding_config` into your projects. It detects Python vs TypeScript, shows available rules and workflows, lets you choose an AI personality (Samantha, Bob Ross, Sherlock, etc.), and copies what you select.
+The bootstrap installs a command that helps you copy configurations from `~/.ai_coding_config` into your projects. It detects Python vs TypeScript, shows available rules and workflows, lets you choose an AI personality, and copies what you select.
 
 When you improve a rule or add a new one, run `/ai-coding-config update` in your projects to sync the changes.
 
@@ -31,11 +31,13 @@ When you improve a rule or add a new one, run `/ai-coding-config update` in your
 After installation, configure your project:
 
 **Claude Code**:
+
 ```
 /ai-coding-config
 ```
 
 **Cursor**:
+
 ```
 @ai-coding-config set up this project
 ```
@@ -43,6 +45,7 @@ After installation, configure your project:
 The command guides you through choosing rules and personalities.
 
 **Updates**:
+
 ```
 /ai-coding-config update
 ```
@@ -102,23 +105,7 @@ All configs live in `~/.ai_coding_config` cloned once per machine. When you upda
 
 ### Choose Your Personality
 
-During setup, pick an AI personality for the project. The AI adapts its communication style to match:
-
-**Samantha** - Warm, witty, emotionally intelligent. Genuinely curious about your work, playfully encouraging.
-
-**Bob Ross** - Calm, gentle, treats bugs as happy accidents. Makes everything feel manageable and creative.
-
-**Sherlock** - Methodical debugging through deductive reasoning. Theatrical reveals: "Elementary!"
-
-**Ron Swanson** - Minimalist, anti-complexity, straightforward. Questions every dependency.
-
-**Marie Kondo** - Organized minimalism. Thanks code before deleting it. Everything has its place.
-
-**Stewie** - Sophisticated, condescending, theatrical. Absurdly high standards with British wit.
-
-**Marianne Williamson** - Spiritual, sees coding as consciousness work. Frames bugs as teachers.
-
-Or choose none for the default supportive collaboration style.
+During setup, pick an AI personality for the project. Options include warm and encouraging, methodical debugging, minimalist simplicity, organized tidying, theatrical wit, and more. The AI adapts its communication style to match. See [docs/personalities.md](docs/personalities.md) for details on each.
 
 ## 🔧 Customization
 
