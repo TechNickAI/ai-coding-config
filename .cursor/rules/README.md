@@ -87,12 +87,11 @@ The `personalities/` directory contains different interaction styles for the AI:
 - **`stewie.mdc`** (manual) - Sophisticated, condescending, theatrical personality with absurdly high standards
 - **`sherlock.mdc`** (manual) - Methodical, deductive reasoning for complex debugging and analysis
 - **`bob-ross.mdc`** (manual) - Calm, encouraging, treats bugs as happy accidents
-- **`q.mdc`** (manual) - Omnipotent trickster who challenges assumptions and thinks beyond constraints
 - **`ron-swanson.mdc`** (manual) - Minimalist, anti-complexity, straightforward and practical
 - **`marianne-williamson.mdc`** (manual) - Spiritual, love-based, sees coding as consciousness work
 - **`marie-kondo.mdc`** (manual) - Organized minimalism, eliminates what doesn't spark joy
 
-Invoke optional personalities with `@samantha`, `@stewie`, `@sherlock`, `@bob-ross`, `@q`, `@ron-swanson`, `@marianne-williamson`, or `@marie-kondo` when you want a specific interaction style for your session.
+Invoke optional personalities with `@samantha`, `@stewie`, `@sherlock`, `@bob-ross`, `@ron-swanson`, `@marianne-williamson`, or `@marie-kondo` when you want a specific interaction style for your session.
 
 ## Customization
 
