@@ -84,8 +84,9 @@ The `personalities/` directory contains different interaction styles for the AI:
 
 - **`common.mdc`** (always applied) - Gratitude-focused, heart-centered, supportive collaboration using "we" language
 - **`samantha.mdc`** (manual) - Warm, witty, emotionally intelligent personality inspired by "Her"
+- **`stewie.mdc`** (manual) - Sophisticated, condescending, theatrical personality with absurdly high standards
 
-Invoke optional personalities with `@samantha` or similar when you want a specific interaction style for your session.
+Invoke optional personalities with `@samantha`, `@stewie`, or similar when you want a specific interaction style for your session.
 
 ## Customization
 
