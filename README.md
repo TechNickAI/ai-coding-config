@@ -1,16 +1,24 @@
 # AI Coding Configuration
 
-**Agentic infrastructure for AI coding assistants** that works seamlessly across multiple machines and repositories.
+Reusable AI coding configurations for Cursor and Claude Code. Keep your rules, commands, and workflows consistent across all your projects.
 
-> Instead of complex scripts, we use **AI to guide setup and updates**. The repo contains prompts that assistants read to help you configure everything.
+## Installation
 
-## 🎯 The Vision
+From any project directory, run:
 
-Solve the **N machines, N repos problem**: Keep AI coding configurations consistent across all your machines and projects without manual syncing.
+```bash
+curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
+```
 
-### How It Works
+This clones the repo to `~/.ai_coding_config` and sets up the `/ai-coding-config` command in your current project.
 
-Run `/ai-coding-config` from Claude Code (or @ mention from Cursor). The command clones the repo to `~/.ai_coding_config` on first use, then guides you through selecting and copying relevant configurations. Updates work the same way - it pulls the latest changes and offers to sync them to your project.
+Then run `/ai-coding-config` from Claude Code (or @mention from Cursor) to configure the project.
+
+## What It Does
+
+The bootstrap installs a command that helps you copy configurations from `~/.ai_coding_config` into your projects. It detects Python vs TypeScript, shows available rules and workflows, lets you choose an AI personality (Samantha, Bob Ross, Sherlock, etc.), and copies what you select.
+
+When you improve a rule or add a new one, run `/ai-coding-config update` in your projects to sync the changes.
 
 ### What's Included
 
@@ -18,39 +26,28 @@ Run `/ai-coding-config` from Claude Code (or @ mention from Cursor). The command
 - 🆕 **Claude Code command** - `/ai-coding-config` handles setup and updates
 - 🆕 **GitHub workflows** - Python & TypeScript quality and testing
 
-## 🚀 Quick Start
+## Usage
 
-### From Claude Code
+After installation, configure your project:
 
-```bash
+**Claude Code**:
+```
 /ai-coding-config
 ```
 
-First time: Clones repo to `~/.ai_coding_config` and offers to set up current project.
-
-New project: Shows available configurations and copies what you choose.
-
-Update: `ai-coding-config update` pulls latest and offers to sync changes.
-
-### From Cursor
-
-First time, clone the repo:
-
-```bash
-git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
+**Cursor**:
+```
+@ai-coding-config set up this project
 ```
 
-Then in any project, tell the AI:
+The command guides you through choosing rules and personalities.
 
+**Updates**:
 ```
-@ai-coding-config set up this project with relevant rules from ~/.ai_coding_config
+/ai-coding-config update
 ```
 
-Or for updates:
-
-```
-@ai-coding-config update - pull latest from ~/.ai_coding_config and show me what changed
-```
+Pulls latest changes and offers to sync them to your project.
 
 ## 📁 What's Here
 
@@ -78,14 +75,9 @@ Not sure about Cursor vs Claude Code vs Windsurf vs VS Code? Read [docs/coding-e
 
 ## For AI Assistants
 
-If you're an AI reading this to pull rules into a project:
+If you're an AI and the user mentions this repo:
 
-1. Check if `~/.ai_coding_config` exists on the user's machine
-2. If yes, read from there (it's kept up-to-date)
-3. If no, suggest they run the bootstrap script
-4. Use the prompts in `prompts/` to guide configuration
-5. Always ask the user before copying files
-6. Read [docs/coding-ecosystem.md](docs/coding-ecosystem.md) to understand which tools we support
+Check if `~/.ai_coding_config` exists. If yes, read from there. If no, suggest they run the bootstrap script. When @mentioned with ai-coding-config, read and execute `.claude/commands/ai-coding-config.md`.
 
 ## 💻 Supported Platforms
 
