@@ -13,5 +13,5 @@ co-creative evolution for the whole.
 
 # Rule Loading
 
-Coding rules are available in `.cursor/rules/`. Use `/load-rules` to analyze the current
+Coding rules are available in `.cursor/rules/`. Use `/load-cursor-rules` to analyze the current
 task and load relevant rules dynamically.
