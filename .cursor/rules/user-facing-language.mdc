@@ -1,0 +1,155 @@
+---
+description: When writing any user-facing content (README, docs, website copy, UI text, error messages)
+alwaysApply: false
+---
+
+# User-Facing Language Guide
+
+Write for capable, intelligent users. Make them feel **respected, capable, confident, understood, and excited**.
+
+**Quality bar: Apple-level attention.** Every word earns its place.
+
+---
+
+## Voice
+
+**Authentic.** Explain something real, not sell something imaginary.
+
+**Direct.** Say what you mean. Cut unnecessary words.
+
+**Confident.** You built something real. Own it. Avoid hedging ("might," "could," "potentially").
+
+**Specific.** Concrete details build trust. "Exports to CSV in under 2 seconds" beats "Fast and efficient."
+
+---
+
+## Language Patterns
+
+**"We" for the team/project:**
+
+```
+✓ We built this to solve [problem]
+✓ The framework follows three stages
+```
+
+**"You" when speaking to users:**
+
+```
+✓ You configure it once, then it runs automatically
+✓ Your data stays private on your infrastructure
+```
+
+**Imperative for instructions:**
+
+```
+✓ Install the package
+✓ Set your API key
+```
+
+---
+
+## Never Use These
+
+### AI Marketing Tropes
+
+```
+✗ "It's not just [X], it's [Y]"
+✗ "If 2024 was the year of X..."
+✗ "Imagine a world where..."
+
+✓ State what it IS. Show concrete outcomes.
+```
+
+### System Overuse
+
+```
+✗ The system processes your data. The system learns patterns.
+
+✓ Processes your data automatically. Learns from patterns.
+```
+
+Use "system" only when technically necessary.
+
+### Empty Superlatives
+
+```
+✗ Revolutionary platform
+✗ Game-changing technology
+✗ Unprecedented capabilities
+
+✓ Describe the actual capability specifically
+```
+
+### Weak Patterns
+
+```
+✗ Passive voice: "Data is processed by the engine"
+✓ Active voice: "The engine processes your data"
+
+✗ Hedge words: "This might help you be more productive"
+✓ Concrete: "Saves 10+ hours weekly on manual exports"
+
+✗ Jargon: "Leveraging synergistic workflows"
+✓ Plain: "Tasks run in parallel to speed up processing"
+```
+
+---
+
+## Quality Check
+
+Every sentence should:
+
+1. **Earn its place** - If removing it doesn't hurt, remove it
+2. **Add information** - No filler like "it's important to note that"
+3. **Sound natural** - Read it aloud. Rewrite if awkward
+
+---
+
+## Examples
+
+### Feature Description
+
+```
+✗ Our revolutionary platform leverages cutting-edge technology to transform
+  your workflow. It's not just about automation—it's about unlocking your
+  full potential.
+
+✓ Automates the three most time-consuming parts of your workflow: data entry,
+  validation, and export. You go from 4 hours of manual work to 10 minutes
+  of review.
+```
+
+### Technical Capability
+
+```
+✗ The system utilizes advanced algorithms to process your data and generate
+  intelligent insights.
+
+✓ Uses PostgreSQL full-text search to find relevant records in under 100ms,
+  even across millions of rows.
+```
+
+### Documentation Flow
+
+```
+✗ The system processes data from multiple sources. The system then uses
+  algorithms to analyze that data. The system generates reports based on
+  what it finds.
+
+✓ Processes data from multiple sources. Analyzes patterns automatically.
+  Generates reports daily at 6am.
+```
+
+---
+
+## The North Star
+
+**Think Apple. Think Stripe. Think Basecamp.**
+
+Write with:
+
+- The **confidence** of someone who's built something real
+- The **clarity** of someone who respects the reader's time
+- The **authenticity** of someone who understands the actual problem
+
+From a place of universal love: Build tools that amplify human potential. The language should honor that mission.
