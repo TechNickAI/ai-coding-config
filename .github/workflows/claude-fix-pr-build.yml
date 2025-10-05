@@ -1,0 +1,148 @@
+---
+# =====================================================================
+# Claude Automatic PR Build Fix Workflow
+# =====================================================================
+#
+# Automatically attempts to fix PR build failures using Claude.
+# Only runs on pull requests, not direct pushes to main.
+#
+# How it works:
+# 1. Triggers when a PR is opened or updated
+# 2. Waits for the Build CryptoAI workflow to complete
+# 3. If it fails, fetches the failure logs
+# 4. Provides logs to Claude with explicit fix instructions
+# 5. Claude analyzes, fixes, and commits directly to the PR branch
+# 6. Pushes the fixes, which triggers a new build
+#
+# With pull_request trigger, GITHUB_TOKEN has write permissions and can
+# push directly to the PR branch. No Personal Access Token needed!
+#
+# For main branch failures: Trigger manually with workflow_dispatch
+#
+# =====================================================================
+
+name: 🤖 Claude Fix PR Build
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+  id-token: write
+
+jobs:
+  fix-pr-build:
+    name: 🔧 Fix PR build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⏳ Wait for build to complete
+        id: wait-build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          echo "⏳ Waiting for Build CryptoAI workflow to complete..."
+          sleep 10
+
+          # Wait for the build workflow run for this commit
+          for i in {1..30}; do
+            RUN_ID=$(gh run list \
+              --workflow "Build CryptoAI 🚀" \
+              --branch "$HEAD_REF" \
+              --json databaseId,status,conclusion,headSha \
+              --jq ".[] | select(.headSha == \"$HEAD_SHA\") | .databaseId" \
+              | head -1)
+
+            if [ -n "$RUN_ID" ]; then
+              STATUS=$(gh run view "$RUN_ID" --json status,conclusion --jq '.status')
+              if [ "$STATUS" = "completed" ]; then
+                CONCLUSION=$(gh run view "$RUN_ID" --json conclusion --jq -r '.conclusion')
+                echo "build_run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+                echo "build_conclusion=$CONCLUSION" >> "$GITHUB_OUTPUT"
+                echo "✅ Build completed with conclusion: $CONCLUSION"
+                break
+              fi
+            fi
+
+            echo "Still waiting... (attempt $i/30)"
+            sleep 10
+          done
+
+      - name: 🔍 Fetch failure logs
+        if: steps.wait-build.outputs.build_conclusion == 'failure'
+        id: get-logs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ steps.wait-build.outputs.build_run_id }}
+        run: |
+          echo "📊 Fetching failure logs from run $RUN_ID"
+          gh run view "$RUN_ID" --log-failed > /tmp/failure-logs.txt || true
+
+          if [ -s /tmp/failure-logs.txt ]; then
+            LINES=$(wc -l < /tmp/failure-logs.txt)
+            echo "✅ Saved failure logs to /tmp/failure-logs.txt ($LINES lines)"
+          else
+            echo "⚠️  No failure logs retrieved"
+          fi
+
+      - name: ⚙️ Configure git
+        if: steps.wait-build.outputs.build_conclusion == 'failure'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 🤖 Run Claude to fix the build
+        if: steps.wait-build.outputs.build_conclusion == 'failure'
+        id: claude-fix
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            The build failed on this PR. Fix the issues and commit your changes.
+
+            Failure logs are in /tmp/failure-logs.txt
+
+            Follow .cursor/rules/git-commit-message.mdc for commit message format.
+            Follow .cursor/rules/autonomous-development-workflow.mdc for the validation workflow.
+
+            The workflow will push your commit directly to this PR branch.
+
+          claude_args:
+            '--permission-mode bypassPermissions --allowed-tools
+            "Bash(*),Read(*),Write(*),Edit(*)"'
+
+      - name: 📤 Push fixes to PR
+        if: steps.wait-build.outputs.build_conclusion == 'failure'
+        id: push-fixes
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          # Check for uncommitted changes
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            echo "⚠️  Claude made changes but didn't commit"
+            git status --short
+            exit 0
+          fi
+
+          # Check for unpushed commits
+          if [ "$(git rev-list --count "origin/$HEAD_REF..HEAD" 2>/dev/null || echo 0)" -gt 0 ]; then
+            echo "✅ Pushing fixes to PR branch"
+            git log --oneline "origin/$HEAD_REF..HEAD"
+            git push
+            echo "✅ Successfully pushed fixes - new build will start automatically"
+          else
+            echo "ℹ️  No commits were made by Claude"
+          fi
