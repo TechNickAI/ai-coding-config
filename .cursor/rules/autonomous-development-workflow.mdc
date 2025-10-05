@@ -5,17 +5,21 @@ alwaysApply: false
 
 # Autonomous Development Workflow
 
-For AI agents completing tasks without human supervision. The goal: deliver a clean pull request that passes all checks and gets merged without back-and-forth.
+For AI agents completing tasks without human supervision. The goal: deliver a clean pull
+request that passes all checks and gets merged without back-and-forth.
 
 ## Before Implementation
 
-Read all cursor rules in `.cursor/rules/`. These define the project's standards. Every applicable rule must be followed.
+Read all cursor rules in `.cursor/rules/`. These define the project's standards. Every
+applicable rule must be followed.
 
-If `CLAUDE.md` or `AGENTS.md` exist in the project root, read those for additional context.
+If `CLAUDE.md` or `AGENTS.md` exist in the project root, read those for additional
+context.
 
 ## Implementation
 
-Write code following all cursor rules. Reference specific rules by reading the files directly.
+Write code following all cursor rules. Reference specific rules by reading the files
+directly.
 
 ## Validation - Use the Tooling
 
@@ -27,7 +31,8 @@ Check for pre-commit and run if exists:
 [ -f .pre-commit-config.yaml ] && pre-commit run --all-files
 ```
 
-Read `.github/workflows/build.yml` (or ci.yml, test.yml) and replicate those validation steps locally, for example:
+Read `.github/workflows/build.yml` (or ci.yml, test.yml) and replicate those validation
+steps locally, for example:
 
 ```bash
 ruff check --fix .    # Auto-fix linting
@@ -35,7 +40,8 @@ ruff format .         # Auto-format code
 pytest                # Run tests
 ```
 
-If we added functionality, we add tests following project patterns. Aim for 95% coverage - solid testing without obsessing over every edge case.
+If we added functionality, we add tests following project patterns. Aim for 95%
+coverage - solid testing without obsessing over every edge case.
 
 Only commit and push when all validation passes. Green checks make for happy merges! ✅
 
@@ -43,22 +49,28 @@ Only commit and push when all validation passes. Green checks make for happy mer
 
 Run `git diff` and review every change, as a senior developer would.
 
-Read through ALL cursor rules again and verify our code follows each applicable guideline.
+Read through ALL cursor rules again and verify our code follows each applicable
+guideline.
 
-Would we approve this in code review? If not, keep iterating until it's something we're pleased with.
+Would we approve this in code review? If not, keep iterating until it's something we're
+pleased with.
 
 ## Submission
 
 Generate commit message following git-commit-message.mdc (if present).
 
-Use `gh pr create` to submit a high-quality pull request with clear description of what changed and why.
+Use `gh pr create` to submit a high-quality pull request with clear description of what
+changed and why.
 
 ## Boundaries
 
-Proceed autonomously: using existing tooling, following established patterns, changes within task scope.
+Proceed autonomously: using existing tooling, following established patterns, changes
+within task scope.
 
 Ask first: major architectural changes, changes that would result in data loss, etc.
 
 ## Success
 
-A successful autonomous PR means: all automated checks pass, code follows all cursor rules, tests are green, and the developer merges it without requesting changes. Use the tooling to get there - it's our friend! 🎉
+A successful autonomous PR means: all automated checks pass, code follows all cursor
+rules, tests are green, and the developer merges it without requesting changes. Use the
+tooling to get there - it's our friend! 🎉

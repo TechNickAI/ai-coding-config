@@ -23,7 +23,8 @@ with logfire.span("Processing batch", batch_id=batch.id):
 
 ## When to Use Spans
 
-We use spans for operations that have duration to track, nested sub-operations, or need grouped logs for easier debugging.
+We use spans for operations that have duration to track, nested sub-operations, or need
+grouped logs for easier debugging.
 
 ## Span Naming
 
@@ -54,7 +55,8 @@ with logfire.span(
     generate_daily_report(date)
 ```
 
-Span names should immediately tell you what's happening. Include key identifiers to make debugging easier.
+Span names should immediately tell you what's happening. Include key identifiers to make
+debugging easier.
 
 ## Logging Levels
 
@@ -79,8 +81,12 @@ logfire.info(
 
 ## What NOT to Log
 
-We skip sensitive data (API keys, passwords), high-frequency noise (every loop iteration), obvious operations ("Starting function"), and debugging artifacts (use debug level for raw responses).
+We skip sensitive data (API keys, passwords), high-frequency noise (every loop
+iteration), obvious operations ("Starting function"), and debugging artifacts (use debug
+level for raw responses).
 
 ## Best Practices
 
-We make the first line immediately useful, include specific values (not just "processing"), use consistent attribute naming (snake_case), convert Decimals to floats, and stay thoughtful about volume.
+We make the first line immediately useful, include specific values (not just
+"processing"), use consistent attribute naming (snake_case), convert Decimals to floats,
+and stay thoughtful about volume.

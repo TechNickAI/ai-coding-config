@@ -4,29 +4,43 @@
 
 ### Cursor IDE
 
-An AI-powered code editor that uses `.cursor/rules/*.mdc` files for context and guidelines. Rules guide how the AI codes - they're passive, providing standards and patterns. You invoke them with `@rule-name` or they apply automatically based on file patterns.
+An AI-powered code editor that uses `.cursor/rules/*.mdc` files for context and
+guidelines. Rules guide how the AI codes - they're passive, providing standards and
+patterns. You invoke them with `@rule-name` or they apply automatically based on file
+patterns.
 
 ### Cursor CLI
 
-A command-line interface for CI/CD that uses the same `.cursor/rules/` as the IDE. This runs AI operations from the terminal, typically with commands like `cursor --command`. It ensures your automated fixes follow the same standards as your interactive coding.
+A command-line interface for CI/CD that uses the same `.cursor/rules/` as the IDE. This
+runs AI operations from the terminal, typically with commands like `cursor --command`.
+It ensures your automated fixes follow the same standards as your interactive coding.
 
 ### Claude Code
 
-A command-line AI coding assistant by Anthropic that uses `.claude/commands/*.md` files for executable workflows. Commands do things - they're active, running tests or deployments. You invoke them with `/command-name` in your terminal.
+A command-line AI coding assistant by Anthropic that uses `.claude/commands/*.md` files
+for executable workflows. Commands do things - they're active, running tests or
+deployments. You invoke them with `/command-name` in your terminal.
 
 ## Rules vs Commands
 
 ### Rules (`.cursor/rules/*.mdc`)
 
-Rules provide context and guidelines. They're passive - they guide AI decisions without executing anything. Cursor IDE and Cursor CLI both use them. Examples: `python-coding-standards.mdc` tells the AI how to write Python, `git-commit-message.mdc` defines commit formats, `django-models.mdc` explains model structure patterns.
+Rules provide context and guidelines. They're passive - they guide AI decisions without
+executing anything. Cursor IDE and Cursor CLI both use them. Examples:
+`python-coding-standards.mdc` tells the AI how to write Python, `git-commit-message.mdc`
+defines commit formats, `django-models.mdc` explains model structure patterns.
 
 ### Commands (`.claude/commands/*.md`)
 
-Commands define executable workflows. They're active - they run tasks and show results. Only Claude Code uses them. Examples: `python-test.md` runs pytest, `python-lint.md` runs ruff, `deploy.md` handles deployment.
+Commands define executable workflows. They're active - they run tasks and show results.
+Only Claude Code uses them. Examples: `python-test.md` runs pytest, `python-lint.md`
+runs ruff, `deploy.md` handles deployment.
 
 ### They Serve Different Purposes
 
-You can't port rules to commands or use commands in Cursor. They're fundamentally different: rules guide how AI codes, commands execute workflows. Both are valuable, and they work together naturally - rules ensure quality, commands automate tasks.
+You can't port rules to commands or use commands in Cursor. They're fundamentally
+different: rules guide how AI codes, commands execute workflows. Both are valuable, and
+they work together naturally - rules ensure quality, commands automate tasks.
 
 ## Repository Structure
 
@@ -86,19 +100,25 @@ cursor --rules .cursor/rules/ --check src/
 
 ### For Cursor Users
 
-Rules: Already have many covering Python, Django, git, and more. Settings: Best practice configurations for the IDE. CLI configs: Setups for CI/CD use.
+Rules: Already have many covering Python, Django, git, and more. Settings: Best practice
+configurations for the IDE. CLI configs: Setups for CI/CD use.
 
 ### For Claude Code Users
 
-Commands: Python and TypeScript workflows for testing, linting, deployment. Agents: Specialized assistants for specific tasks. Settings: CLI preferences.
+Commands: Python and TypeScript workflows for testing, linting, deployment. Agents:
+Specialized assistants for specific tasks. Settings: CLI preferences.
 
 ### For Both
 
-MCP Servers work with both tools. Prompts provide AI-guided setup. Templates offer project starters.
+MCP Servers work with both tools. Prompts provide AI-guided setup. Templates offer
+project starters.
 
 ## Key Points
 
-Rules and commands are fundamentally different. Cursor IDE and Cursor CLI share `.cursor/rules/` while Claude Code has its own `.claude/commands/`. Agents can be referenced by both tools - they're markdown files with frontmatter. Never mention `.cursorrules` - it's deprecated.
+Rules and commands are fundamentally different. Cursor IDE and Cursor CLI share
+`.cursor/rules/` while Claude Code has its own `.claude/commands/`. Agents can be
+referenced by both tools - they're markdown files with frontmatter. Never mention
+`.cursorrules` - it's deprecated.
 
 ## See Also
 

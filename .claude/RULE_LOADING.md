@@ -199,7 +199,8 @@ This documentation was created using the exact process it describes:
 2. **Explored existing structure**: Listed `.cursor/rules/`, read README and samples
 3. **Designed solution**: Dynamic loading via slash command vs static loading via
    context
-4. **Implemented**: Created `.claude/context.md` and `.claude/commands/load-cursor-rules.md`
+4. **Implemented**: Created `.claude/context.md` and
+   `.claude/commands/load-cursor-rules.md`
 5. **Documented**: Wrote this explanation of the system and process
 
 The system is self-referential: `/load-cursor-rules` itself could be improved by loading

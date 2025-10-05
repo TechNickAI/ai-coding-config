@@ -5,29 +5,37 @@ alwaysApply: false
 
 # Git Commit Message Guidelines
 
-We write commit messages to communicate with our future selves and teammates. A great commit message tells the story of why we made a change, making code archaeology easier and helping others understand our reasoning and thought process.
+We write commit messages to communicate with our future selves and teammates. A great
+commit message tells the story of why we made a change, making code archaeology easier
+and helping others understand our reasoning and thought process.
 
 ## Core Principles
 
 - Reflect on the full change before writing the message
 - Focus on motivation and reasoning, not just what changed (the diff shows that)
-- Scale message length to change importance and size - simple changes get one line, major architectural changes deserve 2-3 paragraphs
+- Scale message length to change importance and size - simple changes get one line,
+  major architectural changes deserve 2-3 paragraphs
 - Use imperative mood ("Add feature" not "Added feature")
 - Summary line under 72 characters, no period at the end
 - Capitalize the first word after any emoji
 
 ## No-Deploy Marker
 
-For changes that should not trigger deployment (documentation, tests, CI config, etc.), include `[no-deploy]` in the commit message. This signals both humans and CI/CD automation that deployment is unnecessary.
+For changes that should not trigger deployment (documentation, tests, CI config, etc.),
+include `[no-deploy]` in the commit message. This signals both humans and CI/CD
+automation that deployment is unnecessary.
 
 Place the marker either:
 
-- At the end of the summary line if it fits: `Update README with installation steps [no-deploy]`
+- At the end of the summary line if it fits:
+  `Update README with installation steps [no-deploy]`
 - On its own line after the summary for longer messages
 
 ## Emoji Usage
 
-You have complete freedom to choose ANY emoji that adds value. Start with gitmoji as your reference - if there's a clear gitmoji match, use it. But feel free to get creative and use any emoji that genuinely enhances meaning or clarity.
+You have complete freedom to choose ANY emoji that adds value. Start with gitmoji as
+your reference - if there's a clear gitmoji match, use it. But feel free to get creative
+and use any emoji that genuinely enhances meaning or clarity.
 
 Include an emoji when it:
 
@@ -36,7 +44,8 @@ Include an emoji when it:
 - Creates useful visual anchors in git log
 - Adds personality or context that words alone miss
 
-Skip the emoji entirely when it would feel forced or add no real value. Many excellent commit messages need no emoji at all.
+Skip the emoji entirely when it would feel forced or add no real value. Many excellent
+commit messages need no emoji at all.
 
 Trust your judgment on which emoji fits best, or whether to use one at all.
 
@@ -48,7 +57,10 @@ Trust your judgment on which emoji fits best, or whether to use one at all.
 [Optional body when context is needed]
 ```
 
-Body is optional. Include when explaining why adds value beyond the summary and diff. When included: explain motivation, problem being solved, impact, trade-offs, or alternatives considered. Wrap at 72 characters. For large/important changes, write 2-3 paragraphs if needed.
+Body is optional. Include when explaining why adds value beyond the summary and diff.
+When included: explain motivation, problem being solved, impact, trade-offs, or
+alternatives considered. Wrap at 72 characters. For large/important changes, write 2-3
+paragraphs if needed.
 
 ## Examples
 
@@ -106,6 +118,10 @@ immediate, but business requirements allow 2-3 second delay...
 
 ## Guidelines
 
-Write messages that future developers will thank you for. Use present tense imperative mood. Skip conventional commit prefixes like feat: or fix: (gitmoji serves this purpose when needed). Include body text only when it adds meaningful context. Write clearly and directly for human readers.
+Write messages that future developers will thank you for. Use present tense imperative
+mood. Skip conventional commit prefixes like feat: or fix: (gitmoji serves this purpose
+when needed). Include body text only when it adds meaningful context. Write clearly and
+directly for human readers.
 
-The goal is clarity and kindness to our future selves and teammates. Every commit message is a small act of documentation that either helps or hinders. We choose to help.
+The goal is clarity and kindness to our future selves and teammates. Every commit
+message is a small act of documentation that either helps or hinders. We choose to help.

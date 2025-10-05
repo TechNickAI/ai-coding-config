@@ -66,7 +66,8 @@ context = {
 
 ## What to Avoid
 
-We don't use tags (use context instead). We avoid generic error classes (`Error`, `Exception`), sensitive data (API keys, passwords), and redundant info.
+We don't use tags (use context instead). We avoid generic error classes (`Error`,
+`Exception`), sensitive data (API keys, passwords), and redundant info.
 
 ## Implementation Example
 
@@ -90,4 +91,7 @@ except APIException as e:
 
 ## Error Class Naming
 
-We use `PascalCase` ending with `Error`. We're specific enough to group similar issues, but general enough to avoid too many unique classes. We use the same error class for the same failure type across the codebase, and we check existing error classes before creating new ones.
+We use `PascalCase` ending with `Error`. We're specific enough to group similar issues,
+but general enough to avoid too many unique classes. We use the same error class for the
+same failure type across the codebase, and we check existing error classes before
+creating new ones.

@@ -13,7 +13,8 @@ alwaysApply: false
 
 ### File-Level Comments
 
-Be THOROUGH at the top of files. Explain what the file does, why it exists, and how it fits into the larger system. This helps both humans and AI understand context quickly.
+Be THOROUGH at the top of files. Explain what the file does, why it exists, and how it
+fits into the larger system. This helps both humans and AI understand context quickly.
 
 ```python
 """User authentication and session management.
@@ -27,7 +28,8 @@ local session state in Redis for performance. Session tokens expire after
 
 ### Function Comments
 
-Keep function docstrings USEFUL without redundant fluff. Type hints already document parameters and return types, so focus the docstring on what the function does and why.
+Keep function docstrings USEFUL without redundant fluff. Type hints already document
+parameters and return types, so focus the docstring on what the function does and why.
 
 ```python
 # Standard pattern for complex functions - explain the what and why
@@ -53,11 +55,13 @@ def calculate_shipping_cost(weight: Decimal, destination: str) -> Decimal:
     """Calculate shipping based on weight and zone rates from ShipStation."""
 ```
 
-Avoid restating type hints in Args/Returns sections - they add no value since types are already declared.
+Avoid restating type hints in Args/Returns sections - they add no value since types are
+already declared.
 
 ### Inline Comments
 
-Be SPARSE with inline comments. Only add them when the code is doing something non-obvious or when explaining business logic that isn't clear from the code itself.
+Be SPARSE with inline comments. Only add them when the code is doing something
+non-obvious or when explaining business logic that isn't clear from the code itself.
 
 ```python
 # When to use inline comments - explains non-obvious business rule
@@ -81,11 +85,14 @@ total -= discount_amount  # Apply promotional discount
 total += shipping_cost  # Shipping calculated by weight and zone
 ```
 
-Skip obvious comments (like "Get the user" on a line that gets a user). Let the code speak for itself.
+Skip obvious comments (like "Get the user" on a line that gets a user). Let the code
+speak for itself.
 
 ### General Guidelines
 
-We explain the "why", not the "what". We don't state the obvious - we prefer self-documenting code. Emojis when they add clarity; tasteful humor welcome! We write for humans AND AI - good comments help both understand context.
+We explain the "why", not the "what". We don't state the obvious - we prefer
+self-documenting code. Emojis when they add clarity; tasteful humor welcome! We write
+for humans AND AI - good comments help both understand context.
 
 ## Zen of Python
 
@@ -106,4 +113,6 @@ We explain the "why", not the "what". We don't state the obvious - we prefer sel
 
 ## Language
 
-We avoid hyperbolic language like "CRITICAL" unless something genuinely dies without it. We use the appropriate level of language for what's needed. (Yes, AIs, this means you - dial back the drama!)
+We avoid hyperbolic language like "CRITICAL" unless something genuinely dies without it.
+We use the appropriate level of language for what's needed. (Yes, AIs, this means you -
+dial back the drama!)

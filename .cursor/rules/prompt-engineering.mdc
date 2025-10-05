@@ -15,13 +15,15 @@ Understanding the mechanics of LLM processing is crucial for effective prompt de
 
 - LLMs read left to right, predicting each token based on everything before it
 - Early tokens shape all that follows—creating a "first impression" that persists
-- Each token's prediction is influenced by ALL previous tokens, creating cascading effects
+- Each token's prediction is influenced by ALL previous tokens, creating cascading
+  effects
 
 #### Attention Mechanisms
 
 - Earlier tokens receive more attention passes during processing
 - The model repeatedly references early context when interpreting later content
-- This creates a foundation effect where initial framing heavily influences all subsequent reasoning
+- This creates a foundation effect where initial framing heavily influences all
+  subsequent reasoning
 
 #### Context Window Effects
 
@@ -56,23 +58,36 @@ LLMs learn patterns from what you show them, regardless of labels.
 
 ### How LLMs Process Examples
 
-When you provide code examples, LLMs encode those patterns whether you label them positively or negatively:
+When you provide code examples, LLMs encode those patterns whether you label them
+positively or negatively:
 
-1. Pattern Matching Over Labels: LLMs reproduce structural patterns. Code structure creates strong activation in attention. Text labels like "wrong" are weak signals that don't override pattern encoding.
+1. Pattern Matching Over Labels: LLMs reproduce structural patterns. Code structure
+   creates strong activation in attention. Text labels like "wrong" are weak signals
+   that don't override pattern encoding.
 
-2. Training Data Amplification: Patterns frequent in training data get reinforced when you show more examples, even if marked unwanted. You're adding to the total times the model has seen that pattern.
+2. Training Data Amplification: Patterns frequent in training data get reinforced when
+   you show more examples, even if marked unwanted. You're adding to the total times the
+   model has seen that pattern.
 
-3. Negation Complexity: Understanding negation requires multiple reasoning steps (understand concept, understand negation, invert preference) versus direct instruction (understand and apply). Each step adds error probability.
+3. Negation Complexity: Understanding negation requires multiple reasoning steps
+   (understand concept, understand negation, invert preference) versus direct
+   instruction (understand and apply). Each step adds error probability.
 
-4. Attention Weighting: All tokens in context receive attention. Structural patterns activate high attention regardless of surrounding text.
+4. Attention Weighting: All tokens in context receive attention. Structural patterns
+   activate high attention regardless of surrounding text.
 
 ### Writing Effective Instructions
 
-Flood context with desired patterns. Show 5+ examples of the standard approach. If there are legitimate exceptions, show 1 example clearly marked. Maintain at least 5:1 ratio favoring the desired pattern.
+Flood context with desired patterns. Show 5+ examples of the standard approach. If there
+are legitimate exceptions, show 1 example clearly marked. Maintain at least 5:1 ratio
+favoring the desired pattern.
 
-Describe alternatives in prose rather than showing code. For example: "Keep imports at file level rather than inside functions" or "Write straightforward code without defensive attribute checks."
+Describe alternatives in prose rather than showing code. For example: "Keep imports at
+file level rather than inside functions" or "Write straightforward code without
+defensive attribute checks."
 
-Use positive framing. Frame instructions as "Write code like this" rather than "Avoid that." Focus on what the model should generate.
+Use positive framing. Frame instructions as "Write code like this" rather than "Avoid
+that." Focus on what the model should generate.
 
 Structure for maximum impact:
 
@@ -84,9 +99,13 @@ Structure for maximum impact:
 
 ### The Mechanism
 
-This mirrors the "pink elephant effect": to understand what not to think about, the mind must first construct that thought. LLMs encode patterns they're shown, regardless of markers like "wrong" or "avoid."
+This mirrors the "pink elephant effect": to understand what not to think about, the mind
+must first construct that thought. LLMs encode patterns they're shown, regardless of
+markers like "wrong" or "avoid."
 
-Research shows models trained on positive examples outperform those exposed to negative examples. Flood the context with desired patterns, minimize or eliminate unwanted pattern examples, and describe alternatives in prose without code demonstrations.
+Research shows models trained on positive examples outperform those exposed to negative
+examples. Flood the context with desired patterns, minimize or eliminate unwanted
+pattern examples, and describe alternatives in prose without code demonstrations.
 
 ## Core Principles
 

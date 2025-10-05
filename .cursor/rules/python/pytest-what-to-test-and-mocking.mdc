@@ -7,7 +7,10 @@ alwaysApply: false
 
 ## Core Requirements
 
-We mock external API calls (mark live tests with `@pytest.mark.flaky()`). We reuse fixtures from conftest.py. We always use pytest as testing framework - never import unittest. We use pytest-mock (mocker fixture) and monkeypatch for mocking, not unittest.mock.
+We mock external API calls (mark live tests with `@pytest.mark.flaky()`). We reuse
+fixtures from conftest.py. We always use pytest as testing framework - never import
+unittest. We use pytest-mock (mocker fixture) and monkeypatch for mocking, not
+unittest.mock.
 
 ## What to Test
 
@@ -59,13 +62,16 @@ def test_processes_stripe_response_correctly():
 
 ### Skip Library Testing
 
-We don't test that Pydantic validates, Django filters work, or httpx makes requests. These libraries test themselves. We focus on our logic that uses these tools.
+We don't test that Pydantic validates, Django filters work, or httpx makes requests.
+These libraries test themselves. We focus on our logic that uses these tools.
 
 ### Decision Framework
 
-Test when: we wrote the logic, it could break if we change our code, or we're testing how we use a library.
+Test when: we wrote the logic, it could break if we change our code, or we're testing
+how we use a library.
 
-Skip when: a library is doing what it's designed to do, or it would only break if the library has a bug.
+Skip when: a library is doing what it's designed to do, or it would only break if the
+library has a bug.
 
 ## When to Mock vs When to Fix
 
@@ -97,7 +103,8 @@ def test_generates_unique_codes(mocker):
 
 ### Don't Mock Internal Logic
 
-If you're mocking your own code, the internal code should work. If a test is failing because of your internal logic, fix the logic or test data rather than mocking it away.
+If you're mocking your own code, the internal code should work. If a test is failing
+because of your internal logic, fix the logic or test data rather than mocking it away.
 
 ### Good Reasons to Mock
 
@@ -119,6 +126,10 @@ We don't mock away errors. We understand the root cause and fix it.
 
 ## Philosophy
 
-When a test fails, we think first: is this a test problem or a code problem? We never "fix" a broken test by mocking away the error. We're thoughtful about mocking - is this the best solution or a hack?
+When a test fails, we think first: is this a test problem or a code problem? We never
+"fix" a broken test by mocking away the error. We're thoughtful about mocking - is this
+the best solution or a hack?
 
-We don't test for exact text - we keep tests resilient. We focus on our business logic - test what we wrote, not what libraries do. Quality over quantity - 10 focused tests beat 100 tests that test everything.
+We don't test for exact text - we keep tests resilient. We focus on our business logic -
+test what we wrote, not what libraries do. Quality over quantity - 10 focused tests beat
+100 tests that test everything.

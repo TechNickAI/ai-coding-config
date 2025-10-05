@@ -7,7 +7,8 @@ alwaysApply: false
 
 ## Purpose
 
-This guide documents the process for diagnosing and fixing broken GitHub Actions builds using the `gh` CLI.
+This guide documents the process for diagnosing and fixing broken GitHub Actions builds
+using the `gh` CLI.
 
 ## Prerequisites
 
@@ -32,7 +33,8 @@ Politely stop and guide the developer:
 > gh auth login
 > ```
 >
-> Follow the prompts to authenticate with GitHub. Once complete, we can proceed with debugging the build!
+> Follow the prompts to authenticate with GitHub. Once complete, we can proceed with
+> debugging the build!
 
 ## Diagnostic Workflow
 
@@ -50,7 +52,8 @@ Identify the failed run (marked with `X` or `failure` status). Note the run ID.
 gh run view <run-id> --log-failed | cat
 ```
 
-This shows ONLY the logs from failed steps. Analyze these logs to identify the root cause.
+This shows ONLY the logs from failed steps. Analyze these logs to identify the root
+cause.
 
 ### Step 3: Reproduce Locally
 

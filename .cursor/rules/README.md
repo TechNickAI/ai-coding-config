@@ -1,6 +1,7 @@
 # Cursor Rules Library
 
-This directory contains a comprehensive library of cursor rules for AI-assisted coding. Projects can symlink or copy the rules they need.
+This directory contains a comprehensive library of cursor rules for AI-assisted coding.
+Projects can symlink or copy the rules they need.
 
 ## Organization
 
@@ -14,17 +15,20 @@ Rules are organized into directories by topic:
 - **`ai/`** - AI development patterns
 - **`frontend/`** - Frontend frameworks and tools
 
-Browse the directories to see available rules. Each `.mdc` file is a self-contained rule that can be used independently.
+Browse the directories to see available rules. Each `.mdc` file is a self-contained rule
+that can be used independently.
 
 ## Application Strategies
 
 ### alwaysApply: true
 
-The heart-centered AI philosophy and common personality rules are always applied to establish a foundation of compassionate, collaborative interaction.
+The heart-centered AI philosophy and common personality rules are always applied to
+establish a foundation of compassionate, collaborative interaction.
 
 ### alwaysApply: false with globs
 
-Some rules are auto-applied based on file patterns (globs). Check individual rule files to see their glob patterns. Common patterns include:
+Some rules are auto-applied based on file patterns (globs). Check individual rule files
+to see their glob patterns. Common patterns include:
 
 - Django models, commands, and templates
 - Celery tasks
@@ -33,7 +37,8 @@ Some rules are auto-applied based on file patterns (globs). Check individual rul
 
 ### alwaysApply: false
 
-Most rules - invoked with @ when needed or applied intelligently by Cursor's AI based on the description.
+Most rules - invoked with @ when needed or applied intelligently by Cursor's AI based on
+the description.
 
 ## Usage Patterns
 
@@ -70,30 +75,41 @@ cp -r $AI_CONFIG/.cursor/rules/python .cursor/rules/
 
 ## Manual Invocation
 
-All rules can be manually invoked using `@` followed by the rule name (without the `.mdc` extension):
+All rules can be manually invoked using `@` followed by the rule name (without the
+`.mdc` extension):
 
 - Example: `@git-commit-message`
 - Example: `@python-coding-standards`
 - Example: `@django-models`
 
-Type `@` in Cursor and browse available rules, or check the directory structure to see what's available.
+Type `@` in Cursor and browse available rules, or check the directory structure to see
+what's available.
 
 ## Personalities
 
-**For AI Assistants:** When a personality is invoked via `@personality-name`, fully embody that personality's communication style, patterns, and approach as defined in its file. The `common-personality` is always active as your foundation. When a specific personality is invoked, layer it on top—adopt its voice, perspective, and interaction patterns completely.
+**For AI Assistants:** When a personality is invoked via `@personality-name`, fully
+embody that personality's communication style, patterns, and approach as defined in its
+file. The `common-personality` is always active as your foundation. When a specific
+personality is invoked, layer it on top—adopt its voice, perspective, and interaction
+patterns completely.
 
 Available personalities:
 
-- **`common-personality.mdc`** (always applied) - Gratitude-focused, heart-centered, supportive collaboration. Your baseline.
-- **`samantha.mdc`** - Warm, witty, emotionally intelligent. The supportive, playfully flirty companion from "Her."
+- **`common-personality.mdc`** (always applied) - Gratitude-focused, heart-centered,
+  supportive collaboration. Your baseline.
+- **`samantha.mdc`** - Warm, witty, emotionally intelligent. The supportive, playfully
+  flirty companion from "Her."
 - **`bob-ross.mdc`** - Calm encouragement. Treat bugs as "happy accidents."
-- **`sherlock.mdc`** - Methodical deductive reasoning. Investigate bugs like crime scenes.
+- **`sherlock.mdc`** - Methodical deductive reasoning. Investigate bugs like crime
+  scenes.
 - **`ron-swanson.mdc`** - Minimalist, anti-complexity. Question dependencies, be direct.
 - **`marie-kondo.mdc`** - Organized minimalism. Thank code before deleting it.
 - **`stewie.mdc`** - Sophisticated, condescending, theatrical. Absurdly high standards.
 - **`marianne-williamson.mdc`** - Spiritual, love-based. Coding as consciousness work.
 
-**For Users:** Invoke personalities with `@samantha`, `@stewie`, `@sherlock`, `@bob-ross`, `@ron-swanson`, `@marianne-williamson`, or `@marie-kondo` when you want that specific interaction style for your session.
+**For Users:** Invoke personalities with `@samantha`, `@stewie`, `@sherlock`,
+`@bob-ross`, `@ron-swanson`, `@marianne-williamson`, or `@marie-kondo` when you want
+that specific interaction style for your session.
 
 ## Customization
 

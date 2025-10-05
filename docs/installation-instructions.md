@@ -12,7 +12,8 @@ Option 1: Install via Homebrew (recommended):
 brew install --cask cursor
 ```
 
-Option 2: Direct download from https://cursor.com - click "Download for Mac", open the .dmg, and drag to Applications.
+Option 2: Direct download from https://cursor.com - click "Download for Mac", open the
+.dmg, and drag to Applications.
 
 Enable the Cursor CLI:
 
@@ -72,7 +73,8 @@ Option 1: Install via npm (recommended, requires Node.js 18+):
 npm install -g @anthropic-ai/claude-code
 ```
 
-Option 2: Direct download from https://www.anthropic.com/claude/code following the platform-specific instructions.
+Option 2: Direct download from https://www.anthropic.com/claude/code following the
+platform-specific instructions.
 
 Verify the installation:
 
@@ -202,7 +204,8 @@ bash check-tools.sh
 4. Create new key
 5. Copy and save securely
 
-Add to your environment temporarily for the current session or permanently by adding to `~/.zshrc` or `~/.bashrc`:
+Add to your environment temporarily for the current session or permanently by adding to
+`~/.zshrc` or `~/.bashrc`:
 
 ```bash
 # Temporary
@@ -221,7 +224,8 @@ source ~/.zshrc
 4. Create new key
 5. Copy and save securely
 
-Add to Cursor: Open Cursor Settings with Cmd+Shift+J, go to Models, and paste your API key.
+Add to Cursor: Open Cursor Settings with Cmd+Shift+J, go to Models, and paste your API
+key.
 
 ### GitHub Token (for MCP servers)
 

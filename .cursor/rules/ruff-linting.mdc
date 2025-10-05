@@ -5,14 +5,16 @@ alwaysApply: false
 
 # Ruff Linting
 
-We use `ruff` for linting. If there are lint errors, or if the user says "fix lint errors":
+We use `ruff` for linting. If there are lint errors, or if the user says "fix lint
+errors":
 
 1. Run: `ruff check --fix --unsafe-fixes`
 2. Repeat until all errors are fixed
 
 ## Using Targeted Ignores
 
-For legitimate exceptions, use targeted ignores with specific rule codes and explanations:
+For legitimate exceptions, use targeted ignores with specific rule codes and
+explanations:
 
 ```python
 # Include the rule code and why we're ignoring it

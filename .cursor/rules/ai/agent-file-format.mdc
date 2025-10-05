@@ -61,4 +61,5 @@ agent.test_model.set_response({"result": "test"})
 
 ## Remember
 
-Agents are AI employees - define their identity clearly and let them excel at their specialized roles.
+Agents are AI employees - define their identity clearly and let them excel at their
+specialized roles.

@@ -5,7 +5,8 @@ alwaysApply: false
 
 # Naming Conventions
 
-When in doubt, take time to name things well. It's one of the hardest problems in computer science.
+When in doubt, take time to name things well. It's one of the hardest problems in
+computer science.
 
 ## Importance
 
@@ -31,7 +32,8 @@ Notably, don't spend excessive time on naming for simple things that are easy to
 
 When a name for a new file, function, class, etc. isn't immediately obvious:
 
-- Pause and ask what we should name it. It's better to ask than to guess and have to rename later.
+- Pause and ask what we should name it. It's better to ask than to guess and have to
+  rename later.
 - Consider multiple alternatives
 - Evaluate options based on:
   - Clarity and intuitiveness

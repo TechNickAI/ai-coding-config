@@ -1,6 +1,7 @@
 # AI Coding Configuration - Implementation Plan
 
-> **Updated**: Reflects proper understanding of Cursor vs Claude Code, rules vs commands, and agentic approach.
+> **Updated**: Reflects proper understanding of Cursor vs Claude Code, rules vs
+> commands, and agentic approach.
 
 ## 🎯 Vision
 
@@ -16,7 +17,8 @@ Create an **agentic AI coding infrastructure** that:
 
 1. **Agentic First**: AI prompts guide setup, not bash scripts
 2. **Rules ≠ Commands**: They serve completely different purposes
-3. **Focus Matters**: Deep support for 2 tools + 2 languages, not shallow support for everything
+3. **Focus Matters**: Deep support for 2 tools + 2 languages, not shallow support for
+   everything
 4. **Single Source**: `~/.ai_coding_config` on every machine
 5. **Git for Updates**: Pull changes, AI propagates them
 6. **User Choice**: Always ask, never force
@@ -49,7 +51,8 @@ Create an **agentic AI coding infrastructure** that:
 - Invocation: `/command-name`
 - MCP server support
 
-**Critical**: Rules and commands are NOT interchangeable! See [docs/tools-and-configs.md](docs/tools-and-configs.md)
+**Critical**: Rules and commands are NOT interchangeable! See
+[docs/tools-and-configs.md](docs/tools-and-configs.md)
 
 ## 🏗️ Repository Architecture
 
@@ -849,11 +852,13 @@ JWT_SECRET=your-jwt-secret
 
 ### 1. Agentic > Scripts
 
-AI prompts guide setup instead of complex bash scripts. More flexible, self-documenting, handles edge cases.
+AI prompts guide setup instead of complex bash scripts. More flexible, self-documenting,
+handles edge cases.
 
 ### 2. Rules ≠ Commands
 
-Cursor rules provide context (HOW to code). Claude commands execute workflows (WHAT to do). Never confuse them.
+Cursor rules provide context (HOW to code). Claude commands execute workflows (WHAT to
+do). Never confuse them.
 
 ### 3. Cursor IDE + CLI Share Config
 
@@ -861,7 +866,8 @@ Both use `.cursor/rules/`. CLI is just non-interactive interface to same AI.
 
 ### 4. Focus on 2 Tools + 2 Languages
 
-Deep support for Cursor + Claude Code + Python + TypeScript. Not shallow support for everything.
+Deep support for Cursor + Claude Code + Python + TypeScript. Not shallow support for
+everything.
 
 ### 5. macOS + Linux Only
 
@@ -869,7 +875,8 @@ No Windows support. Keep it simple, we use Unix systems.
 
 ### 6. Single Source on Each Machine
 
-`~/.ai_coding_config` contains everything. Git pull updates it. AI propagates changes to projects.
+`~/.ai_coding_config` contains everything. Git pull updates it. AI propagates changes to
+projects.
 
 ### 7. User Choice Always
 
@@ -923,4 +930,5 @@ Never force configurations. AI always asks before applying changes.
 
 ---
 
-_This plan reflects our understanding as of October 2025. It will evolve as we build and learn._
+_This plan reflects our understanding as of October 2025. It will evolve as we build and
+learn._

@@ -35,7 +35,8 @@ def get_something(self, param: str) -> dict | None:
 
 ## Error Handling
 
-We let the base HTTP client handle HTTP/network errors. We only use try/except for specific scenarios with actual handling. We validate response structure before access.
+We let the base HTTP client handle HTTP/network errors. We only use try/except for
+specific scenarios with actual handling. We validate response structure before access.
 
 ## Validation Pattern
 
@@ -48,8 +49,10 @@ if not response or "data" not in response:
 
 ## Response Processing
 
-We validate response structure before access, convert to standard types (Decimal for financial data), clean and normalize data, and return None for errors (not empty dicts).
+We validate response structure before access, convert to standard types (Decimal for
+financial data), clean and normalize data, and return None for errors (not empty dicts).
 
 ## Testing
 
-We mock all external calls in unit tests, use @pytest.mark.flaky for live API tests, and test both success and error cases.
+We mock all external calls in unit tests, use @pytest.mark.flaky for live API tests, and
+test both success and error cases.

@@ -10,7 +10,10 @@ alwaysApply: false
 
 ### Core structure
 
-We put `handle()` as the first method. We keep logic inline within `handle()` by default, splitting into helper functions only if they're reusable. Helper methods go below `handle()`, never above. We include clear docstrings and help text for non-obvious arguments.
+We put `handle()` as the first method. We keep logic inline within `handle()` by
+default, splitting into helper functions only if they're reusable. Helper methods go
+below `handle()`, never above. We include clear docstrings and help text for non-obvious
+arguments.
 
 ### Example Structure
 
@@ -72,7 +75,8 @@ Return stats at the end for logging and monitoring.
 
 ### Test Structure
 
-We test with `call_command`, mock external services, and verify stats dictionary structure.
+We test with `call_command`, mock external services, and verify stats dictionary
+structure.
 
 ```python
 from django.core.management import call_command

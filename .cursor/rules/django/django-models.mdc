@@ -52,12 +52,15 @@ class Order(models.Model):
 
 ## Financial Fields
 
-We always use `DecimalField` for amounts: `max_digits=18, decimal_places=8` for crypto, `max_digits=18, decimal_places=2` for fiat.
+We always use `DecimalField` for amounts: `max_digits=18, decimal_places=8` for crypto,
+`max_digits=18, decimal_places=2` for fiat.
 
 ## Query Optimization
 
-We use `select_related()` for foreign keys, `prefetch_related()` for reverse relations, and add indexes for frequently queried fields.
+We use `select_related()` for foreign keys, `prefetch_related()` for reverse relations,
+and add indexes for frequently queried fields.
 
 ## Field Guidelines
 
-We use `auto_now_add=True` for creation timestamps, `auto_now=True` for update timestamps, and `blank=True, null=True` for truly optional fields.
+We use `auto_now_add=True` for creation timestamps, `auto_now=True` for update
+timestamps, and `blank=True, null=True` for truly optional fields.
