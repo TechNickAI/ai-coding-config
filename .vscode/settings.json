@@ -9,6 +9,7 @@
     "pytest"
   ],
   "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
   "editor.defaultFormatter": null,
   "editor.wordWrap": "on",
   "editor.rulers": [88, 120],
