@@ -31,6 +31,8 @@ projects to sync the changes.
 
 - ✅ **Cursor rules** - Existing `.mdc` files for Python, Django, git, and more
 - 🆕 **Claude Code command** - `/ai-coding-config` handles setup and updates
+- 🆕 **Claude Code Agents** - Specialized AI assistants (code reviewer, debugger, test
+  engineer, etc.)
 - 🆕 **GitHub workflows** - Python & TypeScript quality and testing
 
 ## Usage
@@ -64,15 +66,17 @@ Pulls latest changes and offers to sync them to your project.
 ```
 ai-coding-config/
 ├── .cursor/rules/       # Cursor rules - context for how to code
-├── .claude/commands/    # ai-coding-config.md command
+├── .claude/
+│   ├── agents/          # Claude Code Agents - specialized AI assistants
+│   └── commands/        # ai-coding-config.md command
 ├── .github/workflows/   # CI/CD workflows - coming soon
 ├── .vscode/             # Editor settings
 └── docs/                # Documentation
 ```
 
-Rules provide context for how to code. Commands execute workflows. Personalities let you
-choose how the AI communicates. Read
-[docs/tools-and-configs.md](docs/tools-and-configs.md) for details.
+Rules provide context for how to code. Commands execute workflows. Agents are
+specialized AI assistants for specific tasks. Personalities let you choose how the AI
+communicates. Read [docs/tools-and-configs.md](docs/tools-and-configs.md) for details.
 
 ## 🤔 Which Tool Should I Use?
 
