@@ -25,12 +25,18 @@ Otherwise, proceed conversationally through the setup goals.
 
 ## Primary Goals
 
-### Goal 1: Ensure ~/.ai_coding_config Exists
+### Goal 1: Ensure ~/.ai_coding_config Exists and Is Up to Date
 
 If the repo isn't cloned yet, clone it:
 
 ```bash
 git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
+```
+
+If it already exists, update it:
+
+```bash
+cd ~/.ai_coding_config && git pull
 ```
 
 Then offer to set up the current project.

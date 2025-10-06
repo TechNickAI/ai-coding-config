@@ -27,13 +27,17 @@ echo "✓ Detected $OS"
 echo "✓ In git repository: $(basename $(git rev-parse --show-toplevel))"
 echo ""
 
-# Clone ai-coding-config if not present
+# Clone or update ai-coding-config
 if [ ! -d "$HOME/.ai_coding_config" ]; then
     echo "📥 Cloning ai-coding-config to ~/.ai_coding_config..."
     git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
     echo "✓ Cloned successfully"
 else
-    echo "✓ ~/.ai_coding_config already exists"
+    echo "📥 Updating ~/.ai_coding_config..."
+    cd ~/.ai_coding_config
+    git pull
+    cd - > /dev/null
+    echo "✓ Updated to latest version"
 fi
 
 echo ""
