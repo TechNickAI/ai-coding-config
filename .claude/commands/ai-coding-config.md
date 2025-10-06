@@ -18,56 +18,98 @@ The system contains Cursor rules, Claude commands, personalities, and GitHub wor
 in ~/.ai_coding_config. This command helps copy relevant configurations into projects
 and keeps them synced.
 
-## Your Goals
+## Arguments (Optional)
 
-**First time (no ~/.ai_coding_config)**: Clone the repo to ~/.ai_coding_config, then
-offer to set up the current project.
+If user provides 'update' argument (`/ai-coding-config update`), skip to Goal 6.
+Otherwise, proceed conversationally through the setup goals.
 
-**New project setup**: Detect project type (Python/TypeScript). Show available rules and
-personalities. Let user choose what to copy. Copy selected files into project structure.
-When copying a personality, set `alwaysApply: true` in its frontmatter. Create `.gitignore`
-files in `.cursor/` and `.claude/` directories to exclude `*.local.json`.
+## Primary Goals
 
-**Update existing project**: Pull latest from ~/.ai_coding_config. Compare with project
-files. Show what changed. Let user choose what to update.
+### Goal 1: Ensure ~/.ai_coding_config Exists
+
+If the repo isn't cloned yet, clone it. Then offer to set up the current project.
+
+### Goal 2: Understand the Project Context
+
+Figure out what kind of project this is and what it needs:
+
+- Detect language/framework (Python/Django/FastAPI, TypeScript/React/Next.js, etc.)
+- Look for existing configurations to avoid duplicates
+- Understand the project's specific needs (API? Web app? CLI tool?)
+
+Be specific about frameworks, not just languages. Django projects need different rules
+than FastAPI projects.
+
+### Goal 3: Present Relevant Options
+
+Show the user what's available that matches their project:
+
+- Group rules by relevance (framework-specific first, then universal)
+- Explain what each rule does so they can make informed choices
+- Present personality options (ONE personality, or none)
+- Offer GitHub workflow templates if they'd be useful
+- Separate personalities from rules in your presentation
+
+Don't just list files - help them understand what they're choosing.
+
+### Goal 4: Install Selected Configurations
+
+Copy what the user selected into the right places:
+
+- Copy rules and commands to project structure
+- When copying a personality: set `alwaysApply: true` in frontmatter
+- Create `.gitignore` files in `.cursor/` and `.claude/` directories containing
+  `*.local.json`
+- Copy any GitHub workflows to `.github/workflows/` if selected
+- Show file paths as you work so they understand the structure
+
+### Goal 5: Verify Everything Works
+
+After installation, make sure it's working:
+
+- Check that configurations can load (no syntax errors)
+- Verify personality is set to alwaysApply if one was chosen
+- Confirm .gitignore files are in place
+- Report a clear summary of what was configured
+
+### Goal 6: Handle Updates (when requested)
+
+When user runs update:
+
+- Pull latest from ~/.ai_coding_config
+- Compare with project files - show actual diffs, not placeholders
+- Let user choose what to update
+- Preserve any local customizations
 
 ## Key Principles
 
 Work conversationally, not robotically. Don't show every bash command - just say what
 you're doing and report results.
 
-Personality selection is important: users pick ONE personality (or none). Don't offer to
-copy all personalities. The common-personality is always included as the baseline.
+Personality selection: users pick ONE personality (or none). Don't offer to copy all
+personalities. The common-personality is always included as the baseline.
 
-**When copying a personality**: Change `alwaysApply: false` to `alwaysApply: true` in the
-frontmatter so it's always active in the project.
+When showing available rules, be framework-specific. Django ≠ FastAPI. React ≠ Next.js.
+Show what's most relevant to their actual stack.
 
-When showing available rules, group by category (Python vs TypeScript vs Universal).
-Explain what each file does so users can make informed choices.
-
-For updates, show what actually changed by comparing files, not placeholder examples.
-Separate personalities from rules in your presentation.
-
-Always create `.gitignore` files in both `.cursor/` and `.claude/` directories containing:
-```
-*.local.json
-```
-
-This keeps local overrides out of version control without cluttering the root `.gitignore`.
+Be helpful in explaining choices. Don't just list files - explain what they do and why
+someone might want them.
 
 ## Finding Configurations
 
-Don't use hardcoded lists. Discover what's available by reading directories:
+Discover what's available by reading directories:
 
-- Explore ~/.ai_coding_config/.cursor/rules/ to find subdirectories and files
-- Read ~/.ai_coding_config/.cursor/rules/personalities/ to find personality options
+- Explore ~/.ai_coding_config/.cursor/rules/ for subdirectories and files
+- Check for framework-specific subdirectories (python/, typescript/, etc.)
+- Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
+- Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates
 - Check ~/.ai_coding_config/.vscode/ for editor settings
-- Match discoveries to detected project type
 
 Files in .cursor/rules/ root (not in subdirectories) generally apply to all projects.
-Let the AI decide what's relevant based on filenames and project context.
+Use your judgment about what's relevant based on project context.
 
-## Execution Notes
+## Execution Philosophy
 
-Be helpful and conversational. Show file paths when copying so users understand the
-structure. Let users make all choices. Confirm what was set up at the end.
+Focus on outcomes, not process. Figure out the best way to achieve each goal based on
+the specific situation. Be conversational and helpful. Show file paths when copying. Let
+users make all choices. Verify everything works before finishing.
