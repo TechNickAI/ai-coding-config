@@ -63,7 +63,8 @@ Show the user what's available that matches their project:
   frontmatter
 - Present Claude Code Agents (default to all, but let them choose) with descriptions
   from frontmatter
-- Offer GitHub workflow templates if they'd be useful
+- Mention that VSCode settings, Prettier config, and GitHub workflows will be included
+  by default
 - Separate personalities and agents from rules in your presentation
 
 Don't just list files - help them understand what they're choosing by reading
@@ -87,24 +88,29 @@ Copy agent files directly from `~/.ai_coding_config/.claude/agents/` to the proj
 
 ### Goal 4: Install Selected Configurations
 
-Copy what the user selected into the right places:
+Copy what the user selected into the right places. Use `cp` for efficiency - don't read
+and rewrite files.
 
-- Copy rules to `.cursor/rules/`, preserving subdirectory structure (e.g.,
-  `django/django-models.mdc` stays in `django/` subdirectory)
-- Copy commands to `.claude/commands/`
-- Copy `.claude/context.md` (contains identity and rule loading instructions)
-- Copy selected agents to `.claude/agents/`
-- Copy the common personality (`common-personality.mdc`) to
-  `.cursor/rules/personalities/` - this is always included
-- If user selected an additional personality, copy it to `.cursor/rules/personalities/`
-  then modify its frontmatter to set `alwaysApply: true`
-- Create `.gitignore` files in `.cursor/` and `.claude/` directories containing
-  `*.local.json`
-- Copy any GitHub workflows to `.github/workflows/` if selected
-- Show file paths as you work so they understand the structure
+Before copying each file, check if it already exists. If it does, use `diff` to compare
+them. If identical, skip it. If different, show what changed and ask the user what they
+want to do. Don't silently overwrite files. When in doubt, ask.
 
-Use cp or rsync to copy files efficiently. After copying personality files, you can
-modify the selected personality's frontmatter using standard file editing.
+What to copy:
+
+- Rules to `.cursor/rules/`, preserving subdirectory structure
+- Commands to `.claude/commands/`
+- `.claude/context.md`
+- Selected agents to `.claude/agents/`
+- Common personality to `.cursor/rules/personalities/` (always included)
+- Additional personality if selected (copy then set `alwaysApply: true` in frontmatter)
+- VSCode settings to `.vscode/` (`settings.json` and `extensions.json`)
+- `.prettierrc` to project root
+- GitHub workflows to `.github/workflows/` (claude.yml, claude-code-review.yml,
+  claude-fix-pr-build.yml)
+- `.gitignore` files in `.cursor/` and `.claude/` directories containing `*.local.json`
+
+After copying, tell the user what was copied, what was skipped, and what they chose to
+do with conflicts.
 
 ### Goal 5: Verify Everything Works
 
@@ -113,6 +119,10 @@ After installation, confirm what was set up:
 - List installed rules (by directory: framework-specific, then universal)
 - List agents in `.claude/agents/`
 - Confirm which personality was selected (if any) and that alwaysApply is set
+- Confirm VSCode settings in `.vscode/` (`settings.json` and `extensions.json`)
+- Confirm `.prettierrc` exists at project root
+- List GitHub workflows in `.github/workflows/` (claude.yml, claude-code-review.yml,
+  claude-fix-pr-build.yml)
 - Confirm .gitignore files are in place
 - Report a clear summary of the configuration
 
@@ -120,25 +130,28 @@ No need for deep validation - just confirm the files are where they should be.
 
 ### Goal 6: Handle Updates (when requested)
 
-When user runs update:
+Pull latest from ~/.ai_coding_config, then compare what's in the repo with what's in the
+project.
 
-- Pull latest from ~/.ai_coding_config with `git pull`
-- Compare repo versions with project versions:
-  - Use `diff` to show changes in existing files
-  - List any new files in the repo not present in project
-  - List project files not in repo (likely local customizations)
-- Check for new agents in ~/.ai_coding_config/.claude/agents/
-- Let user choose what to update:
-  - Which changed files to update
-  - Which new files to add
-  - Keep or remove any local-only files
-- Use cp to update selected files
-- Re-verify setup like Goal 5
+For each file, use `diff` to see what changed. Categorize changes as trivial (typos,
+comments) or significant. List files that exist in the repo but not in the project, and
+files in the project that aren't in the repo (possible local customizations).
+
+Explain what changed and why they might want to update. Let the user choose what to
+update - offer "all", "none", or pick individually. Be careful with files that look
+customized.
+
+Copy selected files using `cp`. Use the same approach as Goal 4 - don't silently
+overwrite. Re-verify like Goal 5 and highlight what changed.
 
 ## Key Principles
 
 Work conversationally, not robotically. Don't show every bash command - just say what
 you're doing and report results.
+
+Respect existing files: Use `cp` for efficiency, but always check if files exist first.
+When conflicts arise, use `diff` to understand what's different, then intelligently
+decide or ask the user. When in doubt, ask. It's better to be thoughtful than fast.
 
 Personality selection: users pick one personality (or none). Don't offer to copy all
 personalities. The common-personality is always included as the baseline.
@@ -157,8 +170,11 @@ Discover what's available by reading directories:
 - Check for framework-specific subdirectories (python/, typescript/, etc.)
 - Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
 - List ~/.ai_coding_config/.claude/agents/ for available Claude Code Agents
-- Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates
-- Check ~/.ai_coding_config/.vscode/ for editor settings
+- Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates (claude.yml,
+  claude-code-review.yml, claude-fix-pr-build.yml)
+- Check ~/.ai_coding_config/.vscode/ for editor settings (settings.json,
+  extensions.json)
+- Check for ~/.ai_coding_config/.prettierrc for code formatting configuration
 
 Files in .cursor/rules/ root (not in subdirectories) generally apply to all projects.
 Use your judgment about what's relevant based on project context.
