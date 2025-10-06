@@ -25,7 +25,8 @@ offer to set up the current project.
 
 **New project setup**: Detect project type (Python/TypeScript). Show available rules and
 personalities. Let user choose what to copy. Copy selected files into project structure.
-Update .gitignore to exclude .local.json files.
+When copying a personality, set `alwaysApply: true` in its frontmatter. Create `.gitignore`
+files in `.cursor/` and `.claude/` directories to exclude `*.local.json`.
 
 **Update existing project**: Pull latest from ~/.ai_coding_config. Compare with project
 files. Show what changed. Let user choose what to update.
@@ -38,13 +39,21 @@ you're doing and report results.
 Personality selection is important: users pick ONE personality (or none). Don't offer to
 copy all personalities. The common-personality is always included as the baseline.
 
+**When copying a personality**: Change `alwaysApply: false` to `alwaysApply: true` in the
+frontmatter so it's always active in the project.
+
 When showing available rules, group by category (Python vs TypeScript vs Universal).
 Explain what each file does so users can make informed choices.
 
 For updates, show what actually changed by comparing files, not placeholder examples.
 Separate personalities from rules in your presentation.
 
-Always add .local.json exclusions to .gitignore if not present.
+Always create `.gitignore` files in both `.cursor/` and `.claude/` directories containing:
+```
+*.local.json
+```
+
+This keeps local overrides out of version control without cluttering the root `.gitignore`.
 
 ## Finding Configurations
 
