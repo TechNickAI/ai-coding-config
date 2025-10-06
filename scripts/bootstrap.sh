@@ -34,6 +34,7 @@ if [ ! -d "$HOME/.ai_coding_config" ]; then
     echo "✓ Cloned successfully"
 else
     echo "📥 Updating ~/.ai_coding_config..."
+    echo "   Running: git pull"
     cd ~/.ai_coding_config
     git pull
     cd - > /dev/null
