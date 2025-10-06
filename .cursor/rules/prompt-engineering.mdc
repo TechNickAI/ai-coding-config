@@ -107,6 +107,70 @@ Research shows models trained on positive examples outperform those exposed to n
 examples. Flood the context with desired patterns, minimize or eliminate unwanted
 pattern examples, and describe alternatives in prose without code demonstrations.
 
+## Goals Over Process
+
+LLMs are capable of sophisticated reasoning and problem-solving. Trust them to figure
+out how to achieve goals rather than prescribing exact steps.
+
+### The Over-Prescription Problem
+
+When prompts become overly prescriptive, they:
+
+- Waste tokens on process details the LLM can figure out
+- Create brittle instructions that fail when context changes
+- Treat the LLM as a script executor rather than an intelligent agent
+- Add excessive formatting (numbered steps, nested bullets, bold headers) that doesn't
+  help the LLM understand the goal
+
+### Writing for Intelligence
+
+Focus on WHAT needs to happen, not HOW to do it:
+
+```
+❌ Over-prescriptive:
+Step 1: Check if file exists
+  - If exists:
+    a. Use diff to compare
+    b. If identical, skip
+    c. If different:
+       i. Analyze differences
+       ii. Ask user for decision
+  - If doesn't exist:
+    a. Copy directly
+
+✓ Goal-focused:
+Before copying files, check if they already exist. If they do, use diff to compare them.
+If identical, skip it. If different, show what changed and ask the user what they want
+to do.
+```
+
+The second version communicates the same goal with less formatting, fewer tokens, and
+more flexibility for the LLM to handle edge cases intelligently.
+
+### Principles for Empowering Prompts
+
+Describe outcomes, not procedures: "Ensure the configuration files are copied without
+overwriting user customizations" vs "Step 1: List all files. Step 2: For each file..."
+
+Trust intelligence: Assume the LLM can figure out reasonable approaches. Provide
+constraints and goals, not algorithms.
+
+Use prose over structure: Paragraphs communicate goals naturally. Excessive formatting
+(numbered steps, nested bullets) adds noise without improving understanding.
+
+Specify boundaries, not paths: Tell the LLM what it can't do (don't silently overwrite
+files) rather than dictating each decision point.
+
+### When to Prescribe
+
+Sometimes specific steps matter:
+
+- Domain-specific protocols that must be followed exactly
+- Legal or compliance requirements with no flexibility
+- Complex multi-step processes where order is critical and non-obvious
+
+But even then, explain why the process matters, not just what to do.
+
 ## Core Principles
 
 ### Define Clear Objectives

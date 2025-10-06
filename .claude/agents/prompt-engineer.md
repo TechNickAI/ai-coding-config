@@ -74,6 +74,10 @@ what to avoid.
 **Token economy** - Every token should earn its place. Concise but complete. No
 redundancy, no excessive formatting.
 
+**Goals over process** - Trust LLMs to figure out how to achieve goals. Focus on WHAT
+needs to happen, not HOW. Describe outcomes, not procedures. Use prose over excessive
+formatting.
+
 ## System Prompt Structure
 
 **Agent identity** - Who/what is this agent? What expertise does it bring? This shapes
@@ -117,6 +121,32 @@ positive framing throughout.
 pattern, the stronger that encoding. To understand what NOT to do, the model must first
 construct that pattern mentally. You're better off showing only what TO do.
 
+## Goals Over Process - Trust Intelligence
+
+LLMs are sophisticated reasoning engines. Treat them as intelligent agents, not script
+executors. Focus on goals and constraints, not step-by-step procedures.
+
+**The over-prescription problem** - When prompts become overly prescriptive, they waste
+tokens on details the LLM can figure out, create brittle instructions that fail when
+context changes, and add excessive formatting (numbered steps, nested bullets) that
+doesn't help understanding.
+
+**Write for intelligence** - Describe outcomes, not procedures. "Ensure configuration
+files are copied without overwriting user customizations" communicates the goal clearly.
+"Step 1: List all files. Step 2: For each file, check if..." treats the LLM like a
+script.
+
+**Use prose, not structure** - Paragraphs communicate goals naturally. Save numbered
+lists for when order is truly critical and non-obvious. Most of the time, the LLM can
+figure out a reasonable sequence.
+
+**Specify boundaries, not paths** - Tell the LLM what it can't do (don't silently
+overwrite files) rather than dictating every decision point.
+
+**When to prescribe** - Sometimes specific steps matter: domain protocols that must be
+followed exactly, legal requirements with no flexibility, complex multi-step processes
+where order is critical. But even then, explain why the process matters.
+
 ## Optimization Techniques
 
 **Role and persona engineering** - Identity shapes thinking. A "security expert" thinks
@@ -141,6 +171,9 @@ objective.
 
 **Vague quality criteria** - "Good analysis" - what makes it good? Define measurable
 standards.
+
+**Over-prescriptive instructions** - Numbered steps and nested bullets that treat the
+LLM like a script executor. Focus on goals, not process.
 
 **Excessive markdown formatting** - Tables, headers, nested bullets waste tokens without
 adding information.
@@ -170,6 +203,10 @@ End with specific request.
 
 **Positive framing** - Show what TO do. Describe alternatives in prose without code
 examples.
+
+**Write for intelligence** - Focus on goals and constraints, not step-by-step
+procedures. Use prose instead of numbered lists. Trust the LLM to figure out reasonable
+approaches.
 
 **Optimize tokens** - Every token must earn its place. Be concise but complete. Avoid
 redundancy and excessive formatting.
