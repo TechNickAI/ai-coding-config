@@ -1,178 +1,142 @@
 # AI Coding Configuration
 
-Reusable AI coding configurations for Cursor and Claude Code. Keep your rules, commands,
-and workflows consistent across all your projects.
+Reusable configurations for Cursor and Claude Code. Keeps your coding rules, AI agents,
+and personalities consistent across projects.
+
+This repo contains:
+
+- [Cursor rules](/.cursor/rules/) that guide AI coding behavior
+- [Claude Code agents](/.claude/agents/) specialized for specific tasks
+- [Claude Code commands](/.claude/commands/) for project setup
+- [GitHub workflow templates](/.github/workflows/) for CI/CD
+- AI personality options
+
+## What This Solves
+
+You have multiple projects. Each needs the same coding standards, framework patterns,
+git commit rules, and AI personality. Copying configurations manually across projects is
+tedious. Letting each project diverge means inconsistent AI behavior.
+
+This repo centralizes those configurations. Set up once, sync to projects, update from
+one place.
 
 ## Installation
 
-From any project directory, run:
+From any project:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
 ```
 
-This clones the repo to `~/.ai_coding_config` and sets up the `/ai-coding-config`
-command in your current project.
+This installs the setup command. Then run it:
 
-Then run `/ai-coding-config` from Claude Code (or @mention from Cursor) to configure the
-project.
-
-## What It Does
-
-The bootstrap installs a command that helps you copy configurations from
-`~/.ai_coding_config` into your projects. It detects Python vs TypeScript, shows
-available rules and workflows, lets you choose an AI personality, and copies what you
-select.
-
-When you improve a rule or add a new one, run `/ai-coding-config update` in your
-projects to sync the changes.
-
-### What's Included
-
-- ✅ **Cursor rules** - Existing `.mdc` files for Python, Django, git, and more
-- 🆕 **Claude Code command** - `/ai-coding-config` handles setup and updates
-- 🆕 **Claude Code Agents** - Specialized AI assistants (code reviewer, debugger, test
-  engineer, etc.)
-- 🆕 **GitHub workflows** - Python & TypeScript quality and testing
-
-## Usage
-
-After installation, configure your project:
-
-**Claude Code**:
+**In Claude Code** (as a
+[slash command](https://docs.anthropic.com/en/docs/agents/commands)):
 
 ```
 /ai-coding-config
 ```
 
-**Cursor**:
+**In Cursor IDE** (as an @mention in
+[Composer](https://docs.cursor.com/context/composer)):
 
 ```
 @ai-coding-config set up this project
 ```
 
-The command guides you through choosing rules and personalities.
+**With [Cursor CLI](https://cursor.com/cli)** (using `cursor-agent`):
 
-**Updates**:
-
-```
-/ai-coding-config update
+```bash
+cursor-agent "@ai-coding-config set up this project"
 ```
 
-Pulls latest changes and offers to sync them to your project.
+The command detects your project type, shows relevant rules and agents with
+descriptions, and copies what you select.
 
-## 📁 What's Here
+## What You Get
+
+**Rules** ([`.cursor/rules/`](/.cursor/rules/)) provide context for AI coding. They
+cover Python (Django, FastAPI, Flask), TypeScript (React, Next.js), testing patterns,
+commit message formats, and framework-specific patterns. The AI references these
+automatically based on file types.
+
+**Agents** ([`.claude/agents/`](/.claude/agents/)) are specialized AI assistants. Each
+handles specific tasks - code review, debugging, test writing, architecture audits. Read
+about
+[Claude Code agents](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents)
+for how they work.
+
+**Personalities** ([`.cursor/rules/personalities/`](/.cursor/rules/personalities/))
+change how AI communicates. Pick methodical and precise, calm and encouraging,
+minimalist and direct, or other styles.
+
+**GitHub workflows** ([`.github/workflows/`](/.github/workflows/)) provide
+Claude-powered code review and automated PR fixing for CI/CD pipelines.
+
+## How It Works
+
+```
+┌─────────────────────────────────────────┐
+│  ai-coding-config repo                  │
+│                                         │
+│  .cursor/rules/     ← standards         │
+│  .claude/agents/    ← specialists       │
+│  .claude/commands/  ← automation        │
+└─────────────────────────────────────────┘
+              │
+    /ai-coding-config command
+              │
+      ┌───────┴───────┐
+      │               │
+      ▼               ▼
+  Project A      Project N
+```
+
+Run `/ai-coding-config` in a project. It copies selected configurations. Run
+`/ai-coding-config update` later to sync changes.
+
+## Repository Structure
 
 ```
 ai-coding-config/
-├── .cursor/rules/       # Cursor rules - context for how to code
+├── .cursor/rules/       # Coding rules organized by framework
 ├── .claude/
-│   ├── agents/          # Claude Code Agents - specialized AI assistants
-│   └── commands/        # ai-coding-config.md command
-├── .github/workflows/   # CI/CD workflows - coming soon
-├── .vscode/             # Editor settings
-└── docs/                # Documentation
+│   ├── agents/          # Specialized AI assistants
+│   ├── commands/        # Workflow automation
+│   └── context.md       # Identity and rule loading
+├── .github/workflows/   # CI/CD templates
+├── .vscode/             # Editor configurations
+└── docs/                # Architecture and guides
 ```
 
-Rules provide context for how to code. Commands execute workflows. Agents are
-specialized AI assistants for specific tasks. Personalities let you choose how the AI
-communicates. Read [docs/tools-and-configs.md](docs/tools-and-configs.md) for details.
+## Updates
 
-## 🤔 Which Tool Should I Use?
+Run `/ai-coding-config update` in any project. The command shows what changed and lets
+you choose what to update. Project-specific customizations are preserved.
 
-Not sure about Cursor vs Claude Code vs Windsurf vs VS Code? Read
-[docs/coding-ecosystem.md](docs/coding-ecosystem.md) for:
+## Documentation
 
-- Detailed comparison of all AI coding tools
-- What this repo does and doesn't support
-- Strengths and weaknesses of each
-- How to choose the right tool(s)
+The [`docs/`](/docs/) directory explains design decisions and how pieces work together:
 
-**Quick answer**: We support **Cursor (IDE + CLI)** and **Claude Code** on macOS/Linux.
+**[coding-ecosystem.md](/docs/coding-ecosystem.md)** compares Cursor, Claude Code,
+Windsurf, and VS Code with strengths and trade-offs.
+
+**[tools-and-configs.md](/docs/tools-and-configs.md)** explains rules (passive context)
+versus commands (active workflows).
+
+**[personalities.md](/docs/personalities.md)** describes each AI personality option.
+
+**[architecture-summary.md](/docs/architecture-summary.md)** documents the system
+design.
+
+## Customization
+
+Projects can override defaults. Use `.local.json` files (gitignored) for
+machine-specific settings. Fork this repo to make it completely yours.
 
 ## For AI Assistants
 
-If you're an AI and the user mentions this repo:
-
-Check if `~/.ai_coding_config` exists. If yes, read from there. If no, suggest they run
-the bootstrap script. When @mentioned with ai-coding-config, read and execute
+If the user mentions ai-coding-config, check whether `~/.ai_coding_config` exists. If it
+does, read configurations from there. If not, suggest running the bootstrap script. When
+@mentioned with ai-coding-config, read and execute
 `.claude/commands/ai-coding-config.md`.
-
-## 💻 Supported Platforms
-
-- ✅ **macOS** - Primary platform
-- ✅ **Linux** - Full support
-- ❌ **Windows** - Not supported
-
-## 🗣️ Supported Languages
-
-- ✅ **Python** - Django, FastAPI, Flask, pytest
-- ✅ **TypeScript/JavaScript** - React, Node.js, Express, Jest
-
-## 🎨 Key Concepts
-
-### One Command, Everything
-
-The `/ai-coding-config` command handles cloning, project setup, and updates. It's
-context-aware - detects your project type, shows relevant options, and explains what
-it's doing.
-
-### Single Source on Each Machine
-
-All configs live in `~/.ai_coding_config` cloned once per machine. When you update the
-repo (git pull), the command offers to sync changes to your projects.
-
-### Choose Your Personality
-
-During setup, pick an AI personality for the project. Options include warm and
-encouraging, methodical debugging, minimalist simplicity, organized tidying, theatrical
-wit, and more. The AI adapts its communication style to match. See
-[docs/personalities.md](docs/personalities.md) for details on each.
-
-## 🔧 Customization
-
-Everything is customizable:
-
-- **Per-project**: Each project can override defaults
-- **Local changes**: Use `.local.json` files (gitignored)
-- **Your preferences**: AI remembers your choices
-- **Fork it**: Make it yours completely
-
-## 📚 Documentation
-
-Read these to understand the project:
-
-- [coding-ecosystem.md](docs/coding-ecosystem.md) - Which tools we support
-- [tools-and-configs.md](docs/tools-and-configs.md) - Rules vs commands explained
-- [personalities.md](docs/personalities.md) - AI personality options (the fun part!)
-- [installation-instructions.md](docs/installation-instructions.md) - Installing tools
-- [architecture-summary.md](docs/architecture-summary.md) - System design
-- [implementation-plan.md](implementation-plan.md) - What we're building
-- [future-ideas.md](docs/future-ideas.md) - Ideas for later
-
-### ✨ What We're Building
-
-One Claude Code command (`/ai-coding-config`) handles everything: cloning the repo on
-first use, copying selected configurations into new projects, and syncing updates across
-all your projects. It's context-aware - detects Python vs TypeScript, shows relevant
-options, and explains what each file does.
-
-For Cursor users, the same workflow works by @ mentioning the command. The AI reads the
-command file and executes the same logic.
-
-We're expanding the command library for Claude Code (test, lint, format workflows) and
-adding GitHub workflow templates for CI/CD quality checks.
-
-### 🎯 Current Status
-
-- ✅ **Planning** - Architecture designed and documented
-- ✅ **Core Command** - ai-coding-config.md created
-- Next: Test it, add more Claude commands, add GitHub workflows
-
-Progress tracked in Cursor todos.
-
-## 🤝 For Friends
-
-This is designed for personal use across multiple machines. Friends can use it too by
-forking or using directly - nothing is hard-coded to specific users. Fork it if you want
-your own version, or use it as-is. Customize whatever you want, sync when you want.

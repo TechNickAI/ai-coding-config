@@ -29,9 +29,10 @@ suggestions as you type (Tab to accept), quick edits with Cmd+K, and a chat inte
 that understands your codebase. The rules system in `.cursor/rules/` guides how the AI
 codes - think coding standards, framework patterns, and best practices.
 
-**Cursor CLI** brings the same AI to your terminal and CI/CD pipelines. It uses the same
-`.cursor/rules/` as the IDE, so your AI behavior stays consistent whether you're coding
-interactively or running automated fixes in GitHub Actions.
+**Cursor CLI** (using the `cursor-agent` command) brings the same AI to your terminal
+and CI/CD pipelines. It uses the same `.cursor/rules/` as the IDE, so your AI behavior
+stays consistent whether you're coding interactively or running automated fixes in
+GitHub Actions. Install it from [cursor.com/cli](https://cursor.com/cli).
 
 This repository provides comprehensive Cursor configurations including an extensive
 rules library for Python and TypeScript projects.
@@ -91,12 +92,16 @@ consistently.
 
 ## Getting Started
 
-Install Cursor from cursor.com. If you want the CLI, enable it from within the IDE: open
-the command palette (Cmd+Shift+P) and run "Shell Command: Install 'cursor' command in
-PATH".
+Install Cursor IDE from [cursor.com](https://cursor.com). For the CLI, install
+`cursor-agent` separately:
+
+```bash
+curl https://cursor.com/install -fsS | bash
+```
 
 Install Claude Code via npm: `npm install -g @anthropic-ai/claude-code`, or visit
-anthropic.com/claude/code for other installation methods.
+[anthropic.com/claude/code](https://anthropic.com/claude/code) for other installation
+methods.
 
 Once you have either tool installed, run our bootstrap script. It clones this repository
 to `~/.ai_coding_config`, then uses AI to guide you through configuration. The AI
@@ -121,10 +126,10 @@ it by forking or using it directly - nothing is hard-coded to specific users.
 
 **Official Documentation**:
 
-- Cursor: docs.cursor.com
-- Cursor CLI: docs.cursor.com/cli
-- Claude Code: docs.anthropic.com
-- MCP: modelcontextprotocol.io
+- Cursor IDE: [docs.cursor.com](https://docs.cursor.com)
+- Cursor CLI: [cursor.com/cli](https://cursor.com/cli)
+- Claude Code: [docs.anthropic.com](https://docs.anthropic.com)
+- MCP: [modelcontextprotocol.io](https://modelcontextprotocol.io)
 
 **Our Documentation**:
 
