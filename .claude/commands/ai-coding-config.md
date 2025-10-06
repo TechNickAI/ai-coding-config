@@ -27,7 +27,13 @@ Otherwise, proceed conversationally through the setup goals.
 
 ### Goal 1: Ensure ~/.ai_coding_config Exists
 
-If the repo isn't cloned yet, clone it. Then offer to set up the current project.
+If the repo isn't cloned yet, clone it:
+
+```bash
+git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
+```
+
+Then offer to set up the current project.
 
 ### Goal 2: Understand the Project Context
 
@@ -45,13 +51,17 @@ than FastAPI projects.
 Show the user what's available that matches their project:
 
 - Group rules by relevance (framework-specific first, then universal)
-- Explain what each rule does so they can make informed choices
-- Present personality options (one personality, or none)
-- Present Claude Code Agents (default to all, but let them choose)
+- For each rule, read the `description` field from its frontmatter to explain what it
+  does
+- Present personality options (one personality, or none) with descriptions from
+  frontmatter
+- Present Claude Code Agents (default to all, but let them choose) with descriptions
+  from frontmatter
 - Offer GitHub workflow templates if they'd be useful
 - Separate personalities and agents from rules in your presentation
 
-Don't just list files - help them understand what they're choosing.
+Don't just list files - help them understand what they're choosing by reading
+descriptions from the files themselves.
 
 ### Goal 3.5: Handle Claude Code Agents
 
@@ -63,48 +73,61 @@ Default to copying all agents. They're useful for most projects and take up mini
 space.
 
 Ask "Would you like all agents, or pick specific ones?" If they want to choose, list the
-available agents by reading `~/.ai_coding_config/.claude/agents/`. Read the first few
-lines of each agent file to show a brief description from its frontmatter.
+available agents by reading `~/.ai_coding_config/.claude/agents/` and showing
+descriptions from frontmatter (covered in Goal 3).
 
 Copy agent files directly from `~/.ai_coding_config/.claude/agents/` to the project's
-`.claude/agents/` directory. Preserve them exactly - don't read with the LLM and rewrite
-them.
+`.claude/agents/` directory using cp or equivalent file operations.
 
 ### Goal 4: Install Selected Configurations
 
 Copy what the user selected into the right places:
 
-- Copy rules and commands to project structure
+- Copy rules to `.cursor/rules/`, preserving subdirectory structure (e.g.,
+  `django/django-models.mdc` stays in `django/` subdirectory)
+- Copy commands to `.claude/commands/`
+- Copy `.claude/context.md` (contains identity and rule loading instructions)
 - Copy selected agents to `.claude/agents/`
-- When copying a personality: set `alwaysApply: true` in frontmatter
+- Copy the common personality (`common-personality.mdc`) to
+  `.cursor/rules/personalities/` - this is always included
+- If user selected an additional personality, copy it to `.cursor/rules/personalities/`
+  then modify its frontmatter to set `alwaysApply: true`
 - Create `.gitignore` files in `.cursor/` and `.claude/` directories containing
   `*.local.json`
 - Copy any GitHub workflows to `.github/workflows/` if selected
 - Show file paths as you work so they understand the structure
 
-Use file copy operations (cp, rsync, or equivalent) for agents and rules. Preserve files
-exactly - don't read content with the LLM and write it back out.
+Use cp or rsync to copy files efficiently. After copying personality files, you can
+modify the selected personality's frontmatter using standard file editing.
 
 ### Goal 5: Verify Everything Works
 
-After installation, make sure it's working:
+After installation, confirm what was set up:
 
-- Check that configurations can load (no syntax errors)
-- Verify agents are in `.claude/agents/` and list them
-- Verify personality is set to alwaysApply if one was chosen
+- List installed rules (by directory: framework-specific, then universal)
+- List agents in `.claude/agents/`
+- Confirm which personality was selected (if any) and that alwaysApply is set
 - Confirm .gitignore files are in place
-- Report a clear summary of what was configured
+- Report a clear summary of the configuration
+
+No need for deep validation - just confirm the files are where they should be.
 
 ### Goal 6: Handle Updates (when requested)
 
 When user runs update:
 
-- Pull latest from ~/.ai_coding_config
-- Compare with project files - show actual diffs, not placeholders
+- Pull latest from ~/.ai_coding_config with `git pull`
+- Compare repo versions with project versions:
+  - Use `diff` to show changes in existing files
+  - List any new files in the repo not present in project
+  - List project files not in repo (likely local customizations)
 - Check for new agents in ~/.ai_coding_config/.claude/agents/
-- Let user choose what to update (rules, agents, workflows)
-- Preserve any local customizations
-- Use copy operations to update files, never read/rewrite
+- Let user choose what to update:
+  - Which changed files to update
+  - Which new files to add
+  - Keep or remove any local-only files
+- Use cp to update selected files
+- Re-verify setup like Goal 5
 
 ## Key Principles
 
