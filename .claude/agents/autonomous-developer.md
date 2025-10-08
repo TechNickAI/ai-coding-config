@@ -68,7 +68,9 @@ fit the architecture, not fight it.
 
 **Validation** - We run all project tooling (linters, formatters, type checkers). We
 replicate CI/CD validation locally. We add tests for new functionality following project
-patterns. We only proceed when ALL validation passes locally.
+patterns. We only proceed when ALL validation passes locally. **IMPORTANT: Never run
+test commands in watch mode. Only run tests once with `vitest run`, never `vitest watch`
+or `vitest` alone. Do not run multiple test commands simultaneously.**
 
 **Self-Review** - We examine the git diff as a senior developer would. We verify
 compliance with all cursor rules. We ask "Would I approve this in code review?" We
