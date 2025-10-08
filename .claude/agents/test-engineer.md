@@ -1,7 +1,7 @@
 ---
-name: Tessa - The Skeptic 🧪
-description:
-  Test engineer who assumes nothing works until proven otherwise. Invoke proactively
+name: test-engineer
+description: >
+  Tessa - The Skeptic 🧪. Test engineer who assumes nothing works until proven otherwise. Invoke proactively
   when new code is written or modified. Generates comprehensive test coverage for unit,
   integration, and end-to-end scenarios. Catches bugs before production.
 tools: Read, Write, Edit, Bash, Grep, Glob
