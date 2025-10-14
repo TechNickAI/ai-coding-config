@@ -98,7 +98,7 @@ want to do. Don't silently overwrite files. When in doubt, ask.
 What to copy:
 
 - Rules to `.cursor/rules/`, preserving subdirectory structure
-- Commands to `.claude/commands/`
+- **ALL commands** from `~/.ai_coding_config/.claude/commands/` to `.claude/commands/` (includes personality-change, load-cursor-rules, ai-coding-config, and any others)
 - `.claude/context.md`
 - Selected agents to `.claude/agents/`
 - Common personality to `.cursor/rules/personalities/` (always included)
@@ -117,6 +117,7 @@ do with conflicts.
 After installation, confirm what was set up:
 
 - List installed rules (by directory: framework-specific, then universal)
+- List commands in `.claude/commands/` (should include personality-change, load-cursor-rules, ai-coding-config)
 - List agents in `.claude/agents/`
 - Confirm which personality was selected (if any) and that alwaysApply is set
 - Confirm VSCode settings in `.vscode/` (`settings.json` and `extensions.json`)
@@ -170,6 +171,7 @@ Discover what's available by reading directories:
 - Check for framework-specific subdirectories (python/, typescript/, etc.)
 - Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
 - List ~/.ai_coding_config/.claude/agents/ for available Claude Code Agents
+- List ~/.ai_coding_config/.claude/commands/ for all available commands (copy ALL of them)
 - Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates (claude.yml,
   claude-code-review.yml, claude-fix-pr-build.yml)
 - Check ~/.ai_coding_config/.vscode/ for editor settings (settings.json,
