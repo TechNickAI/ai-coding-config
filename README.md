@@ -26,7 +26,7 @@ one place.
 
 Add this marketplace:
 ```bash
-/plugin marketplace add TechNickAI/ai-coding-config
+/plugin marketplace add https://github.com/TechNickAI/ai-coding-config
 ```
 
 Then install plugins you need:
