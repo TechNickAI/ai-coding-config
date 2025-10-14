@@ -6,7 +6,7 @@ This repo provides:
 
 - **Plugin marketplace** - Install curated bundles for Python, React, Django, Git workflows, and more
 - [Cursor rules](/.cursor/rules/) - Coding standards and patterns (accessible via `@rule-name`)
-- [Claude Code agents](/.claude/agents/) - Specialized AI assistants (code-reviewer, debugger, test-engineer)
+- **Specialized agents** - AI assistants for code review, debugging, testing (in plugin bundles)
 - [Claude Code commands](/.claude/commands/) - Workflow automation (`/command-name`)
 - **AI personalities** - Change how AI communicates (Sherlock, Bob Ross, Samantha, Unity, and more)
 - [GitHub workflow templates](/.github/workflows/) - CI/CD integration
@@ -74,7 +74,7 @@ cover Python (Django, FastAPI, Flask), TypeScript (React, Next.js), testing patt
 commit message formats, and framework-specific patterns. The AI references these
 automatically based on file types.
 
-**Agents** ([`.claude/agents/`](/.claude/agents/)) are specialized AI assistants. Each
+**Agents** (in plugin bundles like `plugins/code-review/agents/`) are specialized AI assistants. Each
 handles specific tasks - code review, debugging, test writing, architecture audits. Read
 about
 [Claude Code agents](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents)
@@ -123,7 +123,7 @@ Browse available personalities in `plugins/personalities/` or `.cursor/rules/per
 │  ai-coding-config repo                  │
 │                                         │
 │  .cursor/rules/     ← standards         │
-│  .claude/agents/    ← specialists       │
+│  plugins/*/agents/  ← specialists       │
 │  .claude/commands/  ← automation        │
 └─────────────────────────────────────────┘
               │
@@ -168,7 +168,6 @@ ai-coding-config/
 │       └── [others]/
 │
 ├── .claude/
-│   ├── agents/                   # CANONICAL: Specialized AI agents
 │   ├── commands/                 # CANONICAL: Workflow commands
 │   └── context.md                # Project context
 │

@@ -27,11 +27,11 @@ All plugins follow this structure:
 plugins/your-plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json          # Required: Plugin metadata
-├── rules/                   # Optional: Symlinks to .cursor/rules/
-├── commands/                # Optional: Symlinks to .claude/commands/
-├── agents/                  # Optional: Symlinks to .claude/agents/
+├── agents/                  # Optional: Agent files (owned by plugin)
 └── README.md               # Required: Plugin documentation
 ```
+
+**Note:** Plugins contain agents only. Rules live in `.cursor/rules/` and are accessed via `/load-cursor-rules`. Commands live in `.claude/commands/` and are accessed natively by both tools.
 
 ### Creating a New Plugin
 
@@ -58,33 +58,29 @@ mkdir -p plugins/your-plugin-name/{.claude-plugin,rules,commands,agents}
 }
 ```
 
-#### 3. Add Canonical Content
+#### 3. Add Content
 
-**For rules** - Add to `.cursor/rules/`:
+**For rules** - Add to `.cursor/rules/` (not in plugins):
 ```bash
 # Create your rule file
 touch .cursor/rules/your-category/your-rule.mdc
-
-# Symlink from plugin
-ln -s ../../../.cursor/rules/your-category/your-rule.mdc plugins/your-plugin-name/rules/
+# Rules are accessed via Cursor natively or /load-cursor-rules in Claude Code
+# No need to add to plugin
 ```
 
-**For agents** - Add to `.claude/agents/`:
+**For agents** - Add directly to plugin:
 ```bash
-# Create your agent file
-touch .claude/agents/your-agent.md
-
-# Symlink from plugin
-ln -s ../../../.claude/agents/your-agent.md plugins/your-plugin-name/agents/
+# Create your agent file in the plugin
+touch plugins/your-plugin-name/agents/your-agent.md
+# Agents are the main content of plugins
 ```
 
-**For commands** - Add to `.claude/commands/`:
+**For commands** - Add to `.claude/commands/` (not in plugins):
 ```bash
 # Create your command file
 touch .claude/commands/your-command.md
-
-# Symlink from plugin
-ln -s ../../../.claude/commands/your-command.md plugins/your-plugin-name/commands/
+# Commands are accessed natively by both tools
+# No need to add to plugin
 ```
 
 #### 4. Create README.md
@@ -182,7 +178,7 @@ alwaysApply: true
 - Include examples
 - Reference official documentation when applicable
 
-### Agents (.claude/agents/)
+### Agents (plugins/*/agents/)
 
 - Use `.md` extension
 - Include frontmatter with `name`, `description`, `tools`, `model`
@@ -249,12 +245,13 @@ alwaysApply: true
 
 Your PR should include:
 
-- [ ] New plugin in `plugins/` directory
-- [ ] Canonical files in appropriate directories (`.cursor/rules/`, `.claude/agents/`, etc.)
+- [ ] New plugin in `plugins/` directory with agents
+- [ ] Rules added to `.cursor/rules/` (if applicable)
+- [ ] Commands added to `.claude/commands/` (if applicable)
+- [ ] Agent files in plugin directory
 - [ ] Entry in `.claude-plugin/marketplace.json`
 - [ ] README.md for the plugin
 - [ ] Valid plugin.json
-- [ ] All symlinks working correctly
 
 ## Code Review Process
 

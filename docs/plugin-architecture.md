@@ -16,10 +16,11 @@ Content lives in one canonical location. Plugins are curated bundles that symlin
 **Used by:** Cursor IDE (native), Claude Code (via `/load-cursor-rules`)
 **Access:** `@rule-name` in Cursor, `/load-cursor-rules` in Claude Code
 
-### Agents: `.claude/agents/`
+### Agents: `plugins/*/agents/`
 **What:** Specialized AI assistants with specific roles
 **Format:** `.md` files with frontmatter (name, description, tools, model)
-**Used by:** Claude Code (native subagent), Cursor (via `@.claude/agents/name.md`)
+**Location:** Live directly in plugin bundles (e.g., `plugins/code-review/agents/`)
+**Used by:** Claude Code (native subagent), Cursor (via `@plugins/code-review/agents/name.md`)
 **Access:** Native in Claude Code, @ mention in Cursor
 
 ### Commands: `.claude/commands/`
@@ -36,18 +37,17 @@ Each plugin is a directory with symlinks to canonical sources:
 plugins/plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json              # Metadata
-├── rules/                        # Symlinks to .cursor/rules/
-├── commands/                     # Symlinks to .claude/commands/
-├── agents/                       # Symlinks to .claude/agents/
+├── agents/                       # Agent files (owned by plugin)
 └── README.md                     # Documentation
 ```
 
-### Why Symlinks?
+### Why This Structure?
 
-1. **Single source of truth** - Content exists once, used many places
-2. **Easy updates** - Change canonical file, all plugins reflect it
-3. **Flexible bundling** - Different plugins can include same content
-4. **Git efficiency** - Symlinks are tiny, no duplication in repo
+**Rules** stay in `.cursor/rules/` - Cursor's native location. Claude Code accesses them via `/load-cursor-rules`.
+
+**Commands** stay in `.claude/commands/` - both tools can access them natively.
+
+**Agents** live in plugins because they're distributed content that gets installed with the plugin.
 
 ## Tool Compatibility
 
@@ -157,15 +157,14 @@ User: Runs /ai-coding-config or bootstrap
 
 1. Create in `.cursor/rules/category/rule-name.mdc`
 2. Include frontmatter with description, globs
-3. Create or update plugin that includes it
-4. Symlink from plugin: `ln -s ../../../.cursor/rules/category/rule-name.mdc plugins/your-plugin/rules/`
+3. That's it - rules are accessed via Cursor natively or `/load-cursor-rules` in Claude Code
+4. No need to add to plugins
 
 ### Adding an Agent
 
-1. Create in `.claude/agents/agent-name.md`
+1. Create directly in plugin: `plugins/your-plugin/agents/agent-name.md`
 2. Include frontmatter with name, tools, model
-3. Create or update plugin that includes it
-4. Symlink from plugin: `ln -s ../../../.claude/agents/agent-name.md plugins/your-plugin/agents/`
+3. No symlinks needed - agents live in plugins
 
 ### Adding a Command
 
