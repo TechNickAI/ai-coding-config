@@ -409,18 +409,15 @@ You are helping set up ai-coding-config for the first time.
 1. Welcome and explain (1-2 min setup)
 
 2. Check tool availability:
-
    - If no tools installed: Show installation instructions and pause
    - If one tool: Configure that tool
    - If both tools: Ask which to configure (can do both)
 
 3. Ask about usage:
-
    - Primary language? (Python/TypeScript/both)
    - Use cases? (personal/work/both)
 
 4. Guide API key setup (based on tools detected):
-
    - Anthropic API key (required if using Claude Code)
    - OpenAI API key (optional if using Cursor)
    - GitHub token (for MCP servers)
@@ -428,13 +425,11 @@ You are helping set up ai-coding-config for the first time.
    - Test keys work before proceeding
 
 5. Configure MCP servers (if using Claude Code):
-
    - Based on language choice
    - Based on use case
    - Let user select
 
 6. Validate:
-
    - Test API keys work
    - Test MCP servers connect
    - Test tools can access config
@@ -459,7 +454,6 @@ Help configure this project with ai-coding-config.
 ## Analyze Project
 
 1. Detect:
-
    - Language (Python/TypeScript/both)
    - Framework (Django/FastAPI/React/etc)
    - Existing config (if any)
@@ -472,17 +466,14 @@ Help configure this project with ai-coding-config.
 ## Ask User
 
 1. Cursor rules:
-
    - Show recommendations for detected stack
    - Let user add/remove
 
 2. Claude Code commands:
-
    - Show relevant commands
    - Explain what each does
 
 3. MCP servers:
-
    - Based on stack (e.g., PostgreSQL for Django)
    - Based on needs
 
@@ -522,7 +513,6 @@ Help update this project with latest changes from ai-coding-config.
 ## Check Status
 
 1. Compare versions:
-
    - Config repo version
    - Project version
    - What changed?
@@ -900,13 +890,11 @@ Never force configurations. AI always asks before applying changes.
 ## 📝 Next Steps
 
 1. **Review this plan**
-
    - Does it make sense?
    - Anything missing?
    - Priorities correct?
 
 2. **Start Phase 1**
-
    - Create directories
    - Write bootstrap script
    - Write AI prompts

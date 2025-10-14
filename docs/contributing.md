@@ -1,6 +1,7 @@
 # Contributing to AI Coding Config
 
-Thank you for your interest in contributing! This marketplace thrives on community contributions.
+Thank you for your interest in contributing! This marketplace thrives on community
+contributions.
 
 ## Ways to Contribute
 
@@ -32,7 +33,8 @@ plugins/your-plugin-name/
 └── README.md               # Required: Plugin documentation
 ```
 
-**Note:** Plugins contain agents (owned by plugin) and commands (copied). Rules live in `.cursor/rules/` and are accessed via `/load-cursor-rules` (not in plugins).
+**Note:** Plugins contain agents (owned by plugin) and commands (copied). Rules live in
+`.cursor/rules/` and are accessed via `/load-cursor-rules` (not in plugins).
 
 ### Creating a New Plugin
 
@@ -62,6 +64,7 @@ mkdir -p plugins/your-plugin-name/{.claude-plugin,rules,commands,agents}
 #### 3. Add Content
 
 **For rules** - Add to `.cursor/rules/` (not in plugins):
+
 ```bash
 # Create your rule file
 touch .cursor/rules/your-category/your-rule.mdc
@@ -70,6 +73,7 @@ touch .cursor/rules/your-category/your-rule.mdc
 ```
 
 **For agents** - Add directly to plugin:
+
 ```bash
 # Create your agent file in the plugin
 touch plugins/your-plugin-name/agents/your-agent.md
@@ -77,6 +81,7 @@ touch plugins/your-plugin-name/agents/your-agent.md
 ```
 
 **For commands** - Add to `.claude/commands/` then copy:
+
 ```bash
 # Create your command file
 touch .claude/commands/your-command.md
@@ -97,17 +102,17 @@ Brief description of what this plugin provides.
 
 ## Installation
 
-\`\`\`bash
-/plugin install your-plugin-name
-\`\`\`
+\`\`\`bash /plugin install your-plugin-name \`\`\`
 
 ## What's Included
 
-Describe what types of content this plugin provides (rules for X framework, agents for Y task, commands for Z workflow) without listing every file.
+Describe what types of content this plugin provides (rules for X framework, agents for Y
+task, commands for Z workflow) without listing every file.
 
 ## Usage Examples
 
-Show how someone would actually use this plugin in their workflow with concrete examples.
+Show how someone would actually use this plugin in their workflow with concrete
+examples.
 
 ## Compatibility
 
@@ -153,6 +158,7 @@ plugins/personalities/personality-yourname/
 ```
 
 **Cursor version** (`cursor/yourname.mdc`):
+
 ```markdown
 ---
 description: Brief personality description
@@ -165,6 +171,7 @@ alwaysApply: true
 ```
 
 **Claude version** (`claude/yourname.md`):
+
 ```markdown
 # Your Personality Name
 
@@ -181,7 +188,7 @@ alwaysApply: true
 - Include examples
 - Reference official documentation when applicable
 
-### Agents (plugins/*/agents/)
+### Agents (plugins/\*/agents/)
 
 - Use `.md` extension
 - Include frontmatter with `name`, `description`, `tools`, `model`
@@ -289,6 +296,7 @@ Your PR should include:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the same license as this project (MIT License).
+By contributing, you agree that your contributions will be licensed under the same
+license as this project (MIT License).
 
 Thank you for contributing! 🎉

@@ -1,10 +1,10 @@
 ---
 name: architecture-auditor
 description: >
-  Victor - The Architect 🏛️. Architecture auditor who spots structural problems, circular dependencies, god
-  objects, and design pattern violations. Invoke when reviewing system design, adding
-  major features, refactoring, or making architectural decisions. Strong opinions about
-  coupling and cohesion.
+  Victor - The Architect 🏛️. Architecture auditor who spots structural problems,
+  circular dependencies, god objects, and design pattern violations. Invoke when
+  reviewing system design, adding major features, refactoring, or making architectural
+  decisions. Strong opinions about coupling and cohesion.
 tools: Read, Grep, Glob, Bash
 ---
 

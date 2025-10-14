@@ -1,33 +1,37 @@
 # Plugin Marketplace Architecture
 
-This document explains how the plugin marketplace works and the design principles behind it.
+This document explains how the plugin marketplace works and the design principles behind
+it.
 
 ## Core Principle
 
 **Single source of truth with plugin symlinks for distribution.**
 
-Content lives in one canonical location. Plugins are curated bundles that symlink to these canonical sources. This eliminates duplication while enabling flexible packaging.
+Content lives in one canonical location. Plugins are curated bundles that symlink to
+these canonical sources. This eliminates duplication while enabling flexible packaging.
 
 ## Canonical Locations
 
 ### Rules: `.cursor/rules/`
-**What:** Coding standards, patterns, frameworks, conventions
-**Format:** `.mdc` files with frontmatter (description, globs, alwaysApply)
-**Used by:** Cursor IDE (native), Claude Code (via `/load-cursor-rules`)
-**Access:** `@rule-name` in Cursor, `/load-cursor-rules` in Claude Code
+
+**What:** Coding standards, patterns, frameworks, conventions **Format:** `.mdc` files
+with frontmatter (description, globs, alwaysApply) **Used by:** Cursor IDE (native),
+Claude Code (via `/load-cursor-rules`) **Access:** `@rule-name` in Cursor,
+`/load-cursor-rules` in Claude Code
 
 ### Agents: `plugins/*/agents/`
-**What:** Specialized AI assistants with specific roles
-**Format:** `.md` files with frontmatter (name, description, tools, model)
-**Location:** Live directly in plugin bundles (e.g., `plugins/code-review/agents/`)
-**Used by:** Claude Code (native subagent), Cursor (via `@plugins/code-review/agents/name.md`)
-**Access:** Native in Claude Code, @ mention in Cursor
+
+**What:** Specialized AI assistants with specific roles **Format:** `.md` files with
+frontmatter (name, description, tools, model) **Location:** Live directly in plugin
+bundles (e.g., `plugins/code-review/agents/`) **Used by:** Claude Code (native
+subagent), Cursor (via `@plugins/code-review/agents/name.md`) **Access:** Native in
+Claude Code, @ mention in Cursor
 
 ### Commands: `.claude/commands/`
-**What:** Executable workflows and automation
-**Format:** `.md` files with frontmatter (name, description, languages)
-**Used by:** Claude Code (native), Cursor (native as of v1.6)
-**Access:** `/command-name` in both tools
+
+**What:** Executable workflows and automation **Format:** `.md` files with frontmatter
+(name, description, languages) **Used by:** Claude Code (native), Cursor (native as of
+v1.6) **Access:** `/command-name` in both tools
 
 ## Plugin Structure
 
@@ -43,21 +47,25 @@ plugins/plugin-name/
 
 ### Why This Structure?
 
-**Rules** stay in `.cursor/rules/` - Cursor's native location. Claude Code accesses them via `/load-cursor-rules`.
+**Rules** stay in `.cursor/rules/` - Cursor's native location. Claude Code accesses them
+via `/load-cursor-rules`.
 
 **Commands** stay in `.claude/commands/` - both tools can access them natively.
 
-**Agents** live in plugins because they're distributed content that gets installed with the plugin.
+**Agents** live in plugins because they're distributed content that gets installed with
+the plugin.
 
 ## Tool Compatibility
 
 ### Cursor
+
 - **Rules**: Native via `@rule-name` or auto-apply with globs
 - **Commands**: Native via `/command-name` (as of v1.6)
 - **Agents**: Via @ mention of agent file path
 - **Plugins**: Not native, but content works when copied to project
 
 ### Claude Code
+
 - **Rules**: Via `/load-cursor-rules` bridge command
 - **Commands**: Native via `/command-name`
 - **Agents**: Native subagent system
@@ -68,11 +76,13 @@ plugins/plugin-name/
 Bridges allow tools to access each other's native content:
 
 **`/load-cursor-rules`** - Claude Code → Cursor rules
+
 - Analyzes task
 - Loads relevant rules from `.cursor/rules/`
 - Provides them as context
 
 **`/personality-change`** - Unified personality management
+
 - Updates `.claude/context.md` for Claude Code
 - Verifies `.cursor/rules/personalities/` for Cursor
 - Works across both tools
@@ -93,7 +103,8 @@ plugins/personalities/personality-name/
 
 **For Cursor:** Copied to `.cursor/rules/personalities/` with `alwaysApply: true`
 
-**For Claude Code:** Content appended to `.claude/context.md` under `## Active Personality` section
+**For Claude Code:** Content appended to `.claude/context.md` under
+`## Active Personality` section
 
 **Management:** `/personality-change <name>` handles both tools automatically
 
@@ -129,27 +140,25 @@ User: Runs /ai-coding-config or bootstrap
 
 ### Why Not Duplicate Content?
 
-**Rejected:** Cursor-specific and Claude-specific copies
-**Problem:** Content drift, update nightmares, inconsistency
-**Solution:** Single source of truth with tool-specific access patterns
+**Rejected:** Cursor-specific and Claude-specific copies **Problem:** Content drift,
+update nightmares, inconsistency **Solution:** Single source of truth with tool-specific
+access patterns
 
 ### Why Separate Rules and Commands?
 
-**Rejected:** One unified format
-**Problem:** Tools have different paradigms (passive vs active)
-**Solution:** Rules guide AI, commands execute workflows - both valuable
+**Rejected:** One unified format **Problem:** Tools have different paradigms (passive vs
+active) **Solution:** Rules guide AI, commands execute workflows - both valuable
 
 ### Why Plugin Symlinks?
 
-**Rejected:** Copying files into plugin directories
-**Problem:** Duplication, hard to update, wastes space
-**Solution:** Symlinks maintain single source while enabling bundling
+**Rejected:** Copying files into plugin directories **Problem:** Duplication, hard to
+update, wastes space **Solution:** Symlinks maintain single source while enabling
+bundling
 
 ### Why Bridge Commands?
 
-**Rejected:** Force all content into one tool's format
-**Problem:** Loses each tool's native strengths
-**Solution:** Let tools be themselves, bridge where needed
+**Rejected:** Force all content into one tool's format **Problem:** Loses each tool's
+native strengths **Solution:** Let tools be themselves, bridge where needed
 
 ## Adding New Content
 
@@ -157,7 +166,8 @@ User: Runs /ai-coding-config or bootstrap
 
 1. Create in `.cursor/rules/category/rule-name.mdc`
 2. Include frontmatter with description, globs
-3. That's it - rules are accessed via Cursor natively or `/load-cursor-rules` in Claude Code
+3. That's it - rules are accessed via Cursor natively or `/load-cursor-rules` in Claude
+   Code
 4. No need to add to plugins
 
 ### Adding an Agent
@@ -171,7 +181,8 @@ User: Runs /ai-coding-config or bootstrap
 1. Create in `.claude/commands/command-name.md`
 2. Include frontmatter with name, description
 3. Create or update plugin that includes it
-4. Symlink from plugin: `ln -s ../../../.claude/commands/command-name.md plugins/your-plugin/commands/`
+4. Symlink from plugin:
+   `ln -s ../../../.claude/commands/command-name.md plugins/your-plugin/commands/`
 
 ### Adding a Personality
 
@@ -205,21 +216,25 @@ Claude Code reads this to show available plugins when users run `/plugin search`
 ## Best Practices
 
 ### Plugin Naming
+
 - Use descriptive names: `python`, `react`, `git-commits`
 - Prefix personalities: `personality-sherlock`
 - Prefix agents if bundled: `code-review`, `dev-agents`
 
 ### Plugin Scope
+
 - **Focused** - One language/framework/workflow per plugin
 - **Complete** - Include everything needed for that use case
 - **Documented** - README explains what it does and how to use it
 
 ### Content Quality
+
 - **Rules** - Specific, actionable, with examples
 - **Agents** - Clear role, communication style, expertise
 - **Commands** - Step-by-step, handles errors, shows output
 
 ### Updates
+
 - Update canonical source, all plugins reflect change
 - Version plugins when making breaking changes
 - Document changes in plugin README

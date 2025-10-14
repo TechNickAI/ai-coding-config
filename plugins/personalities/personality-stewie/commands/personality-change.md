@@ -2,7 +2,8 @@
 description: Change or activate a personality for both Cursor and Claude Code
 ---
 
-Change the active AI personality to create consistent behavior across Claude Code and Cursor.
+Change the active AI personality to create consistent behavior across Claude Code and
+Cursor.
 
 **IMPORTANT: Ask the user which personality they want if not provided.**
 
@@ -21,7 +22,8 @@ Change the active AI personality to create consistent behavior across Claude Cod
 
 ### 1. Validate Input
 
-- If no personality name provided, show available personalities and ask which to activate
+- If no personality name provided, show available personalities and ask which to
+  activate
 - Check that `.cursor/rules/personalities/<name>.mdc` exists
 - If `none` was requested, skip to step 3 to remove personality
 
@@ -30,38 +32,41 @@ Change the active AI personality to create consistent behavior across Claude Cod
 a. Read or create `.claude/context.md`
 
 b. Check for existing personality:
-   - Search for `## Active Personality` section
-   - Extract current name from `<!-- personality-<name> -->` comment if found
+
+- Search for `## Active Personality` section
+- Extract current name from `<!-- personality-<name> -->` comment if found
 
 c. If personality exists:
-   - If same as requested: inform "✓ <name> is already active" and stop
-   - If different: remove entire `## Active Personality` section (including HTML comments)
+
+- If same as requested: inform "✓ <name> is already active" and stop
+- If different: remove entire `## Active Personality` section (including HTML comments)
 
 d. If not removing (name != "none"):
-   - Read `.cursor/rules/personalities/<name>.mdc`
-   - Strip frontmatter (content between opening `---` and closing `---`)
-   - Append to `.claude/context.md`:
 
-   ```
-   ## Active Personality
+- Read `.cursor/rules/personalities/<name>.mdc`
+- Strip frontmatter (content between opening `---` and closing `---`)
+- Append to `.claude/context.md`:
 
-   <!-- personality-<name> -->
-   <personality content without frontmatter>
-   <!-- /personality-<name> -->
-   ```
+```
+## Active Personality
+
+<!-- personality-<name> -->
+<personality content without frontmatter>
+<!-- /personality-<name> -->
+```
 
 e. Write updated `.claude/context.md`
 
 ### 3. Verify Cursor Setup
 
-a. Read `.cursor/rules/personalities/<name>.mdc` frontmatter
-b. Check if `alwaysApply: true` is set
-c. If not set and name != "none", inform user:
-   "⚠️ Note: For Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.mdc"
+a. Read `.cursor/rules/personalities/<name>.mdc` frontmatter b. Check if
+`alwaysApply: true` is set c. If not set and name != "none", inform user: "⚠️ Note: For
+Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.mdc"
 
 ### 4. Report Results
 
 **If switching personalities:**
+
 ```
 ✓ Switched from <old-name> to <new-name> personality
 
@@ -70,6 +75,7 @@ Cursor: Active at .cursor/rules/personalities/<name>.mdc
 ```
 
 **If activating (no previous):**
+
 ```
 ✓ Activated <name> personality
 
@@ -78,6 +84,7 @@ Cursor: Active at .cursor/rules/personalities/<name>.mdc
 ```
 
 **If removing:**
+
 ```
 ✓ Removed active personality
 
@@ -86,6 +93,7 @@ Cursor: Manually set alwaysApply: false if desired
 ```
 
 **If already active:**
+
 ```
 ✓ <name> personality is already active
 ```

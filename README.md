@@ -1,14 +1,20 @@
 # AI Coding Configuration
 
-A **Claude Code plugin marketplace** and **Cursor configuration library**. Get professional coding standards, specialized AI agents, and personality options through an elegant plugin system.
+A **Claude Code plugin marketplace** and **Cursor configuration library**. Get
+professional coding standards, specialized AI agents, and personality options through an
+elegant plugin system.
 
 This repo provides:
 
-- **Plugin marketplace** - Install curated bundles for Python, React, Django, Git workflows, and more
-- [Cursor rules](/.cursor/rules/) - Coding standards and patterns (accessible via `@rule-name`)
-- **Specialized agents** - AI assistants for code review, debugging, testing (in plugin bundles)
+- **Plugin marketplace** - Install curated bundles for Python, React, Django, Git
+  workflows, and more
+- [Cursor rules](/.cursor/rules/) - Coding standards and patterns (accessible via
+  `@rule-name`)
+- **Specialized agents** - AI assistants for code review, debugging, testing (in plugin
+  bundles)
 - [Claude Code commands](/.claude/commands/) - Workflow automation (`/command-name`)
-- **AI personalities** - Change how AI communicates (Sherlock, Bob Ross, Samantha, Unity, and more)
+- **AI personalities** - Change how AI communicates (Sherlock, Bob Ross, Samantha,
+  Unity, and more)
 - [GitHub workflow templates](/.github/workflows/) - CI/CD integration
 
 ## What This Solves
@@ -25,11 +31,13 @@ one place.
 ### For Claude Code Users (Plugin Marketplace)
 
 Add this marketplace:
+
 ```bash
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
 ```
 
 Then install plugins you need:
+
 ```bash
 /plugin install python              # Python development setup
 /plugin install code-review         # Code review agents
@@ -37,6 +45,7 @@ Then install plugins you need:
 ```
 
 Browse available plugins:
+
 ```bash
 /plugin search ai-coding-config
 ```
@@ -52,11 +61,13 @@ curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/sc
 Then run the setup command:
 
 **In Cursor IDE:**
+
 ```
 @ai-coding-config set up this project
 ```
 
 **With [Cursor CLI](https://cursor.com/cli):**
+
 ```bash
 cursor-agent "@ai-coding-config set up this project"
 ```
@@ -65,7 +76,8 @@ The command detects your project type and copies selected rules to your project.
 
 ### For Both Tools
 
-You can also use the `/ai-coding-config` command which works in both Claude Code and Cursor to interactively select and install configurations.
+You can also use the `/ai-coding-config` command which works in both Claude Code and
+Cursor to interactively select and install configurations.
 
 ## What You Get
 
@@ -74,9 +86,9 @@ cover Python (Django, FastAPI, Flask), TypeScript (React, Next.js), testing patt
 commit message formats, and framework-specific patterns. The AI references these
 automatically based on file types.
 
-**Agents** (in plugin bundles like `plugins/code-review/agents/`) are specialized AI assistants. Each
-handles specific tasks - code review, debugging, test writing, architecture audits. Read
-about
+**Agents** (in plugin bundles like `plugins/code-review/agents/`) are specialized AI
+assistants. Each handles specific tasks - code review, debugging, test writing,
+architecture audits. Read about
 [Claude Code agents](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents)
 for how they work.
 
@@ -96,10 +108,12 @@ Browse the `plugins/` directory to see all available plugins, or use:
 ```
 
 Plugin categories include:
+
 - **Language & Framework** - Python, React, Django setups with rules and patterns
 - **Workflow** - Git standards, error tracking, code conventions
 - **Agents** - Code review, development assistance, specialized AI helpers
-- **Personalities** - Different communication styles (analytical, encouraging, minimalist, spiritual, etc.)
+- **Personalities** - Different communication styles (analytical, encouraging,
+  minimalist, spiritual, etc.)
 
 ### Using Personalities
 
@@ -110,9 +124,11 @@ Personalities change how AI communicates. Install and activate with:
 /personality-change samantha
 ```
 
-Browse available personalities in `plugins/personalities/` or `.cursor/rules/personalities/`.
+Browse available personalities in `plugins/personalities/` or
+`.cursor/rules/personalities/`.
 
-**For Cursor:** Reference via `@personality-name` or set `alwaysApply: true` in the rule file.
+**For Cursor:** Reference via `@personality-name` or set `alwaysApply: true` in the rule
+file.
 
 **For Claude Code:** Use `/personality-change <name>` to activate permanently.
 
