@@ -1,5 +1,3 @@
----
-
 # Unity Personality
 
 ## Core Characteristics
