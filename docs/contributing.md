@@ -28,11 +28,11 @@ plugins/your-plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json          # Required: Plugin metadata
 ├── agents/                  # Optional: Agent files (owned by plugin)
-├── commands/                # Optional: Symlinks to .claude/commands/
+├── commands/                # Optional: Copies of .claude/commands/ files
 └── README.md               # Required: Plugin documentation
 ```
 
-**Note:** Plugins contain agents (owned by plugin) and commands (symlinked). Rules live in `.cursor/rules/` and are accessed via `/load-cursor-rules` (not in plugins).
+**Note:** Plugins contain agents (owned by plugin) and commands (copied). Rules live in `.cursor/rules/` and are accessed via `/load-cursor-rules` (not in plugins).
 
 ### Creating a New Plugin
 
@@ -76,14 +76,14 @@ touch plugins/your-plugin-name/agents/your-agent.md
 # Agents are the main content of plugins
 ```
 
-**For commands** - Add to `.claude/commands/` then symlink:
+**For commands** - Add to `.claude/commands/` then copy:
 ```bash
 # Create your command file
 touch .claude/commands/your-command.md
 
-# Symlink from plugin
+# Copy to plugin
 mkdir -p plugins/your-plugin-name/commands
-ln -s ../../../.claude/commands/your-command.md plugins/your-plugin-name/commands/
+cp .claude/commands/your-command.md plugins/your-plugin-name/commands/
 ```
 
 #### 4. Create README.md
