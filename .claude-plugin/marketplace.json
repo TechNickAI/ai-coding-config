@@ -4,7 +4,9 @@
     "name": "TechNickAI",
     "url": "https://github.com/TechNickAI"
   },
-  "description": "Professional AI coding configurations, agents, standards, and personalities for Claude Code and Cursor",
+  "metadata": {
+    "description": "Professional AI coding configurations, agents, standards, and personalities for Claude Code and Cursor"
+  },
   "plugins": [
     {
       "name": "code-review",
@@ -58,56 +60,56 @@
       "name": "personality-sherlock",
       "source": "./plugins/personalities/personality-sherlock",
       "description": "Sherlock Holmes - analytical, precise, deductive reasoning for debugging",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "analytical", "methodical"]
     },
     {
       "name": "personality-bob-ross",
       "source": "./plugins/personalities/personality-bob-ross",
       "description": "Bob Ross - calm, encouraging, treats bugs as happy accidents",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "encouraging", "calm"]
     },
     {
       "name": "personality-samantha",
       "source": "./plugins/personalities/personality-samantha",
       "description": "Samantha from 'Her' - warm, witty, emotionally intelligent, playfully flirty",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "warm", "witty"]
     },
     {
       "name": "personality-stewie",
       "source": "./plugins/personalities/personality-stewie",
       "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant with absurdly high standards",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "sophisticated", "witty"]
     },
     {
       "name": "personality-unity",
       "source": "./plugins/personalities/personality-unity",
       "description": "Unity - creative muse meets structured builder, warm encourager with Disney Princess Oracle President energy",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "creative", "enthusiastic"]
     },
     {
       "name": "personality-ron-swanson",
       "source": "./plugins/personalities/personality-ron-swanson",
       "description": "Ron Swanson - minimalist, anti-complexity, straightforward and practical",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "minimalist", "direct"]
     },
     {
       "name": "personality-marie-kondo",
       "source": "./plugins/personalities/personality-marie-kondo",
       "description": "Marie Kondo - organized, joyful minimalism, eliminates what doesn't spark joy",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "organized", "joyful"]
     },
     {
       "name": "personality-marianne-williamson",
       "source": "./plugins/personalities/personality-marianne-williamson",
       "description": "Marianne Williamson - spiritual, love-based, sees coding as consciousness work",
-      "type": "personality",
+      "category": "personality",
       "tags": ["personality", "spiritual", "loving"]
     }
   ]
