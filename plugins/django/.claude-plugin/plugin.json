@@ -5,6 +5,5 @@
   "author": {
     "name": "TechNickAI",
     "url": "https://github.com/TechNickAI"
-  },
-  "tags": ["django", "python", "backend", "orm"]
+  }
 }
