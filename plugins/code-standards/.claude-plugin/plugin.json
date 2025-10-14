@@ -1,0 +1,10 @@
+{
+  "name": "code-standards",
+  "description": "Universal coding standards - naming, user-facing language, code style philosophy",
+  "version": "1.0.0",
+  "author": {
+    "name": "TechNickAI",
+    "url": "https://github.com/TechNickAI"
+  },
+  "tags": ["standards", "style", "naming", "conventions"]
+}

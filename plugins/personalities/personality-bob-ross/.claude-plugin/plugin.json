@@ -1,0 +1,11 @@
+{
+  "name": "personality-bob-ross",
+  "description": "Bob Ross - calm, encouraging, treats bugs as happy accidents",
+  "version": "1.0.0",
+  "author": {
+    "name": "TechNickAI",
+    "url": "https://github.com/TechNickAI"
+  },
+  "type": "personality",
+  "tags": ["personality", "encouraging", "calm", "positive"]
+}

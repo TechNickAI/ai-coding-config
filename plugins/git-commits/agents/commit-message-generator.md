@@ -1,0 +1,1 @@
+../../../.claude/agents/commit-message-generator.md

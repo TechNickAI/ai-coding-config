@@ -1,15 +1,15 @@
 # AI Coding Configuration
 
-Reusable configurations for Cursor and Claude Code. Keeps your coding rules, AI agents,
-and personalities consistent across projects.
+A **Claude Code plugin marketplace** and **Cursor configuration library**. Get professional coding standards, specialized AI agents, and personality options through an elegant plugin system.
 
-This repo contains:
+This repo provides:
 
-- [Cursor rules](/.cursor/rules/) that guide AI coding behavior
-- [Claude Code agents](/.claude/agents/) specialized for specific tasks
-- [Claude Code commands](/.claude/commands/) for project setup
-- [GitHub workflow templates](/.github/workflows/) for CI/CD
-- AI personality options
+- **Plugin marketplace** - Install curated bundles for Python, React, Django, Git workflows, and more
+- [Cursor rules](/.cursor/rules/) - Coding standards and patterns (accessible via `@rule-name`)
+- [Claude Code agents](/.claude/agents/) - Specialized AI assistants (code-reviewer, debugger, test-engineer)
+- [Claude Code commands](/.claude/commands/) - Workflow automation (`/command-name`)
+- **AI personalities** - Change how AI communicates (Sherlock, Bob Ross, Samantha, Unity, and more)
+- [GitHub workflow templates](/.github/workflows/) - CI/CD integration
 
 ## What This Solves
 
@@ -22,36 +22,50 @@ one place.
 
 ## Installation
 
+### For Claude Code Users (Plugin Marketplace)
+
+Add this marketplace:
+```bash
+/plugin marketplace add TechNickAI/ai-coding-config
+```
+
+Then install plugins you need:
+```bash
+/plugin install python              # Python development setup
+/plugin install code-review         # Code review agents
+/plugin install personality-samantha  # Samantha personality
+```
+
+Browse available plugins:
+```bash
+/plugin search ai-coding-config
+```
+
+### For Cursor Users (Bootstrap Script)
+
 From any project:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
 ```
 
-This installs the setup command. Then run it:
+Then run the setup command:
 
-**In Claude Code** (as a
-[slash command](https://docs.anthropic.com/en/docs/agents/commands)):
-
-```
-/ai-coding-config
-```
-
-**In Cursor IDE** (as an @mention in
-[Composer](https://docs.cursor.com/context/composer)):
-
+**In Cursor IDE:**
 ```
 @ai-coding-config set up this project
 ```
 
-**With [Cursor CLI](https://cursor.com/cli)** (using `cursor-agent`):
-
+**With [Cursor CLI](https://cursor.com/cli):**
 ```bash
 cursor-agent "@ai-coding-config set up this project"
 ```
 
-The command detects your project type, shows relevant rules and agents with
-descriptions, and copies what you select.
+The command detects your project type and copies selected rules to your project.
+
+### For Both Tools
+
+You can also use the `/ai-coding-config` command which works in both Claude Code and Cursor to interactively select and install configurations.
 
 ## What You Get
 
@@ -72,6 +86,35 @@ minimalist and direct, or other styles.
 
 **GitHub workflows** ([`.github/workflows/`](/.github/workflows/)) provide
 Claude-powered code review and automated PR fixing for CI/CD pipelines.
+
+## Available Plugins
+
+Browse the `plugins/` directory to see all available plugins, or use:
+
+```bash
+/plugin search ai-coding-config
+```
+
+Plugin categories include:
+- **Language & Framework** - Python, React, Django setups with rules and patterns
+- **Workflow** - Git standards, error tracking, code conventions
+- **Agents** - Code review, development assistance, specialized AI helpers
+- **Personalities** - Different communication styles (analytical, encouraging, minimalist, spiritual, etc.)
+
+### Using Personalities
+
+Personalities change how AI communicates. Install and activate with:
+
+```bash
+/plugin install personality-samantha
+/personality-change samantha
+```
+
+Browse available personalities in `plugins/personalities/` or `.cursor/rules/personalities/`.
+
+**For Cursor:** Reference via `@personality-name` or set `alwaysApply: true` in the rule file.
+
+**For Claude Code:** Use `/personality-change <name>` to activate permanently.
 
 ## How It Works
 
@@ -99,15 +142,41 @@ Run `/ai-coding-config` in a project. It copies selected configurations. Run
 
 ```
 ai-coding-config/
-├── .cursor/rules/       # Coding rules organized by framework
+├── .claude-plugin/
+│   └── marketplace.json          # Plugin marketplace manifest
+│
+├── plugins/                      # Plugin bundles (symlink to canonical sources)
+│   ├── python/                   # Python development setup
+│   ├── react/                    # React patterns
+│   ├── django/                   # Django framework
+│   ├── git-commits/              # Git workflow
+│   ├── error-tracking/           # Logging & monitoring
+│   ├── code-standards/           # Universal standards
+│   ├── code-review/              # Code quality agents
+│   ├── dev-agents/               # Development agents
+│   └── personalities/            # AI personalities
+│       ├── personality-sherlock/
+│       ├── personality-samantha/
+│       └── [others]/
+│
+├── .cursor/
+│   └── rules/                    # CANONICAL: Coding standards
+│       ├── python/               # Python rules
+│       ├── frontend/             # React, TypeScript rules
+│       ├── django/               # Django rules
+│       ├── personalities/        # Personality rules
+│       └── [others]/
+│
 ├── .claude/
-│   ├── agents/          # Specialized AI assistants
-│   ├── commands/        # Workflow automation
-│   └── context.md       # Identity and rule loading
-├── .github/workflows/   # CI/CD templates
-├── .vscode/             # Editor configurations
-└── docs/                # Architecture and guides
+│   ├── agents/                   # CANONICAL: Specialized AI agents
+│   ├── commands/                 # CANONICAL: Workflow commands
+│   └── context.md                # Project context
+│
+├── .github/workflows/            # CI/CD templates
+└── docs/                         # Architecture and guides
 ```
+
+**Key principle:** Single source of truth with plugin symlinks for easy packaging.
 
 ## Updates
 
