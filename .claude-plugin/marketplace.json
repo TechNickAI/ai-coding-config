@@ -45,12 +45,6 @@
       "tags": ["git", "workflow", "commits"]
     },
     {
-      "name": "error-tracking",
-      "source": "./plugins/error-tracking",
-      "description": "Logging and error monitoring setup - Logfire, Honeybadger",
-      "tags": ["observability", "logging", "errors"]
-    },
-    {
       "name": "code-standards",
       "source": "./plugins/code-standards",
       "description": "Universal coding standards - naming, user-facing language, code style philosophy",

@@ -1,0 +1,111 @@
+---
+description: Autonomous task workflow using git worktrees
+alwaysApply: false
+---
+
+# Git Worktree Task Workflow
+
+When completing tasks autonomously, we work in git worktrees. This isolates our work,
+keeps the main working directory clean, and allows context switching without losing
+state. The goal: deliver a pull request that passes all checks and merges without
+back-and-forth.
+
+## Why Git Worktrees
+
+Worktrees let you work on multiple branches simultaneously without stashing or losing
+context. Your main directory stays on `main` for quick reference. Your task directory is
+isolated. You can switch between them instantly. When done, the worktree disappears
+cleanly.
+
+## The Complete Cycle
+
+**Setup your workspace.** Create a git worktree for the task. Choose a branch name that
+describes what you're building. The worktree should be in a separate directory,
+typically parallel to your main repo directory.
+
+**Read the standards.** Before writing code, read all cursor rules in `.cursor/rules/`.
+These define how this project works. Every applicable rule must be followed. If
+`CLAUDE.md` or `AGENTS.md` exist at the project root, read those too.
+
+**Implement the solution.** Write code that solves the problem. Follow all cursor rules.
+Make commits along the way as logical units of work are completed. Each commit should
+follow the git commit message guidelines in .cursor/rules/git-commit-message.md.
+
+**Validate locally before pushing.** Run the project's pre-push validation. This catches
+issues before CI does, saving time and CI minutes. The project likely has
+`pnpm pre-push` or similar. Run it. Fix any issues it finds. Only proceed when
+everything passes locally. You can also run pre-commit if it exists, pytest, ruff,
+prettier, etc. For a clue, you can look for a CI job in the github workflows. It will
+save you time if you can run the steps locally rather than pushing and waiting for a
+build.
+
+If validation fails, understand why and fix it. Don't push broken code hoping CI will
+tell you what's wrong - the local tooling already told you.
+
+**Self-review your changes.** Invoke the code reviewer agent (Rivera in
+.claude/agents/rivera.md) to review your changes before pushing. The reviewer catches
+bugs, security issues, design problems, and maintainability concerns that you might have
+missed. Address critical issues. Consider warnings seriously. Evaluate suggestions for
+merit.
+
+The reviewer's feedback is educational - learn from it. If you disagree with feedback,
+explain your reasoning. But if the feedback points out an actual problem, fix it before
+pushing.
+
+**Push and create the PR.** Once local validation passes and code review is addressed,
+push your commits. Create a pull request with a clear description of what changed and
+why. The PR description should help reviewers understand the context and the decisions
+you made.
+
+**Wait for CI to complete.** - Let all CI jobs run to completion (usually about 3
+minutes). The project has multiple validation jobs (code quality, tests, build). All
+must pass. Green checks are required before merge.
+
+This is a good time to review and update documentation while you are waiting for the PR
+to build. If you don't have anything to do, you can run a bash sleep 180 to sleep for a
+bit. Take a nap.
+
+Run gh to check on the build. If CI fails, read the logs carefully. Understand what
+broke and why. Fix the issue and push again. Don't guess - the CI logs contain the
+information you need.
+
+**Wait for AI bot reviews.** There are AI code review bots that will be operating on the
+pull request. AI bot reviews to complete. These bots analyze code for additional issues
+that automated checks might miss.
+
+**Address feedback intelligently.** When the code review bots provide feedback, evaluate
+it critically. You have full project context - the bots don't. Some feedback is valuable
+and should be addressed. Some feedback is incorrect or not applicable and should be
+marked WONTFIX with clear reasoning.
+
+Be smarter than the bots. If feedback conflicts with project standards, follow project
+standards. If feedback suggests changes that would break functionality, explain why it's
+WONTFIX. If feedback identifies a real issue, fix it. Do not let them talk you into
+adding unnecessary complexity. Be discerning. Some feedback is eyeroll worthy. If it's
+helpful, you can use gh to mark the feedback as positive / negative with a github
+reaction.
+
+**Merge when all checks pass.** Once CI is green, bot reviews are addressed, and all
+checks pass, the PR is ready. Either merge it yourself or wait for the human reviewer to
+merge it.
+
+## Common Pitfalls
+
+**Skipping local validation.** Don't push without running pre-push checks. You'll just
+waste time waiting for CI to tell you what your local tooling would have caught in
+seconds.
+
+**Blindly following bot feedback.** Bots provide suggestions, not mandates. Evaluate
+each piece of feedback. You have context they don't. Make informed decisions about what
+to fix and what to WONTFIX.
+
+## Success Criteria
+
+A successful autonomous task means: the original request is completed, all automated
+checks pass, code follows all cursor rules, tests are green, code review was addressed,
+bot feedback was evaluated intelligently, and the PR merges without human intervention
+requesting changes.
+
+The tools are your friends. Use them. They catch issues early when they're easy to fix.
+They validate your work before it becomes someone else's problem. They help you deliver
+quality code that people trust.

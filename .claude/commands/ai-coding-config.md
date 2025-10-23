@@ -106,8 +106,7 @@ What to copy:
 - Additional personality if selected (copy then set `alwaysApply: true` in frontmatter)
 - VSCode settings to `.vscode/` (`settings.json` and `extensions.json`)
 - `.prettierrc` to project root
-- GitHub workflows to `.github/workflows/` (claude.yml, claude-code-review.yml,
-  claude-fix-pr-build.yml)
+- GitHub workflows to `.github/workflows/` (claude.yml, claude-code-review.yml)
 - `.gitignore` files in `.cursor/` and `.claude/` directories containing `*.local.json`
 
 After copying, tell the user what was copied, what was skipped, and what they chose to

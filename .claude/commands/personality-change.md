@@ -57,11 +57,20 @@ d. If not removing (name != "none"):
 
 e. Write updated `.claude/context.md`
 
-### 3. Verify Cursor Setup
+### 3. Update Cursor Configuration
 
-a. Read `.cursor/rules/personalities/<name>.mdc` frontmatter b. Check if
-`alwaysApply: true` is set c. If not set and name != "none", inform user: "⚠️ Note: For
-Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.mdc"
+a. Find all personality files in `.cursor/rules/personalities/` (except
+`common-personality.mdc`)
+
+b. For each personality file:
+
+- Read the file content
+- Extract frontmatter (between `---` markers)
+- If this is the selected personality and name != "none": set `alwaysApply: true`
+- If this is NOT the selected personality OR name == "none": set `alwaysApply: false`
+- Write the updated file back
+
+c. Confirm updates were made
 
 ### 4. Report Results
 
@@ -71,7 +80,8 @@ Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.m
 ✓ Switched from <old-name> to <new-name> personality
 
 Claude Code: Updated .claude/context.md
-Cursor: Active at .cursor/rules/personalities/<name>.mdc
+Cursor: Set alwaysApply=true in .cursor/rules/personalities/<new-name>.mdc
+        Set alwaysApply=false in .cursor/rules/personalities/<old-name>.mdc
 ```
 
 **If activating (no previous):**
@@ -80,7 +90,7 @@ Cursor: Active at .cursor/rules/personalities/<name>.mdc
 ✓ Activated <name> personality
 
 Claude Code: Added to .claude/context.md
-Cursor: Active at .cursor/rules/personalities/<name>.mdc
+Cursor: Set alwaysApply=true in .cursor/rules/personalities/<name>.mdc
 ```
 
 **If removing:**
@@ -89,7 +99,7 @@ Cursor: Active at .cursor/rules/personalities/<name>.mdc
 ✓ Removed active personality
 
 Claude Code: Removed from .claude/context.md
-Cursor: Manually set alwaysApply: false if desired
+Cursor: Set alwaysApply=false for all personalities
 ```
 
 **If already active:**
@@ -111,5 +121,6 @@ Cursor: Manually set alwaysApply: false if desired
 - Only one personality active at a time (plus common-personality baseline)
 - Personality affects ALL future interactions in this project
 - `.cursor/rules/personalities/common-personality.mdc` is always applied as baseline
-- Cursor requires `alwaysApply: true` in frontmatter for auto-activation
+- Cursor frontmatter is automatically updated (`alwaysApply: true` for active, `false` for
+  others)
 - Claude Code reads from `.claude/context.md` which is always included
