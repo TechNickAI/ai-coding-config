@@ -1,0 +1,202 @@
+---
+description: Production TypeScript coding standards
+alwaysApply: true
+---
+
+# TypeScript Coding Standards
+
+Write production TypeScript code that is maintainable, observable, and follows modern
+patterns.
+
+## Structured Logging with Pino
+
+Use pino logger for structured JSON logging. The logger auto-silences during tests and
+provides pretty formatting in development.
+
+```typescript
+import { logger } from "@/lib/logger";
+
+logger.info({ userId, email, service }, "User authenticated");
+logger.error({ error, userEmail, action }, "Failed to execute action");
+logger.warn({ retryCount, url }, "HTTP request retry");
+logger.debug({ requestId, method }, "Processing request");
+```
+
+For client-side code, use the client logger which works in browsers:
+
+```typescript
+import { logger } from "@/lib/client-logger";
+
+logger.error({ error, context }, "Failed to copy text");
+logger.info({ service }, "Connection successful");
+```
+
+The first argument is ALWAYS a context object (even if empty `{}`), the second is ALWAYS
+the message string. Structure your context with meaningful keys that help debug issues.
+Use emojis in messages when they add clarity and make logs more scannable.
+
+Never use `console.log`, `console.error`, `console.warn`, or `console.info` directly.
+Always use the appropriate logger for consistent structured logging.
+
+## Error Monitoring with Sentry
+
+Sentry captures errors with rich context for observability. Add context at error
+boundaries to make debugging easier.
+
+Capture exceptions with tags and extra data:
+
+```typescript
+import * as Sentry from "@sentry/nextjs";
+
+try {
+  await riskyOperation();
+} catch (error) {
+  logger.error({ error, userId }, "Operation failed");
+
+  Sentry.captureException(error, {
+    tags: { component: "api", action: "send_email" },
+    extra: { userId, messageId, attemptCount },
+  });
+
+  throw error;
+}
+```
+
+Add breadcrumbs for important state changes:
+
+```typescript
+Sentry.addBreadcrumb({
+  category: "http.retry",
+  message: `Retrying ${method} ${url}`,
+  level: "warning",
+  data: { url, retryCount },
+});
+```
+
+Create spans for performance monitoring:
+
+```typescript
+return await Sentry.startSpan(
+  { op: "http.request", name: `${method} ${url}` },
+  async (span) => {
+    span.setAttribute("user_id", userId);
+    const result = await execute();
+    span.setStatus({ code: 1, message: "Success" });
+    return result;
+  }
+);
+```
+
+## Error Handling
+
+Use typed errors that map to appropriate HTTP status codes:
+
+```typescript
+import { ValidationError, AuthenticationError, NotFoundError } from "@/lib/errors";
+
+if (!params.query) {
+  throw new ValidationError("Query parameter is required");
+}
+
+if (!bearerToken) {
+  throw new AuthenticationError("Bearer token required");
+}
+
+const user = await db.user.findUnique({ where: { email } });
+if (!user) {
+  throw new NotFoundError("User");
+}
+```
+
+Let errors bubble up to error boundaries. Don't silently catch and log errors - that
+buries problems. Error boundaries handle logging, Sentry reporting, and user-facing
+responses. Only catch errors when you have meaningful recovery logic (retry, fallback,
+cleanup). When in doubt, let it fail loudly so issues surface in Sentry rather than
+getting lost in logs.
+
+## Code Organization
+
+Group imports logically: external packages first, then internal modules. Within internal
+modules: types, utilities, then feature code. Keep imports alphabetically sorted within
+each group.
+
+```typescript
+// External packages
+import * as Sentry from "@sentry/nextjs";
+import { z } from "zod";
+
+// Types and interfaces
+import type { ServiceAdapter } from "@/lib/adapters/base";
+
+// Internal utilities
+import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
+import { ValidationError } from "@/lib/errors";
+
+// Feature code
+import { EmailService } from "@/lib/services/email";
+```
+
+Start files with a doc comment explaining purpose. Declare types and interfaces near the
+top. Keep related functions together.
+
+Naming conventions:
+
+- Files: kebab-case (`connection-manager.ts`)
+- Types/Interfaces: PascalCase (`ConnectionCredentials`)
+- Functions/Variables: camelCase (`getCredentials`)
+- Constants: SCREAMING_SNAKE_CASE (`API_TIMEOUT_MS`)
+
+## Async Patterns
+
+Use async/await instead of raw Promises. This produces cleaner stack traces and works
+better with try-catch:
+
+```typescript
+try {
+  const result = await operation();
+  return result;
+} catch (error) {
+  logger.error({ error }, "Operation failed");
+  throw error;
+}
+```
+
+Use `Promise.all()` for independent async operations that can run in parallel. Use
+sequential awaits when operations depend on each other:
+
+```typescript
+// Parallel - operations are independent
+const [connections, preferences] = await Promise.all([
+  fetchConnections(userEmail),
+  fetchPreferences(userEmail),
+]);
+
+// Sequential - second depends on first
+const connection = await getConnection(id);
+const credentials = await decryptCredentials(connection.encryptedData);
+```
+
+## Additional Patterns
+
+Create child loggers with persistent context for request handlers:
+
+```typescript
+const requestLogger = logger.child({ requestId, userEmail });
+requestLogger.info("Processing request");
+```
+
+For non-critical background operations, use void-immediately-invoked async pattern:
+
+```typescript
+void (async () => {
+  try {
+    await db.activityLog.create({ data });
+  } catch (error) {
+    logger.error({ error }, "Failed to log activity");
+  }
+})();
+```
+
+This ensures the operation doesn't block the request and errors are caught without
+failing the main flow.
