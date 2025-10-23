@@ -1,9 +1,0 @@
-{
-  "name": "error-tracking",
-  "description": "Logging and error monitoring setup - Logfire, Honeybadger",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}
