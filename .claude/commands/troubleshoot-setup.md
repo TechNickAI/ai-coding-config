@@ -88,12 +88,17 @@ Project Root/
 
 ## Why This Approach
 
-**Unified Configuration:** `.mcp.json` is the single source. Both Claude Code and Cursor symlink to it.
+**Unified Configuration:** `.mcp.json` is the single source. Both Claude Code and Cursor
+symlink to it.
 
-**AI-First Design:** The command trusts the AI to make intelligent decisions. Goal-focused, not prescriptive.
+**AI-First Design:** The command trusts the AI to make intelligent decisions.
+Goal-focused, not prescriptive.
 
-**Parallel Workflows:** Multiple bugs fixed simultaneously in isolated worktrees. Much faster than sequential fixing.
+**Parallel Workflows:** Multiple bugs fixed simultaneously in isolated worktrees. Much
+faster than sequential fixing.
 
-**Pattern Recognition:** AI clusters related errors and fixes root causes, not just symptoms.
+**Pattern Recognition:** AI clusters related errors and fixes root causes, not just
+symptoms.
 
-**Autonomous Operation:** No hand-holding needed. AI operates continuously until production is clean.
+**Autonomous Operation:** No hand-holding needed. AI operates continuously until
+production is clean.
