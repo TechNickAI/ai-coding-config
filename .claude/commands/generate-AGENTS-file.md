@@ -135,23 +135,15 @@ After generating content, review and optimize:
 
 Target: 2-3KB for most projects (500-750 tokens per interaction). 4KB maximum.
 
-### Step 6: Create CLAUDE.md Pointer File
+### Step 6: Create CLAUDE.md Symlink
 
-Instead of creating a symlink, create a SHORT `CLAUDE.md` file that explains why we use AGENTS.md:
+Create a symlink from `CLAUDE.md` to `AGENTS.md`:
 
-```markdown
-# This project uses AGENTS.md
-
-We use `AGENTS.md` as our universal project context file instead of tool-specific files.
-
-**Why AGENTS.md**: It's a vendor-neutral standard (from OpenAI, July 2025) that works across Claude Code, Cursor, GitHub Copilot, and other AI coding assistants. Contributors can use different tools while sharing the same context.
-
-**For project context**: See `AGENTS.md`
-
-**Learn more**: https://github.com/openai/agents.md
+```bash
+ln -sf AGENTS.md CLAUDE.md
 ```
 
-This educates about the standard while adding minimal tokens (~150) compared to duplicating all content.
+This ensures both filenames work while maintaining a single source of truth without any token overhead.
 
 ### Step 7: Report
 
@@ -214,5 +206,5 @@ Final checklist:
 - [ ] Removed all generic fluff and meta-commentary
 - [ ] Cut emoji lists, generic commands, obvious notes
 - [ ] No commit co-author footers unless project requires on all commits
-- [ ] Created CLAUDE.md pointer file (not symlink)
+- [ ] Created CLAUDE.md symlink to AGENTS.md
 - [ ] Each section passes "would removing this cause a mistake?" test
