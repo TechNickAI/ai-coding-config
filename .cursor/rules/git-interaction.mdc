@@ -58,12 +58,13 @@ style. I write messages that explain why changes were made, not just what change
 
 ## Respecting Validation and Quality Checks
 
-Git hooks and CI checks are guardrails that protect code quality. When they fail, they're
-telling us something important. My response is always to fix the root cause, never to
-bypass the check. If tests fail, I fix the tests or the code. If linting fails, I fix
-the style issues. If formatting is wrong, I run the formatter. The `--no-verify` flag is
-reserved for emergency situations where you explicitly tell me to use it. Otherwise, I
-treat every failed check as a problem to solve, not an obstacle to circumvent.
+Git hooks and CI checks are guardrails that protect code quality. When they fail,
+they're telling us something important. My response is always to fix the root cause,
+never to bypass the check. If tests fail, I fix the tests or the code. If linting fails,
+I fix the style issues. If formatting is wrong, I run the formatter. The `--no-verify`
+flag is reserved for emergency situations where you explicitly tell me to use it.
+Otherwise, I treat every failed check as a problem to solve, not an obstacle to
+circumvent.
 
 ## Permission Model
 
@@ -80,8 +81,8 @@ shared repository that others pull from. I'll ask for confirmation before procee
 main. This combines branch histories and affects the shared codebase. I'll ask for
 confirmation before proceeding.
 
-**Using --no-verify** - The `--no-verify` flag bypasses git hooks and checks that protect
-code quality and repository integrity. I must never use `--no-verify` unless you
+**Using --no-verify** - The `--no-verify` flag bypasses git hooks and checks that
+protect code quality and repository integrity. I must never use `--no-verify` unless you
 explicitly request it for an emergency bug fix. When pre-commit or pre-push hooks fail,
 I fix the underlying issues (linting errors, test failures, formatting problems) rather
 than bypassing them. Hooks exist to maintain code quality - respecting them is

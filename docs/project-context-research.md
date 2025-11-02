@@ -2,9 +2,15 @@
 
 ## Executive Summary
 
-The AI coding tools ecosystem has evolved from fragmented tool-specific configurations (`.cursorrules`, `CLAUDE.md`, `GEMINI.md`) toward a unified standard: **AGENTS.md**. This research examines the current landscape, best practices, and provides recommendations for implementing a single source of truth for project context across multiple AI coding assistants.
+The AI coding tools ecosystem has evolved from fragmented tool-specific configurations
+(`.cursorrules`, `CLAUDE.md`, `GEMINI.md`) toward a unified standard: **AGENTS.md**.
+This research examines the current landscape, best practices, and provides
+recommendations for implementing a single source of truth for project context across
+multiple AI coding assistants.
 
-**Key Finding**: AGENTS.md has emerged as the vendor-neutral standard, supported by OpenAI, GitHub Copilot, Sourcegraph Amp, and increasingly by other tools. It's currently used in 20k+ open source projects.
+**Key Finding**: AGENTS.md has emerged as the vendor-neutral standard, supported by
+OpenAI, GitHub Copilot, Sourcegraph Amp, and increasingly by other tools. It's currently
+used in 20k+ open source projects.
 
 ---
 
@@ -14,15 +20,15 @@ The AI coding tools ecosystem has evolved from fragmented tool-specific configur
 
 Different AI coding tools developed proprietary context file formats:
 
-| Tool | Primary File | Status |
-|------|-------------|--------|
-| **Claude Code** | `CLAUDE.md` | Active, but migrating to AGENTS.md |
-| **Cursor** | `.cursorrules` → `.cursor/rules/` | Deprecated → Modern |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | Active + AGENTS.md support |
-| **Gemini CLI** | `GEMINI.md` | Active |
-| **Sourcegraph Amp** | `AGENTS.md` | Native support |
-| **Continue** | `.continuerules` | Active |
-| **JetBrains (Junie)** | `.junie/guidelines.md` | Active |
+| Tool                  | Primary File                      | Status                             |
+| --------------------- | --------------------------------- | ---------------------------------- |
+| **Claude Code**       | `CLAUDE.md`                       | Active, but migrating to AGENTS.md |
+| **Cursor**            | `.cursorrules` → `.cursor/rules/` | Deprecated → Modern                |
+| **GitHub Copilot**    | `.github/copilot-instructions.md` | Active + AGENTS.md support         |
+| **Gemini CLI**        | `GEMINI.md`                       | Active                             |
+| **Sourcegraph Amp**   | `AGENTS.md`                       | Native support                     |
+| **Continue**          | `.continuerules`                  | Active                             |
+| **JetBrains (Junie)** | `.junie/guidelines.md`            | Active                             |
 
 ### The Convergence: AGENTS.md
 
@@ -31,7 +37,9 @@ In July 2025, OpenAI introduced AGENTS.md as an open standard:
 > "AGENTS.md — a simple, open format for guiding coding agents"
 
 **Why it matters:**
-- **Cross-tool compatibility**: One file works across Claude Code, Cursor, GitHub Copilot, and others
+
+- **Cross-tool compatibility**: One file works across Claude Code, Cursor, GitHub
+  Copilot, and others
 - **Team consistency**: Contributors can use different tools but share the same context
 - **Future-proof**: Vendor-neutral standard reduces lock-in
 - **Widespread adoption**: 160k+ GitHub repositories already using related formats
@@ -49,7 +57,8 @@ ln -s AGENTS.md CLAUDE.md
 ln -s AGENTS.md GEMINI.md
 ```
 
-This ensures existing tool integrations continue working while transitioning to the universal standard.
+This ensures existing tool integrations continue working while transitioning to the
+universal standard.
 
 ---
 
@@ -57,7 +66,8 @@ This ensures existing tool integrations continue working while transitioning to 
 
 ### Core Philosophy
 
-A project context file serves as **onboarding documentation for your AI teammate**. Unlike README (which targets human developers), it contains:
+A project context file serves as **onboarding documentation for your AI teammate**.
+Unlike README (which targets human developers), it contains:
 
 - **Detailed technical context** that AI needs to make correct decisions
 - **Specific commands and conventions** to avoid hallucination
@@ -83,7 +93,8 @@ Be specific about versions to prevent version mismatches:
 - MobX for state management
 ```
 
-**Why**: AI models may default to more common versions or patterns if not specified. Explicit versions prevent hours of debugging incompatible code.
+**Why**: AI models may default to more common versions or patterns if not specified.
+Explicit versions prevent hours of debugging incompatible code.
 
 #### 2. **Project Structure**
 
@@ -99,7 +110,8 @@ Help the AI navigate your codebase efficiently:
 - `.claude/` - Claude Code configuration and commands
 ```
 
-**Why**: Reduces token waste from the AI exploring the wrong directories. Speeds up task completion.
+**Why**: Reduces token waste from the AI exploring the wrong directories. Speeds up task
+completion.
 
 #### 3. **Commands**
 
@@ -109,20 +121,24 @@ Critical for preventing the AI from guessing or using wrong commands:
 ## Common Commands
 
 **Development**:
+
 - `pnpm dev` - Start dev server (use pnpm, not npm)
 - `pnpm test:watch` - Run tests in watch mode
 - `pnpm lint` - Run ESLint
 - `pnpm type-check` - Run TypeScript compiler check only
 
 **Build**:
+
 - `pnpm build` - Production build
 - `pnpm preview` - Preview production build locally
 
 **Per-file testing** (faster than full builds):
+
 - `pnpm test:file <path>` - Test single file
 ```
 
-**Why**: Avoids expensive mistakes like running `npm install` in a `pnpm` project, or attempting full rebuilds when testing a single file.
+**Why**: Avoids expensive mistakes like running `npm install` in a `pnpm` project, or
+attempting full rebuilds when testing a single file.
 
 #### 4. **Code Style & Conventions**
 
@@ -132,20 +148,25 @@ Be opinionated and specific:
 ## Code Style
 
 **DO**:
+
 - Use Emotion `css={{}}` prop format for styling
-- Import design tokens from `DynamicStyles.tsx` - never hardcode colors, spacing, or breakpoints
+- Import design tokens from `DynamicStyles.tsx` - never hardcode colors, spacing, or
+  breakpoints
 - Use MobX stores for state management, not useState for shared state
 - Follow conventional commits format for commit messages
 - Write tests for all new features
 
 **DON'T**:
+
 - Don't use inline styles with hardcoded values
 - Don't create new CSS files (use Emotion)
 - Don't install new dependencies without discussion
 - Don't modify files in `/generated` directory
 ```
 
-**Why**: This section typically has the highest ROI. Real example: Without specifying MUI version and Emotion format, AI generated v4 code with different APIs, requiring complete rewrites.
+**Why**: This section typically has the highest ROI. Real example: Without specifying
+MUI version and Emotion format, AI generated v4 code with different APIs, requiring
+complete rewrites.
 
 #### 5. **Testing Instructions**
 
@@ -162,7 +183,8 @@ Clear guidance on test requirements and execution:
 - Minimum coverage: 80%
 ```
 
-**Why**: Establishes quality expectations and prevents the "write code but skip tests" pattern.
+**Why**: Establishes quality expectations and prevents the "write code but skip tests"
+pattern.
 
 #### 6. **Repository Etiquette**
 
@@ -172,22 +194,26 @@ How to work with version control:
 ## Repository Guidelines
 
 **Commits**:
+
 - Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, etc.
 - Keep commits atomic and focused
 - Reference issues: `feat: add dark mode toggle (#123)`
 
 **Branches**:
+
 - Main branch: `main` (protected)
 - Feature branches: `feature/description`
 - Bug fixes: `fix/description`
 
 **PRs**:
+
 - All changes require PR review
 - Include tests and documentation
 - Ensure CI passes
 ```
 
-**Why**: Maintains git history quality and prevents merge conflicts from poor branching strategies.
+**Why**: Maintains git history quality and prevents merge conflicts from poor branching
+strategies.
 
 #### 7. **Warnings & Gotchas**
 
@@ -249,9 +275,13 @@ Equally important is knowing what to exclude:
 ### ❌ Avoid Long Prose
 
 **Bad**:
-> "Our project uses a modern, cutting-edge approach to state management that leverages the power of MobX, a battle-tested library that has been proven in production environments..."
+
+> "Our project uses a modern, cutting-edge approach to state management that leverages
+> the power of MobX, a battle-tested library that has been proven in production
+> environments..."
 
 **Good**:
+
 > "Use MobX for state management"
 
 **Why**: Every character consumes tokens. AI needs facts, not marketing copy.
@@ -259,19 +289,23 @@ Equally important is knowing what to exclude:
 ### ❌ Avoid Duplicating README
 
 **Don't repeat**:
+
 - Project description
 - Installation instructions for end users
 - License information
 - Contributing guidelines (unless AI-specific)
 
-**Why**: README already covers this for humans. Context files should focus on AI-specific needs.
+**Why**: README already covers this for humans. Context files should focus on
+AI-specific needs.
 
 ### ❌ Avoid Vague Guidance
 
 **Bad**:
+
 > "Write good code and follow best practices"
 
 **Good**:
+
 > "All functions must have JSDoc comments. Use TypeScript strict mode."
 
 **Why**: Vague guidance doesn't change AI behavior. Specific rules do.
@@ -279,9 +313,11 @@ Equally important is knowing what to exclude:
 ### ❌ Avoid Overly Restrictive Rules
 
 **Bad**:
+
 > "Never use any dependencies. Never create new files. Never refactor."
 
-**Why**: This hamstrings the AI's ability to help. Be opinionated about conventions, not paralyzed.
+**Why**: This hamstrings the AI's ability to help. Be opinionated about conventions, not
+paralyzed.
 
 ---
 
@@ -292,12 +328,14 @@ Equally important is knowing what to exclude:
 **File**: `AGENTS.md` at project root
 
 **Benefits**:
+
 - Discoverable by all tools
 - Committed to git for team sharing
 - Single source of truth
 - Works with monorepos using nested files
 
 **Example**:
+
 ```
 my-project/
 ├── AGENTS.md           # Main project context
@@ -316,11 +354,13 @@ my-project/
 **File**: `~/.claude/CLAUDE.md` or `~/.config/agents/AGENTS.md`
 
 **Use case**:
+
 - Personal preferences (e.g., "always use pnpm")
 - Cross-project conventions
 - Tool-specific settings
 
 **Should NOT contain**:
+
 - Project-specific information
 - Team conventions (these belong in repo)
 
@@ -329,11 +369,13 @@ my-project/
 **File**: `AGENTS.local.md` or `CLAUDE.local.md` (gitignored)
 
 **Use case**:
+
 - Personal workflow preferences
 - Local development shortcuts
 - Experimental rules
 
 **Example .gitignore**:
+
 ```
 *.local.md
 AGENTS.local.md
@@ -397,6 +439,7 @@ git commit -m "docs: add MobX state management requirement to AGENTS.md"
 **Native support**: `CLAUDE.md` files at multiple levels
 
 **Locations checked** (in order):
+
 1. Current directory and parents
 2. Project root
 3. `~/.claude/CLAUDE.md` (global)
@@ -404,6 +447,7 @@ git commit -m "docs: add MobX state management requirement to AGENTS.md"
 **Best practice**: Create `AGENTS.md` and symlink `CLAUDE.md → AGENTS.md`
 
 **Directory structure**:
+
 ```
 .claude/
 ├── context.md              # Base context (optional, legacy)
@@ -419,11 +463,13 @@ git commit -m "docs: add MobX state management requirement to AGENTS.md"
 **Modern approach**: `.cursor/rules/` directory
 
 **Benefits**:
+
 - Multiple rule files
 - Path-based scoping
 - Version controlled
 
 **Migration**:
+
 ```bash
 # Old way
 .cursorrules
@@ -465,6 +511,7 @@ Every character in your context file consumes tokens on **every** AI interaction
 - **Large file** (10KB): ~2500 tokens per request
 
 Over a 100-message session:
+
 - Small: 25k tokens (affordable)
 - Large: 250k tokens (expensive, may hit limits)
 
@@ -485,6 +532,7 @@ Consider multiple context files when:
 - **Large codebase**: >100k LOC with distinct subsystems
 
 **Example hierarchy**:
+
 ```
 AGENTS.md                    # Shared conventions (1KB)
 frontend/AGENTS.md           # React-specific (2KB)
@@ -501,6 +549,7 @@ Total per context: 3KB instead of 7KB monolithic file.
 ### Current State Analysis
 
 This project currently has:
+
 - `.claude/context.md` - Contains identity and rule loading instruction
 - `.claude/commands/` - Slash commands
 - Multiple personality directories with `claude/` subdirectories
@@ -560,6 +609,7 @@ Based on this project's unique characteristics:
 ### Phase 1: Create Initial AGENTS.md
 
 Command should:
+
 1. Analyze project to understand tech stack
 2. Generate initial AGENTS.md with core sections
 3. Create symlinks for tool compatibility
@@ -568,6 +618,7 @@ Command should:
 ### Phase 2: Update Mechanism
 
 Command should:
+
 1. Detect if AGENTS.md exists
 2. Analyze recent commits/changes to understand updates needed
 3. Suggest additions based on:
@@ -579,11 +630,13 @@ Command should:
 ### Implementation Considerations
 
 **Avoid**:
+
 - Overwriting user customizations
 - Generating generic boilerplate
 - Creating overly long files
 
 **Include**:
+
 - Project-specific intelligence (scan package.json, tech stack)
 - Interactive prompts for ambiguous choices
 - Diff preview before changes
@@ -595,19 +648,23 @@ Command should:
 
 ### 1. **The Virtuous Cycle**
 
-> "When we set up a good context file, the agent's performance gets better. As it gets better, we tend to use it more, which helps us further improve and refine the context."
+> "When we set up a good context file, the agent's performance gets better. As it gets
+> better, we tend to use it more, which helps us further improve and refine the
+> context."
 
 Investment in context files compounds over time.
 
 ### 2. **Specificity Over Generality**
 
-Projects with specific, actionable rules see dramatically better AI output than those with vague guidance.
+Projects with specific, actionable rules see dramatically better AI output than those
+with vague guidance.
 
 ### 3. **The README Question**
 
 Some argue: "If you need to tell AI this, your README is incomplete."
 
 **Counter-argument**: Context files serve a different purpose:
+
 - README: Human onboarding, project description
 - AGENTS.md: AI-specific conventions, commands, gotchas
 
@@ -615,11 +672,13 @@ Both can coexist and complement each other.
 
 ### 4. **Tool Consolidation Trend**
 
-The ecosystem is moving toward AGENTS.md as the standard. Early adoption positions projects well for future tool compatibility.
+The ecosystem is moving toward AGENTS.md as the standard. Early adoption positions
+projects well for future tool compatibility.
 
 ### 5. **Don't Over-Engineer Early**
 
-Start small. Real project usage reveals what rules matter. Premature optimization wastes time on rules that don't affect behavior.
+Start small. Real project usage reveals what rules matter. Premature optimization wastes
+time on rules that don't affect behavior.
 
 ---
 
@@ -630,6 +689,7 @@ Start small. Real project usage reveals what rules matter. Premature optimizatio
 **Primary recommendation**: Use `AGENTS.md` as the single source of truth.
 
 **Rationale**:
+
 1. ✅ Vendor-neutral standard
 2. ✅ Growing ecosystem support (20k+ projects)
 3. ✅ Works with Claude Code, Cursor, GitHub Copilot, and others
@@ -658,6 +718,7 @@ For `ai-coding-config` specifically:
 ### Command Design
 
 Create `/init-agents` command that:
+
 - Generates intelligent AGENTS.md by analyzing project
 - Creates compatibility symlinks
 - Prompts for customization decisions
@@ -669,7 +730,8 @@ Create `/init-agents` command that:
 
 Before implementing the command, clarify:
 
-1. **Identity & Personality**: Should personality instructions live in AGENTS.md or remain in `.claude/context.md`?
+1. **Identity & Personality**: Should personality instructions live in AGENTS.md or
+   remain in `.claude/context.md`?
 
 2. **Scope**: Should the command:
    - Generate generic templates, or
