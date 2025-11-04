@@ -1,0 +1,1 @@
+../../.claude/commands/personality-change.md

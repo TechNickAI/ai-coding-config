@@ -99,7 +99,8 @@ What to copy:
 
 - Rules to `.cursor/rules/`, preserving subdirectory structure
 - **ALL commands** from `~/.ai_coding_config/.claude/commands/` to `.claude/commands/`
-  (includes personality-change, load-cursor-rules, ai-coding-config, and any others)
+  AND create symlinks in `.cursor/commands/` pointing to `.claude/commands/*.md` (Cursor
+  and Claude Code share the same command format, so symlinks keep them in sync)
 - `.claude/context.md`
 - Selected agents to `.claude/agents/`
 - Common personality to `.cursor/rules/personalities/` (always included)
@@ -119,6 +120,7 @@ After installation, confirm what was set up:
 - List installed rules (by directory: framework-specific, then universal)
 - List commands in `.claude/commands/` (should include personality-change,
   load-cursor-rules, ai-coding-config)
+- Confirm symlinks exist in `.cursor/commands/` pointing to `.claude/commands/*.md`
 - List agents in `.claude/agents/`
 - Confirm which personality was selected (if any) and that alwaysApply is set
 - Confirm VSCode settings in `.vscode/` (`settings.json` and `extensions.json`)
@@ -173,7 +175,7 @@ Discover what's available by reading directories:
 - Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
 - List ~/.ai_coding_config/.claude/agents/ for available Claude Code Agents
 - List ~/.ai_coding_config/.claude/commands/ for all available commands (copy ALL of
-  them)
+  them to both `.claude/commands/` AND create symlinks in `.cursor/commands/`)
 - Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates (claude.yml,
   claude-code-review.yml, claude-fix-pr-build.yml)
 - Check ~/.ai_coding_config/.vscode/ for editor settings (settings.json,
