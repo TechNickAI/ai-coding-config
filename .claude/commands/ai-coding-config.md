@@ -154,8 +154,19 @@ No need for deep validation - just confirm the files are where they should be.
 
 ### Goal 6: Handle Updates (when requested)
 
-Pull latest from ~/.ai_coding_config, then compare what's in the repo with what's in the
-project.
+First, update the ai-coding-config repo to get the latest changes:
+
+```bash
+cd ~/.ai_coding_config && git pull
+```
+
+Then self-update: Compare this command file itself
+(`~/.ai_coding_config/.claude/commands/ai-coding-config.md`) with the project's version
+(`.claude/commands/ai-coding-config.md`). If the repo version is newer or different, copy
+it over using `cp`, then re-read the updated file to ensure you're following the latest
+instructions for the rest of this update process.
+
+After self-updating (if needed), compare what's in the repo with what's in the project.
 
 For each file, use `diff` to see what changed. Categorize changes as trivial (typos,
 comments) or significant. List files that exist in the repo but not in the project, and
