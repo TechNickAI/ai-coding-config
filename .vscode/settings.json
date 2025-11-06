@@ -1,12 +1,14 @@
 {
   "cSpell.words": [
     "docstrings",
+    "frontmatter",
     "gitmoji",
     "Honeybadger",
     "logfire",
     "noqa",
     "pydantic",
-    "pytest"
+    "pytest",
+    "tavily"
   ],
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
