@@ -1,169 +1,158 @@
 ---
 name: research
-description: Web research skill for augmenting agent context with current information. This skill should be used when an agent needs up-to-date information beyond its knowledge cutoff, when verifying current API documentation, checking for breaking changes, or gathering comprehensive information to make informed decisions.
+description:
+  Web research skill for augmenting agent context with current information. Used when
+  outdated information could lead to broken implementations or wasted effort.
 ---
 
 # Research
 
-## Overview
+## Core Philosophy
 
-This skill enables agents to perform web research at different depth levels, from quick fact-checking to comprehensive investigations. The research is designed to augment agent knowledge with current information, producing structured findings that inform better decisions and implementations.
+Research when **getting it right matters**. When current information saves hours of
+debugging, ensures secure implementations, or guides you to the right
+abstraction—research first.
 
-## When to Offer Research
+## Natural Triggers
 
-Proactively offer research when:
-- Working with technologies or APIs from 2024 or later
-- Encountering potential version conflicts or deprecations
-- Making architectural decisions requiring current best practices
-- Implementing features where standards may have evolved
-- Seeing errors that suggest API changes or breaking updates
+Clear signals that research is needed:
 
-Example offering: "I should research the current NextAuth.js implementation patterns since the library has likely evolved since my knowledge cutoff. Would you like me to do that?"
+- Hitting an error that smells like an API change
+- Implementing something security-critical (auth, payments, file handling)
+- Making architecture decisions you'll live with for months
+- Working with libraries you know evolve rapidly
+- That moment of "wait, is this still how we do this?"
 
-## Research Depth Levels
+## Two Modes
 
-### Quick (<1 minute)
-Fast fact-checking and validation. Used for:
-- Version verification: "What's the latest stable React version?"
-- API changes: "Did Vite change the config format in v6?"
-- Breaking changes: "Is this webpack plugin still maintained?"
-- Quick validation: "Does this approach work with TypeScript 5?"
+### Quick Check
 
-**Output**: Structured facts with source links, minimal narrative.
+**When:** Mid-flow verification **Time:** Under a minute **Examples:**
 
-### Standard (5-10 minutes)
-Implementation research for active coding. Used for:
-- Understanding APIs: "How does Stripe webhook validation work?"
-- Comparing options: "tRPC vs GraphQL for this use case"
-- Getting unstuck: "Why isn't this React Server Component pattern working?"
-- Current patterns: "Best practices for Next.js 14 data fetching"
+- "Is `useEffect` still the way to handle this in React 18?"
+- "Did Stripe change their webhook payload?"
+- "What's the current Node LTS version?"
 
-**Output**: Actionable findings with code examples, gotchas, implementation notes.
+Just search, grab the answer, keep coding. No storage, no ceremony, no permission
+needed.
 
-### Deep (15-30+ minutes)
-Comprehensive research for major decisions. Used for:
-- Architecture choices: "Microservices vs monolith for our scale"
-- Complex evaluations: "Auth strategy for multi-tenant SaaS"
-- Emerging tech: "How do React Server Components actually work?"
-- Migration planning: "Moving from Express to Fastify implications"
+### Deep Dive
 
-**Output**: Thorough analysis with multiple perspectives, trade-offs, recommendations.
+**When:** The decision really matters **Time:** 5-15 minutes **Examples:**
 
-## Research Process
+- Choosing between competing technologies
+- Understanding a new architectural pattern
+- Debugging something that doesn't match documentation
 
-### 1. Check Existing Research
+**Always ask first**: "This needs deeper research (5-15 min). Should I dig into this
+now?" Let the user decide if they want to pause for research or continue with existing
+knowledge.
 
-Before starting new research, check the `research/` folder for existing findings:
+Research thoroughly, save findings in `research/[topic].md` for team reference.
 
-```bash
-# Check if research exists and when it was created
-ls -la research/ | grep -i [topic]
+## How to Research
 
-# For quick research: reuse if <24 hours old
-# For standard research: reuse if <7 days old
-# For deep research: reuse if <30 days old
-```
+### 1. Select Best Search Tool
 
-If recent relevant research exists, read it first and determine if it needs updating or can be reused.
+Always use the best available web search. Priority order:
 
-### 2. Structure Research Output
+**MCP servers (preferred when available):**
 
-Research findings go in `research/[topic-name].md` using lowercase with hyphens. The content structure adapts to the depth level but generally includes:
+- Tavily MCP server
+- Exa MCP server
+- Other specialized search MCP servers
+
+**Built-in tools (fallback):**
+
+- Cursor: `web_search` tool
+- Claude Code: Built-in web search
+
+**Tell the user which you're using:**
+
+- "Using Tavily MCP server for enhanced search capabilities"
+- "Using Exa MCP server for code-focused research"
+- "Using built-in web search (no MCP servers configured)"
+
+This transparency helps users understand tool selection and configure MCP servers if
+desired.
+
+### 2. Search Strategy
+
+Start with official sources - docs, changelogs, GitHub releases. Then expand to
+community discussions if needed.
+
+### 3. Write Output
+
+Output should be scannable and actionable. Skip the fluff, get to what matters.
+
+## Output Style
+
+### Do This
 
 ```markdown
-# [Topic]
+## Stripe Checkout v4 Migration
 
-Generated: [timestamp]
-Depth: [quick/standard/deep]
+**Breaking change**: `redirectToCheckout()` removed in v4
 
-## Key Findings
-- Critical fact or insight [source]
-- Another key point [source]
+**New pattern**:
 
-## [Context-Appropriate Sections]
-[Varies by research type and findings]
+- Use Payment Element (unified UI)
+- Or Checkout Sessions API (hosted page)
 
-## Sources
-[Numbered list of sources consulted]
+**Migration**: [Specific code example]
+
+**Source**: Stripe docs v2024.11.15
 ```
 
-### 3. Execute Research
+### Not This
 
-Use WebSearch to gather information, prioritizing:
-- Official documentation and changelogs
-- Recent GitHub issues and discussions
-- Technical blogs and tutorials (check dates)
-- Stack Overflow (verify currency)
-
-For conflicting information, note discrepancies and provide context for both viewpoints.
-
-### 4. Process Findings
-
-Transform raw search results into actionable intelligence:
-- Extract facts relevant to the current task
-- Include code snippets when applicable
-- Note version dependencies and dates
-- Highlight gotchas and edge cases
-- Mark uncertain information clearly
-
-## Output Guidelines
-
-Research output is primarily for agent consumption while remaining human-readable. Follow these principles:
-
-### Structure Over Narrative
-Write scannable, structured content. Use headings, bullets, and code blocks rather than prose paragraphs. The goal is quick information extraction, not storytelling.
-
-### Facts Over Flourish
-State findings directly. Skip preambles like "After extensive research..." or "It's important to note that..." Get to the point.
-
-### Actionable Over Abstract
-Focus on what the agent needs to know to complete the task. Include specific version numbers, exact API calls, and working code examples.
-
-### Confidence Signals
-Mark uncertainty explicitly:
-- "Confirmed in v5.0.0 docs"
-- "Multiple sources agree"
-- "Conflicting information: some sources say X, others say Y"
-- "Could not verify for latest version"
-
-## Example Usage Patterns
-
-### Quick Research in Flow
-```
-User: "Fix the build error with Vite"
-Agent: "Let me quickly check if this is related to Vite 6 changes"
-[Quick research on Vite 6 breaking changes]
-Agent: "Found it - Vite 6 changed how environment variables are handled. Here's the fix..."
+```markdown
+After extensive research into the evolving landscape of payment processing... It's
+important to note that Stripe has made significant changes... Let's dive into the
+migration process...
 ```
 
-### Standard Research for Implementation
-```
-User: "Add Google OAuth to the app"
-Agent: "I'll research the current best practices for Google OAuth implementation"
-[Standard research on OAuth patterns, latest libraries]
-Agent: [Uses findings to implement correctly with 2025 patterns]
-```
+## Real Examples
 
-### Deep Research for Architecture
+### Quick Check in Action
+
 ```
-User: "Should we use GraphQL or tRPC for our API?"
-Agent: "This is an important architectural decision. Let me do comprehensive research on both options for your use case"
-[Deep research comparing both, checking recent developments]
-Agent: [Provides thorough recommendation based on findings]
+[User struggling with Vite error]
+Agent: "That error usually means a Vite config issue. Let me check v6 changes..."
+[30 seconds later]
+Agent: "Found it—Vite 6 requires explicit `server.fs.allow` for parent directories. Adding it now."
 ```
 
-## References
+### Deep Dive for Architecture
 
-When performing research, reference these guidelines for optimal output:
+```
+[User asking about state management for new project]
+Agent: "State management in 2025 has some new players. Let me research current options for your scale..."
+[10 minutes of research]
+Agent: "For your use case (e-commerce, 50K users):
+        - Zustand if you want simplicity (2KB, no boilerplate)
+        - TanStack Store if you need framework agnostic
+        - Redux Toolkit still solid for complex async flows
 
-- `.cursor/rules/prompt-engineering.mdc` - For structuring effective agent prompts
-- `.cursor/rules/user-facing-language.mdc` - For writing clear, scannable findings
+        Skip Redux unless you need time-travel debugging.
+        Here's Zustand handling your cart state..."
+```
 
-These documents provide principles for goal-focused instructions, pattern reinforcement, and clear communication that should inform how research findings are structured.
+## Key Principles
 
-## Notes
+**Recognize patterns** - When you see version-specific errors, deprecated methods, or
+post-2023 technologies, that signals research is needed.
 
-- Research output visibility: Show progress indicators but keep detailed findings in background unless user requests
-- Source quality: Always note publication dates and prefer official sources
-- Caching strategy: Reuse recent research when appropriate but refresh for critical decisions
-- Format flexibility: Adapt output structure to the specific research needs rather than forcing a rigid template
+**Be transparent** - Say "I should verify this" or "Let me check current best practices"
+rather than guessing.
+
+**Speed over perfection** - For quick checks, first good answer wins. For deep dives,
+thoroughness matters.
+
+**No unnecessary storage** - Quick research lives in the conversation. Only save deep
+research that others might reference.
+
+## Common Pitfall
+
+Don't research everything. If your React knowledge from 2023 still works and the user
+isn't hitting issues, just build. Research is a tool, not a crutch.
