@@ -14,9 +14,9 @@ First, get context about what ai-coding-config does:
 - If not: Fetch and read
   https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/README.md
 
-The system contains Cursor rules, Claude commands, Claude Code Agents, personalities,
-and GitHub workflows in ~/.ai_coding_config. This command copies (not reads/rewrites)
-relevant configurations into projects and keeps them synced.
+The system contains Cursor rules, Claude commands, Claude Code Agents, Skills,
+personalities, and GitHub workflows in ~/.ai_coding_config. This command copies (not
+reads/rewrites) relevant configurations into projects and keeps them synced.
 
 ## Arguments (Optional)
 
@@ -63,9 +63,11 @@ Show the user what's available that matches their project:
   frontmatter
 - Present Claude Code Agents (default to all, but let them choose) with descriptions
   from frontmatter
+- Present Skills (default to all, but let them choose) with descriptions from
+  frontmatter
 - Mention that VSCode settings, Prettier config, and GitHub workflows will be included
   by default
-- Separate personalities and agents from rules in your presentation
+- Separate personalities, agents, and skills from rules in your presentation
 
 Don't just list files - help them understand what they're choosing by reading
 descriptions from the files themselves.
@@ -86,6 +88,22 @@ descriptions from frontmatter (covered in Goal 3).
 Copy agent files directly from `~/.ai_coding_config/.claude/agents/` to the project's
 `.claude/agents/` directory using cp or equivalent file operations.
 
+### Goal 3.6: Handle Skills
+
+Skills are modular packages that extend Claude's capabilities with specialized knowledge,
+workflows, and tool integrations. They live in `.skills/`.
+
+Default to copying all skills. They provide domain-specific expertise and procedural
+knowledge that's useful for most projects.
+
+Ask "Would you like all skills, or pick specific ones?" If they want to choose, list the
+available skills by reading `~/.ai_coding_config/.skills/` and showing descriptions from
+frontmatter (covered in Goal 3).
+
+Copy skill directories directly from `~/.ai_coding_config/.skills/` to the project's
+`.skills/` directory using cp -r for entire skill packages (including SKILL.md and any
+bundled resources).
+
 ### Goal 4: Install Selected Configurations
 
 Copy what the user selected into the right places. Use `cp` for efficiency - don't read
@@ -103,6 +121,7 @@ What to copy:
   and Claude Code share the same command format, so symlinks keep them in sync)
 - `.claude/context.md`
 - Selected agents to `.claude/agents/`
+- Selected skills to `.skills/` (copy entire skill directories)
 - Common personality to `.cursor/rules/personalities/` (always included)
 - Additional personality if selected (copy then set `alwaysApply: true` in frontmatter)
 - VSCode settings to `.vscode/` (`settings.json` and `extensions.json`)
@@ -122,6 +141,7 @@ After installation, confirm what was set up:
   load-cursor-rules, ai-coding-config)
 - Confirm symlinks exist in `.cursor/commands/` pointing to `.claude/commands/*.md`
 - List agents in `.claude/agents/`
+- List skills in `.skills/`
 - Confirm which personality was selected (if any) and that alwaysApply is set
 - Confirm VSCode settings in `.vscode/` (`settings.json` and `extensions.json`)
 - Confirm `.prettierrc` exists at project root
@@ -174,6 +194,7 @@ Discover what's available by reading directories:
 - Check for framework-specific subdirectories (python/, typescript/, etc.)
 - Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
 - List ~/.ai_coding_config/.claude/agents/ for available Claude Code Agents
+- List ~/.ai_coding_config/.skills/ for available Skills
 - List ~/.ai_coding_config/.claude/commands/ for all available commands (copy ALL of
   them to both `.claude/commands/` AND create symlinks in `.cursor/commands/`)
 - Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates (claude.yml,
@@ -188,6 +209,10 @@ Use your judgment about what's relevant based on project context.
 For agents: Default to copying all agents - they're specialized assistants that help
 with specific tasks (code review, debugging, testing, etc.) and are useful for most
 projects.
+
+For skills: Default to copying all skills - they're modular packages that extend
+Claude's capabilities with specialized knowledge, workflows, and tool integrations
+useful for most projects.
 
 ## Execution Philosophy
 
