@@ -1,151 +1,94 @@
 ---
 name: systematic-debugging
-description: Use when encountering bugs, test failures, or unexpected behavior - ensures root cause understanding before attempting fixes, preventing wasted time on symptom patches
+description: Use when encountering bugs, test failures, or unexpected behavior - ensures root cause understanding before attempting fixes
 ---
 
 # Systematic Debugging
 
 ## Overview
 
-Find the root cause before writing fixes. Random patches waste time and create new bugs.
-
-**Core principle:** Understand WHY something breaks before changing it. Symptom fixes are failures.
+Find the root cause before writing fixes. Understanding why something breaks leads to correct fixes. Guessing wastes time and creates new problems.
 
 ## When to Use
 
-Use for any technical issue:
-- Test failures, build errors, integration issues
-- Bugs in production or development
-- Unexpected behavior, performance problems
-- Especially when under time pressure or after previous fixes failed
+Use for any technical issue: test failures, build errors, bugs, unexpected behavior, performance problems. Especially valuable when previous attempts haven't worked or when tempted to try a "quick fix."
 
-**Don't skip when:**
-- The issue seems simple (simple bugs have root causes)
-- You're in a hurry (systematic is faster than thrashing)
-- "One quick fix" seems obvious
+## Core Principle
 
-## The Iron Law
+If you can't explain WHY it's broken, you're not ready to fix it. Every fix must address a specific, understood root cause.
 
-```
-NO FIXES WITHOUT ROOT CAUSE UNDERSTANDING
-```
+## Debugging Approach
 
-If you can't explain WHY it's broken, you can't propose fixes.
+### Start with the Evidence
 
-## Debugging Framework
+Read error messages completely. Stack traces, line numbers, and error codes contain valuable information. The error message often points directly to the problem.
 
-### Understand the Failure
+Work to reproduce the issue reliably. If you can't trigger it consistently, gather more data before proposing solutions. Document the exact steps that trigger the failure.
 
-**Read error messages completely.** Stack traces, line numbers, error codes contain the solution. Don't skim past them.
+Check what changed recently. Review commits, new dependencies, configuration changes, environmental differences. Most bugs correlate with recent changes.
 
-**Reproduce reliably.** If you can't trigger it consistently, gather more data before guessing. Document exact steps.
+### Trace the Problem
 
-**Check recent changes.** What changed that could cause this? Review git diff, recent commits, new dependencies, config changes, environmental differences.
+Follow the data flow backward from the error. Where does the bad value originate? Work through the call stack until you find the source. Understanding the complete path from source to symptom reveals the true problem.
 
-**Trace the data flow.** Where does the bad value originate? Work backward from the error through the call stack until you find the source. Fix at the source, not at the symptom.
+When multiple components interact, add diagnostic output at each boundary to identify which component fails. This narrows the investigation to the specific failing layer.
 
-### For Multi-Component Systems
+### Compare with Working Code
 
-When multiple components interact (CI → build → signing, API → service → database), add diagnostic instrumentation at each boundary:
+Find similar code that works correctly. Compare the working and broken versions systematically. Every difference matters until proven otherwise.
 
-```bash
-# Example: Debugging a signing failure
+When implementing a pattern, read reference implementations thoroughly. Understand their dependencies, settings, and environmental requirements.
 
-# Layer 1: Secrets available?
-echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+### Test Your Understanding
 
-# Layer 2: Env vars propagated?
-env | grep IDENTITY || echo "IDENTITY missing"
+Form a clear hypothesis: "X causes the problem because Y." Test with the smallest possible change. Change one variable at a time to isolate the cause.
 
-# Layer 3: Keychain state?
-security find-identity -v
+When a hypothesis proves wrong, form a new one based on what you learned. Don't layer fixes on top of failed attempts.
 
-# Layer 4: Signing verbose output
-codesign --sign "$IDENTITY" --verbose=4 "$APP"
-```
+### Implement the Fix
 
-Run once to see WHERE it breaks, then investigate that specific component. Gather evidence showing which layer fails.
+Create a test that reproduces the issue before fixing it. This ensures you understand the problem and can verify the fix works.
 
-### Compare Working Examples
+Apply a single, focused fix that addresses the root cause. Resist bundling other improvements or refactoring.
 
-Find similar code that works. What's different between working and broken? List every difference - don't assume "that can't matter."
+Verify the fix resolves the issue without breaking other functionality.
 
-Read reference implementations completely if implementing a pattern. Don't skim. Understand dependencies, settings, config, environment requirements.
+## Recognizing Architectural Problems
 
-### Form and Test Hypotheses
+When multiple fix attempts fail in different ways, the architecture might be the problem. Signs include:
+- Each fix reveals new coupling or shared state issues
+- Fixes require extensive refactoring to work properly
+- Each attempted fix creates new symptoms elsewhere
 
-State clearly: "X is the root cause because Y." Be specific. Make the smallest possible change to test it.
+These patterns suggest reconsidering the fundamental approach rather than continuing to patch symptoms.
 
-One variable at a time. Don't fix multiple things at once.
-
-If it works → implement properly with tests. If it doesn't → form a NEW hypothesis. Don't add more fixes on top.
-
-### Fix the Root Cause
-
-Create a failing test that reproduces the issue. Automated test if possible, one-off test script otherwise. Must have before fixing.
-
-Implement the single fix addressing the root cause. No "while I'm here" improvements. No bundled refactoring.
-
-Verify the fix: test passes, no other tests broken, issue actually resolved.
-
-**If the fix doesn't work:** Count your attempts. If this is your third failed fix, STOP and question the architecture (see below).
-
-## The Three-Fix Rule
-
-After three failed fixes, stop attempting more fixes. The pattern indicates an architectural problem:
-- Each fix reveals new shared state or coupling in a different place
-- Fixes require massive refactoring to implement correctly
-- Each fix creates new symptoms elsewhere
-
-This isn't a failed hypothesis - this is wrong architecture. Question fundamentals:
-- Is this pattern sound?
-- Are we persisting through inertia?
-- Should we refactor the architecture instead of fixing symptoms?
-
-Discuss with your human partner before attempting more fixes.
-
-## Common Debugging Patterns
-
-**Good debugging looks like:**
+## Example: Tracing a Problem
 
 ```typescript
-// Read the actual error message
 // Error: Cannot read property 'id' of undefined at getUserData (user.ts:45)
 
-// Trace back: where does user come from?
-// user.ts:45 → called from api.ts:23
-// api.ts:23 → user = await fetchUser(userId)
+// Trace backward:
+// user.ts:45 uses user.id
+// user comes from api.ts:23
+// api.ts:23 gets user from fetchUser(userId)
 // fetchUser returns undefined when user not found
 
-// Root cause: missing null check after fetchUser
+// Root cause: Missing null check after fetchUser
 // Fix: Handle the null case before accessing properties
 ```
 
-Describe anti-patterns in prose: Avoid trying random fixes hoping one works. Avoid "quick patches for now, investigate later." Avoid fixing multiple things simultaneously without knowing which helped.
+## Warning Signs
 
-## Red Flags - Stop and Find Root Cause
-
-If you catch yourself thinking:
+Stop and investigate properly when thinking:
+- "Try this and see if it works"
 - "Quick fix for now, investigate later"
-- "Just try changing X and see if it works"
-- "I don't fully understand but this might work"
-- "Here are several things to try" (without investigation)
-- "One more fix attempt" (when already tried 2+)
+- "I don't fully understand but this might help"
+- "Here are several things to try"
 
-**ALL of these mean: STOP. Find the root cause first.**
+These thoughts signal you're guessing rather than debugging systematically.
 
-## When You Don't Understand
+## When Stuck
 
-Say "I don't understand X." Don't pretend to know. Ask for help or research more. Understanding before fixing isn't optional.
+If you don't understand something, say so clearly. Ask for help or research more. Understanding the problem before attempting fixes saves time and prevents introducing new bugs.
 
-## Integration with Other Skills
-
-Use `test-driven-development` for creating failing test cases before implementing fixes.
-
-Use `verification-before-completion` to ensure the fix actually worked before claiming success.
-
-## Real-World Impact
-
-Systematic debugging: 15-30 minutes to fix, 95% first-time success, near-zero new bugs introduced.
-
-Random fixes: 2-3 hours of thrashing, 40% first-time success, common new bugs.
+Systematic debugging finds and fixes the real problem. Random attempts waste time and create new issues.
