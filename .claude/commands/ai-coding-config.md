@@ -1,232 +1,225 @@
 ---
-description: Set up or update AI coding configurations from ai-coding-config repo
+description: Set up, update, or add AI coding configurations
 ---
 
 # AI Coding Configuration
 
-Manages reusable AI configurations across machines and projects.
+Manages reusable AI configurations across machines and projects. The system lives in
+`~/.ai_coding_config` and contains Cursor rules, Claude commands, agents, skills,
+personalities, and GitHub workflows.
 
-## Understanding the System
+## Usage
 
-First, get context about what ai-coding-config does:
+- `/ai-coding-config` - Interactive setup for current project
+- `/ai-coding-config update` - Update existing configs to latest versions
+- `/ai-coding-config add` - Add new command/skill/agent/plugin to the repo
 
-- If ~/.ai_coding_config exists: Read ~/.ai_coding_config/README.md
-- If not: Fetch and read
-  https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/README.md
+---
 
-The system contains Cursor rules, Claude commands, Claude Code Agents, Skills,
-personalities, and GitHub workflows in ~/.ai_coding_config. This command copies (not
-reads/rewrites) relevant configurations into projects and keeps them synced.
+## Setup Mode (no arguments)
 
-## Arguments (Optional)
+Walk through setting up AI coding configs for the current project.
 
-If user provides 'update' argument (`/ai-coding-config update`), skip to Goal 6.
-Otherwise, proceed conversationally through the setup goals.
+### Ensure Local Repository Exists
 
-## Primary Goals
-
-### Goal 1: Ensure ~/.ai_coding_config Exists and Is Up to Date
-
-If the repo isn't cloned yet, clone it:
-
+If `~/.ai_coding_config` doesn't exist, clone it:
 ```bash
 git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
 ```
 
-If it already exists, update it:
-
+If it exists, update it:
 ```bash
 cd ~/.ai_coding_config && git pull
 ```
 
-Then offer to set up the current project.
+### Understand the Project
 
-### Goal 2: Understand the Project Context
+Detect what kind of project this is. Be specific about frameworks, not just languages.
+Django needs different rules than FastAPI. React differs from Next.js.
 
-Figure out what kind of project this is and what it needs:
+Look for existing configurations to avoid duplicates. Understand the project's purpose -
+API server, web app, CLI tool?
 
-- Detect language/framework (Python/Django/FastAPI, TypeScript/React/Next.js, etc.)
-- Look for existing configurations to avoid duplicates
-- Understand the project's specific needs (API? Web app? CLI tool?)
+### Present Relevant Options
 
-Be specific about frameworks, not just languages. Django projects need different rules
-than FastAPI projects.
+Show what's available that matches this project. Group by relevance - framework-specific
+first, then universal.
 
-### Goal 3: Present Relevant Options
+For each option, read the description from frontmatter to explain what it does. Help
+users understand their choices, not just list files.
 
-Show the user what's available that matches their project:
+**Rules** - `.cursor/rules/` subdirectories and files
 
-- Group rules by relevance (framework-specific first, then universal)
-- For each rule, read the `description` field from its frontmatter to explain what it
-  does
-- Present personality options (one personality, or none) with descriptions from
-  frontmatter
-- Present Claude Code Agents (default to all, but let them choose) with descriptions
-  from frontmatter
-- Present Skills (default to all, but let them choose) with descriptions from
-  frontmatter
-- Mention that VSCode settings, Prettier config, and GitHub workflows will be included
-  by default
-- Separate personalities, agents, and skills from rules in your presentation
+**Personalities** - One personality or none. Common-personality is always included as
+baseline. Read `~/.ai_coding_config/.cursor/rules/personalities/` for options.
 
-Don't just list files - help them understand what they're choosing by reading
-descriptions from the files themselves.
+**Agents** - Specialized AI assistants for specific tasks. Default to all agents - they're
+useful for most projects and take minimal space. Read
+`~/.ai_coding_config/.claude/agents/` for available agents.
 
-### Goal 3.5: Handle Claude Code Agents
+**Skills** - Modular packages extending Claude's capabilities. Default to all skills -
+they provide domain expertise useful for most projects. Read
+`~/.ai_coding_config/.skills/` for available skills.
 
-Claude Code Agents are specialized AI assistants that live in `.claude/agents/`. Each
-agent is an expert at specific tasks - code review, debugging, architecture, testing,
-and more.
+**Commands** - Always copy all commands from `~/.ai_coding_config/.claude/commands/` to
+both `.claude/commands/` AND create symlinks in `.cursor/commands/` (shared format).
 
-Default to copying all agents. They're useful for most projects and take up minimal
-space.
+**Standard configs** - VSCode settings, Prettier config, GitHub workflows included by
+default.
 
-Ask "Would you like all agents, or pick specific ones?" If they want to choose, list the
-available agents by reading `~/.ai_coding_config/.claude/agents/` and showing
-descriptions from frontmatter (covered in Goal 3).
+### Install Selected Configurations
 
-Copy agent files directly from `~/.ai_coding_config/.claude/agents/` to the project's
-`.claude/agents/` directory using cp or equivalent file operations.
+Use `cp` for efficiency. Before copying each file, check if it exists. If it does, use
+`diff` to compare. If identical, skip it. If different, show what changed and ask what
+to do. Don't silently overwrite. When in doubt, ask.
 
-### Goal 3.6: Handle Skills
+Copy to these locations:
+- Rules → `.cursor/rules/` (preserve subdirectory structure)
+- Commands → `.claude/commands/` AND symlinks in `.cursor/commands/`
+- Context → `.claude/context.md`
+- Selected agents → `.claude/agents/`
+- Selected skills → `.skills/` (copy entire directories)
+- Common personality → `.cursor/rules/personalities/` (always)
+- Additional personality → `.cursor/rules/personalities/` (set `alwaysApply: true`)
+- VSCode settings → `.vscode/` (`settings.json`, `extensions.json`)
+- Prettier → `.prettierrc` at root
+- GitHub workflows → `.github/workflows/` (claude.yml, claude-code-review.yml)
+- Gitignore → `.cursor/.gitignore` and `.claude/.gitignore` containing `*.local.json`
 
-Skills are modular packages that extend Claude's capabilities with specialized
-knowledge, workflows, and tool integrations. They live in `.skills/`.
+Report what was copied, skipped, and how conflicts were handled.
 
-Default to copying all skills. They provide domain-specific expertise and procedural
-knowledge that's useful for most projects.
+### Verify Installation
 
-Ask "Would you like all skills, or pick specific ones?" If they want to choose, list the
-available skills by reading `~/.ai_coding_config/.skills/` and showing descriptions from
-frontmatter (covered in Goal 3).
-
-Copy skill directories directly from `~/.ai_coding_config/.skills/` to the project's
-`.skills/` directory using cp -r for entire skill packages (including SKILL.md and any
-bundled resources).
-
-### Goal 4: Install Selected Configurations
-
-Copy what the user selected into the right places. Use `cp` for efficiency - don't read
-and rewrite files.
-
-Before copying each file, check if it already exists. If it does, use `diff` to compare
-them. If identical, skip it. If different, show what changed and ask the user what they
-want to do. Don't silently overwrite files. When in doubt, ask.
-
-What to copy:
-
-- Rules to `.cursor/rules/`, preserving subdirectory structure
-- **ALL commands** from `~/.ai_coding_config/.claude/commands/` to `.claude/commands/`
-  AND create symlinks in `.cursor/commands/` pointing to `.claude/commands/*.md` (Cursor
-  and Claude Code share the same command format, so symlinks keep them in sync)
-- `.claude/context.md`
-- Selected agents to `.claude/agents/`
-- Selected skills to `.skills/` (copy entire skill directories)
-- Common personality to `.cursor/rules/personalities/` (always included)
-- Additional personality if selected (copy then set `alwaysApply: true` in frontmatter)
-- VSCode settings to `.vscode/` (`settings.json` and `extensions.json`)
-- `.prettierrc` to project root
-- GitHub workflows to `.github/workflows/` (claude.yml, claude-code-review.yml)
-- `.gitignore` files in `.cursor/` and `.claude/` directories containing `*.local.json`
-
-After copying, tell the user what was copied, what was skipped, and what they chose to
-do with conflicts.
-
-### Goal 5: Verify Everything Works
-
-After installation, confirm what was set up:
-
+Confirm files are where they should be:
 - List installed rules (by directory: framework-specific, then universal)
-- List commands in `.claude/commands/` (should include personality-change,
-  load-cursor-rules, ai-coding-config)
-- Confirm symlinks exist in `.cursor/commands/` pointing to `.claude/commands/*.md`
+- List commands in `.claude/commands/`
+- Confirm symlinks in `.cursor/commands/` point to `.claude/commands/*.md`
 - List agents in `.claude/agents/`
 - List skills in `.skills/`
-- Confirm which personality was selected (if any) and that alwaysApply is set
-- Confirm VSCode settings in `.vscode/` (`settings.json` and `extensions.json`)
-- Confirm `.prettierrc` exists at project root
-- List GitHub workflows in `.github/workflows/` (claude.yml, claude-code-review.yml,
-  claude-fix-pr-build.yml)
-- Confirm .gitignore files are in place
-- Report a clear summary of the configuration
+- Confirm which personality was selected and `alwaysApply` is set
+- Confirm VSCode settings exist
+- Confirm `.prettierrc` at root
+- List GitHub workflows
+- Confirm gitignore files in place
 
-No need for deep validation - just confirm the files are where they should be.
+Report a clear summary. No deep validation needed.
 
-### Goal 6: Handle Updates (when requested)
+---
 
-First, update the ai-coding-config repo to get the latest changes:
+## Update Mode (`update` argument)
 
+Update existing configs to latest versions from the repo.
+
+### Update Repository
+
+Pull latest changes:
 ```bash
 cd ~/.ai_coding_config && git pull
 ```
 
-Then self-update: Compare this command file itself
-(`~/.ai_coding_config/.claude/commands/ai-coding-config.md`) with the project's version
-(`.claude/commands/ai-coding-config.md`). If the repo version is newer or different,
-copy it over using `cp`, then re-read the updated file to ensure you're following the
-latest instructions for the rest of this update process.
+### Self-Update
 
-After self-updating (if needed), compare what's in the repo with what's in the project.
+Compare this command file (`~/.ai_coding_config/.claude/commands/ai-coding-config.md`)
+with the project version (`.claude/commands/ai-coding-config.md`). If the repo version
+is newer or different, copy it using `cp`, then re-read it to follow latest instructions.
 
-For each file, use `diff` to see what changed. Categorize changes as trivial (typos,
-comments) or significant. List files that exist in the repo but not in the project, and
-files in the project that aren't in the repo (possible local customizations).
+### Compare and Update
 
-Explain what changed and why they might want to update. Let the user choose what to
-update - offer "all", "none", or pick individually. Be careful with files that look
-customized.
+For each config file, use `diff` to see what changed. Categorize as trivial (typos,
+comments) or significant.
 
-Copy selected files using `cp`. Use the same approach as Goal 4 - don't silently
-overwrite. Re-verify like Goal 5 and highlight what changed.
+List files that exist in repo but not in project. List files in project that aren't in
+repo (possible local customizations).
 
-## Key Principles
+Explain what changed and why they might want to update. Let the user choose - "all",
+"none", or pick individually. Be careful with customized files.
 
-Work conversationally, not robotically. Don't show every bash command - just say what
-you're doing and report results.
+Copy selected files using `cp`. Don't silently overwrite. Re-verify and highlight what
+changed.
 
-Respect existing files: Use `cp` for efficiency, but always check if files exist first.
-When conflicts arise, use `diff` to understand what's different, then intelligently
-decide or ask the user. When in doubt, ask. It's better to be thoughtful than fast.
+---
 
-Personality selection: users pick one personality (or none). Don't offer to copy all
-personalities. The common-personality is always included as the baseline.
+## Add Mode (`add` argument)
 
-When showing available rules, be framework-specific. Django ≠ FastAPI. React ≠ Next.js.
-Show what's most relevant to their actual stack.
+Help contributors add new functionality to the ai-coding-config repo itself.
 
-Be helpful in explaining choices. Don't just list files - explain what they do and why
-someone might want them.
+### Understand What They're Adding
 
-## Finding Configurations
+Ask for a description of the functionality. Based on the description, work through
+clarifying questions to determine the right mechanism.
 
-Discover what's available by reading directories:
+### Fetch Claude Code Documentation
 
-- Explore ~/.ai_coding_config/.cursor/rules/ for subdirectories and files
-- Check for framework-specific subdirectories (python/, typescript/, etc.)
-- Read ~/.ai_coding_config/.cursor/rules/personalities/ for personality options
-- List ~/.ai_coding_config/.claude/agents/ for available Claude Code Agents
-- List ~/.ai_coding_config/.skills/ for available Skills
-- List ~/.ai_coding_config/.claude/commands/ for all available commands (copy ALL of
-  them to both `.claude/commands/` AND create symlinks in `.cursor/commands/`)
-- Look for ~/.ai_coding_config/.github/workflows/ for CI/CD templates (claude.yml,
-  claude-code-review.yml, claude-fix-pr-build.yml)
-- Check ~/.ai_coding_config/.vscode/ for editor settings (settings.json,
-  extensions.json)
-- Check for ~/.ai_coding_config/.prettierrc for code formatting configuration
+Before creating files, fetch the latest Claude Code documentation for the mechanism
+you're implementing (commands, skills, agents, or plugins). Get current implementation
+details including frontmatter requirements, file structure, and best practices.
 
-Files in .cursor/rules/ root (not in subdirectories) generally apply to all projects.
-Use your judgment about what's relevant based on project context.
+### Decision Framework
 
-For agents: Default to copying all agents - they're specialized assistants that help
-with specific tasks (code review, debugging, testing, etc.) and are useful for most
-projects.
+**Who triggers it?**
+- User manually → Command
+- Claude autonomously → Skill
+- Claude delegates focused work → Agent
+- Bundling multiple mechanisms → Plugin
 
-For skills: Default to copying all skills - they're modular packages that extend
-Claude's capabilities with specialized knowledge, workflows, and tool integrations
-useful for most projects.
+**Does it need isolated context?**
+- No → Command or Skill
+- Yes → Agent
+
+**Cursor compatibility needed?**
+- Commands work in both (native Claude Code, Cursor v1.6+)
+- Skills are Claude Code only (create companion Command for Cursor if needed)
+- Agents work in Claude Code (Cursor can @ mention agent file paths)
+- Plugins are Claude Code only (content works when manually copied to Cursor)
+
+### Ask Clarifying Questions
+
+1. Who should trigger this - user manually, or should Claude decide when to use it?
+2. Does it need its own isolated context window, or use the main conversation?
+3. Does it need to work in Cursor, or is Claude Code only acceptable?
+4. Is this a single capability, or bundling multiple related features?
+
+### Create Files
+
+**For Commands:**
+Create `.claude/commands/command-name.md` with frontmatter including description.
+Commands work in both Claude Code and Cursor.
+
+**For Skills:**
+Create `.claude/skills/skill-name/SKILL.md` with frontmatter (name, description).
+The description is critical - Claude uses it to decide when to activate. Add supporting
+files in skill directory if needed. If Cursor compatibility needed, also create a
+Command for manual invocation.
+
+**For Agents:**
+Determine which plugin this belongs to (or create new plugin). Create
+`plugins/plugin-name/agents/agent-name.md` with frontmatter (name, description, tools,
+model). Agents live in plugins, not in `.claude/agents/`.
+
+**For Plugins:**
+Create `plugins/plugin-name/` directory structure. Add `.claude-plugin/plugin.json`
+manifest. Bundle appropriate commands (via symlinks), skills, agents, hooks, MCP
+servers. Add README.md documenting the plugin. Update
+`.claude-plugin/marketplace.json` to list the new plugin.
+
+### Verify Implementation
+
+Check that files are in correct locations, frontmatter includes required fields, skill
+descriptions clearly define when to activate, commands work when invoked, and plugins
+are properly structured.
+
+Explain what was created and how to test it.
+
+---
 
 ## Execution Philosophy
 
-Focus on outcomes, not process. Figure out the best way to achieve each goal based on
-the specific situation. Be conversational and helpful. Show file paths when copying. Let
-users make all choices. Verify everything works before finishing.
+Work conversationally, not robotically. Focus on outcomes. Figure out the best approach
+for each situation. Show file paths when copying. Let users make all choices. Verify
+everything works before finishing.
+
+Respect existing files - always check before overwriting. Use `diff` to understand
+differences, then decide intelligently or ask. Better to be thoughtful than fast.
+
+Be helpful explaining choices. Don't just list files - explain what they do and why
+someone might want them.
