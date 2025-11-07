@@ -90,8 +90,8 @@ Copy agent files directly from `~/.ai_coding_config/.claude/agents/` to the proj
 
 ### Goal 3.6: Handle Skills
 
-Skills are modular packages that extend Claude's capabilities with specialized knowledge,
-workflows, and tool integrations. They live in `.skills/`.
+Skills are modular packages that extend Claude's capabilities with specialized
+knowledge, workflows, and tool integrations. They live in `.skills/`.
 
 Default to copying all skills. They provide domain-specific expertise and procedural
 knowledge that's useful for most projects.
@@ -162,9 +162,9 @@ cd ~/.ai_coding_config && git pull
 
 Then self-update: Compare this command file itself
 (`~/.ai_coding_config/.claude/commands/ai-coding-config.md`) with the project's version
-(`.claude/commands/ai-coding-config.md`). If the repo version is newer or different, copy
-it over using `cp`, then re-read the updated file to ensure you're following the latest
-instructions for the rest of this update process.
+(`.claude/commands/ai-coding-config.md`). If the repo version is newer or different,
+copy it over using `cp`, then re-read the updated file to ensure you're following the
+latest instructions for the rest of this update process.
 
 After self-updating (if needed), compare what's in the repo with what's in the project.
 
