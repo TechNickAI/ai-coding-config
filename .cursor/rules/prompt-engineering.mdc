@@ -212,6 +212,98 @@ But even then, explain why the process matters, not just what to do.
 - Keep system stable; vary user prompt per request
 - Token economy: concise but complete; avoid redundancy
 
+### Structural Delimiters
+
+Use delimiters to create clear boundaries between different types of information. This helps
+the LLM parse and understand the structure of your prompt.
+
+XML tags work well for semantic grouping when you have multiple distinct sections:
+
+```
+<context>
+Current database has 50M records across 12 tables
+</context>
+
+<task>
+Optimize the query to run in under 2 seconds
+</task>
+
+<constraints>
+Cannot modify indexes or table structure
+</constraints>
+```
+
+For simpler cases, markdown headers or basic labels work fine:
+
+```
+Context: Working with a React 18 application using TypeScript
+Task: Add error boundary to catch rendering errors
+Output: Component code with proper types
+```
+
+Only add structure when it clarifies meaning. A single, clear paragraph often works better
+than over-structured sections. Use XML when you need to reference specific sections later
+or when mixing different types of content (code, data, instructions).
+
+### Few-Shot Example Guidelines
+
+Examples teach patterns more powerfully than explanations. The LLM learns from what you
+show, not what you tell it to avoid.
+
+**How many examples?**
+- 0 examples: For straightforward tasks the LLM already understands
+- 1-2 examples: For specific format requirements
+- 3-5 examples: For complex patterns or nuanced behavior
+- 5+ examples: When establishing a new pattern the model hasn't seen
+
+**Example structure:**
+
+Always show what you want, not what you don't want:
+
+```
+✓ Good approach - Show desired pattern:
+Format user data like this:
+- Alice Smith → A. Smith
+- Bob Johnson → B. Johnson
+
+✗ Poor approach - Showing unwanted patterns:
+Don't format like this: alice_smith (wrong!)
+Don't format like this: ALICE S. (wrong!)
+```
+
+Place examples after instructions but before the actual task. Group similar examples
+together. When showing code examples, include the most common case first, edge cases last.
+
+### Token Compression Tactics
+
+Reduce tokens while maintaining clarity. The goal is density, not obscurity.
+
+**Effective compressions:**
+
+Remove unnecessary words while preserving meaning:
+- "In order to accomplish the task of" → "To"
+- "It is important to note that" → "Note:"
+- "Make sure that you" → "Ensure"
+- "The process of creating" → "Creating"
+
+Use clear abbreviations for repeated terms:
+- Define once: "TypeScript (TS)" then use "TS"
+- Common abbreviations need no introduction: API, JSON, SQL
+
+Combine related instructions:
+- Instead of: "First, validate the input. Second, check it's not null. Third, verify the type."
+- Write: "Validate input: non-null and correct type."
+
+**Maintain readability:**
+
+Don't sacrifice clarity for minor token savings. These compressions harm more than help:
+- "u" instead of "you" (saves 2 tokens, reduces clarity)
+- Removing all articles ("the", "a") when they aid comprehension
+- Extreme abbreviations that require mental translation
+
+Good compression feels like clear technical writing, not a telegram. Aim for the
+conciseness of good documentation, not the brevity of text messages.
+
 ## Common Pitfalls
 
 - Ambiguous asks ("analyze thoroughly")
