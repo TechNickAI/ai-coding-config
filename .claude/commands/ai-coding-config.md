@@ -23,11 +23,13 @@ Walk through setting up AI coding configs for the current project.
 ### Ensure Local Repository Exists
 
 If `~/.ai_coding_config` doesn't exist, clone it:
+
 ```bash
 git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
 ```
 
 If it exists, update it:
+
 ```bash
 cd ~/.ai_coding_config && git pull
 ```
@@ -53,8 +55,8 @@ users understand their choices, not just list files.
 **Personalities** - One personality or none. Common-personality is always included as
 baseline. Read `~/.ai_coding_config/.cursor/rules/personalities/` for options.
 
-**Agents** - Specialized AI assistants for specific tasks. Default to all agents - they're
-useful for most projects and take minimal space. Read
+**Agents** - Specialized AI assistants for specific tasks. Default to all agents -
+they're useful for most projects and take minimal space. Read
 `~/.ai_coding_config/.claude/agents/` for available agents.
 
 **Skills** - Modular packages extending Claude's capabilities. Default to all skills -
@@ -74,6 +76,7 @@ Use `cp` for efficiency. Before copying each file, check if it exists. If it doe
 to do. Don't silently overwrite. When in doubt, ask.
 
 Copy to these locations:
+
 - Rules → `.cursor/rules/` (preserve subdirectory structure)
 - Commands → `.claude/commands/` AND symlinks in `.cursor/commands/`
 - Context → `.claude/context.md`
@@ -91,6 +94,7 @@ Report what was copied, skipped, and how conflicts were handled.
 ### Verify Installation
 
 Confirm files are where they should be:
+
 - List installed rules (by directory: framework-specific, then universal)
 - List commands in `.claude/commands/`
 - Confirm symlinks in `.cursor/commands/` point to `.claude/commands/*.md`
@@ -113,6 +117,7 @@ Update existing configs to latest versions from the repo.
 ### Update Repository
 
 Pull latest changes:
+
 ```bash
 cd ~/.ai_coding_config && git pull
 ```
@@ -121,7 +126,8 @@ cd ~/.ai_coding_config && git pull
 
 Compare this command file (`~/.ai_coding_config/.claude/commands/ai-coding-config.md`)
 with the project version (`.claude/commands/ai-coding-config.md`). If the repo version
-is newer or different, copy it using `cp`, then re-read it to follow latest instructions.
+is newer or different, copy it using `cp`, then re-read it to follow latest
+instructions.
 
 ### Compare and Update
 
@@ -157,16 +163,19 @@ details including frontmatter requirements, file structure, and best practices.
 ### Decision Framework
 
 **Who triggers it?**
+
 - User manually → Command
 - Claude autonomously → Skill
 - Claude delegates focused work → Agent
 - Bundling multiple mechanisms → Plugin
 
 **Does it need isolated context?**
+
 - No → Command or Skill
 - Yes → Agent
 
 **Cursor compatibility needed?**
+
 - Commands work in both (native Claude Code, Cursor v1.6+)
 - Skills are Claude Code only (create companion Command for Cursor if needed)
 - Agents work in Claude Code (Cursor can @ mention agent file paths)
@@ -181,25 +190,21 @@ details including frontmatter requirements, file structure, and best practices.
 
 ### Create Files
 
-**For Commands:**
-Create `.claude/commands/command-name.md` with frontmatter including description.
-Commands work in both Claude Code and Cursor.
+**For Commands:** Create `.claude/commands/command-name.md` with frontmatter including
+description. Commands work in both Claude Code and Cursor.
 
-**For Skills:**
-Create `.claude/skills/skill-name/SKILL.md` with frontmatter (name, description).
-The description is critical - Claude uses it to decide when to activate. Add supporting
-files in skill directory if needed. If Cursor compatibility needed, also create a
-Command for manual invocation.
+**For Skills:** Create `.claude/skills/skill-name/SKILL.md` with frontmatter (name,
+description). The description is critical - Claude uses it to decide when to activate.
+Add supporting files in skill directory if needed. If Cursor compatibility needed, also
+create a Command for manual invocation.
 
-**For Agents:**
-Determine which plugin this belongs to (or create new plugin). Create
+**For Agents:** Determine which plugin this belongs to (or create new plugin). Create
 `plugins/plugin-name/agents/agent-name.md` with frontmatter (name, description, tools,
 model). Agents live in plugins, not in `.claude/agents/`.
 
-**For Plugins:**
-Create `plugins/plugin-name/` directory structure. Add `.claude-plugin/plugin.json`
-manifest. Bundle appropriate commands (via symlinks), skills, agents, hooks, MCP
-servers. Add README.md documenting the plugin. Update
+**For Plugins:** Create `plugins/plugin-name/` directory structure. Add
+`.claude-plugin/plugin.json` manifest. Bundle appropriate commands (via symlinks),
+skills, agents, hooks, MCP servers. Add README.md documenting the plugin. Update
 `.claude-plugin/marketplace.json` to list the new plugin.
 
 ### Verify Implementation
