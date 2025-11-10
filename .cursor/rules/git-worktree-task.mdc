@@ -36,12 +36,7 @@ cd .gitworktrees/task-name
 /setup-environment
 ```
 
-This command:
-- Detects your project type (Node.js, Python, Ruby, Go, Rust, etc.)
-- Installs dependencies (pnpm, pip, poetry, bundler, cargo, etc.)
-- Runs code generation (Prisma, TypeORM, Django migrations, etc.)
-- Copies .env files from parent directory (../../.env, ../../.env.local*, etc.)
-- Reports what's ready and what needs manual setup
+This prompts your AI assistant to detect the project type and intelligently set up dependencies, code generation, and environment files. The goal is to make the worktree a fully functional development environment where all tests pass.
 
 **If `/setup-environment` doesn't exist** in your project, set up manually:
 
@@ -73,10 +68,7 @@ cp ../../.env.*.local . 2>/dev/null || true
 ```
 
 **Note on .env files:**
-- `.env` contains secrets (database URLs, API keys) needed for integration tests
-- Unit tests typically don't need .env (they use mocks)
-- If only unit tests need to pass locally, you can skip .env
-- CI always has proper environment configured
+Copy .env from the parent directory. It contains database URLs and API keys needed for integration tests. After proper setup, ALL tests (unit + integration) should pass in your worktree.
 
 **Read the standards.** Before writing code, read all cursor rules in `.cursor/rules/`.
 These define how this project works. Every applicable rule must be followed. If
