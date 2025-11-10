@@ -20,8 +20,63 @@ cleanly.
 ## The Complete Cycle
 
 **Setup your workspace.** Create a git worktree for the task. Choose a branch name that
-describes what you're building. The worktree should be in a separate directory,
-typically parallel to your main repo directory.
+describes what you're building. The worktree should be in the `.gitworktrees/` directory
+to keep things organized.
+
+```bash
+# Create worktree in .gitworktrees directory
+mkdir -p .gitworktrees
+git worktree add -b feature/task-name .gitworktrees/task-name main
+cd .gitworktrees/task-name
+```
+
+**Initialize the environment.** Run the setup command to prepare the worktree:
+
+```bash
+/setup-environment
+```
+
+This command:
+- Detects your project type (Node.js, Python, Ruby, Go, Rust, etc.)
+- Installs dependencies (pnpm, pip, poetry, bundler, cargo, etc.)
+- Runs code generation (Prisma, TypeORM, Django migrations, etc.)
+- Copies .env files from parent directory (../../.env, ../../.env.local*, etc.)
+- Reports what's ready and what needs manual setup
+
+**If `/setup-environment` doesn't exist** in your project, set up manually:
+
+For Node.js/TypeScript projects:
+```bash
+pnpm install
+[ -f prisma/schema.prisma ] && pnpm db:generate
+```
+
+For Python projects:
+```bash
+pip install -r requirements.txt  # or poetry install
+python manage.py migrate  # Django
+# or: alembic upgrade head  # SQLAlchemy
+```
+
+For Ruby projects:
+```bash
+bundle install
+bundle exec rake db:migrate  # Rails
+```
+
+**Copy environment files** if setup command didn't:
+```bash
+# Copy all environment files from parent directory
+cp ../../.env .env 2>/dev/null || cp .env.example .env
+cp ../../.env.local .env.local 2>/dev/null || true
+cp ../../.env.*.local . 2>/dev/null || true
+```
+
+**Note on .env files:**
+- `.env` contains secrets (database URLs, API keys) needed for integration tests
+- Unit tests typically don't need .env (they use mocks)
+- If only unit tests need to pass locally, you can skip .env
+- CI always has proper environment configured
 
 **Read the standards.** Before writing code, read all cursor rules in `.cursor/rules/`.
 These define how this project works. Every applicable rule must be followed. If
@@ -29,18 +84,32 @@ These define how this project works. Every applicable rule must be followed. If
 
 **Implement the solution.** Write code that solves the problem. Follow all cursor rules.
 Make commits along the way as logical units of work are completed. Each commit should
-follow the git commit message guidelines in .cursor/rules/git-commit-message.md.
+follow the git commit message guidelines in .cursor/rules/git-commit-message.mdc (or .md).
 
 **Validate locally before pushing.** Run the project's pre-push validation. This catches
-issues before CI does, saving time and CI minutes. The project likely has
-`pnpm pre-push` or similar. Run it. Fix any issues it finds. Only proceed when
-everything passes locally. You can also run pre-commit if it exists, pytest, ruff,
-prettier, etc. For a clue, you can look for a CI job in the github workflows. It will
-save you time if you can run the steps locally rather than pushing and waiting for a
-build.
+issues before CI does, saving time and CI minutes. Look for these commands:
 
-If validation fails, understand why and fix it. Don't push broken code hoping CI will
-tell you what's wrong - the local tooling already told you.
+- Node.js: `pnpm pre-push`, `npm run pre-push`, or check `package.json` scripts
+- Python: `pre-commit run --all-files`, `pytest`, `ruff check`, `mypy`
+- Ruby: `bundle exec rake test`, `bundle exec rubocop`
+- Go: `go test ./...`, `golangci-lint run`
+- Rust: `cargo test`, `cargo clippy`
+
+You can also check `.github/workflows/` to see what CI runs - run those steps locally.
+
+**All tests should pass in a properly configured worktree.** After running `/setup-environment`,
+your worktree should be a fully functioning development environment where:
+- ✅ Unit tests pass (use mocks, no external dependencies)
+- ✅ Integration tests pass (have real .env with database access)
+- ✅ Type checking passes (code generation completed)
+- ✅ Linting passes (dependencies installed)
+
+If tests fail, it's either:
+1. **Setup incomplete** - Did you run `/setup-environment`? Check that .env was copied and dependencies installed.
+2. **Your code has bugs** - Fix them before pushing. The local tooling is telling you what's wrong.
+
+Never push hoping CI will tell you what's broken - the local tooling already told you.
+Worktrees should be complete, working environments. No excuses.
 
 **Self-review your changes.** Invoke the code reviewer agent (Rivera in
 .claude/agents/rivera.md) to review your changes before pushing. The reviewer catches
@@ -89,7 +158,26 @@ reaction.
 checks pass, the PR is ready. Either merge it yourself or wait for the human reviewer to
 merge it.
 
+**Clean up the worktree.** After the PR merges, remove the worktree to keep things tidy:
+
+```bash
+# Return to main directory
+cd ../.. # or cd /path/to/main/repo
+
+# Remove the worktree
+git worktree remove .gitworktrees/task-name
+
+# Or use the cleanup command if available
+/clean-up-worktree  # if project has this slash command
+```
+
+The worktree directory and its files are deleted, but your work lives on in main via the merged PR.
+
 ## Common Pitfalls
+
+**Skipping environment setup.** After creating the worktree, always run `/setup-environment`
+or manually install dependencies. Type errors and test failures often stem from missing
+code generation (Prisma, etc.) or dependencies.
 
 **Skipping local validation.** Don't push without running pre-push checks. You'll just
 waste time waiting for CI to tell you what your local tooling would have caught in
@@ -98,6 +186,9 @@ seconds.
 **Blindly following bot feedback.** Bots provide suggestions, not mandates. Evaluate
 each piece of feedback. You have context they don't. Make informed decisions about what
 to fix and what to WONTFIX.
+
+**Not verifying full test suite.** After setup, ALL tests should pass - both unit and
+integration tests. If tests fail, fix your setup or your code. Don't push with failing tests.
 
 ## Success Criteria
 
