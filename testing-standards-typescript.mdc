@@ -5,463 +5,87 @@ alwaysApply: false
 
 # Testing Standards for TypeScript with Vitest
 
-## Testing Philosophy
+Test what matters. Focus on behavior and functionality, not implementation details or configuration. Good tests give confidence that the application works correctly while remaining maintainable.
 
-**Test what matters.** Focus on behavior and functionality, not implementation details
-or configuration. Good tests give confidence that the application works correctly while
-remaining maintainable.
+## Core Principles
 
-## What to Test (and What Not to Test)
+Write tests that validate business logic and user-facing behavior. Test runtime error handling with invalid inputs, edge cases, and integration between components. Target 90% line coverage and 85% branch coverage through meaningful tests, not by chasing numbers.
 
-### Test Application Logic, Not Configuration
+Minimize mocking of your own code. Use real database operations with PGlite for integration tests. Mock external APIs, third-party services, and non-deterministic operations, but don't mock your own database layer or business logic. A missing migration that crashes production should fail your tests.
 
-**DO test:**
+Write independent, isolated tests. Each test should stand alone without depending on execution order. Use descriptive names that read like documentation. Follow the AAA pattern: Arrange (setup), Act (execute), Assert (verify).
 
-- Business logic and data transformations
-- API endpoint behavior with valid inputs
-- Error handling with invalid inputs
-- Edge cases and boundary conditions
-- User-facing functionality and workflows
-- Integration between components
+## Writing Effective Tests
 
-**DON'T test:**
-
-- Environment variable presence (test deployment config separately)
-- Configuration that should be stable
-- Framework internals or library behavior
-- Overly specific implementation details
-
-### Example: Configuration Tests Are Wrong
-
-**❌ BAD - Testing stable configuration:**
+Here are examples of well-structured tests:
 
 ```typescript
-it("returns error when API_KEY is missing", async () => {
-  delete process.env.API_KEY;
-  const result = await adapter.execute();
-  expect(result.error).toContain("API_KEY missing");
-});
-```
-
-This tests deployment configuration, not application logic. If API_KEY is missing, the
-application won't work at all - this isn't a runtime edge case to handle.
-
-**✅ GOOD - Testing runtime behavior:**
-
-```typescript
-it("returns error when user provides invalid API request", async () => {
-  const result = await adapter.execute({ action: "invalid" });
-  expect(result.error).toContain("Unknown action");
-});
-```
-
-This tests actual application logic - how the code handles bad user input.
-
-## Test Status Codes Correctly
-
-### Understanding HTTP Status Codes
-
-**400-level (Client Errors):**
-
-- 400 Bad Request: Client sent invalid data
-- 401 Unauthorized: Authentication required or failed
-- 403 Forbidden: Authenticated but lacks permission
-- 404 Not Found: Resource doesn't exist
-
-**500-level (Server Errors):**
-
-- 500 Internal Server Error: Unexpected server problem
-- 502 Bad Gateway: Upstream service failed
-- 503 Service Unavailable: Server overloaded or down
-
-### Test For Success, Not Just Errors
-
-**❌ BAD - Test expects failure:**
-
-```typescript
-it("returns 500 when config is missing", async () => {
-  delete process.env.CONFIG;
-  const response = await POST(request);
-  expect(response.status).toBe(500);
-});
-```
-
-This test validates that the system is broken! Tests should validate that code WORKS.
-
-**✅ GOOD - Test expects success:**
-
-```typescript
-it("processes request successfully", async () => {
-  const response = await POST(validRequest);
-  expect(response.status).toBe(200);
-  expect(response.data).toMatchObject({ success: true });
-});
-```
-
-**✅ ALSO GOOD - Test graceful error handling:**
-
-```typescript
-it("returns 400 for invalid user input", async () => {
-  const response = await POST(invalidRequest);
-  expect(response.status).toBe(400);
-  expect(response.error).toContain("Invalid field: email");
-});
-```
-
-This validates the system correctly handles bad input - that's good behavior to test.
-
-## Avoid Overmocking
-
-### The Problem
-
-Excessive mocking hides real bugs by:
-
-- Testing mocks instead of actual code
-- Missing integration issues
-- Creating tests that pass but code that fails
-- Hiding missing migrations, configuration, or dependencies
-
-### Example: The Missing Migration Bug
-
-**What happened:**
-
-- Production code hit a missing database table
-- Tests all passed ✅
-- Why? Everything was mocked!
-
-```typescript
-// ❌ BAD - Overmocked test
-it("saves connection", async () => {
-  vi.mocked(db.connection.create).mockResolvedValue(mockData);
-  await saveConnection(data);
-  expect(db.connection.create).toHaveBeenCalled();
-});
-```
-
-This test passes even if:
-
-- The database table doesn't exist
-- The schema is wrong
-- The connection code has a bug
-- The SQL is malformed
-
-**✅ BETTER - Test with real database:**
-
-```typescript
-it("saves connection to database", async () => {
-  // Use test database, not mocks
-  const result = await saveConnection(data);
-
-  // Verify actual database state
-  const saved = await db.connection.findUnique({
-    where: { id: result.id },
-  });
-  expect(saved).toMatchObject(data);
-});
-```
-
-### What to Mock
-
-**DO mock:**
-
-- External APIs and services
-- Third-party libraries you don't control
-- Slow operations (file I/O, network calls)
-- Non-deterministic operations (Date.now(), Math.random())
-
-**DON'T mock:**
-
-- Your own database layer (use test database)
-- Your own business logic
-- Simple utility functions
-- Framework internals that are fast
-
-### Integration Tests Prevent Production Bugs
-
-The bug that triggered this audit? A missing database migration that tests didn't catch
-because the database was mocked. Integration tests would have caught it.
-
-```typescript
-// Add integration tests that touch real systems
-describe("Database Integration", () => {
-  beforeAll(async () => {
-    // Run migrations on test database
-    await runMigrations();
-  });
-
-  it("creates user with all required fields", async () => {
-    // This fails if migration is missing!
-    const user = await createUser({ email: "test@example.com" });
-    expect(user.id).toBeDefined();
-  });
-});
-```
-
-## Test Structure and Organization
-
-### Follow AAA Pattern (Arrange, Act, Assert)
-
-```typescript
+// Test successful behavior first
 it("processes payment successfully", async () => {
-  // Arrange - Setup test data
   const payment = { amount: 100, currency: "USD" };
   const mockUser = createMockUser();
 
-  // Act - Execute the code
   const result = await processPayment(mockUser, payment);
 
-  // Assert - Verify outcome
   expect(result.success).toBe(true);
   expect(result.transactionId).toBeDefined();
 });
-```
 
-### Descriptive Test Names
-
-Test names should read like documentation:
-
-**❌ BAD:**
-
-```typescript
-it("works", () => { ... });
-it("test user function", () => { ... });
-it("should handle errors", () => { ... });
-```
-
-**✅ GOOD:**
-
-```typescript
-it("creates user with valid email and hashed password", () => { ... });
-it("returns 400 when email format is invalid", () => { ... });
-it("sends welcome email after successful registration", () => { ... });
-```
-
-### Test One Thing at a Time
-
-**❌ BAD - Multiple assertions unrelated:**
-
-```typescript
-it("user operations work", () => {
-  const user = createUser();
-  expect(user.id).toBeDefined();
-
-  const deleted = deleteUser(user.id);
-  expect(deleted).toBe(true);
-
-  const updated = updateUser(user.id, { name: "New" });
-  expect(updated.name).toBe("New");
+// Test error handling with user input
+it("returns 400 for invalid email format", async () => {
+  const response = await POST({ email: "not-an-email" });
+  expect(response.status).toBe(400);
+  expect(response.error).toContain("Invalid field: email");
 });
-```
 
-**✅ GOOD - Separate, focused tests:**
-
-```typescript
-describe("User Operations", () => {
-  it("creates user with generated ID", () => {
-    const user = createUser();
-    expect(user.id).toBeDefined();
+// Test with real database operations
+it("creates user with all required fields", async () => {
+  await db.insert(schema.users).values({
+    email: "test@example.com",
+    clerkId: "clerk_123",
+    name: "Test User",
   });
 
-  it("deletes user by ID", () => {
-    const user = createUser();
-    const deleted = deleteUser(user.id);
-    expect(deleted).toBe(true);
-  });
-
-  it("updates user name", () => {
-    const user = createUser();
-    const updated = updateUser(user.id, { name: "New" });
-    expect(updated.name).toBe("New");
-  });
+  const user = await getUserByEmail("test@example.com");
+  expect(user.email).toBe("test@example.com");
 });
-```
 
-## Coverage Goals
-
-### Target 90% Line Coverage, 85% Branch Coverage
-
-Don't aim for 100% - focus on meaningful tests:
-
-**High priority:**
-
-- User-facing features and APIs
-- Business logic and calculations
-- Error handling and edge cases
-- Data transformations and validations
-
-**Low priority:**
-
-- Type definitions and interfaces
-- Simple getters and setters
-- Framework boilerplate
-- Obvious pass-through code
-
-### Meaningful Coverage vs Number Chasing
-
-**❌ BAD - Test that boosts coverage but adds no value:**
-
-```typescript
-it("calls the function", () => {
-  const result = myFunction();
-  expect(result).toBeDefined();
-});
-```
-
-**✅ GOOD - Test that validates behavior:**
-
-```typescript
+// Test edge cases and boundaries
 it("returns user-friendly error message for invalid email", () => {
   const result = validateEmail("not-an-email");
   expect(result.error).toBe("Please enter a valid email address");
 });
-```
 
-## Clean Test Output
-
-### Reduce Stderr Noise
-
-Tests should have clean output. If your test run shows hundreds of error messages, it's
-impossible to spot real issues.
-
-**What causes noise:**
-
-- Console.error in application code that's triggered by tests
-- Stack traces for expected errors
-- Validation errors logged during error handling tests
-
-**Solutions:**
-
-```typescript
-// 1. Mock console in tests that trigger expected errors
-it("handles missing required field", () => {
-  const consoleSpy = vi.spyOn(console, "error").mockImplementation();
-
-  const result = validateInput({});
-  expect(result.error).toContain("Missing required field");
-
-  consoleSpy.mockRestore();
-});
-
-// 2. Use test-specific log levels
-beforeAll(() => {
-  process.env.LOG_LEVEL = "silent";
-});
-
-// 3. Don't log validation errors to console
-// Log real errors, but validation failures should just return error objects
-```
-
-## Test Isolation and Independence
-
-### Each Test Should Stand Alone
-
-**❌ BAD - Tests depend on order:**
-
-```typescript
-let user;
-
-it("creates user", () => {
-  user = createUser();
-});
-
-it("updates user", () => {
-  updateUser(user.id); // Fails if previous test didn't run
-});
-```
-
-**✅ GOOD - Tests are independent:**
-
-```typescript
-it("creates user", () => {
-  const user = createUser();
-  expect(user.id).toBeDefined();
-});
-
-it("updates user", () => {
-  const user = createUser();
-  updateUser(user.id);
-  expect(getUser(user.id).updated).toBe(true);
-});
-```
-
-### Clean Up After Tests
-
-```typescript
-describe("Database Tests", () => {
-  const testUsers = [];
-
-  afterEach(async () => {
-    // Clean up test data
-    await Promise.all(testUsers.map((id) => deleteUser(id)));
-    testUsers.length = 0;
+// Test integration between components
+describe("User Operations", () => {
+  it("creates user with generated ID", async () => {
+    const user = await createUser({ email: "test@example.com" });
+    expect(user.id).toBeDefined();
   });
 
-  it("creates user", async () => {
-    const user = await createUser();
-    testUsers.push(user.id);
-    // Test continues...
+  it("deletes user by ID", async () => {
+    const user = await createUser({ email: "test@example.com" });
+    const deleted = await deleteUser(user.id);
+    expect(deleted).toBe(true);
   });
 });
 ```
 
-## Vitest-Specific Best Practices
+Avoid testing configuration that should be stable in deployment. Don't test environment variable presence or framework internals. Don't validate that broken systems stay broken - test that working code continues to work. When testing error handling, verify the system gracefully handles bad input, not that missing configuration causes errors.
 
-### Use Concurrent Tests Wisely
-
-```typescript
-// Tests that don't share state can run concurrently
-describe.concurrent("Pure Functions", () => {
-  it("calculates total", () => { ... });
-  it("formats currency", () => { ... });
-});
-
-// Tests that share resources should NOT be concurrent
-describe("Database Operations", () => {  // No .concurrent
-  it("creates record", () => { ... });
-  it("updates record", () => { ... });
-});
-```
-
-### Use beforeEach for Setup
-
-```typescript
-describe("API Tests", () => {
-  let mockUser;
-
-  beforeEach(() => {
-    // Fresh setup for each test
-    mockUser = {
-      id: "test-id",
-      email: "test@example.com",
-    };
-    vi.clearAllMocks();
-  });
-
-  // Tests here...
-});
-```
-
-### Proper Cleanup in afterEach
-
-```typescript
-afterEach(() => {
-  vi.clearAllMocks(); // Clear mock call history
-  vi.restoreAllMocks(); // Restore original implementations
-  vi.unstubAllEnvs(); // Restore environment variables
-});
-```
+Use `toMatchObject()` for flexible assertions rather than exact equality when you don't care about every field. This makes tests more maintainable and less brittle.
 
 ## Testing with PGlite and Drizzle ORM
 
-### The Pattern: Global Mock + Real Database Operations
+Use PGlite (in-memory WASM PostgreSQL) with a single global mock. This is the industry-standard pattern from Drizzle's official examples. The key insight: mock the database MODULE (swap Postgres for PGlite), but use real database OPERATIONS (db.insert(), db.query(), etc.).
 
-When testing code that uses Drizzle ORM, use **PGlite** (in-memory WASM PostgreSQL) with a
-single global mock. This provides a real database for tests without external dependencies.
+### The Critical Rule: One Global Mock, Zero Local Mocks
 
-**Key principle:** Mock the database MODULE (swap Postgres for PGlite), but don't mock the
-OPERATIONS (use real db.insert(), db.query(), etc.)
+Local vi.mock() calls in test files OVERRIDE the global PGlite mock. This breaks tests because local mocks provide incomplete interfaces. When production code calls `db.query.users.findFirst()` but your local mock only defines `db.user.upsert`, you get `TypeError: Cannot read properties of undefined (reading 'users')`.
 
-### Setup: One Global Mock in vitest.setup.ts
+Never create local vi.mock("@/lib/db") calls in test files. The global mock from vitest.setup.ts provides everything you need.
+
+### Setup in vitest.setup.ts
 
 ```typescript
 import { PGlite } from "@electric-sql/pglite";
@@ -470,7 +94,6 @@ import { migrate } from "drizzle-orm/pglite/migrator";
 import { sql } from "drizzle-orm";
 import * as schema from "./lib/db/schema";
 
-// Create PGlite instance
 const client = new PGlite();
 const testDb = drizzle(client, { schema });
 
@@ -483,7 +106,7 @@ vi.mock("./lib/db", async (importOriginal) => {
   };
 });
 
-// Run migrations before tests
+// Run migrations before each test
 beforeEach(async () => {
   await migrate(testDb, {
     migrationsFolder: path.join(process.cwd(), "drizzle/migrations"),
@@ -498,310 +121,252 @@ afterEach(async () => {
 });
 ```
 
-### Test Files: NO Local Mocks, Real Operations
+### Using Real Database Operations in Tests
 
-**❌ WRONG - Local mock overrides global mock:**
-
-```typescript
-// This BREAKS the PGlite setup!
-vi.mock("@/lib/db", () => ({
-  db: {
-    user: {
-      upsert: vi.fn(), // Fake function
-    },
-    // ❌ Missing db.query property!
-  },
-}));
-
-it("creates user", async () => {
-  vi.mocked(db.user.upsert).mockResolvedValue(mockUser);
-  await createUser(data);
-  // Test passes but production code might fail!
-});
-```
-
-**Why this fails:**
-
-- Local vi.mock() OVERRIDES the global PGlite mock
-- Provides incomplete interface (missing db.query)
-- Production code crashes: `TypeError: Cannot read properties of undefined (reading
-'users')`
-- Mocking hides real bugs (missing migrations, wrong schemas)
-
-**✅ CORRECT - Use real database operations:**
+Import the db and schema, then use real database operations. No vi.mocked(), no mockResolvedValue(). Just insert data, call your code, verify results.
 
 ```typescript
 import { db, schema } from "@/lib/db";
+import { eq } from "drizzle-orm";
 
 it("creates user successfully", async () => {
-  // Setup: Insert real data
+  // Setup: Insert real data with real database
   await db.insert(schema.users).values({
     email: "test@example.com",
     clerkId: "clerk_123",
     name: "Test User",
   });
 
-  // Act: Call production code
+  // Act: Call production code (uses real PGlite)
   const user = await getUserByEmail("test@example.com");
 
   // Assert: Verify real database state
   expect(user.email).toBe("test@example.com");
   expect(user.name).toBe("Test User");
 });
+
+it("returns user with their connections", async () => {
+  // Setup: Create related data
+  const [user] = await db
+    .insert(schema.users)
+    .values({
+      email: "test@example.com",
+      clerkId: "clerk_123",
+      name: "Test User",
+    })
+    .returning();
+
+  await db.insert(schema.connections).values({
+    userId: user.id,
+    service: "github",
+    accessToken: "encrypted_token",
+    status: "CONNECTED",
+  });
+
+  // Act: Production code uses real db.query with relationships
+  const result = await db.query.users.findFirst({
+    where: eq(schema.users.email, "test@example.com"),
+    with: { connections: true },
+  });
+
+  // Assert: Real database relationships work
+  expect(result?.email).toBe("test@example.com");
+  expect(result?.connections).toHaveLength(1);
+  expect(result?.connections[0].service).toBe("github");
+});
 ```
 
 ### Why This Pattern Works
 
-**Benefits:**
+This validates real behavior. Tests catch missing migrations, wrong schemas, invalid SQL, and broken relationships. The database cleanup between tests provides isolation automatically - no manual coordination needed. This matches Drizzle's official examples and industry best practices.
 
-1. **Tests real behavior** - Catches migration issues, schema problems, SQL errors
-2. **No mock coordination** - Database cleanup handles isolation automatically
-3. **Production-like** - Same queries, same constraints, same validations
-4. **Simple** - No vi.mocked(), no mockResolvedValue()
-5. **Matches official Drizzle examples** - Industry best practice
+When production code uses `db.query.users.findFirst()`, tests work automatically because db.query is real PGlite, not a mock. You can't get partial interface errors because you're not creating partial interfaces.
 
-**When production code uses:**
+### Common Mistakes
 
-```typescript
-const user = await db.query.users.findFirst({
-  where: eq(schema.users.email, email),
-});
-```
+Don't use vi.mocked() with database operations - insert real data instead. Don't create local database mocks in test files - trust the global mock from vitest.setup.ts. Don't manually clean up specific tables - drop the entire schema (already in vitest.setup.ts).
 
-**Tests work automatically** because db.query is real PGlite, not a mock.
+Pattern based on [Drizzle's official Vitest + PGlite example](https://github.com/drizzle-team/drizzle-orm/tree/main/examples/vitest-pg).
 
-### Common Mistakes to Avoid
+## Test Fixtures
 
-**❌ Don't use vi.mocked() with database operations:**
+Create reusable fixture functions in `__tests__/fixtures/` to keep tests DRY:
 
 ```typescript
-vi.mocked(db.query.users.findFirst).mockResolvedValue(mockData);
-```
+// __tests__/fixtures/db-fixtures.ts
+import { db, schema } from "@/lib/db";
 
-**✅ Insert real data instead:**
-
-```typescript
-await db.insert(schema.users).values(mockData);
-```
-
-**❌ Don't create local database mocks in test files:**
-
-```typescript
-vi.mock("@/lib/db", () => ({ ... }));  // NEVER do this
-```
-
-**✅ Trust the global mock from vitest.setup.ts:**
-
-```typescript
-import { db, schema } from "@/lib/db";  // Uses PGlite automatically
-```
-
-**❌ Don't manually clean up specific tables:**
-
-```typescript
-afterEach(async () => {
-  await db.delete(schema.users);  // Tedious, error-prone
-});
-```
-
-**✅ Drop entire schema (already in vitest.setup.ts):**
-
-```typescript
-afterEach(async () => {
-  await testDb.execute(sql`DROP SCHEMA IF EXISTS public CASCADE`);
-  await testDb.execute(sql`CREATE SCHEMA public`);
-});
-```
-
-### Real-World Example
-
-**Testing a function that queries the database:**
-
-```typescript
-// lib/user-service.ts
-export async function getUserWithConnections(email: string) {
-  return await db.query.users.findFirst({
-    where: eq(schema.users.email, email),
-    with: { connections: true },
-  });
+export interface TestUserOptions {
+  email?: string;
+  clerkId?: string;
+  name?: string;
 }
 
-// __tests__/user-service.test.ts
-import { db, schema } from "@/lib/db";
-import { getUserWithConnections } from "@/lib/user-service";
+export async function createTestUser(options: TestUserOptions = {}) {
+  const [user] = await db
+    .insert(schema.users)
+    .values({
+      email: options.email ?? "test@example.com",
+      clerkId: options.clerkId ?? "clerk_123",
+      name: options.name ?? "Test User",
+    })
+    .returning();
+  return user;
+}
 
-describe("getUserWithConnections", () => {
-  it("returns user with their connections", async () => {
-    // Setup: Create test data with real database
-    const [user] = await db
-      .insert(schema.users)
-      .values({
-        email: "test@example.com",
-        clerkId: "clerk_123",
-        name: "Test User",
+// Compound fixture for common scenarios
+export async function createTestUserWithOAuth() {
+  const user = await createTestUser();
+
+  const [client] = await db
+    .insert(schema.oauthClients)
+    .values({
+      userEmail: user.email,
+      clientId: "test_client",
+      // ... defaults
+    })
+    .returning();
+
+  const [token] = await db
+    .insert(schema.oauthAccessTokens)
+    .values({
+      userEmail: user.email,
+      clientId: client.clientId,
+      // ... defaults
+    })
+    .returning();
+
+  return { user, client, token };
+}
+```
+
+Usage in tests:
+
+```typescript
+import { createTestUserWithOAuth } from "@/__tests__/fixtures/db-fixtures";
+
+describe("MCP Endpoint", () => {
+  let user, client, token;
+
+  beforeEach(async () => {
+    ({ user, client, token } = await createTestUserWithOAuth());
+  });
+
+  it("authenticates with OAuth token", async () => {
+    const response = await POST(
+      new NextRequest("http://localhost/mcp", {
+        headers: { Authorization: `Bearer ${token.accessToken}` },
       })
-      .returning();
-
-    await db.insert(schema.connections).values({
-      userId: user.id,
-      service: "github",
-      accessToken: "encrypted_token",
-      status: "CONNECTED",
-    });
-
-    // Act: Call production code (uses real PGlite)
-    const result = await getUserWithConnections("test@example.com");
-
-    // Assert: Verify real database relationships work
-    expect(result).toBeDefined();
-    expect(result?.email).toBe("test@example.com");
-    expect(result?.connections).toHaveLength(1);
-    expect(result?.connections[0].service).toBe("github");
+    );
+    expect(response.status).toBe(200);
   });
 });
 ```
 
-**This test validates:**
+Fixtures provide type safety, composability, and explicit imports. Return created entities from fixtures. Use sensible defaults and allow overrides. Keep fixtures pure with no side effects beyond database operations.
 
-- Database schema is correct
-- Migrations ran successfully
-- Drizzle relationships work
-- Query syntax is valid
-- Real production behavior
+## Vitest Best Practices
 
-### Reference
-
-Pattern based on [Drizzle's official Vitest + PGlite
-example](https://github.com/drizzle-team/drizzle-orm/tree/main/examples/vitest-pg).
-
-## Common Anti-Patterns to Avoid
-
-### 1. Testing Implementation Details
-
-**❌ BAD:**
+Use concurrent tests for pure functions that don't share state:
 
 ```typescript
-it("calls helper function 3 times", () => {
-  const spy = vi.spyOn(utils, "helper");
-  processData();
-  expect(spy).toHaveBeenCalledTimes(3);
+describe.concurrent("Pure Functions", () => {
+  it("calculates total", () => { ... });
+  it("formats currency", () => { ... });
 });
 ```
 
-**✅ GOOD:**
+Don't use concurrent for tests that share resources like database state.
+
+Set up fresh state in beforeEach:
 
 ```typescript
-it("processes all items in dataset", () => {
-  const result = processData(items);
-  expect(result).toHaveLength(items.length);
-  expect(result.every((r) => r.processed)).toBe(true);
+describe("API Tests", () => {
+  let mockUser;
+
+  beforeEach(() => {
+    mockUser = {
+      id: "test-id",
+      email: "test@example.com",
+    };
+    vi.clearAllMocks();
+  });
 });
 ```
 
-### 2. Brittle Assertions
-
-**❌ BAD:**
+Clean up in afterEach:
 
 ```typescript
-expect(result).toEqual({
-  id: "123",
-  name: "John",
-  email: "john@example.com",
-  created: "2024-01-15T10:30:00Z",
-  updated: "2024-01-15T10:30:00Z",
-  // 20 more fields...
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.restoreAllMocks();
+  vi.unstubAllEnvs();
 });
 ```
 
-**✅ GOOD:**
+## Running Tests Correctly
 
-```typescript
-expect(result).toMatchObject({
-  id: expect.any(String),
-  name: "John",
-  email: "john@example.com",
-});
-```
+Never pipe test commands - piping creates orphaned worker processes that consume 110%+ CPU indefinitely when interrupted.
 
-### 3. Flaky Tests with Timing
-
-**❌ BAD:**
-
-```typescript
-it("eventually processes queue", async () => {
-  addToQueue(item);
-  await sleep(100); // Race condition!
-  expect(queue.isEmpty()).toBe(true);
-});
-```
-
-**✅ GOOD:**
-
-```typescript
-it("eventually processes queue", async () => {
-  addToQueue(item);
-  await waitFor(
-    () => {
-      expect(queue.isEmpty()).toBe(true);
-    },
-    { timeout: 5000 }
-  );
-});
-```
-
-## CRITICAL: Avoid Orphaned Vitest Processes ⚠️
-
-**Problem:** Piping test commands (e.g., `pnpm test | head -50`) creates orphaned worker
-processes that consume 110%+ CPU indefinitely when interrupted.
-
-**Solution:** Never pipe test commands. Use correct vitest syntax instead:
-
+Run specific test file:
 ```bash
-# ✅ CORRECT - Run specific test file
 pnpm test -- path/to/file.test.ts
 pnpm test -- __tests__/unit/lib/adapters/notion.test.ts
+```
 
-# ✅ CORRECT - Filter by test name
+Filter by test name:
+```bash
 pnpm test -- -t "pattern"
 pnpm test -- -t "should handle errors"
-
-# ✅ CORRECT - Run all tests
-pnpm test
-
-# ❌ INCORRECT - These don't work
-pnpm test -- --run path/to/file.test.ts  # --run flag doesn't exist
-pnpm test -- --grep="pattern"            # Use -t instead
-pnpm test | head -50                     # Creates orphaned processes
 ```
 
-**Key facts:**
-- File paths are positional arguments, not flags
-- Use `-t` or `--testNamePattern` to filter by test name
-- The `--run` flag does not exist in vitest CLI
-- Config uses `pool: "threads"` to reduce orphaned process risk
-
-**If system is slow:**
-
+Run all tests:
 ```bash
-ps aux | grep vitest | grep -v grep  # Check for orphaned processes
-pkill -9 -f "vitest"                 # Kill all vitest processes
+pnpm test
 ```
 
-**For AI agents:** Never pipe test commands. Always use correct vitest syntax with file
-paths as positional arguments and `-t` for test name filtering.
+File paths are positional arguments, not flags. Use `-t` or `--testNamePattern` to filter by test name. The `--run` flag does not exist in vitest CLI. Config uses `pool: "threads"` to reduce orphaned process risk.
 
-## Summary: Key Principles
+If system becomes slow, check for orphaned processes with `ps aux | grep vitest | grep -v grep` and kill them with `pkill -9 -f "vitest"`.
 
-1. **Test behavior, not configuration** - Focus on runtime logic, not deployment setup
-2. **Test for success first** - Validate code works before testing error cases
-3. **Minimize mocking** - Use real implementations and test databases when possible
-4. **Write meaningful tests** - Coverage numbers mean nothing without quality
-5. **Keep tests isolated** - Each test should run independently
-6. **Clean output** - Reduce noise so real issues are visible
-7. **Descriptive names** - Tests are documentation
-8. **One thing per test** - Makes failures easy to diagnose
-9. **Integration tests prevent production bugs** - Don't mock everything
+## What to Avoid
 
-Remember: Tests are not bureaucracy. They're confidence. Good tests let you refactor
-fearlessly, catch bugs before production, and document expected behavior. That's what we
-optimize for.
+Don't test implementation details like how many times a helper function is called. Test the outcome instead. Don't write brittle assertions that match every field when you only care about a few - use `toMatchObject()`. Don't rely on timing with sleep() - use proper async utilities like `waitFor()`.
+
+Avoid testing stable deployment configuration. If an environment variable must be present for the app to run at all, that's not a runtime test case. Test how your code handles runtime conditions like invalid user input, not deployment setup.
+
+Keep test output clean by mocking console for tests that trigger expected errors. Use test-specific log levels. Don't log validation errors to console - return error objects instead.
+
+## Clean Test Output
+
+Silence expected errors to keep output clean:
+
+```typescript
+it("handles missing required field", () => {
+  const consoleSpy = vi.spyOn(console, "error").mockImplementation();
+
+  const result = validateInput({});
+  expect(result.error).toContain("Missing required field");
+
+  consoleSpy.mockRestore();
+});
+
+// Or set LOG_LEVEL for all tests
+beforeAll(() => {
+  process.env.LOG_LEVEL = "silent";
+});
+```
+
+## HTTP Status Codes
+
+Use appropriate status codes: 400-level for client errors (bad input, auth failures), 500-level for server errors (unexpected problems, upstream failures). Use 503 Service Unavailable for configuration issues, not 500 Internal Server Error.
+
+## Coverage Goals
+
+Target 90% line coverage and 85% branch coverage. Prioritize user-facing features, business logic, error handling, and data transformations. Don't chase 100% - type definitions, simple getters, framework boilerplate, and obvious pass-through code are low priority.
+
+## Key Principles Summary
+
+Test behavior, not configuration. Test for success first, then error cases. Minimize mocking of your own code - use one global PGlite mock with zero local mocks. Write meaningful tests, not coverage theater. Keep tests isolated and independent. Maintain clean output so real issues are visible. Use descriptive names that document behavior. Test one thing per test for easy diagnosis. Integration tests prevent production bugs.
+
+Tests are confidence. Good tests let you refactor fearlessly, catch bugs before production, and document expected behavior. That's what we optimize for.
