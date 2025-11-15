@@ -36,17 +36,21 @@ cd .gitworktrees/task-name
 /setup-environment
 ```
 
-This prompts your AI assistant to detect the project type and intelligently set up dependencies, code generation, and environment files. The goal is to make the worktree a fully functional development environment where all tests pass.
+This prompts your AI assistant to detect the project type and intelligently set up
+dependencies, code generation, and environment files. The goal is to make the worktree a
+fully functional development environment where all tests pass.
 
 **If `/setup-environment` doesn't exist** in your project, set up manually:
 
 For Node.js/TypeScript projects:
+
 ```bash
 pnpm install
 [ -f prisma/schema.prisma ] && pnpm db:generate
 ```
 
 For Python projects:
+
 ```bash
 pip install -r requirements.txt  # or poetry install
 python manage.py migrate  # Django
@@ -54,12 +58,14 @@ python manage.py migrate  # Django
 ```
 
 For Ruby projects:
+
 ```bash
 bundle install
 bundle exec rake db:migrate  # Rails
 ```
 
 **Copy environment files** if setup command didn't:
+
 ```bash
 # Copy all environment files from parent directory
 cp ../../.env .env 2>/dev/null || cp .env.example .env
@@ -67,8 +73,9 @@ cp ../../.env.local .env.local 2>/dev/null || true
 cp ../../.env.*.local . 2>/dev/null || true
 ```
 
-**Note on .env files:**
-Copy .env from the parent directory. It contains database URLs and API keys needed for integration tests. After proper setup, ALL tests (unit + integration) should pass in your worktree.
+**Note on .env files:** Copy .env from the parent directory. It contains database URLs
+and API keys needed for integration tests. After proper setup, ALL tests (unit +
+integration) should pass in your worktree.
 
 **Read the standards.** Before writing code, read all cursor rules in `.cursor/rules/`.
 These define how this project works. Every applicable rule must be followed. If
@@ -76,7 +83,8 @@ These define how this project works. Every applicable rule must be followed. If
 
 **Implement the solution.** Write code that solves the problem. Follow all cursor rules.
 Make commits along the way as logical units of work are completed. Each commit should
-follow the git commit message guidelines in .cursor/rules/git-commit-message.mdc (or .md).
+follow the git commit message guidelines in .cursor/rules/git-commit-message.mdc (or
+.md).
 
 **Validate locally before pushing.** Run the project's pre-push validation. This catches
 issues before CI does, saving time and CI minutes. Look for these commands:
@@ -89,16 +97,21 @@ issues before CI does, saving time and CI minutes. Look for these commands:
 
 You can also check `.github/workflows/` to see what CI runs - run those steps locally.
 
-**All tests should pass in a properly configured worktree.** After running `/setup-environment`,
-your worktree should be a fully functioning development environment where:
+**All tests should pass in a properly configured worktree.** After running
+`/setup-environment`, your worktree should be a fully functioning development
+environment where:
+
 - ✅ Unit tests pass (use mocks, no external dependencies)
 - ✅ Integration tests pass (have real .env with database access)
 - ✅ Type checking passes (code generation completed)
 - ✅ Linting passes (dependencies installed)
 
 If tests fail, it's either:
-1. **Setup incomplete** - Did you run `/setup-environment`? Check that .env was copied and dependencies installed.
-2. **Your code has bugs** - Fix them before pushing. The local tooling is telling you what's wrong.
+
+1. **Setup incomplete** - Did you run `/setup-environment`? Check that .env was copied
+   and dependencies installed.
+2. **Your code has bugs** - Fix them before pushing. The local tooling is telling you
+   what's wrong.
 
 Never push hoping CI will tell you what's broken - the local tooling already told you.
 Worktrees should be complete, working environments. No excuses.
@@ -163,13 +176,14 @@ git worktree remove .gitworktrees/task-name
 /clean-up-worktree  # if project has this slash command
 ```
 
-The worktree directory and its files are deleted, but your work lives on in main via the merged PR.
+The worktree directory and its files are deleted, but your work lives on in main via the
+merged PR.
 
 ## Common Pitfalls
 
-**Skipping environment setup.** After creating the worktree, always run `/setup-environment`
-or manually install dependencies. Type errors and test failures often stem from missing
-code generation (Prisma, etc.) or dependencies.
+**Skipping environment setup.** After creating the worktree, always run
+`/setup-environment` or manually install dependencies. Type errors and test failures
+often stem from missing code generation (Prisma, etc.) or dependencies.
 
 **Skipping local validation.** Don't push without running pre-push checks. You'll just
 waste time waiting for CI to tell you what your local tooling would have caught in
@@ -180,7 +194,8 @@ each piece of feedback. You have context they don't. Make informed decisions abo
 to fix and what to WONTFIX.
 
 **Not verifying full test suite.** After setup, ALL tests should pass - both unit and
-integration tests. If tests fail, fix your setup or your code. Don't push with failing tests.
+integration tests. If tests fail, fix your setup or your code. Don't push with failing
+tests.
 
 ## Success Criteria
 

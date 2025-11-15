@@ -30,25 +30,35 @@ Detect what kind of project this is:
 - Find test frameworks and build tools
 - Locate key directories (`src/`, `tests/`, etc.)
 
-### Step 2: Extract "Always Apply" Rules
+### Step 2: Include "Always Apply" Rules
 
 **Critical**: Scan `.cursor/rules/` for rules with `alwaysApply: true` in frontmatter.
 
-These are the MOST IMPORTANT conventions - they apply to every task. Extract:
+These are the MOST IMPORTANT conventions - they apply to every task. Instead of
+extracting content, reference them directly:
 
-- Core principle or constraint from each rule
-- Key DO/DON'T points
-- Critical commands or patterns
+**Add an "Always Apply Rules" section at the top** with @ references:
 
-**Important**: Be selective - extract the essence, not the entire rule content. Focus
-on:
+```markdown
+## Always Apply Rules
 
-- Non-obvious constraints that prevent mistakes
-- Specific commands or patterns to follow
-- Project-specific conventions that differ from defaults
+Core project rules that apply to all tasks:
 
-**Skip**: Generic best practices that any AI already knows (like "write tests" unless
-there's a specific test approach).
+@.cursor/rules/personalities/unity.mdc @.cursor/rules/git-interaction.mdc
+@.cursor/rules/typescript-coding-standards.mdc
+```
+
+**Why use @ references instead of extraction:**
+
+- AI coding assistants load the full rule when they see `@path/to/rule.mdc`
+- Ensures rules stay up-to-date without AGENTS.md edits
+- No token overhead from duplicating rule content
+- Single source of truth for all conventions
+
+**When to still extract (rare):**
+
+- Only if a rule has a specific command or constraint worth highlighting elsewhere
+- Don't duplicate - reference in "Always Apply Rules" section instead
 
 ### Step 3: Extract Key Context
 
@@ -76,6 +86,14 @@ Create a structured file with these sections (omit sections with no valuable con
 
 ```markdown
 # Project Context for AI Assistants
+
+## Always Apply Rules
+
+Core project rules that apply to all tasks:
+
+@.cursor/rules/rule-one.mdc @.cursor/rules/rule-two.mdc
+
+## Project Overview
 
 Brief 1-2 sentence description of what this project is.
 
@@ -208,7 +226,7 @@ If no, cut it.
 - Project description and marketing copy (that's for README)
 - Installation instructions for end users
 - License and contribution guidelines (unless AI-specific)
-- Complete rule content (extract essence only)
+- Rule content (use @ references in "Always Apply Rules" section instead)
 - Generic best practices AI already knows
 - Obvious directory purposes (like `tests/` contains tests)
 - Complete API documentation (link to it instead)
@@ -223,8 +241,9 @@ If no, cut it.
 Final checklist:
 
 - [ ] File is concise (2-3KB target, 4KB max)
-- [ ] No redundancy with README
-- [ ] Includes essence of always-apply rules (not full content)
+- [ ] "Always Apply Rules" section at top with @ references to all alwaysApply: true
+      rules
+- [ ] No redundancy with README or cursor rules
 - [ ] Commands are PROJECT-SPECIFIC (no generic git/npm commands)
 - [ ] DO/DON'T lists have actionable items
 - [ ] Removed all generic fluff and meta-commentary

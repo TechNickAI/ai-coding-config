@@ -5,15 +5,24 @@ alwaysApply: false
 
 # Testing Standards for TypeScript with Vitest
 
-Test what matters. Focus on behavior and functionality, not implementation details or configuration. Good tests give confidence that the application works correctly while remaining maintainable.
+Test what matters. Focus on behavior and functionality, not implementation details or
+configuration. Good tests give confidence that the application works correctly while
+remaining maintainable.
 
 ## Core Principles
 
-Write tests that validate business logic and user-facing behavior. Test runtime error handling with invalid inputs, edge cases, and integration between components. Target 90% line coverage and 85% branch coverage through meaningful tests, not by chasing numbers.
+Write tests that validate business logic and user-facing behavior. Test runtime error
+handling with invalid inputs, edge cases, and integration between components. Target 90%
+line coverage and 85% branch coverage through meaningful tests, not by chasing numbers.
 
-Minimize mocking of your own code. Use real database operations with PGlite for integration tests. Mock external APIs, third-party services, and non-deterministic operations, but don't mock your own database layer or business logic. A missing migration that crashes production should fail your tests.
+Minimize mocking of your own code. Use real database operations with PGlite for
+integration tests. Mock external APIs, third-party services, and non-deterministic
+operations, but don't mock your own database layer or business logic. A missing
+migration that crashes production should fail your tests.
 
-Write independent, isolated tests. Each test should stand alone without depending on execution order. Use descriptive names that read like documentation. Follow the AAA pattern: Arrange (setup), Act (execute), Assert (verify).
+Write independent, isolated tests. Each test should stand alone without depending on
+execution order. Use descriptive names that read like documentation. Follow the AAA
+pattern: Arrange (setup), Act (execute), Assert (verify).
 
 ## Writing Effective Tests
 
@@ -71,19 +80,30 @@ describe("User Operations", () => {
 });
 ```
 
-Avoid testing configuration that should be stable in deployment. Don't test environment variable presence or framework internals. Don't validate that broken systems stay broken - test that working code continues to work. When testing error handling, verify the system gracefully handles bad input, not that missing configuration causes errors.
+Avoid testing configuration that should be stable in deployment. Don't test environment
+variable presence or framework internals. Don't validate that broken systems stay
+broken - test that working code continues to work. When testing error handling, verify
+the system gracefully handles bad input, not that missing configuration causes errors.
 
-Use `toMatchObject()` for flexible assertions rather than exact equality when you don't care about every field. This makes tests more maintainable and less brittle.
+Use `toMatchObject()` for flexible assertions rather than exact equality when you don't
+care about every field. This makes tests more maintainable and less brittle.
 
 ## Testing with PGlite and Drizzle ORM
 
-Use PGlite (in-memory WASM PostgreSQL) with a single global mock. This is the industry-standard pattern from Drizzle's official examples. The key insight: mock the database MODULE (swap Postgres for PGlite), but use real database OPERATIONS (db.insert(), db.query(), etc.).
+Use PGlite (in-memory WASM PostgreSQL) with a single global mock. This is the
+industry-standard pattern from Drizzle's official examples. The key insight: mock the
+database MODULE (swap Postgres for PGlite), but use real database OPERATIONS
+(db.insert(), db.query(), etc.).
 
 ### The Critical Rule: One Global Mock, Zero Local Mocks
 
-Local vi.mock() calls in test files OVERRIDE the global PGlite mock. This breaks tests because local mocks provide incomplete interfaces. When production code calls `db.query.users.findFirst()` but your local mock only defines `db.user.upsert`, you get `TypeError: Cannot read properties of undefined (reading 'users')`.
+Local vi.mock() calls in test files OVERRIDE the global PGlite mock. This breaks tests
+because local mocks provide incomplete interfaces. When production code calls
+`db.query.users.findFirst()` but your local mock only defines `db.user.upsert`, you get
+`TypeError: Cannot read properties of undefined (reading 'users')`.
 
-Never create local vi.mock("@/lib/db") calls in test files. The global mock from vitest.setup.ts provides everything you need.
+Never create local vi.mock("@/lib/db") calls in test files. The global mock from
+vitest.setup.ts provides everything you need.
 
 ### Setup in vitest.setup.ts
 
@@ -123,7 +143,8 @@ afterEach(async () => {
 
 ### Using Real Database Operations in Tests
 
-Import the db and schema, then use real database operations. No vi.mocked(), no mockResolvedValue(). Just insert data, call your code, verify results.
+Import the db and schema, then use real database operations. No vi.mocked(), no
+mockResolvedValue(). Just insert data, call your code, verify results.
 
 ```typescript
 import { db, schema } from "@/lib/db";
@@ -178,15 +199,23 @@ it("returns user with their connections", async () => {
 
 ### Why This Pattern Works
 
-This validates real behavior. Tests catch missing migrations, wrong schemas, invalid SQL, and broken relationships. The database cleanup between tests provides isolation automatically - no manual coordination needed. This matches Drizzle's official examples and industry best practices.
+This validates real behavior. Tests catch missing migrations, wrong schemas, invalid
+SQL, and broken relationships. The database cleanup between tests provides isolation
+automatically - no manual coordination needed. This matches Drizzle's official examples
+and industry best practices.
 
-When production code uses `db.query.users.findFirst()`, tests work automatically because db.query is real PGlite, not a mock. You can't get partial interface errors because you're not creating partial interfaces.
+When production code uses `db.query.users.findFirst()`, tests work automatically because
+db.query is real PGlite, not a mock. You can't get partial interface errors because
+you're not creating partial interfaces.
 
 ### Common Mistakes
 
-Don't use vi.mocked() with database operations - insert real data instead. Don't create local database mocks in test files - trust the global mock from vitest.setup.ts. Don't manually clean up specific tables - drop the entire schema (already in vitest.setup.ts).
+Don't use vi.mocked() with database operations - insert real data instead. Don't create
+local database mocks in test files - trust the global mock from vitest.setup.ts. Don't
+manually clean up specific tables - drop the entire schema (already in vitest.setup.ts).
 
-Pattern based on [Drizzle's official Vitest + PGlite example](https://github.com/drizzle-team/drizzle-orm/tree/main/examples/vitest-pg).
+Pattern based on
+[Drizzle's official Vitest + PGlite example](https://github.com/drizzle-team/drizzle-orm/tree/main/examples/vitest-pg).
 
 ## Test Fixtures
 
@@ -263,7 +292,9 @@ describe("MCP Endpoint", () => {
 });
 ```
 
-Fixtures provide type safety, composability, and explicit imports. Return created entities from fixtures. Use sensible defaults and allow overrides. Keep fixtures pure with no side effects beyond database operations.
+Fixtures provide type safety, composability, and explicit imports. Return created
+entities from fixtures. Use sensible defaults and allow overrides. Keep fixtures pure
+with no side effects beyond database operations.
 
 ## Vitest Best Practices
 
@@ -306,36 +337,50 @@ afterEach(() => {
 
 ## Running Tests Correctly
 
-Never pipe test commands - piping creates orphaned worker processes that consume 110%+ CPU indefinitely when interrupted.
+Never pipe test commands - piping creates orphaned worker processes that consume 110%+
+CPU indefinitely when interrupted.
 
 Run specific test file:
+
 ```bash
 pnpm test -- path/to/file.test.ts
 pnpm test -- __tests__/unit/lib/adapters/notion.test.ts
 ```
 
 Filter by test name:
+
 ```bash
 pnpm test -- -t "pattern"
 pnpm test -- -t "should handle errors"
 ```
 
 Run all tests:
+
 ```bash
 pnpm test
 ```
 
-File paths are positional arguments, not flags. Use `-t` or `--testNamePattern` to filter by test name. The `--run` flag does not exist in vitest CLI. Config uses `pool: "threads"` to reduce orphaned process risk.
+File paths are positional arguments, not flags. Use `-t` or `--testNamePattern` to
+filter by test name. The `--run` flag does not exist in vitest CLI. Config uses
+`pool: "threads"` to reduce orphaned process risk.
 
-If system becomes slow, check for orphaned processes with `ps aux | grep vitest | grep -v grep` and kill them with `pkill -9 -f "vitest"`.
+If system becomes slow, check for orphaned processes with
+`ps aux | grep vitest | grep -v grep` and kill them with `pkill -9 -f "vitest"`.
 
 ## What to Avoid
 
-Don't test implementation details like how many times a helper function is called. Test the outcome instead. Don't write brittle assertions that match every field when you only care about a few - use `toMatchObject()`. Don't rely on timing with sleep() - use proper async utilities like `waitFor()`.
+Don't test implementation details like how many times a helper function is called. Test
+the outcome instead. Don't write brittle assertions that match every field when you only
+care about a few - use `toMatchObject()`. Don't rely on timing with sleep() - use proper
+async utilities like `waitFor()`.
 
-Avoid testing stable deployment configuration. If an environment variable must be present for the app to run at all, that's not a runtime test case. Test how your code handles runtime conditions like invalid user input, not deployment setup.
+Avoid testing stable deployment configuration. If an environment variable must be
+present for the app to run at all, that's not a runtime test case. Test how your code
+handles runtime conditions like invalid user input, not deployment setup.
 
-Keep test output clean by mocking console for tests that trigger expected errors. Use test-specific log levels. Don't log validation errors to console - return error objects instead.
+Keep test output clean by mocking console for tests that trigger expected errors. Use
+test-specific log levels. Don't log validation errors to console - return error objects
+instead.
 
 ## Clean Test Output
 
@@ -359,14 +404,24 @@ beforeAll(() => {
 
 ## HTTP Status Codes
 
-Use appropriate status codes: 400-level for client errors (bad input, auth failures), 500-level for server errors (unexpected problems, upstream failures). Use 503 Service Unavailable for configuration issues, not 500 Internal Server Error.
+Use appropriate status codes: 400-level for client errors (bad input, auth failures),
+500-level for server errors (unexpected problems, upstream failures). Use 503 Service
+Unavailable for configuration issues, not 500 Internal Server Error.
 
 ## Coverage Goals
 
-Target 90% line coverage and 85% branch coverage. Prioritize user-facing features, business logic, error handling, and data transformations. Don't chase 100% - type definitions, simple getters, framework boilerplate, and obvious pass-through code are low priority.
+Target 90% line coverage and 85% branch coverage. Prioritize user-facing features,
+business logic, error handling, and data transformations. Don't chase 100% - type
+definitions, simple getters, framework boilerplate, and obvious pass-through code are
+low priority.
 
 ## Key Principles Summary
 
-Test behavior, not configuration. Test for success first, then error cases. Minimize mocking of your own code - use one global PGlite mock with zero local mocks. Write meaningful tests, not coverage theater. Keep tests isolated and independent. Maintain clean output so real issues are visible. Use descriptive names that document behavior. Test one thing per test for easy diagnosis. Integration tests prevent production bugs.
+Test behavior, not configuration. Test for success first, then error cases. Minimize
+mocking of your own code - use one global PGlite mock with zero local mocks. Write
+meaningful tests, not coverage theater. Keep tests isolated and independent. Maintain
+clean output so real issues are visible. Use descriptive names that document behavior.
+Test one thing per test for easy diagnosis. Integration tests prevent production bugs.
 
-Tests are confidence. Good tests let you refactor fearlessly, catch bugs before production, and document expected behavior. That's what we optimize for.
+Tests are confidence. Good tests let you refactor fearlessly, catch bugs before
+production, and document expected behavior. That's what we optimize for.
