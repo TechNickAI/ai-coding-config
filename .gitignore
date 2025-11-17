@@ -29,3 +29,4 @@ build/
 *.tmp
 *.temp
 
+.created-prompts/
