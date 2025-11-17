@@ -41,19 +41,29 @@ yt-dlp --version
 
 ## Transcript Extraction Process
 
+### Setup Temporary Directory
+
+IMPORTANT: Always create and use a temporary directory for downloaded files to avoid cluttering the repository:
+
+```bash
+# Create temporary directory for this analysis
+ANALYSIS_DIR=$(mktemp -d)
+echo "Using temporary directory: $ANALYSIS_DIR"
+```
+
 ### Download Transcript
 
-Use yt-dlp to extract subtitles/transcripts:
+Use yt-dlp to extract subtitles/transcripts to the temporary directory:
 
 ```bash
 # Download transcript only (no video)
-yt-dlp --skip-download --write-auto-sub --sub-format vtt --output "transcript.%(ext)s" URL
+yt-dlp --skip-download --write-auto-sub --sub-format vtt --output "$ANALYSIS_DIR/transcript.%(ext)s" URL
 
 # Or get manually created subtitles if available (higher quality)
-yt-dlp --skip-download --write-sub --sub-lang en --sub-format vtt --output "transcript.%(ext)s" URL
+yt-dlp --skip-download --write-sub --sub-lang en --sub-format vtt --output "$ANALYSIS_DIR/transcript.%(ext)s" URL
 
 # Get video metadata for context
-yt-dlp --skip-download --print-json URL
+yt-dlp --skip-download --print-json URL > "$ANALYSIS_DIR/metadata.json"
 ```
 
 ### Handle Long Transcripts
@@ -108,16 +118,20 @@ Provide analysis in this format:
 ## Example Workflow
 
 ```bash
-# 1. Get video metadata
-yt-dlp --print-json "https://youtube.com/watch?v=VIDEO_ID" > metadata.json
+# 1. Create temporary directory
+ANALYSIS_DIR=$(mktemp -d)
 
-# 2. Download transcript
+# 2. Get video metadata
+yt-dlp --print-json "https://youtube.com/watch?v=VIDEO_ID" > "$ANALYSIS_DIR/metadata.json"
+
+# 3. Download transcript
 yt-dlp --skip-download --write-auto-sub --sub-lang en --sub-format vtt \
-  --output "transcript" "https://youtube.com/watch?v=VIDEO_ID"
+  --output "$ANALYSIS_DIR/transcript" "https://youtube.com/watch?v=VIDEO_ID"
 
-# 3. Read and analyze transcript content
-# 4. If long: chunk by timestamp ranges (every 10-15 minutes)
-# 5. Generate summaries and relate to user's question
+# 4. Read and analyze transcript content from $ANALYSIS_DIR
+# 5. If long: chunk by timestamp ranges (every 10-15 minutes)
+# 6. Generate summaries and relate to user's question
+# 7. Files in $ANALYSIS_DIR will be automatically cleaned up by the system
 ```
 
 ## Handling Common Issues
