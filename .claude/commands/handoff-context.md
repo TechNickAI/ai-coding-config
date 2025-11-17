@@ -4,15 +4,16 @@ Generate a comprehensive context handoff for the current conversation that can b
 
 ## Instructions
 
-1. **Generate the handoff using the structured format** - Create a complete context handoff following the XML-structured format
-2. **Output ONLY the handoff content** - No preambles, no explanations, just the raw handoff ready to paste
-3. **Offer clipboard integration** - After generating, ask if the user wants it copied to clipboard
+1. **Generate the handoff** - Create a complete context handoff following the XML-structured format
+2. **Save to temp file** - Use Write tool to save to `/tmp/context_handoff.md`
+3. **Copy to clipboard automatically** - Use `pbcopy < /tmp/context_handoff.md` without asking
+4. **Show brief confirmation** - Just `📋 Copied to clipboard`
 
 ## Process
 
-### Step 1: Generate Clean Handoff
+### Step 1: Generate the Handoff
 
-Output the handoff in this exact format with NO additional text before or after:
+Create the handoff in this exact format (don't output to user yet, you'll save it directly to file):
 
 ```markdown
 # Context Handoff
@@ -50,18 +51,18 @@ Output the handoff in this exact format with NO additional text before or after:
 </context_handoff>
 ```
 
-### Step 2: Clipboard Integration
+### Step 2: Save and Copy (Fast & Automatic)
 
-After outputting the handoff, ask:
-```
-──────────────────────────────
-Copy to clipboard? (y/n)
-```
+**DO NOT ASK** - Just do it:
 
-If user says yes, use:
-```bash
-pbcopy < /tmp/context_handoff.md
-```
+1. Use **Write tool** to save the handoff content to `/tmp/context_handoff.md`
+2. Use **Bash** to copy: `pbcopy < /tmp/context_handoff.md`
+3. Confirm: `📋 Copied to clipboard`
+
+**Why Write tool instead of heredoc?**
+- Avoids triggering git hooks (heredoc with `<<` can trigger branch protection)
+- Cleaner, no escaping issues
+- Faster execution
 
 ## Important Guidelines
 
@@ -81,58 +82,23 @@ pbcopy < /tmp/context_handoff.md
 - Include git status and branch info
 
 **For Clipboard Operation:**
-1. First save the handoff to a temp file:
-   ```bash
-   cat > /tmp/context_handoff.md << 'EOF'
-   [handoff content]
-   EOF
-   ```
-
-2. Then copy to clipboard:
-   ```bash
-   pbcopy < /tmp/context_handoff.md
-   ```
-
-3. Confirm success:
-   ```bash
-   echo "✅ Handoff copied to clipboard"
-   ```
+1. Use Write tool to save to `/tmp/context_handoff.md` (avoids heredoc hook triggers)
+2. Run: `pbcopy < /tmp/context_handoff.md` (single fast command)
+3. Show: `📋 Copied to clipboard` (brief confirmation)
 
 ## Example Usage Flow
 
 User: `/handoff-context`
 
-Assistant outputs:
-```markdown
-# Context Handoff
+Assistant immediately:
+1. Generates the handoff content
+2. Uses Write tool to save to `/tmp/context_handoff.md`
+3. Runs `pbcopy < /tmp/context_handoff.md`
+4. Shows `📋 Copied to clipboard`
 
-<context_handoff>
-[... structured handoff content ...]
-</context_handoff>
-```
+**Total time: ~2 seconds**
 
-Then asks:
-```
-──────────────────────────────
-Copy to clipboard? (y/n)
-```
-
-User: `y`
-
-Assistant executes:
-```bash
-# Save to temp file and copy to clipboard
-cat > /tmp/context_handoff.md << 'EOF'
-# Context Handoff
-
-<context_handoff>
-[... content ...]
-</context_handoff>
-EOF
-
-pbcopy < /tmp/context_handoff.md
-echo "✅ Handoff copied to clipboard - ready to paste in new conversation"
-```
+No prompts, no asking, just fast automatic clipboard copy.
 
 ## Notes
 
