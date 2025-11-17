@@ -8,7 +8,8 @@
     "noqa",
     "pydantic",
     "pytest",
-    "tavily"
+    "tavily",
+    "worktree"
   ],
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
