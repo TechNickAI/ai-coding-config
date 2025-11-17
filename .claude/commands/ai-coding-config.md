@@ -118,6 +118,44 @@ Confirm files are where they should be:
 
 Report a clear summary. No deep validation needed.
 
+### Recommend Next Steps
+
+After successful installation, check for opportunities to help the user get started and
+provide actionable recommendations:
+
+**Always check and recommend:**
+
+1. **Generate AGENTS.md** - If `AGENTS.md` doesn't exist at project root:
+   ```
+   📋 Recommended: Generate project context file for AI assistants
+   Run: /generate-AGENTS-file
+
+   This creates AGENTS.md with essential project context that helps AI assistants
+   understand your conventions, tech stack, and workflows.
+   ```
+
+2. **Review available commands** - List the commands now available:
+   ```
+   ✅ Available commands:
+   - /load-cursor-rules - Load relevant rules for current task
+   - /personality-change - Switch AI personality
+   - /create-prompt - Create optimized prompts for complex tasks
+   - /troubleshoot - Autonomous error resolution (if error monitoring configured)
+   - /setup-environment - Initialize development environment for git worktree
+   - /handoff-context - Generate context handoff for continuing work
+   - /product-intel - Research competitors and industry trends
+   ```
+
+**Conditionally recommend based on project characteristics:**
+
+- **If using git worktrees**: Suggest running `/setup-environment` in any new worktree
+- **If error monitoring detected** (Sentry/HoneyBadger in dependencies): Mention
+  `/troubleshoot` for autonomous error resolution
+- **If competitive product**: Suggest `/product-intel` to track competitors
+
+Only show recommendations that are genuinely useful. Don't overwhelm with every possible
+next step.
+
 ---
 
 ## Update Mode (`update` argument)
