@@ -15,6 +15,13 @@ personalities, and GitHub workflows.
 - `/ai-coding-config update` - Update existing configs to latest versions
 - `/ai-coding-config add` - Add new command/skill/agent/plugin to the repo
 
+## Interaction Guidelines
+
+Use AskUserQuestion when presenting discrete choices that save the user time (e.g.,
+selecting a personality, choosing update strategy, handling file conflicts). This lets
+users quickly click options while still allowing free-form text via "Other". Only use
+when it genuinely speeds up the interaction.
+
 ---
 
 ## Setup Mode (no arguments)
@@ -54,7 +61,8 @@ users understand their choices, not just list files.
 **Rules** - `.cursor/rules/` subdirectories and files
 
 **Personalities** - One personality or none. Common-personality is always included as
-baseline. Read `~/.ai_coding_config/.cursor/rules/personalities/` for options.
+baseline. Read `~/.ai_coding_config/.cursor/rules/personalities/` for options. Use
+AskUserQuestion to present available personalities as quick-select options.
 
 **Agents** - Specialized AI assistants for specific tasks. Default to all agents -
 they're useful for most projects and take minimal space. Read
@@ -73,8 +81,9 @@ default.
 ### Install Selected Configurations
 
 Use `cp` for efficiency. Before copying each file, check if it exists. If it does, use
-`diff` to compare. If identical, skip it. If different, show what changed and ask what
-to do. Don't silently overwrite. When in doubt, ask.
+`diff` to compare. If identical, skip it. If different, show what changed and use
+AskUserQuestion to offer quick choices (overwrite, skip, show diff, or custom action).
+Don't silently overwrite. When in doubt, ask.
 
 Copy to these locations:
 
@@ -138,8 +147,9 @@ comments) or significant.
 List files that exist in repo but not in project. List files in project that aren't in
 repo (possible local customizations).
 
-Explain what changed and why they might want to update. Let the user choose - "all",
-"none", or pick individually. Be careful with customized files.
+Explain what changed and why they might want to update. Use AskUserQuestion to let the
+user quickly choose: "Update all", "Update none", "Pick individually", or type custom
+instructions. Be careful with customized files.
 
 Copy selected files using `cp`. Don't silently overwrite. Re-verify and highlight what
 changed.
