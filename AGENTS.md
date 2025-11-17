@@ -3,6 +3,15 @@
 AI coding configuration marketplace providing plugin-based setup for Claude Code and
 Cursor.
 
+## Always Apply Rules
+
+Core project rules that apply to all tasks:
+
+@.cursor/rules/personalities/common-personality.mdc
+@.cursor/rules/git-interaction.mdc
+@.cursor/rules/prompt-engineering.mdc
+
+
 ## Tech Stack
 
 - **Claude Code** - Plugin marketplace (`.claude-plugin/marketplace.json`)
@@ -29,17 +38,6 @@ Cursor.
 - `/ai-coding-config` - Interactive setup for projects
 - `curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash` -
   Bootstrap for Cursor
-
-**Context Management:**
-
-- `/load-cursor-rules` - Dynamically load relevant rules for current task
-- `/personality-change <name>` - Activate personality (Claude Code)
-- `@personality-name` - Reference personality (Cursor)
-
-**Workflows:**
-
-- `/troubleshoot` - Autonomous error resolution
-- `/generate-AGENTS-file` - Create/update AGENTS.md
 
 ## Code Conventions
 
