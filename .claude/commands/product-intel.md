@@ -1,3 +1,8 @@
+---
+description: Run comprehensive product intelligence research on competitors and industry trends
+argument-hint: [competitor name | topic | "all"]
+---
+
 # Product Intelligence Research
 
 Run comprehensive product intelligence research on competitors, industry trends, and

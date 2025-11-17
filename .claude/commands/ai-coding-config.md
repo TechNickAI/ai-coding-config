@@ -1,5 +1,6 @@
 ---
 description: Set up, update, or add AI coding configurations
+argument-hint: [update | add]
 ---
 
 # AI Coding Configuration

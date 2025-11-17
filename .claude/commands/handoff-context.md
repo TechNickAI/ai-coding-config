@@ -1,3 +1,7 @@
+---
+description: Generate comprehensive context handoff and copy to clipboard for continuing work
+---
+
 # Handoff Context
 
 Generate a comprehensive context handoff for the current conversation that can be cleanly copied and pasted to continue work in a new session.

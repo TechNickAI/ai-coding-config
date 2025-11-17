@@ -1,5 +1,6 @@
 ---
 description: Autonomous production error resolution system
+argument-hint: [mode | error keywords | error number]
 ---
 
 # Troubleshoot Command

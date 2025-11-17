@@ -1,7 +1,6 @@
 ---
-name: create-prompt
 description: Create optimized prompts for complex tasks and save them with descriptive names
-alwaysApply: false
+argument-hint: <task description>
 ---
 
 # Create Prompt
