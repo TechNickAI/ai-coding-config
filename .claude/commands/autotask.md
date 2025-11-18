@@ -85,16 +85,16 @@ Recover gracefully from failures when possible, or inform the user clearly when 
 ## Requirements
 
 - GitHub CLI (`gh`) installed and authenticated
-- Node.js/npm
+- Project tooling (npm for TypeScript/JavaScript, pip/poetry for Python, etc.)
 - Project standards accessible via /load-cursor-rules
 
 ## Configuration
 
 The command adapts to your project structure:
 
-- Detects git hooks (husky, pre-commit)
-- Detects test runners (jest, mocha, vitest, etc.)
-- Finds linting configs (eslint, prettier, etc.)
+- Detects git hooks (husky for TypeScript/JavaScript, pre-commit for Python)
+- Detects test runners (jest/vitest for TypeScript, pytest for Python)
+- Finds linting tools (eslint/prettier for TypeScript, ruff/mypy/black for Python)
 - Uses available build scripts
 - Respects project-specific conventions
 

@@ -29,7 +29,7 @@ One command that handles everything from task to PR-ready state.
 
 ## How `/autotask` Works
 
-### Phase 1: Task Preparation
+### Task Preparation
 
 Analyzes task complexity:
 
@@ -40,7 +40,7 @@ Analyzes task complexity:
   - Get your confirmation before proceeding
 - **Straightforward** → Skip directly to execution
 
-### Phase 2: Worktree Setup
+### Worktree Setup
 
 Create isolated development environment:
 
@@ -51,7 +51,7 @@ cd .gitworktrees/task-name
 /setup-environment  # Install deps, copy env files, setup git hooks
 ```
 
-### Phase 3: Autonomous Execution
+### Autonomous Execution
 
 LLM intelligently chooses which agents to use based on the task:
 
@@ -65,7 +65,7 @@ LLM intelligently chooses which agents to use based on the task:
 
 Automatically follows all `.cursor/rules/*.mdc` standards.
 
-### Phase 4: Adaptive Validation & Review
+### Adaptive Validation & Review
 
 **The key insight**: Review intensity should match task complexity and risk.
 
@@ -97,7 +97,7 @@ Automatically follows all `.cursor/rules/*.mdc` standards.
 - Focus on what automation can't catch (design decisions, security logic, UX)
 - Skip review entirely for trivial changes that pass hooks
 
-### Phase 5: Create PR
+### Create PR
 
 ```bash
 # Commit with proper message format
@@ -121,7 +121,7 @@ gh pr create \
   --body "Summary of changes..."
 ```
 
-### Phase 6: Bot Feedback Loop
+### Bot Feedback Loop
 
 **This is the key innovation** - don't wait for you, autonomously handle bot feedback:
 
@@ -168,7 +168,7 @@ while true; do
 done
 ```
 
-### Phase 7: Done - Handoff to You
+### Done - Handoff to You
 
 ```
 ✅ Development complete
