@@ -20,8 +20,10 @@ You only need to provide the task description and review the final PR.
 
 ## Execution Flow
 
+Read @rules/git-worktree-task.mdc for comprehensive autonomous workflow guidance.
+
 <task-preparation>
-Ensure you have clear, unambiguous requirements before starting implementation. If the task description is unclear or has multiple valid interpretations, clarify requirements with the user before proceeding. For tasks with clear requirements and single valid interpretation, proceed directly to implementation.
+Ensure you have clear, unambiguous requirements before starting implementation. If the task description is unclear or has multiple valid interpretations, use @commands/create-prompt.md to ask clarifying questions and create a structured prompt. For tasks with clear requirements and single valid interpretation, proceed directly to implementation.
 </task-preparation>
 
 <worktree-setup>
@@ -54,7 +56,13 @@ Deliver a well-documented pull request ready for review, with commits following 
 </create-pr>
 
 <bot-feedback-loop>
-Autonomously address valuable bot feedback, reject what's not applicable, and deliver a PR ready for human review with all critical issues resolved. Give bots time to analyze, then review their feedback critically. You have context bots lack: project standards, why implementation choices were made, trade-offs considered, and user requirements. Evaluate feedback against this context - bots may suggest changes that contradict project patterns or misunderstand requirements. Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not (use WONTFIX with brief explanation for context-missing or incorrect feedback). You are the ultimate decider - trust your judgment on what matters. Iterate as needed until critical issues are resolved.
+Autonomously address valuable bot feedback, reject what's not applicable, and deliver a PR ready for human review with all critical issues resolved.
+
+After creating the PR, wait 3 minutes for AI code review bots to complete their initial analysis. Check for bot comments using GitHub API. You have context bots lack: project standards, why implementation choices were made, trade-offs considered, and user requirements. Evaluate feedback against this context - bots may suggest changes that contradict project patterns or misunderstand requirements.
+
+Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not (use WONTFIX with brief explanation for context-missing or incorrect feedback). You are the ultimate decider - trust your judgment on what matters.
+
+After making fixes and pushing, wait 90 seconds for bots to re-review. Iterate up to 5 times if needed until critical issues are resolved.
 </bot-feedback-loop>
 
 <completion>
@@ -76,16 +84,15 @@ Recover gracefully from failures when possible, or inform the user clearly when 
 
 ## Requirements
 
-- Git worktrees support
 - GitHub CLI (`gh`) installed and authenticated
-- Node.js/npm or yarn
-- Project must have main/master branch
-- `.cursor/rules/*.mdc` standards in place
+- Node.js/npm
+- Project standards accessible via /load-cursor-rules
 
 ## Configuration
 
 The command adapts to your project structure:
 
+- Detects git hooks (husky, pre-commit)
 - Detects test runners (jest, mocha, vitest, etc.)
 - Finds linting configs (eslint, prettier, etc.)
 - Uses available build scripts
