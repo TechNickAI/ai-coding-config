@@ -54,6 +54,12 @@ mkdir -p .gitworktrees
 
 # Generate branch name from task
 TASK_NAME="{{TASK_DESCRIPTION}}"
+
+# Validate task description doesn't contain dangerous shell metacharacters
+if echo "$TASK_NAME" | grep -q '[;& |`$(){}]'; then
+  echo "⚠️ Task description contains shell metacharacters - sanitizing..."
+fi
+
 BRANCH_NAME=$(echo "$TASK_NAME" | \
   tr '[:upper:]' '[:lower:]' | \
   sed 's/[^a-z0-9]/-/g' | \
@@ -246,7 +252,6 @@ const reviewLevel = analyzeChanges({
 
 </adaptive-review-strategy>
 
-<validation-and-review>
 ```bash
 echo "🔍 Running validation and review..."
 

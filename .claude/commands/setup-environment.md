@@ -107,7 +107,7 @@ echo "🪝 Setting up git hooks..."
 MAIN_DIR=$(git worktree list --porcelain | grep "^worktree" | head -1 | cut -d' ' -f2)
 
 # Husky (most common in JS/TS projects)
-if [ -d "$MAIN_DIR/.husky" ] || [ -f ".husky" ]; then
+if [ -d "$MAIN_DIR/.husky" ] || [ -d ".husky" ]; then
   echo "  Installing Husky hooks..."
   npx husky install
   echo "  ✓ Husky hooks installed"
