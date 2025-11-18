@@ -317,6 +317,10 @@ const auth = new OAuth2Client(clientId, clientSecret);
 
 Guidelines for XML structure:
 
+- **Use semantic names, not numbers**: `<task-preparation>` not `<phase-1>`, `<create-pr>` not `<step-6>`
+  - Numbered tags are brittle: reordering requires renumbering all tags and references
+  - Semantic tags are self-documenting: `<validation-and-review>` tells you what it does
+  - Example: A workflow with `<task-preparation>`, `<execution>`, `<review>` stays clear even when phases are added or reordered
 - Be consistent with tag names throughout your codebase (always use `<task>` not
   sometimes `<objective>`)
 - Use semantically meaningful tag names that describe the content
