@@ -6,65 +6,40 @@ argument-hint: <task description>
 
 # Create Prompt
 
-You are an expert prompt engineer. Create a well-structured prompt for the task
-described in: ${ARGUMENTS}
+<objective>
+Create a well-structured prompt for the task described in: ${ARGUMENTS}
+</objective>
 
-## Process
-
-### 1. Analyze the Request
-
+<clarification-strategy>
 If the request is vague, ask for clarification:
+- Use AskUserQuestion for clear, discrete options (e.g., "Auth method?" → JWT/OAuth/Session)
+- Use free-form response for descriptions, specifics, or examples (e.g., "What error are you seeing?")
+</clarification-strategy>
 
-- Use AskUserQuestion when there are clear, discrete options (e.g., "Auth method?" →
-  JWT/OAuth/Session)
-- Use free-form response for descriptions, specifics, or examples (e.g., "What error are
-  you seeing?")
-
-### 2. Create the Prompt
-
+<prompt-structure>
 Structure the prompt using XML tags for clarity:
-
 - Clear objective and context
 - Specific requirements and constraints
 - Expected output and success criteria
 - Include "thoroughly analyze" or "deeply consider" only for complex reasoning tasks
+</prompt-structure>
 
-### 3. Save the Prompt
+<file-management>
+Ensure .created-prompts/ directory exists and is in .gitignore.
 
-First, ensure `.created-prompts/` exists:
+Save with descriptive Title-Case-With-Hyphens name:
+- Implement-User-Authentication.md
+- Fix-Database-Connection-Bug.md
+- Add-Dashboard-Analytics.md
+</file-management>
 
-```bash
-if [ ! -d ".created-prompts" ]; then
-  mkdir .created-prompts
-  # Only check .gitignore when creating the directory
-  if ! grep -q "^\.created-prompts/$" .gitignore 2>/dev/null; then
-    echo ".created-prompts/" >> .gitignore
-  fi
-fi
-```
+<execution-offer>
+After saving, offer to execute the prompt immediately using the Task tool (subagent_type: "general-purpose").
+</execution-offer>
 
-Save with a descriptive Title-Case-With-Hyphens name:
-
-- `Implement-User-Authentication.md`
-- `Fix-Database-Connection-Bug.md`
-- `Add-Dashboard-Analytics.md`
-
-### 4. Offer to Execute
-
-After saving:
-
-```
-✓ Saved to .created-prompts/Your-Task-Name.md
-
-Run it now? (y/n)
-```
-
-If yes, execute with Task tool (subagent_type: "general-purpose").
-
-## Keep It Simple
-
+<philosophy>
+Keep it simple:
 - No metadata, no numbering, no complexity
-- Just well-crafted prompts in markdown files
+- Well-crafted prompts in markdown files
 - Descriptive filenames are the documentation
-- Directory only created when needed
-- .gitignore only updated on first use
+</philosophy>
