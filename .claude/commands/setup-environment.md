@@ -4,232 +4,116 @@ description: Initialize development environment for git worktree
 
 # Setup Development Environment
 
-Initialize a git worktree as a fully functional development environment with all
-dependencies, configurations, and validation tools.
+Initialize development environment with context-aware setup that distinguishes between git worktrees and new machines.
 
-## What This Command Does
+<objective>
+Get the development environment ready for productive work, with right-sized verification based on context.
+</objective>
 
-You're in a fresh git worktree. This command will:
+<context-detection>
+Determine whether this is a git worktree or new machine setup by checking:
+- Is the current path within .gitworktrees/? → worktree setup
+- Does node_modules already exist in main repo? → worktree setup
+- Neither of the above? → new machine setup
+</context-detection>
 
-1. Install all project dependencies
-2. Copy necessary environment configurations
-3. Set up git hooks (husky/pre-commit)
-4. Run any required build/generation steps
-5. Verify everything works correctly
+<setup-approach>
+For git worktrees (15-30 seconds):
+- Install dependencies only
+- Copy environment files if needed
+- Run minimal smoke test
+- Trust main repo's validation
 
-## Detection Phase
+For new machines (2-5 minutes):
+- Install and verify all dependencies
+- Set up and test git hooks
+- Run build process
+- Execute test suite
+- Verify all tools are available
+</setup-approach>
 
-First, I'll analyze the project structure to understand what needs to be set up:
+<project-detection>
+Identify the project type and package manager by examining project files:
 
-<detect-project-type>
-Checking for project indicators:
-- package.json → Node.js/JavaScript/TypeScript project
-- requirements.txt/Pipfile → Python project
-- Gemfile → Ruby project
-- go.mod → Go project
-- Cargo.toml → Rust project
-- pom.xml/build.gradle → Java project
-- .csproj → .NET project
-</detect-project-type>
+Project types:
+- Node.js: package.json present
+- Python: requirements.txt or Pipfile present
+- Ruby: Gemfile present
+- Go: go.mod present
+- Rust: Cargo.toml present
+- Java: pom.xml or build.gradle present
+- .NET: .csproj files present
 
-<detect-package-manager>
-For Node.js projects, detecting package manager:
-- pnpm-lock.yaml → pnpm
-- yarn.lock → yarn
-- package-lock.json → npm
-- bun.lockb → bun
-</detect-package-manager>
+Package managers for Node.js:
+- pnpm if pnpm-lock.yaml exists
+- yarn if yarn.lock exists
+- bun if bun.lockb exists
+- npm as default fallback
+</project-detection>
 
-## Setup Steps
+<dependency-installation>
+Install project dependencies using the appropriate package manager. For Node.js projects, use pnpm/yarn/bun/npm based on which lockfile exists. For Python, use pip or pipenv. Install with frozen/locked versions to ensure consistency with the main repository.
+</dependency-installation>
 
-### 1. Install Dependencies
+<environment-configuration>
+For git worktrees, copy environment files from the main repository. Look for:
+- .env and its variants (.env.local, .env.development, .env.test)
+- Local configuration files not in version control
+- Secret files needed for development
 
-```bash
-# Based on detected package manager
-echo "📦 Installing dependencies..."
+The main repository path can be found using git worktree list.
+</environment-configuration>
 
-# Node.js
-if [ -f "package.json" ]; then
-  if [ -f "pnpm-lock.yaml" ]; then
-    pnpm install
-  elif [ -f "yarn.lock" ]; then
-    yarn install
-  elif [ -f "bun.lockb" ]; then
-    bun install
-  else
-    npm install
-  fi
-fi
+<git-hooks-setup>
+Set up git hooks based on what the project uses:
+- Husky: Run husky install if .husky directory exists
+- Pre-commit: Run pre-commit install if .pre-commit-config.yaml exists
+- Custom hooks: Copy any custom hooks from main repository's .git/hooks
 
-# Python
-if [ -f "requirements.txt" ]; then
-  pip install -r requirements.txt
-elif [ -f "Pipfile" ]; then
-  pipenv install
-fi
+For git worktrees, the main repository path can be found using git worktree list.
+</git-hooks-setup>
 
-# Add other language-specific installations as needed
-```
+<code-generation>
+Run any necessary code generation steps the project requires:
+- Prisma: Generate client if @prisma/client is in dependencies
+- GraphQL: Run codegen if codegen configuration exists
+- TypeScript: Generate declarations if configured
+- Package prepare scripts: Run if defined in package.json
 
-### 2. Copy Environment Configuration
+These ensure generated code is available for development.
+</code-generation>
 
-```bash
-echo "🔐 Setting up environment configuration..."
+<verification>
+Verify the environment is ready based on context:
 
-# Get the main working directory (parent of .gitworktrees)
-MAIN_DIR=$(git worktree list --porcelain | grep "^worktree" | head -1 | cut -d' ' -f2)
+For git worktrees (smoke test only):
+- Confirm dependencies were installed successfully
+- Run a quick TypeScript compilation check if applicable
+- Trust that the main repository's validation is sufficient
 
-# Copy environment files if they exist
-ENV_FILES=(.env .env.local .env.development .env.test)
-for env_file in "${ENV_FILES[@]}"; do
-  if [ -f "$MAIN_DIR/$env_file" ]; then
-    echo "  Copying $env_file from main directory..."
-    cp "$MAIN_DIR/$env_file" "./$env_file"
-  fi
-done
+For new machines (thorough verification):
+- Verify all development tools are available and working
+- Run the build process to ensure it completes
+- Execute the test suite to confirm everything works
+- Test that git hooks function correctly
+- Check that all required command-line tools are installed
+</verification>
 
-# Copy any other config files that aren't in version control
-CONFIG_FILES=(.secrets.json local.config.js config.local.json)
-for config_file in "${CONFIG_FILES[@]}"; do
-  if [ -f "$MAIN_DIR/$config_file" ]; then
-    echo "  Copying $config_file from main directory..."
-    cp "$MAIN_DIR/$config_file" "./$config_file"
-  fi
-done
-```
+<error-handling>
+When encountering failures, identify the root cause and attempt automatic resolution where possible. For issues that require manual intervention, provide clear guidance on how to proceed. Continue with other setup steps when it's safe to do so without the failed component.
+</error-handling>
 
-### 3. Setup Git Hooks
+<success-criteria>
+Git worktree success (15-30 seconds):
+- Dependencies installed successfully
+- Basic smoke test passes
+- Development environment ready for immediate use
 
-```bash
-echo "🪝 Setting up git hooks..."
+New machine success (2-5 minutes):
+- All dependencies and tools functioning correctly
+- Build and test processes verified
+- Git hooks operational
+- Complete development environment validated
 
-# Get the main working directory
-MAIN_DIR=$(git worktree list --porcelain | grep "^worktree" | head -1 | cut -d' ' -f2)
-
-# Husky (most common in JS/TS projects)
-if [ -d "$MAIN_DIR/.husky" ] || [ -d ".husky" ]; then
-  echo "  Installing Husky hooks..."
-  npx husky install
-  echo "  ✓ Husky hooks installed"
-fi
-
-# Pre-commit (Python and multi-language projects)
-if [ -f "$MAIN_DIR/.pre-commit-config.yaml" ] || [ -f ".pre-commit-config.yaml" ]; then
-  echo "  Installing pre-commit hooks..."
-  if command -v pre-commit >/dev/null 2>&1; then
-    pre-commit install
-    echo "  ✓ Pre-commit hooks installed"
-  else
-    echo "  ⚠️ pre-commit not installed, run: pip install pre-commit"
-  fi
-fi
-
-# Simple git hooks (legacy projects)
-if [ -d "$MAIN_DIR/.git/hooks" ]; then
-  # Check for custom hooks that need copying
-  for hook in pre-commit pre-push commit-msg; do
-    if [ -f "$MAIN_DIR/.git/hooks/$hook" ] && [ ! -f ".git/hooks/$hook" ]; then
-      echo "  Copying $hook hook..."
-      cp "$MAIN_DIR/.git/hooks/$hook" ".git/hooks/$hook"
-      chmod +x ".git/hooks/$hook"
-    fi
-  done
-fi
-
-echo "  ✓ Git hooks configured for this worktree"
-```
-
-### 4. Run Build/Generation Steps
-
-```bash
-echo "🏗️ Running build and generation steps..."
-
-# Check for code generation needs
-if [ -f "package.json" ]; then
-  # Prisma generation
-  if grep -q "@prisma/client" package.json; then
-    echo "  Generating Prisma client..."
-    npx prisma generate
-  fi
-
-  # GraphQL codegen
-  if [ -f "codegen.yml" ] || [ -f "codegen.ts" ]; then
-    echo "  Running GraphQL codegen..."
-    npm run codegen || yarn codegen || npx graphql-codegen
-  fi
-
-  # Build if needed for development
-  if grep -q '"prepare"' package.json; then
-    echo "  Running prepare script..."
-    npm run prepare || yarn prepare
-  fi
-
-  # TypeScript declarations
-  if [ -f "tsconfig.json" ] && grep -q '"declaration"' tsconfig.json; then
-    echo "  Building TypeScript declarations..."
-    npx tsc --emitDeclarationOnly || true
-  fi
-fi
-```
-
-### 5. Verify Setup
-
-```bash
-echo "🔍 Verifying environment setup..."
-
-# Run git hooks to verify everything works
-echo "Testing git hooks..."
-if [ -d ".husky" ]; then
-  echo "  Running Husky pre-commit hooks..."
-  npx husky run pre-commit && echo "  ✓ Husky hooks working" || echo "  ⚠️ Some checks failed (fixing...)"
-elif [ -f ".pre-commit-config.yaml" ]; then
-  echo "  Running pre-commit hooks..."
-  pre-commit run --all-files && echo "  ✓ Pre-commit hooks working" || echo "  ⚠️ Some checks failed (fixing...)"
-else
-  echo "  ⚠️ No git hooks configured - consider adding husky or pre-commit"
-fi
-
-# Quick sanity checks
-if [ -f "package.json" ]; then
-  echo "Testing build..."
-  npm run build 2>/dev/null || yarn build 2>/dev/null || echo "  ⚠️ No build script"
-fi
-
-# Check environment files
-if [ -f ".env" ]; then
-  echo "✅ Environment configuration present"
-fi
-
-echo ""
-echo "✅ Environment setup complete!"
-echo ""
-echo "This worktree is now ready for development:"
-echo "  - All dependencies installed"
-echo "  - Environment configured"
-echo "  - Git hooks installed and working"
-echo "  - Ready for development"
-echo ""
-echo "Your git hooks will handle all validation when you commit."
-```
-
-## Error Handling
-
-If any step fails, I'll:
-
-1. Identify what went wrong
-2. Attempt to fix common issues automatically
-3. Provide clear guidance on manual fixes if needed
-4. Continue with other steps when safe to do so
-
-## Success Criteria
-
-After setup completes:
-
-- All dependencies are installed
-- Environment variables are configured
-- Git hooks are properly installed and working
-- The worktree is ready for development
-
-The goal is a worktree that's immediately productive - no missing dependencies, no
-failing tests, no configuration issues. Your existing git hooks (husky/pre-commit)
-handle all validation automatically when you commit.
+The goal is right-sized verification: minimal for worktrees that inherit from the main repository, comprehensive for new machine setups.
+</success-criteria>
