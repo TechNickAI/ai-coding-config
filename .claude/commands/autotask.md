@@ -37,7 +37,7 @@ Implement the solution following project patterns and standards. Build a plan fo
 - Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes tests
 - Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates accessibility, ensures UX consistency
 - Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates design patterns, checks security
-- Petra (.claude/agents/code-review/architecture-auditor.md): System-level architecture analysis
+- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
 Create your execution plan, then implement the solution. Use /load-cursor-rules to load relevant project standards for the task. Execute agents in parallel when possible, sequentially when they depend on each other.
