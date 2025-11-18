@@ -1,5 +1,6 @@
 ---
-description: Execute complete development task autonomously from description to PR-ready state
+description:
+  Execute complete development task autonomously from description to PR-ready state
 ---
 
 # /autotask - Autonomous Task Execution
@@ -14,7 +15,10 @@ Execute a complete development task autonomously from description to PR-ready st
 
 ## What This Command Does
 
-Takes your task description and autonomously delivers a pull request ready for your review. The command analyzes task complexity, sets up an isolated worktree environment, implements the solution using appropriate agents, performs adaptive validation scaled to risk level, and handles bot feedback intelligently.
+Takes your task description and autonomously delivers a pull request ready for your
+review. The command analyzes task complexity, sets up an isolated worktree environment,
+implements the solution using appropriate agents, performs adaptive validation scaled to
+risk level, and handles bot feedback intelligently.
 
 You only need to provide the task description and review the final PR.
 
@@ -33,18 +37,32 @@ Create a fully functional, isolated development environment in .gitworktrees/ wh
 <autonomous-execution>
 Implement the solution following project patterns and standards. Build a plan for which agents or approaches to use based on the task type. Available specialized agents:
 
-- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues, identifies underlying problems
-- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes tests
-- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates accessibility, ensures UX consistency
-- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates design patterns, checks security
-- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and refinement
+- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues,
+  identifies underlying problems
+- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes
+  tests
+- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates
+  accessibility, ensures UX consistency
+- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates
+  design patterns, checks security
+- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and
+  refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
-Create your execution plan, then implement the solution. Use /load-cursor-rules to load relevant project standards for the task. Execute agents in parallel when possible, sequentially when they depend on each other.
+Create your execution plan, then implement the solution. Use /load-cursor-rules to load
+relevant project standards for the task. Execute agents in parallel when possible,
+sequentially when they depend on each other.
 
-When launching agents, provide targeted context for effectiveness: task context (original requirements and any clarifications), implementation context (what's been built, decisions made, constraints), project context (relevant standards from /load-cursor-rules), and specific focus area. Tailor context to agent type - debuggers need error details and reproduction steps, reviewers need change rationale and risk areas, implementers need full requirements and constraints.
+When launching agents, provide targeted context for effectiveness: task context
+(original requirements and any clarifications), implementation context (what's been
+built, decisions made, constraints), project context (relevant standards from
+/load-cursor-rules), and specific focus area. Tailor context to agent type - debuggers
+need error details and reproduction steps, reviewers need change rationale and risk
+areas, implementers need full requirements and constraints.
 
-Maintain context throughout workflow phases. Decisions and clarifications from earlier phases inform later ones - don't re-decide or re-ask. Carry forward user clarifications, implementation decisions, constraint discoveries, and why choices were made.
+Maintain context throughout workflow phases. Decisions and clarifications from earlier
+phases inform later ones - don't re-decide or re-ask. Carry forward user clarifications,
+implementation decisions, constraint discoveries, and why choices were made.
 </autonomous-execution>
 
 <validation-and-review>
@@ -58,12 +76,18 @@ Deliver a well-documented pull request ready for review, with commits following 
 <bot-feedback-loop>
 Autonomously address valuable bot feedback, reject what's not applicable, and deliver a PR ready for human review with all critical issues resolved.
 
-After creating the PR, wait 3 minutes for AI code review bots to complete their initial analysis. Check for bot comments using GitHub API. You have context bots lack: project standards, why implementation choices were made, trade-offs considered, and user requirements. Evaluate feedback against this context - bots may suggest changes that contradict project patterns or misunderstand requirements.
+After creating the PR, wait 3 minutes for AI code review bots to complete their initial
+analysis. Check for bot comments using GitHub API. You have context bots lack: project
+standards, why implementation choices were made, trade-offs considered, and user
+requirements. Evaluate feedback against this context - bots may suggest changes that
+contradict project patterns or misunderstand requirements.
 
-Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not (use WONTFIX with brief explanation for context-missing or incorrect feedback). You are the ultimate decider - trust your judgment on what matters.
+Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not
+(use WONTFIX with brief explanation for context-missing or incorrect feedback). You are
+the ultimate decider - trust your judgment on what matters.
 
-After making fixes and pushing, wait 90 seconds for bots to re-review. Iterate up to 5 times if needed until critical issues are resolved.
-</bot-feedback-loop>
+After making fixes and pushing, wait 90 seconds for bots to re-review. Iterate up to 5
+times if needed until critical issues are resolved. </bot-feedback-loop>
 
 <completion>
 Provide a summary of what was accomplished, highlights you're proud of, and any significant issues found and fixed during bot review. Scale the summary length to the complexity of the change - simple fixes get a sentence or two, major features deserve a paragraph. Include the PR URL and worktree location.

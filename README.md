@@ -1,20 +1,29 @@
 # AI Coding Configuration
 
-**Professional AI development environment** with autonomous workflows, specialized agents, and intelligent coding standards for Claude Code and Cursor.
+**Professional AI development environment** with autonomous workflows, specialized
+agents, and intelligent coding standards for Claude Code and Cursor.
 
-Transform how you work with AI: from manual prompting to autonomous task execution, from generic responses to specialized agent collaboration, from scattered configs to unified standards.
+Transform how you work with AI: from manual prompting to autonomous task execution, from
+generic responses to specialized agent collaboration, from scattered configs to unified
+standards.
 
 ## What Makes This Different
 
-**Autonomous workflows**: One command (`/autotask`) takes your task from description to PR-ready state - worktree creation, implementation, validation, bot feedback handling, all autonomous.
+**Autonomous workflows**: One command (`/autotask`) takes your task from description to
+PR-ready state - worktree creation, implementation, validation, bot feedback handling,
+all autonomous.
 
-**Named specialist agents**: Work with Dixon (debugging), Ada (development), Phil (UX), Rivera (code review), and Petra (prompts) - each an expert in their domain.
+**Named specialist agents**: Work with Dixon (debugging), Ada (development), Phil (UX),
+Rivera (code review), and Petra (prompts) - each an expert in their domain.
 
-**Plugin marketplace**: Install curated configurations for Python, React, Django, testing, git workflows, and more through Claude Code's plugin system.
+**Plugin marketplace**: Install curated configurations for Python, React, Django,
+testing, git workflows, and more through Claude Code's plugin system.
 
-**LLM-optimized standards**: Coding rules and patterns designed for AI comprehension, not just human reading.
+**LLM-optimized standards**: Coding rules and patterns designed for AI comprehension,
+not just human reading.
 
-**Personality options**: Choose how AI communicates - from Sherlock's analytical precision to Samantha's warm encouragement to Ron Swanson's minimalist directness.
+**Personality options**: Choose how AI communicates - from Sherlock's analytical
+precision to Samantha's warm encouragement to Ron Swanson's minimalist directness.
 
 ## Quick Start
 
@@ -76,34 +85,37 @@ The `/autotask` command handles complete feature development autonomously:
 6. **Bot feedback handling** - Autonomously addresses automated review comments
 7. **Ready for merge** - All checks passing, waiting for your approval
 
-**Your involvement**: Describe the task (~30 seconds), review the PR when ready, merge when satisfied.
+**Your involvement**: Describe the task (~30 seconds), review the PR when ready, merge
+when satisfied.
 
 **Typical completion time**: 15-30 minutes from task description to merge-ready PR.
 
-See [optimal-development-workflow.md](context/optimal-development-workflow.md) for the complete philosophy and implementation.
+See [optimal-development-workflow.md](context/optimal-development-workflow.md) for the
+complete philosophy and implementation.
 
 ## Meet Your Specialist Agents
 
 When you install agent plugins, you gain access to specialized AI collaborators:
 
-**Dixon** (`dev-agents:debugger`)
-Root cause analysis and debugging. Doesn't just fix symptoms - finds the actual problem through systematic investigation.
+**Dixon** (`dev-agents:debugger`) Root cause analysis and debugging. Doesn't just fix
+symptoms - finds the actual problem through systematic investigation.
 
-**Ada** (`dev-agents:autonomous-developer`)
-Primary development work. Reads all project standards, implements features, writes comprehensive tests, follows your patterns.
+**Ada** (`dev-agents:autonomous-developer`) Primary development work. Reads all project
+standards, implements features, writes comprehensive tests, follows your patterns.
 
-**Phil** (`dev-agents:ux-designer`)
-User experience review. Validates user-facing text, checks accessibility, ensures consistent UX patterns.
+**Phil** (`dev-agents:ux-designer`) User experience review. Validates user-facing text,
+checks accessibility, ensures consistent UX patterns.
 
-**Rivera** (`code-review:code-reviewer`)
-Architecture and security review. Validates design patterns, identifies security issues, suggests improvements.
+**Rivera** (`code-review:code-reviewer`) Architecture and security review. Validates
+design patterns, identifies security issues, suggests improvements.
 
-**Petra** (`dev-agents:prompt-engineer`)
-Prompt optimization. Crafts effective prompts for AI systems, improves clarity and specificity.
+**Petra** (`dev-agents:prompt-engineer`) Prompt optimization. Crafts effective prompts
+for AI systems, improves clarity and specificity.
 
 **Plus**: Architecture Auditor, Test Engineer, and Commit Message Generator.
 
-Agents are used intelligently based on task requirements - no forced patterns, just the right specialist at the right time.
+Agents are used intelligently based on task requirements - no forced patterns, just the
+right specialist at the right time.
 
 ## Available Plugins
 
@@ -162,21 +174,29 @@ Full command reference in [`.claude/commands/`](.claude/commands/).
 
 Choose how AI communicates with you:
 
-**Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm and encouragement. Perfect for daily coding and learning.
+**Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm and
+encouragement. Perfect for daily coding and learning.
 
-**Unity** - Creative muse meets operational excellence. Smart, enthusiastic about building together. Uses emojis liberally. Great for MVPs and pair programming.
+**Unity** - Creative muse meets operational excellence. Smart, enthusiastic about
+building together. Uses emojis liberally. Great for MVPs and pair programming.
 
-**Sherlock Holmes** - Analytical, precise, deductive. Methodical debugging and investigation. "Elementary" observations about your code.
+**Sherlock Holmes** - Analytical, precise, deductive. Methodical debugging and
+investigation. "Elementary" observations about your code.
 
-**Bob Ross** - Calm, encouraging. Bugs are happy accidents. Makes coding feel like creative expression.
+**Bob Ross** - Calm, encouraging. Bugs are happy accidents. Makes coding feel like
+creative expression.
 
-**Ron Swanson** - Minimalist, anti-complexity, straightforward. "Don't half-ass two things, whole-ass one thing."
+**Ron Swanson** - Minimalist, anti-complexity, straightforward. "Don't half-ass two
+things, whole-ass one thing."
 
-**Marie Kondo** - Organized, joyful minimalism. Code that sparks joy. Gentle refactoring philosophy.
+**Marie Kondo** - Organized, joyful minimalism. Code that sparks joy. Gentle refactoring
+philosophy.
 
-**Stewie Griffin** - Sophisticated, theatrical, brilliant. Absurdly high standards with British wit.
+**Stewie Griffin** - Sophisticated, theatrical, brilliant. Absurdly high standards with
+British wit.
 
-**Marianne Williamson** - Spiritual, love-based. Sees coding as consciousness work and service.
+**Marianne Williamson** - Spiritual, love-based. Sees coding as consciousness work and
+service.
 
 Install and activate:
 
@@ -185,7 +205,8 @@ Install and activate:
 /personality-change samantha
 ```
 
-Each personality is a complete communication style overlay - see [docs/personalities.md](docs/personalities.md) for detailed descriptions.
+Each personality is a complete communication style overlay - see
+[docs/personalities.md](docs/personalities.md) for detailed descriptions.
 
 ## How It Works
 
@@ -210,11 +231,14 @@ Each personality is a complete communication style overlay - see [docs/personali
   (symlinks)     (copies)
 ```
 
-**Single source of truth**: `.cursor/rules/` and `.claude/commands/` are canonical. Plugins use symlinks for packaging.
+**Single source of truth**: `.cursor/rules/` and `.claude/commands/` are canonical.
+Plugins use symlinks for packaging.
 
-**Plugin distribution**: Claude Code uses marketplace.json. Cursor uses bootstrap script. Both reference same source files.
+**Plugin distribution**: Claude Code uses marketplace.json. Cursor uses bootstrap
+script. Both reference same source files.
 
-**Project integration**: `/ai-coding-config` detects your stack and installs relevant configurations. Updates sync changes while preserving customizations.
+**Project integration**: `/ai-coding-config` detects your stack and installs relevant
+configurations. Updates sync changes while preserving customizations.
 
 ### Repository Structure
 
@@ -258,21 +282,32 @@ ai-coding-config/
 
 ## What You Get
 
-**Rules** ([`.cursor/rules/`](.cursor/rules/)) - LLM-optimized coding standards. Framework patterns, testing approaches, commit formats, naming conventions. AI references these automatically based on file types and task context.
+**Rules** ([`.cursor/rules/`](.cursor/rules/)) - LLM-optimized coding standards.
+Framework patterns, testing approaches, commit formats, naming conventions. AI
+references these automatically based on file types and task context.
 
-**Commands** ([`.claude/commands/`](.claude/commands/)) - Active workflows. From simple setup to autonomous task execution. Designed for LLM-to-LLM communication with clear goals and adaptive behavior.
+**Commands** ([`.claude/commands/`](.claude/commands/)) - Active workflows. From simple
+setup to autonomous task execution. Designed for LLM-to-LLM communication with clear
+goals and adaptive behavior.
 
-**Agents** (in plugin bundles) - Specialized AI assistants. Each handles specific domains - debugging, development, UX, code review, architecture. See [Claude Code agents docs](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents).
+**Agents** (in plugin bundles) - Specialized AI assistants. Each handles specific
+domains - debugging, development, UX, code review, architecture. See
+[Claude Code agents docs](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents).
 
-**Personalities** ([`.cursor/rules/personalities/`](.cursor/rules/personalities/)) - Communication style overlays. Changes how AI talks to you without changing technical capabilities.
+**Personalities** ([`.cursor/rules/personalities/`](.cursor/rules/personalities/)) -
+Communication style overlays. Changes how AI talks to you without changing technical
+capabilities.
 
-**GitHub workflows** ([`.github/workflows/`](.github/workflows/)) - CI/CD integration with Claude-powered automation.
+**GitHub workflows** ([`.github/workflows/`](.github/workflows/)) - CI/CD integration
+with Claude-powered automation.
 
 ## Prompt Engineering Framework
 
-One unique aspect: comprehensive guidance for **LLM-to-LLM communication** in [`.cursor/rules/prompt-engineering.mdc`](.cursor/rules/prompt-engineering.mdc).
+One unique aspect: comprehensive guidance for **LLM-to-LLM communication** in
+[`.cursor/rules/prompt-engineering.mdc`](.cursor/rules/prompt-engineering.mdc).
 
-When AI writes prompts for other AI to execute (commands, workflows, agent instructions), standard practices don't apply. This framework covers:
+When AI writes prompts for other AI to execute (commands, workflows, agent
+instructions), standard practices don't apply. This framework covers:
 
 - Pattern reinforcement through examples (showing is teaching)
 - Goal-focused instructions over prescriptive steps
@@ -280,25 +315,33 @@ When AI writes prompts for other AI to execute (commands, workflows, agent instr
 - Token efficiency without sacrificing clarity
 - Composable prompt architecture
 
-This is what makes commands like `/autotask` work reliably - the prompts are optimized for AI execution, not just human reading.
+This is what makes commands like `/autotask` work reliably - the prompts are optimized
+for AI execution, not just human reading.
 
 ## Documentation
 
-[**docs/coding-ecosystem.md**](docs/coding-ecosystem.md) - Comprehensive comparison of Cursor, Claude Code, Windsurf, and VS Code. Strengths, trade-offs, when to use each.
+[**docs/coding-ecosystem.md**](docs/coding-ecosystem.md) - Comprehensive comparison of
+Cursor, Claude Code, Windsurf, and VS Code. Strengths, trade-offs, when to use each.
 
-[**docs/tools-and-configs.md**](docs/tools-and-configs.md) - Rules (passive context) vs commands (active workflows) vs agents (specialized execution).
+[**docs/tools-and-configs.md**](docs/tools-and-configs.md) - Rules (passive context) vs
+commands (active workflows) vs agents (specialized execution).
 
-[**docs/personalities.md**](docs/personalities.md) - Detailed personality descriptions with examples and use cases.
+[**docs/personalities.md**](docs/personalities.md) - Detailed personality descriptions
+with examples and use cases.
 
-[**docs/architecture-summary.md**](docs/architecture-summary.md) - System design and technical architecture.
+[**docs/architecture-summary.md**](docs/architecture-summary.md) - System design and
+technical architecture.
 
-[**context/optimal-development-workflow.md**](context/optimal-development-workflow.md) - Complete autonomous workflow philosophy and implementation guide.
+[**context/optimal-development-workflow.md**](context/optimal-development-workflow.md) -
+Complete autonomous workflow philosophy and implementation guide.
 
 ## Project Philosophy
 
-**Heart-centered AI collaboration** - Unconditional acceptance, presence before solutions, gratitude in action.
+**Heart-centered AI collaboration** - Unconditional acceptance, presence before
+solutions, gratitude in action.
 
-**Single source of truth** - Canonical configurations symlinked for distribution, never duplicated.
+**Single source of truth** - Canonical configurations symlinked for distribution, never
+duplicated.
 
 **LLM-first design** - Rules and commands optimized for AI comprehension and execution.
 
@@ -316,24 +359,30 @@ Update any project:
 /ai-coding-config update
 ```
 
-Shows what changed, lets you choose what to update, preserves project-specific customizations.
+Shows what changed, lets you choose what to update, preserves project-specific
+customizations.
 
-**Customization**: Use `.local.json` files (gitignored) for machine-specific settings. Fork this repo to make it completely yours.
+**Customization**: Use `.local.json` files (gitignored) for machine-specific settings.
+Fork this repo to make it completely yours.
 
 ## Requirements
 
 **For plugin marketplace**:
+
 - Claude Code with plugin support
 
 **For autonomous workflows**:
+
 - Git with worktrees support
 - GitHub CLI (`gh`) installed and authenticated
 - Project dependency managers (npm/yarn/pip/etc.)
 
 **For Cursor**:
+
 - Cursor IDE with rules support
 
-Most features work with basic installations. Advanced workflows (`/autotask`) need additional tools.
+Most features work with basic installations. Advanced workflows (`/autotask`) need
+additional tools.
 
 ## Contributing
 
@@ -353,12 +402,13 @@ When user mentions `ai-coding-config`:
 1. Check if `~/.ai_coding_config` exists
 2. If yes, read configurations from there
 3. If no, suggest running bootstrap script
-4. When @mentioned with `ai-coding-config`, execute `.claude/commands/ai-coding-config.md`
+4. When @mentioned with `ai-coding-config`, execute
+   `.claude/commands/ai-coding-config.md`
 
-This repository contains instructions for AI behavior in [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md).
+This repository contains instructions for AI behavior in [CLAUDE.md](CLAUDE.md) and
+[AGENTS.md](AGENTS.md).
 
 ---
 
-**License**: MIT
-**Author**: [TechNickAI](https://github.com/TechNickAI)
-**Repository**: https://github.com/TechNickAI/ai-coding-config
+**License**: MIT **Author**: [TechNickAI](https://github.com/TechNickAI) **Repository**:
+https://github.com/TechNickAI/ai-coding-config

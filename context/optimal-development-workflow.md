@@ -70,6 +70,7 @@ Automatically follows all `.cursor/rules/*.mdc` standards.
 **The key insight**: Review intensity should match task complexity and risk.
 
 **Step 1: Git hooks handle the basics**
+
 - Your existing husky/pre-commit hooks run automatically
 - Linting, formatting, type checking, unit tests
 - Auto-fix what can be fixed
@@ -77,22 +78,26 @@ Automatically follows all `.cursor/rules/*.mdc` standards.
 **Step 2: Conditional agent review based on complexity**
 
 **Minimal Review** (trivial changes):
+
 - Git hooks pass = good enough
 - No additional review needed
 
 **Targeted Review** (medium complexity):
+
 - Git hooks + one relevant agent
 - UI changes → Phil reviews UX
 - Bug fixes → Dixon spot-checks for edge cases
 - Refactoring → Rivera validates architecture
 
 **Comprehensive Review** (high risk/complexity):
+
 - Git hooks + multiple agents
 - Security changes → Full Rivera security review
 - Major features → Rivera + Phil + Dixon
 - Breaking changes → Extra scrutiny
 
 **Smart Principles**:
+
 - Don't review what hooks already validated
 - Focus on what automation can't catch (design decisions, security logic, UX)
 - Skip review entirely for trivial changes that pass hooks
