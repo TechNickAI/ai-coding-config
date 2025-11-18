@@ -53,12 +53,10 @@ Creating isolated development environment for clean, parallel work:
 mkdir -p .gitworktrees
 
 # Generate branch name from task
-TASK_NAME="{{TASK_DESCRIPTION}}"
+TASK_NAME_RAW="{{TASK_DESCRIPTION}}"
 
-# Validate task description doesn't contain dangerous shell metacharacters
-if echo "$TASK_NAME" | grep -q '[;& |`$(){}]'; then
-  echo "⚠️ Task description contains shell metacharacters - sanitizing..."
-fi
+# Sanitize task description immediately (security)
+TASK_NAME=$(echo "$TASK_NAME_RAW" | tr -cd '[:alnum:][:space:]-_')
 
 BRANCH_NAME=$(echo "$TASK_NAME" | \
   tr '[:upper:]' '[:lower:]' | \
