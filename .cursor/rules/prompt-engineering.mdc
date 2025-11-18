@@ -29,6 +29,7 @@ you create for LLM consumption.
 
 ## Key Principles for LLM-Readable Prompts
 
+- Assume the executing model is smarter: The model executing your prompt is likely more capable than the model that created it. Trust its abilities rather than over-prescribing implementation details.
 - Front-load critical information: LLMs give more weight to early content
 - Be explicit: LLMs can't infer context the way humans do
 - Maintain consistency: Use the same terminology throughout
@@ -142,11 +143,14 @@ what you don't want, even as a counterexample.
 When writing prompts for LLM execution (commands, workflows, agents), focus on clear
 outcomes rather than micro-managing steps. LLMs can figure out implementation details.
 
+Remember: The model executing your prompt is likely more advanced than the model that created it. A prompt written by GPT-4 might be executed by Claude 3.5 Sonnet or GPT-4o. Even prompts written by older versions of the same model will be executed by newer, smarter versions. Trust the executing model's superior capabilities.
+
 ### The Over-Prescription Problem in LLM-to-LLM Communication
 
 Overly prescriptive prompts create problems when LLMs execute them:
 
 - Waste tokens on process details the executing LLM can determine
+- Prevent the executing model from using its superior capabilities
 - Create brittle workflows that break with slight context changes
 - Force unnecessary decision trees that add complexity
 - Reduce the LLM's ability to handle edge cases intelligently
