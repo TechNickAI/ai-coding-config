@@ -14,22 +14,14 @@ Execute a complete development task autonomously from description to PR-ready st
 
 ## What This Command Does
 
-Takes your task description and autonomously:
-
-1. Analyzes complexity and creates structured prompt if needed
-2. Sets up isolated git worktree environment
-3. Implements the solution using intelligent agent orchestration
-4. Adaptive validation & review based on complexity
-5. Creates PR with proper commit messages
-6. Handles bot feedback autonomously
-7. Delivers PR ready for your review
+Takes your task description and autonomously delivers a pull request ready for your review. The command analyzes task complexity, sets up an isolated worktree environment, implements the solution using appropriate agents, performs adaptive validation scaled to risk level, and handles bot feedback intelligently.
 
 You only need to provide the task description and review the final PR.
 
 ## Execution Flow
 
 <task-preparation>
-Ensure you have clear, unambiguous requirements before starting implementation. If the task description is unclear or has multiple valid interpretations, clarify requirements with the user before proceeding. For straightforward tasks, proceed directly to implementation.
+Ensure you have clear, unambiguous requirements before starting implementation. If the task description is unclear or has multiple valid interpretations, clarify requirements with the user before proceeding. For tasks with clear requirements and single valid interpretation, proceed directly to implementation.
 </task-preparation>
 
 <worktree-setup>
@@ -39,14 +31,14 @@ Create a fully functional, isolated development environment in .gitworktrees/ wh
 <autonomous-execution>
 Implement the solution following project patterns and standards. Build a plan for which agents or approaches to use based on the task type. Available specialized agents:
 
-- Dixon (dev-agents:debugger): Root cause analysis, reproduces issues, identifies underlying problems
-- Ada (dev-agents:autonomous-developer): Implementation work, writes tests
-- Phil (dev-agents:ux-designer): Reviews user-facing text, validates accessibility, ensures UX consistency
-- Rivera (code-review:code-reviewer): Architecture review, validates design patterns, checks security
-- Petra (code-review:architecture-auditor): System-level architecture analysis
+- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues, identifies underlying problems
+- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes tests
+- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates accessibility, ensures UX consistency
+- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates design patterns, checks security
+- Petra (.claude/agents/code-review/architecture-auditor.md): System-level architecture analysis
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
-Create your execution plan, then implement the solution. Use @commands/load-cursor-rules.md to load relevant project standards for the task. Run agents in parallel when possible, sequentially when they depend on each other.
+Create your execution plan, then implement the solution. Use /load-cursor-rules to load relevant project standards for the task. Execute agents in parallel when possible, sequentially when they depend on each other.
 </autonomous-execution>
 
 <validation-and-review>
