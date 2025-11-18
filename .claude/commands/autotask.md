@@ -27,11 +27,37 @@ You only need to provide the task description and review the final PR.
 Read @rules/git-worktree-task.mdc for comprehensive autonomous workflow guidance.
 
 <task-preparation>
-Ensure you have clear, unambiguous requirements before starting implementation. If the task description is unclear or has multiple valid interpretations, use @commands/create-prompt.md to ask clarifying questions and create a structured prompt. For tasks with clear requirements and single valid interpretation, proceed directly to implementation.
+Analyze the task description to determine clarity:
+
+**If unclear or ambiguous:** Use /create-prompt to ask clarifying questions and create a structured prompt. This ensures we capture all requirements upfront and saves time later. The /create-prompt workflow will:
+- Ask targeted clarification questions
+- Create a structured prompt document
+- Offer to execute immediately
+
+**If clear and unambiguous:** Proceed directly to implementation.
+
+Quick clarity check:
+- Can you identify the exact files to modify? If no → use /create-prompt
+- Are there multiple valid approaches? If yes → use /create-prompt
+- Is the expected outcome measurable? If no → use /create-prompt
 </task-preparation>
 
 <worktree-setup>
-Create a fully functional, isolated development environment in .gitworktrees/ where all tests pass and the project is ready for development work. Ensure the environment is secure (prevent shell injection), handle any conflicts, and set up all necessary dependencies and configurations using /setup-environment.
+Create an isolated development environment using /setup-environment:
+
+Git worktree setup (auto-detected):
+- Create worktree with branch
+- Run: /setup-environment
+- Automatically detects worktree context
+- Smoke test only (15-30 seconds)
+- Main repo already validated everything
+
+The /setup-environment command is smart:
+- Detects .gitworktrees/ path → minimal setup
+- Detects existing node_modules → minimal setup
+- Fresh clone without dependencies → full validation
+
+No need to specify verification level - the command figures out the right approach based on context. Git worktrees get fast setup, new machines get thorough validation.
 </worktree-setup>
 
 <autonomous-execution>
@@ -65,12 +91,54 @@ phases inform later ones - don't re-decide or re-ask. Carry forward user clarifi
 implementation decisions, constraint discoveries, and why choices were made.
 </autonomous-execution>
 
+<obstacle-and-decision-handling>
+Pause only for deal-killers: security risks, data loss potential, or fundamentally unclear requirements. For everything else, make a reasonable choice and document it.
+
+Design decisions get documented in the PR with rationale and alternatives considered. The executing model knows when to ask vs when to decide and document.
+</obstacle-and-decision-handling>
+
 <validation-and-review>
-Ensure code quality through adaptive validation that scales with complexity and risk. Match review intensity to the changes: simple changes need only automated checks, medium complexity benefits from targeted agent review, high-risk or security-sensitive changes warrant comprehensive review. Use your judgment to determine what level of validation the changes require.
+**Minimal validation (default - trust git hooks):**
+- Make the changes
+- Stage and commit
+- Let git hooks validate automatically
+- Fix only if hooks fail
+
+**Targeted validation (complex features):**
+- Run specific tests for changed code
+- Use Rivera for architecture review if patterns change
+
+**Full validation (security/database/auth changes):**
+- Comprehensive test suite
+- Multiple agent reviews
+- Security scanning
+
+The principle: Don't duplicate what git hooks already do. They'll catch formatting, linting, and test failures at commit time. Only add extra validation when the risk justifies it.
 </validation-and-review>
 
 <create-pr>
-Deliver a well-documented pull request ready for review, with commits following .cursor/rules/git-commit-message.mdc. Provide reviewers with decision context: why this approach over alternatives, what trade-offs were made, how this fits the larger system, and what testing validates the changes.
+Deliver a well-documented pull request ready for review, with commits following .cursor/rules/git-commit-message.mdc.
+
+PR description must include:
+
+Summary:
+- What was implemented and why
+- How it addresses the requirements
+
+Design Decisions (if any were made):
+- List each significant decision with rationale
+- Note alternatives considered and trade-offs
+- Explain why each approach was chosen
+
+Obstacles Encountered (if any):
+- Document any challenges faced
+- How they were resolved or worked around
+
+Testing:
+- What validation was performed
+- Any edge cases considered
+
+This transparency helps reviewers understand not just what changed, but why specific approaches were chosen and what was considered along the way.
 </create-pr>
 
 <bot-feedback-loop>
@@ -90,7 +158,22 @@ After making fixes and pushing, wait 90 seconds for bots to re-review. Iterate u
 times if needed until critical issues are resolved. </bot-feedback-loop>
 
 <completion>
-Provide a summary of what was accomplished, highlights you're proud of, and any significant issues found and fixed during bot review. Scale the summary length to the complexity of the change - simple fixes get a sentence or two, major features deserve a paragraph. Include the PR URL and worktree location.
+Provide a summary including:
+
+What was accomplished:
+- Core functionality delivered
+- Any design decisions made autonomously
+- Obstacles overcome without user intervention
+
+Key highlights:
+- Elegant solutions or optimizations
+- Significant issues found and fixed
+- Bot feedback addressed
+
+Transparency note if applicable:
+"Made [N] design decisions autonomously - all documented in the PR for your review."
+
+Include the PR URL and worktree location. Scale the summary length to complexity - simple tasks get brief summaries, complex features deserve detailed explanations.
 </completion>
 
 <error-handling>
@@ -105,6 +188,8 @@ Recover gracefully from failures when possible, or inform the user clearly when 
 - Git hooks do validation: Leverage your existing infrastructure
 - Autonomous bot handling: Don't wait for human intervention
 - PR-centric workflow: Everything leads to a mergeable pull request
+- Smart obstacle handling: Pause only for deal-killers, document all decisions
+- Decision transparency: Every autonomous choice is documented in the PR
 
 ## Requirements
 
