@@ -4,7 +4,8 @@ description: Initialize development environment for git worktree
 
 # Setup Development Environment
 
-Initialize development environment with context-aware setup that distinguishes between git worktrees and new machines.
+Initialize development environment with context-aware setup that distinguishes between
+git worktrees and new machines.
 
 <objective>
 Get the development environment ready for productive work, with right-sized verification based on context.
@@ -25,17 +26,18 @@ For git worktrees (15-30 seconds):
 - Trust main repo's validation
 
 For new machines (2-5 minutes):
+
 - Install and verify all dependencies
 - Set up and test git hooks
 - Run build process
 - Execute test suite
-- Verify all tools are available
-</setup-approach>
+- Verify all tools are available </setup-approach>
 
 <project-detection>
 Identify the project type and package manager by examining project files:
 
 Project types:
+
 - Node.js: package.json present
 - Python: requirements.txt or Pipfile present
 - Ruby: Gemfile present
@@ -45,11 +47,11 @@ Project types:
 - .NET: .csproj files present
 
 Package managers for Node.js:
+
 - pnpm if pnpm-lock.yaml exists
 - yarn if yarn.lock exists
 - bun if bun.lockb exists
-- npm as default fallback
-</project-detection>
+- npm as default fallback </project-detection>
 
 <dependency-installation>
 Install project dependencies using the appropriate package manager. For Node.js projects, use pnpm/yarn/bun/npm based on which lockfile exists. For Python, use pip or pipenv. Install with frozen/locked versions to ensure consistency with the main repository.
@@ -80,24 +82,24 @@ Run any necessary code generation steps the project requires:
 - TypeScript: Generate declarations if configured
 - Package prepare scripts: Run if defined in package.json
 
-These ensure generated code is available for development.
-</code-generation>
+These ensure generated code is available for development. </code-generation>
 
 <verification>
 Verify the environment is ready based on context:
 
 For git worktrees (smoke test only):
+
 - Confirm dependencies were installed successfully
 - Run a quick TypeScript compilation check if applicable
 - Trust that the main repository's validation is sufficient
 
 For new machines (thorough verification):
+
 - Verify all development tools are available and working
 - Run the build process to ensure it completes
 - Execute the test suite to confirm everything works
 - Test that git hooks function correctly
-- Check that all required command-line tools are installed
-</verification>
+- Check that all required command-line tools are installed </verification>
 
 <error-handling>
 When encountering failures, identify the root cause and attempt automatic resolution where possible. For issues that require manual intervention, provide clear guidance on how to proceed. Continue with other setup steps when it's safe to do so without the failed component.
@@ -110,10 +112,11 @@ Git worktree success (15-30 seconds):
 - Development environment ready for immediate use
 
 New machine success (2-5 minutes):
+
 - All dependencies and tools functioning correctly
 - Build and test processes verified
 - Git hooks operational
 - Complete development environment validated
 
-The goal is right-sized verification: minimal for worktrees that inherit from the main repository, comprehensive for new machine setups.
-</success-criteria>
+The goal is right-sized verification: minimal for worktrees that inherit from the main
+repository, comprehensive for new machine setups. </success-criteria>

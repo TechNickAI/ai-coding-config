@@ -29,7 +29,10 @@ Read @rules/git-worktree-task.mdc for comprehensive autonomous workflow guidance
 <task-preparation>
 Analyze the task description to determine clarity:
 
-**If unclear or ambiguous:** Use /create-prompt to ask clarifying questions and create a structured prompt. This ensures we capture all requirements upfront and saves time later. The /create-prompt workflow will:
+**If unclear or ambiguous:** Use /create-prompt to ask clarifying questions and create a
+structured prompt. This ensures we capture all requirements upfront and saves time
+later. The /create-prompt workflow will:
+
 - Ask targeted clarification questions
 - Create a structured prompt document
 - Offer to execute immediately
@@ -37,15 +40,16 @@ Analyze the task description to determine clarity:
 **If clear and unambiguous:** Proceed directly to implementation.
 
 Quick clarity check:
+
 - Can you identify the exact files to modify? If no → use /create-prompt
 - Are there multiple valid approaches? If yes → use /create-prompt
-- Is the expected outcome measurable? If no → use /create-prompt
-</task-preparation>
+- Is the expected outcome measurable? If no → use /create-prompt </task-preparation>
 
 <worktree-setup>
 Create an isolated development environment using /setup-environment:
 
 Git worktree setup (auto-detected):
+
 - Create worktree with branch
 - Run: /setup-environment
 - Automatically detects worktree context
@@ -53,11 +57,13 @@ Git worktree setup (auto-detected):
 - Main repo already validated everything
 
 The /setup-environment command is smart:
+
 - Detects .gitworktrees/ path → minimal setup
 - Detects existing node_modules → minimal setup
 - Fresh clone without dependencies → full validation
 
-No need to specify verification level - the command figures out the right approach based on context. Git worktrees get fast setup, new machines get thorough validation.
+No need to specify verification level - the command figures out the right approach based
+on context. Git worktrees get fast setup, new machines get thorough validation.
 </worktree-setup>
 
 <autonomous-execution>
@@ -94,7 +100,8 @@ implementation decisions, constraint discoveries, and why choices were made.
 <obstacle-and-decision-handling>
 Pause only for deal-killers: security risks, data loss potential, or fundamentally unclear requirements. For everything else, make a reasonable choice and document it.
 
-Design decisions get documented in the PR with rationale and alternatives considered. The executing model knows when to ask vs when to decide and document.
+Design decisions get documented in the PR with rationale and alternatives considered.
+The executing model knows when to ask vs when to decide and document.
 </obstacle-and-decision-handling>
 
 <validation-and-review>
@@ -105,16 +112,19 @@ Design decisions get documented in the PR with rationale and alternatives consid
 - Fix only if hooks fail
 
 **Targeted validation (complex features):**
+
 - Run specific tests for changed code
 - Use Rivera for architecture review if patterns change
 
 **Full validation (security/database/auth changes):**
+
 - Comprehensive test suite
 - Multiple agent reviews
 - Security scanning
 
-The principle: Don't duplicate what git hooks already do. They'll catch formatting, linting, and test failures at commit time. Only add extra validation when the risk justifies it.
-</validation-and-review>
+The principle: Don't duplicate what git hooks already do. They'll catch formatting,
+linting, and test failures at commit time. Only add extra validation when the risk
+justifies it. </validation-and-review>
 
 <create-pr>
 Deliver a well-documented pull request ready for review, with commits following .cursor/rules/git-commit-message.mdc.
@@ -122,24 +132,28 @@ Deliver a well-documented pull request ready for review, with commits following 
 PR description must include:
 
 Summary:
+
 - What was implemented and why
 - How it addresses the requirements
 
 Design Decisions (if any were made):
+
 - List each significant decision with rationale
 - Note alternatives considered and trade-offs
 - Explain why each approach was chosen
 
 Obstacles Encountered (if any):
+
 - Document any challenges faced
 - How they were resolved or worked around
 
 Testing:
+
 - What validation was performed
 - Any edge cases considered
 
-This transparency helps reviewers understand not just what changed, but why specific approaches were chosen and what was considered along the way.
-</create-pr>
+This transparency helps reviewers understand not just what changed, but why specific
+approaches were chosen and what was considered along the way. </create-pr>
 
 <bot-feedback-loop>
 Autonomously address valuable bot feedback, reject what's not applicable, and deliver a PR ready for human review with all critical issues resolved.
@@ -161,19 +175,22 @@ times if needed until critical issues are resolved. </bot-feedback-loop>
 Provide a summary including:
 
 What was accomplished:
+
 - Core functionality delivered
 - Any design decisions made autonomously
 - Obstacles overcome without user intervention
 
 Key highlights:
+
 - Elegant solutions or optimizations
 - Significant issues found and fixed
 - Bot feedback addressed
 
-Transparency note if applicable:
-"Made [N] design decisions autonomously - all documented in the PR for your review."
+Transparency note if applicable: "Made [N] design decisions autonomously - all
+documented in the PR for your review."
 
-Include the PR URL and worktree location. Scale the summary length to complexity - simple tasks get brief summaries, complex features deserve detailed explanations.
+Include the PR URL and worktree location. Scale the summary length to complexity -
+simple tasks get brief summaries, complex features deserve detailed explanations.
 </completion>
 
 <error-handling>
