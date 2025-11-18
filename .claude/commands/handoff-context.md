@@ -55,12 +55,15 @@ numbers] </work_completed>
 
 **DO NOT ASK** - Just do it:
 
-1. Generate a unique filename: `/tmp/context_handoff_TIMESTAMP.md` where TIMESTAMP is the current Unix timestamp
+1. Generate a unique filename: `/tmp/context_handoff_TIMESTAMP.md` where TIMESTAMP is
+   the current Unix timestamp
 2. Use **Write tool** to save the handoff content to that unique filename
-3. Use **Bash** to copy the file you just created: `pbcopy < /tmp/context_handoff_TIMESTAMP.md`
+3. Use **Bash** to copy the file you just created:
+   `pbcopy < /tmp/context_handoff_TIMESTAMP.md`
 4. Confirm: `📋 Copied to clipboard`
 
-**Implementation:** First run `date +%s` to get the timestamp, then use that value in both the Write and Bash commands.
+**Implementation:** First run `date +%s` to get the timestamp, then use that value in
+both the Write and Bash commands.
 
 **Why Write tool instead of heredoc?**
 
