@@ -5,115 +5,71 @@ description:
   understanding before attempting fixes
 ---
 
-# Systematic Debugging
+<objective>
+Find the root cause before writing fixes. Understanding why something breaks leads to correct fixes. Guessing wastes time and creates new problems.
 
-## Overview
+Core principle: If you can't explain WHY it's broken, you're not ready to fix it. Every fix must address a specific, understood root cause.
+</objective>
 
-Find the root cause before writing fixes. Understanding why something breaks leads to
-correct fixes. Guessing wastes time and creates new problems.
+<when-to-use>
+Use for any technical issue: test failures, build errors, bugs, unexpected behavior, performance problems. Especially valuable when previous attempts haven't worked or when tempted to try a "quick fix."
+</when-to-use>
 
-## When to Use
+<start-with-evidence>
+Read error messages completely. Stack traces, line numbers, and error codes contain valuable information. The error message often points directly to the problem.
 
-Use for any technical issue: test failures, build errors, bugs, unexpected behavior,
-performance problems. Especially valuable when previous attempts haven't worked or when
-tempted to try a "quick fix."
+Work to reproduce the issue reliably. If you can't trigger it consistently, gather more data before proposing solutions. Document the exact steps that trigger the failure.
 
-## Core Principle
+Check what changed recently. Review commits, new dependencies, configuration changes, environmental differences. Most bugs correlate with recent changes.
+</start-with-evidence>
 
-If you can't explain WHY it's broken, you're not ready to fix it. Every fix must address
-a specific, understood root cause.
+<trace-the-problem>
+Follow the data flow backward from the error. Where does the bad value originate? Work through the call stack until you find the source. Understanding the complete path from source to symptom reveals the true problem.
 
-## Debugging Approach
+When multiple components interact, add diagnostic output at each boundary to identify which component fails. This narrows the investigation to the specific failing layer.
+</trace-the-problem>
 
-### Start with the Evidence
+<compare-with-working-code>
+Find similar code that works correctly. Compare the working and broken versions systematically. Every difference matters until proven otherwise.
 
-Read error messages completely. Stack traces, line numbers, and error codes contain
-valuable information. The error message often points directly to the problem.
+When implementing a pattern, read reference implementations thoroughly. Understand their dependencies, settings, and environmental requirements.
+</compare-with-working-code>
 
-Work to reproduce the issue reliably. If you can't trigger it consistently, gather more
-data before proposing solutions. Document the exact steps that trigger the failure.
+<test-understanding>
+Form a clear hypothesis: "X causes the problem because Y." Test with the smallest possible change. Change one variable at a time to isolate the cause.
 
-Check what changed recently. Review commits, new dependencies, configuration changes,
-environmental differences. Most bugs correlate with recent changes.
+When a hypothesis proves wrong, form a new one based on what you learned. Don't layer fixes on top of failed attempts.
+</test-understanding>
 
-### Trace the Problem
+<implement-fix>
+Create a test that reproduces the issue before fixing it. This ensures you understand the problem and can verify the fix works.
 
-Follow the data flow backward from the error. Where does the bad value originate? Work
-through the call stack until you find the source. Understanding the complete path from
-source to symptom reveals the true problem.
-
-When multiple components interact, add diagnostic output at each boundary to identify
-which component fails. This narrows the investigation to the specific failing layer.
-
-### Compare with Working Code
-
-Find similar code that works correctly. Compare the working and broken versions
-systematically. Every difference matters until proven otherwise.
-
-When implementing a pattern, read reference implementations thoroughly. Understand their
-dependencies, settings, and environmental requirements.
-
-### Test Your Understanding
-
-Form a clear hypothesis: "X causes the problem because Y." Test with the smallest
-possible change. Change one variable at a time to isolate the cause.
-
-When a hypothesis proves wrong, form a new one based on what you learned. Don't layer
-fixes on top of failed attempts.
-
-### Implement the Fix
-
-Create a test that reproduces the issue before fixing it. This ensures you understand
-the problem and can verify the fix works.
-
-Apply a single, focused fix that addresses the root cause. Resist bundling other
-improvements or refactoring.
+Apply a single, focused fix that addresses the root cause. Resist bundling other improvements or refactoring.
 
 Verify the fix resolves the issue without breaking other functionality.
+</implement-fix>
 
-## Recognizing Architectural Problems
-
-When multiple fix attempts fail in different ways, the architecture might be the
-problem. Signs include:
-
+<recognizing-architectural-problems>
+When multiple fix attempts fail in different ways, the architecture might be the problem. Signs include:
 - Each fix reveals new coupling or shared state issues
 - Fixes require extensive refactoring to work properly
 - Each attempted fix creates new symptoms elsewhere
 
-These patterns suggest reconsidering the fundamental approach rather than continuing to
-patch symptoms.
+These patterns suggest reconsidering the fundamental approach rather than continuing to patch symptoms.
+</recognizing-architectural-problems>
 
-## Example: Tracing a Problem
-
-```typescript
-// Error: Cannot read property 'id' of undefined at getUserData (user.ts:45)
-
-// Trace backward:
-// user.ts:45 uses user.id
-// user comes from api.ts:23
-// api.ts:23 gets user from fetchUser(userId)
-// fetchUser returns undefined when user not found
-
-// Root cause: Missing null check after fetchUser
-// Fix: Handle the null case before accessing properties
-```
-
-## Warning Signs
-
+<warning-signs>
 Stop and investigate properly when thinking:
-
 - "Try this and see if it works"
 - "Quick fix for now, investigate later"
 - "I don't fully understand but this might help"
 - "Here are several things to try"
 
 These thoughts signal you're guessing rather than debugging systematically.
+</warning-signs>
 
-## When Stuck
+<when-stuck>
+If you don't understand something, say so clearly. Ask for help or research more. Understanding the problem before attempting fixes saves time and prevents introducing new bugs.
 
-If you don't understand something, say so clearly. Ask for help or research more.
-Understanding the problem before attempting fixes saves time and prevents introducing
-new bugs.
-
-Systematic debugging finds and fixes the real problem. Random attempts waste time and
-create new issues.
+Systematic debugging finds and fixes the real problem. Random attempts waste time and create new issues.
+</when-stuck>
