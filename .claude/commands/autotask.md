@@ -252,17 +252,27 @@ echo "🔍 Running validation and review..."
 
 # Step 1: Git hooks handle the basics
 
-echo "🪝 Running pre-commit hooks..." git add .
+echo "🪝 Running pre-commit hooks..."
+git add .
 
-if [ -d ".husky" ]; then npx husky run pre-commit || { echo "Fixing hook failures..." #
-Auto-fix and retry } elif [ -f ".pre-commit-config.yaml" ]; then pre-commit run
---all-files || { echo "Fixing hook failures..." # Auto-fix and retry } fi
+if [ -d ".husky" ]; then
+  npx husky run pre-commit || {
+    echo "❌ Pre-commit hooks failed, attempting fixes..."
+    npx eslint --fix . 2>/dev/null || true
+    npx prettier --write . 2>/dev/null || true
+    npx husky run pre-commit
+  }
+elif [ -f ".pre-commit-config.yaml" ]; then
+  pre-commit run --all-files || {
+    echo "❌ Pre-commit hooks failed, attempting fixes..."
+    pre-commit run --all-files
+  }
+fi
 
 # Step 2: Conditional agent review based on complexity
 
 echo "📊 Analyzing changes to determine review needs..."
-
-````
+```
 
 Based on the analysis, I'll deploy appropriate review agents:
 
@@ -370,8 +380,12 @@ Autonomously handling bot feedback without waiting for user intervention:
 echo "⏳ Waiting for bot reviews to complete..."
 PR_NUMBER=$(gh pr view --json number -q .number)
 
-# Initial wait for bots to run (typically 2-5 minutes)
-sleep 120
+# Get repository info
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+
+# Initial wait for bots to run
+echo "⏰ Waiting 3 minutes for bots to complete initial analysis..."
+sleep 180
 
 MAX_ATTEMPTS=5
 ATTEMPT=0
@@ -382,12 +396,12 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
 
   # Get all bot comments
   BOT_COMMENTS=$(gh api \
-    repos/{owner}/{repo}/pulls/$PR_NUMBER/comments \
+    "repos/$REPO/pulls/$PR_NUMBER/comments" \
     --jq '.[] | select(.user.type == "Bot" or .user.login | endswith("[bot]")) | {id: .id, body: .body, path: .path, line: .line}')
 
   # Also check review comments
   BOT_REVIEWS=$(gh api \
-    repos/{owner}/{repo}/pulls/$PR_NUMBER/reviews \
+    "repos/$REPO/pulls/$PR_NUMBER/reviews" \
     --jq '.[] | select(.user.type == "Bot" or .user.login | endswith("[bot]")) | {state: .state, body: .body}')
 
   # Check CI status
