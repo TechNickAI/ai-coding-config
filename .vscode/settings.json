@@ -9,7 +9,8 @@
     "pydantic",
     "pytest",
     "tavily",
-    "worktree"
+    "worktree",
+    "worktrees"
   ],
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,

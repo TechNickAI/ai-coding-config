@@ -126,6 +126,7 @@ provide actionable recommendations:
 **Always check and recommend:**
 
 1. **Generate AGENTS.md** - If `AGENTS.md` doesn't exist at project root:
+
    ```
    📋 Recommended: Generate project context file for AI assistants
    Run: /generate-AGENTS-file

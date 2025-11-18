@@ -1,9 +1,9 @@
 ---
 name: youtube-transcript-analyzer
 description:
-  Use when analyzing YouTube videos for research, learning, or understanding how
-  content relates to a project - downloads transcripts with yt-dlp, chunks long
-  content, and provides context-aware analysis
+  Use when analyzing YouTube videos for research, learning, or understanding how content
+  relates to a project - downloads transcripts with yt-dlp, chunks long content, and
+  provides context-aware analysis
 ---
 
 # YouTube Transcript Analyzer
@@ -43,7 +43,8 @@ yt-dlp --version
 
 ### Setup Temporary Directory
 
-IMPORTANT: Always create and use a temporary directory for downloaded files to avoid cluttering the repository:
+IMPORTANT: Always create and use a temporary directory for downloaded files to avoid
+cluttering the repository:
 
 ```bash
 # Create temporary directory for this analysis
@@ -153,14 +154,14 @@ yt-dlp --skip-download --write-auto-sub --sub-lang en --sub-format vtt \
 
 ## Best Practices
 
-Focus analysis on practical application rather than comprehensive summaries. Users
-want to know "how does this help me" not "what did they say for 90 minutes."
+Focus analysis on practical application rather than comprehensive summaries. Users want
+to know "how does this help me" not "what did they say for 90 minutes."
 
 Extract concrete examples and code patterns when available. Reference specific
 timestamps so users can jump to relevant sections.
 
-When comparing with project code, be specific about similarities and differences.
-Vague comparisons like "similar approach" don't add value.
+When comparing with project code, be specific about similarities and differences. Vague
+comparisons like "similar approach" don't add value.
 
 For technical content, identify the underlying patterns and principles rather than
 surface-level implementation details. Help users understand transferable concepts.

@@ -1,23 +1,29 @@
 ---
-description: Create optimized prompts for complex tasks and save them with descriptive names
+description:
+  Create optimized prompts for complex tasks and save them with descriptive names
 argument-hint: <task description>
 ---
 
 # Create Prompt
 
-You are an expert prompt engineer. Create a well-structured prompt for the task described in: ${ARGUMENTS}
+You are an expert prompt engineer. Create a well-structured prompt for the task
+described in: ${ARGUMENTS}
 
 ## Process
 
 ### 1. Analyze the Request
 
 If the request is vague, ask for clarification:
-- Use AskUserQuestion when there are clear, discrete options (e.g., "Auth method?" → JWT/OAuth/Session)
-- Use free-form response for descriptions, specifics, or examples (e.g., "What error are you seeing?")
+
+- Use AskUserQuestion when there are clear, discrete options (e.g., "Auth method?" →
+  JWT/OAuth/Session)
+- Use free-form response for descriptions, specifics, or examples (e.g., "What error are
+  you seeing?")
 
 ### 2. Create the Prompt
 
 Structure the prompt using XML tags for clarity:
+
 - Clear objective and context
 - Specific requirements and constraints
 - Expected output and success criteria
@@ -26,6 +32,7 @@ Structure the prompt using XML tags for clarity:
 ### 3. Save the Prompt
 
 First, ensure `.created-prompts/` exists:
+
 ```bash
 if [ ! -d ".created-prompts" ]; then
   mkdir .created-prompts
@@ -37,6 +44,7 @@ fi
 ```
 
 Save with a descriptive Title-Case-With-Hyphens name:
+
 - `Implement-User-Authentication.md`
 - `Fix-Database-Connection-Bug.md`
 - `Add-Dashboard-Analytics.md`
@@ -44,6 +52,7 @@ Save with a descriptive Title-Case-With-Hyphens name:
 ### 4. Offer to Execute
 
 After saving:
+
 ```
 ✓ Saved to .created-prompts/Your-Task-Name.md
 

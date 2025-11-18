@@ -5,51 +5,70 @@ alwaysApply: false
 
 # Prompt Engineering Best Practices for LLM-to-LLM Communication
 
-When creating prompts that will be read and executed by other LLMs (commands, workflows, agent prompts), follow these practices. These guidelines are for prompts that LLMs write for other LLMs to consume - not for human-to-LLM interaction.
+When creating prompts that will be read and executed by other LLMs (commands, workflows,
+agent prompts), follow these practices. These guidelines are for prompts that LLMs write
+for other LLMs to consume - not for human-to-LLM interaction.
 
 ## Why This Document Minimizes Formatting
 
 This document is designed to be read by LLMs, not humans. Therefore:
 
-- Minimal markdown formatting: No excessive bold, italics, or decorative symbols. These waste tokens and add no semantic value for LLM comprehension.
-- Minimal "bad" examples: LLMs encode patterns from what they see, regardless of labels like "wrong" or "don't do this." Showing anti-patterns teaches the LLM to reproduce them.
-- Simple structure: Headings for organization, code blocks for actual patterns, plain text for instructions.
-- Clear over clever: Direct language that LLMs can parse literally, not stylistic variations.
+- Minimal markdown formatting: No excessive bold, italics, or decorative symbols. These
+  waste tokens and add no semantic value for LLM comprehension.
+- Minimal "bad" examples: LLMs encode patterns from what they see, regardless of labels
+  like "wrong" or "don't do this." Showing anti-patterns teaches the LLM to reproduce
+  them.
+- Simple structure: Headings for organization, code blocks for actual patterns, plain
+  text for instructions.
+- Clear over clever: Direct language that LLMs can parse literally, not stylistic
+  variations.
 
-When you read "avoid X" or see a counterexample in this document, understand that we're violating our own principle for teaching purposes - but minimize this pattern in prompts you create for LLM consumption.
+When you read "avoid X" or see a counterexample in this document, understand that we're
+violating our own principle for teaching purposes - but minimize this pattern in prompts
+you create for LLM consumption.
 
 ## Key Principles for LLM-Readable Prompts
 
 - Front-load critical information: LLMs give more weight to early content
 - Be explicit: LLMs can't infer context the way humans do
 - Maintain consistency: Use the same terminology throughout
-- Structure matters: Clear boundaries (especially XML tags) help LLMs parse complex prompts
+- Structure matters: Clear boundaries (especially XML tags) help LLMs parse complex
+  prompts
 - Examples teach patterns: What you show is what the LLM will do
 - Clarity over brevity: Never sacrifice unambiguous interpretation for token savings
 
 ## Pattern Reinforcement Through Examples
 
-When creating prompts for other LLMs to execute, pattern teaching becomes critical. LLMs learn from what you show them, not from what you tell them to avoid.
+When creating prompts for other LLMs to execute, pattern teaching becomes critical. LLMs
+learn from what you show them, not from what you tell them to avoid.
 
 ### How LLMs Process Examples in Prompts
 
-When an LLM reads a prompt file with examples, it encodes those patterns for reproduction:
+When an LLM reads a prompt file with examples, it encodes those patterns for
+reproduction:
 
-1. Pattern Matching Over Labels: LLMs reproduce structural patterns. Code structure creates strong activation. Text labels like "wrong" or "don't do this" are weak signals that don't override pattern encoding.
+1. Pattern Matching Over Labels: LLMs reproduce structural patterns. Code structure
+   creates strong activation. Text labels like "wrong" or "don't do this" are weak
+   signals that don't override pattern encoding.
 
-2. Direct Teaching Through Examples: When writing command workflows or agent prompts, you're teaching the executing LLM. Every example shown is a lesson it will follow.
+2. Direct Teaching Through Examples: When writing command workflows or agent prompts,
+   you're teaching the executing LLM. Every example shown is a lesson it will follow.
 
-3. Consistency is Critical: In LLM-to-LLM communication, inconsistent examples cause unpredictable behavior. The executing LLM can't resolve ambiguity the way humans do.
+3. Consistency is Critical: In LLM-to-LLM communication, inconsistent examples cause
+   unpredictable behavior. The executing LLM can't resolve ambiguity the way humans do.
 
-4. Attention Weighting: All tokens in the prompt receive attention. Structural patterns activate high attention regardless of surrounding text saying "avoid this."
+4. Attention Weighting: All tokens in the prompt receive attention. Structural patterns
+   activate high attention regardless of surrounding text saying "avoid this."
 
 ### Writing Effective Instructions for LLM Execution
 
 For command workflows and agent prompts:
 
 1. Flood with correct patterns: Show 5+ examples of the standard approach
-2. Never show anti-patterns: Don't include "wrong" examples - the LLM will reproduce them
-3. Describe exceptions in prose: If there are edge cases, describe them in words, not code
+2. Never show anti-patterns: Don't include "wrong" examples - the LLM will reproduce
+   them
+3. Describe exceptions in prose: If there are edge cases, describe them in words, not
+   code
 4. Maintain pattern consistency: All examples should follow the same structure
 
 Example of good pattern teaching in a prompt file:
@@ -109,16 +128,19 @@ Apply this exact error handling pattern to all endpoints. If an endpoint doesn't
 ### The Mechanism in LLM-to-LLM Communication
 
 When one LLM writes a prompt for another to execute:
+
 - The executing LLM encodes ALL patterns shown, regardless of labels
 - "Don't do X" requires the LLM to first construct X, then negate it
 - Direct positive examples create stronger, more reliable execution
 - Pattern consistency across examples ensures predictable behavior
 
-Key principle: In LLM-to-LLM communication, show exactly what you want done. Never show what you don't want, even as a counterexample.
+Key principle: In LLM-to-LLM communication, show exactly what you want done. Never show
+what you don't want, even as a counterexample.
 
 ## Goals Over Process in LLM-Readable Prompts
 
-When writing prompts for LLM execution (commands, workflows, agents), focus on clear outcomes rather than micro-managing steps. LLMs can figure out implementation details.
+When writing prompts for LLM execution (commands, workflows, agents), focus on clear
+outcomes rather than micro-managing steps. LLMs can figure out implementation details.
 
 ### The Over-Prescription Problem in LLM-to-LLM Communication
 
@@ -134,6 +156,7 @@ Overly prescriptive prompts create problems when LLMs execute them:
 For command workflows and agent prompts:
 
 Over-prescriptive command:
+
 ```xml
 <task>
 Step 1: Open each TypeScript file
@@ -152,6 +175,7 @@ Step 5: Run type checking
 ```
 
 Goal-focused command:
+
 ```xml
 <task>
 Remove the 'I' prefix from all TypeScript interface names throughout the codebase, updating all references. Ensure type checking still passes.
@@ -161,6 +185,7 @@ Remove the 'I' prefix from all TypeScript interface names throughout the codebas
 For agent prompts:
 
 Over-prescriptive agent prompt:
+
 ```xml
 <instructions>
 1. First, read the package.json file
@@ -174,6 +199,7 @@ Over-prescriptive agent prompt:
 ```
 
 Goal-focused agent prompt:
+
 ```xml
 <objective>
 Update all dependencies to their latest compatible versions while ensuring all tests continue to pass.
@@ -189,15 +215,19 @@ Update all dependencies to their latest compatible versions while ensuring all t
 
 Describe outcomes clearly: State what success looks like, not how to achieve it.
 
-Set boundaries, not algorithms: Define constraints and requirements, let the LLM determine the approach.
+Set boundaries, not algorithms: Define constraints and requirements, let the LLM
+determine the approach.
 
-Use natural language: Write prompts as you would explain a task to a competent colleague.
+Use natural language: Write prompts as you would explain a task to a competent
+colleague.
 
-Trust the LLM's capabilities: Modern LLMs can handle file operations, code analysis, and complex refactoring without step-by-step instructions.
+Trust the LLM's capabilities: Modern LLMs can handle file operations, code analysis, and
+complex refactoring without step-by-step instructions.
 
 ### When Detailed Steps ARE Needed
 
 Include specific steps only when:
+
 - The order is critical and non-obvious
 - Domain-specific requirements must be followed exactly
 - You're establishing a specific pattern to be replicated
@@ -222,15 +252,20 @@ These steps are required by our deployment pipeline and cannot be skipped or reo
 </reason>
 ```
 
-Key principle: In LLM-to-LLM communication, clarity about the goal is more valuable than detailed process instructions.
+Key principle: In LLM-to-LLM communication, clarity about the goal is more valuable than
+detailed process instructions.
 
 ## Structural Delimiters for LLM Consumption
 
-Modern LLMs are trained to recognize XML-style tags, making them highly effective for LLM-to-LLM communication. Use them to create unambiguous boundaries that LLMs can reliably parse.
+Modern LLMs are trained to recognize XML-style tags, making them highly effective for
+LLM-to-LLM communication. Use them to create unambiguous boundaries that LLMs can
+reliably parse.
 
-Now that you understand pattern reinforcement and goal-focused prompting, you need to know how to structure prompts so LLMs can parse them reliably.
+Now that you understand pattern reinforcement and goal-focused prompting, you need to
+know how to structure prompts so LLMs can parse them reliably.
 
 When to use XML tags:
+
 - Multiple distinct sections that need clear separation
 - When you need to reference specific parts later in the prompt
 - Complex prompts with different types of content (context, task, examples, constraints)
@@ -251,6 +286,7 @@ Cannot modify indexes or table structure
 ```
 
 When to skip XML tags:
+
 - Single, straightforward instructions
 - Simple one-paragraph prompts
 - When the prompt has natural flow without needing boundaries
@@ -280,38 +316,48 @@ const auth = new OAuth2Client(clientId, clientSecret);
 ```
 
 Guidelines for XML structure:
-- Be consistent with tag names throughout your codebase (always use `<task>` not sometimes `<objective>`)
+
+- Be consistent with tag names throughout your codebase (always use `<task>` not
+  sometimes `<objective>`)
 - Use semantically meaningful tag names that describe the content
 - Tags should enhance clarity, not add complexity for its own sake
 - LLMs parse these more literally than humans would
 
 ## Writing Prompts for LLM Consumption
 
-When creating prompts that other LLMs will read and execute (command files, agent prompts, workflows), remember that LLMs parse more literally than humans. Ambiguity that humans resolve through context will confuse LLMs.
+When creating prompts that other LLMs will read and execute (command files, agent
+prompts, workflows), remember that LLMs parse more literally than humans. Ambiguity that
+humans resolve through context will confuse LLMs.
 
 ### Key Differences from Human-Readable Prompts
 
-LLMs need explicit context: Humans infer relationships and context. LLMs need everything spelled out.
+LLMs need explicit context: Humans infer relationships and context. LLMs need everything
+spelled out.
 
 Good example:
+
 ```
 "Update the webpack.config.js to enable source maps in development mode by setting devtool: 'source-map'"
 ```
 
 Avoid vague references like "update the config like we discussed"
 
-Consistent terminology matters: Use the same terms throughout. Don't vary vocabulary for style.
+Consistent terminology matters: Use the same terms throughout. Don't vary vocabulary for
+style.
 
 Good example:
+
 ```
 "Update the component... update the component... update the component..."
 ```
 
-Avoid varying terms like "modify the component... update the element... change the widget"
+Avoid varying terms like "modify the component... update the element... change the
+widget"
 
 Unambiguous references: Be specific about what you're referring to.
 
 Good example:
+
 ```
 "After updating the UserProfile component, test the user authentication functionality"
 ```
@@ -345,6 +391,7 @@ A single Modal.tsx file with the complete implementation
 Order matters for context building: Put foundational information first.
 
 Good order:
+
 1. Environment/context
 2. Overall objective
 3. Specific requirements
@@ -402,6 +449,7 @@ Review the codebase for performance issues
 ### Testing LLM-Readable Prompts
 
 When you write a prompt file, consider:
+
 - Can another LLM execute this without your implicit knowledge?
 - Are all terms defined or demonstrated through examples?
 - Is the success criteria clear and measurable?
@@ -409,7 +457,9 @@ When you write a prompt file, consider:
 
 ## Few-Shot Example Guidelines for LLM Authors
 
-When an LLM creates prompts with examples for another LLM to execute, pattern consistency is critical. Examples are the primary teaching mechanism. This builds on the "Pattern Reinforcement Through Examples" section above.
+When an LLM creates prompts with examples for another LLM to execute, pattern
+consistency is critical. Examples are the primary teaching mechanism. This builds on the
+"Pattern Reinforcement Through Examples" section above.
 
 How many examples for LLM execution?
 
@@ -421,7 +471,8 @@ How many examples for LLM execution?
 Critical rule for LLM-generated examples: All examples must follow identical structure.
 
 Good - Consistent pattern for LLM to follow:
-```xml
+
+````xml
 <examples>
 // Convert async/await to promises:
 // Before:
@@ -485,44 +536,53 @@ Preserve all functionality and bindings
 <apply-to>
 All files in src/components/
 </apply-to>
-```
+````
 
 ## Token Efficiency for LLM Clarity
 
-When writing prompts for LLM consumption, prioritize unambiguous interpretation over brevity. Clear communication between LLMs is more important than token count. Remember the principle from earlier: clarity over brevity.
+When writing prompts for LLM consumption, prioritize unambiguous interpretation over
+brevity. Clear communication between LLMs is more important than token count. Remember
+the principle from earlier: clarity over brevity.
 
 Clarity-focused optimizations:
 
 Remove redundancy, keep precision:
 
 Good example:
+
 ```
 "Update the webpack.config.js file"
 ```
 
-Avoid unnecessarily verbose phrasing like "In order to accomplish the task of updating the configuration file" or overly compressed ambiguous phrases like "update config"
+Avoid unnecessarily verbose phrasing like "In order to accomplish the task of updating
+the configuration file" or overly compressed ambiguous phrases like "update config"
 
 Use consistent terminology:
 
 Good example:
+
 ```
 "Update the component, then update the module, then update the element"
 ```
 
-Avoid varying terms for style like "Modify the component, then alter the module, then change the element"
+Avoid varying terms for style like "Modify the component, then alter the module, then
+change the element"
 
 Combine related instructions when logical:
 
 Good example:
+
 ```
 "Validate input: ensure it's a non-null string"
 ```
 
-Avoid over-separated instructions like "First, validate the input. Second, check it's not null. Third, verify it's a string."
+Avoid over-separated instructions like "First, validate the input. Second, check it's
+not null. Third, verify it's a string."
 
 When compression hurts LLM comprehension:
 
 Avoid these "optimizations" that confuse LLMs:
+
 - Ambiguous pronouns ("it", "that", "this") without clear antecedents
 - Omitting articles that clarify meaning ("the UserService" vs "UserService")
 - Context-dependent abbreviations not defined in the prompt
@@ -531,6 +591,7 @@ Avoid these "optimizations" that confuse LLMs:
 Example of good balance:
 
 Good example:
+
 ```xml
 <task>
 Fix the authentication bug in the login component where users remain logged in after session expiry
@@ -539,11 +600,13 @@ Fix the authentication bug in the login component where users remain logged in a
 
 Avoid over-compressed descriptions like "fix auth bug in login"
 
-Key principle: In LLM-to-LLM prompts, every word that adds clarity is worth including. Compression should never introduce ambiguity.
+Key principle: In LLM-to-LLM prompts, every word that adds clarity is worth including.
+Compression should never introduce ambiguity.
 
 ## Prompt Composability
 
-When building command workflows and agent systems, design prompts that can be combined and reused across different contexts.
+When building command workflows and agent systems, design prompts that can be combined
+and reused across different contexts.
 
 ### Modular Prompt Design
 
@@ -652,6 +715,7 @@ Create reusable templates with parameters:
 ### Composition Patterns
 
 Sequential composition: Tasks that must run in order
+
 ```xml
 <sequence>
   <do>Analyze current implementation</do>
@@ -662,6 +726,7 @@ Sequential composition: Tasks that must run in order
 ```
 
 Parallel composition: Tasks that can run simultaneously
+
 ```xml
 <parallel>
   <task>Update component styles</task>
@@ -671,6 +736,7 @@ Parallel composition: Tasks that can run simultaneously
 ```
 
 Conditional composition: Tasks based on conditions
+
 ```xml
 <conditional>
   <if condition="uses TypeScript">
@@ -690,12 +756,15 @@ Conditional composition: Tasks based on conditions
 4. Documentation: Include descriptions of when and how to use each prompt
 5. Version compatibility: Note which versions of tools/frameworks prompts work with
 
-Key principle: Design prompts like you would design functions - focused, reusable, and composable.
+Key principle: Design prompts like you would design functions - focused, reusable, and
+composable.
 
 ## Common Pitfalls in LLM-to-LLM Prompts
 
-- Ambiguous instructions: "Update the code" vs "Update all React components to use hooks instead of class syntax"
-- Inconsistent terminology: Switching between "component", "element", "widget" for the same thing
+- Ambiguous instructions: "Update the code" vs "Update all React components to use hooks
+  instead of class syntax"
+- Inconsistent terminology: Switching between "component", "element", "widget" for the
+  same thing
 - Showing anti-patterns: Including "wrong" examples that the LLM will reproduce
 - Over-prescriptive steps: Micro-managing instead of stating clear goals
 - Unclear references: Using "it", "that", "this" without clear antecedents
