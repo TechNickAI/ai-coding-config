@@ -243,11 +243,10 @@ const reviewLevel = analyzeChanges({
 **Process**:
 1. Wait 3 minutes for bots to complete initial analysis
 2. Check for bot comments using GitHub API
-3. Categorize feedback:
-   - **CRITICAL**: Security, bugs, breaking changes → Fix immediately
-   - **VALID**: Legitimate improvements → Apply
-   - **CONTEXT-MISSING**: Bot lacks project knowledge → Explain in comment
-   - **FALSE-POSITIVE**: Bot incorrect → Explain reasoning
+3. Review each piece of feedback and decide:
+   - Fix what's valuable (security issues, real bugs, good suggestions)
+   - Reject what's not (use WONTFIX with brief explanation for context-missing or incorrect feedback)
+   - **You are the ultimate decider** - trust your judgment on what matters
 4. Make fixes, commit, push
 5. Wait for bots to re-review (90s)
 6. Repeat up to 5 times if needed
