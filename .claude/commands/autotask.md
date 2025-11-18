@@ -1,3 +1,7 @@
+---
+description: Execute complete development task autonomously from description to PR-ready state
+---
+
 # /autotask - Autonomous Task Execution
 
 Execute a complete development task autonomously from description to PR-ready state.
@@ -46,56 +50,15 @@ If the task is complex or unclear, I'll use the Task tool to run the create-prom
 </task-preparation>
 
 <worktree-setup>
-Creating isolated development environment for clean, parallel work:
+**Goal**: Create an isolated development environment in `.gitworktrees/` with a sanitized branch name derived from the task description.
 
-```bash
-# Ensure worktrees directory exists
-mkdir -p .gitworktrees
+**Requirements**:
+- Sanitize task description to prevent shell injection
+- Generate feature branch name (lowercase, alphanumeric, max 60 chars)
+- Handle existing worktree conflicts
+- Run /setup-environment to install dependencies, copy configs, and set up git hooks
 
-# Generate branch name from task
-TASK_NAME_RAW="{{TASK_DESCRIPTION}}"
-
-# Sanitize task description immediately (security)
-TASK_NAME=$(echo "$TASK_NAME_RAW" | tr -cd '[:alnum:][:space:]-_')
-
-BRANCH_NAME=$(echo "$TASK_NAME" | \
-  tr '[:upper:]' '[:lower:]' | \
-  sed 's/[^a-z0-9]/-/g' | \
-  sed 's/--*/-/g' | \
-  sed 's/^-//' | \
-  sed 's/-$//' | \
-  cut -c1-60)
-BRANCH_NAME="feature/${BRANCH_NAME}"
-
-# Check if worktree already exists
-if [ -d ".gitworktrees/$BRANCH_NAME" ]; then
-  echo "⚠️ Worktree already exists for this task"
-  echo "Options:"
-  echo "1. Continue in existing worktree"
-  echo "2. Remove and recreate"
-  echo "3. Choose different task name"
-  # Handle user choice
-fi
-
-# Create fresh worktree from main
-echo "🌳 Creating worktree: $BRANCH_NAME"
-git worktree add -b "$BRANCH_NAME" ".gitworktrees/$BRANCH_NAME" main
-
-# Move to worktree
-cd ".gitworktrees/$BRANCH_NAME"
-
-# Set up environment
-echo "🔧 Setting up development environment..."
-```
-
-<setup-environment>
-Now running /setup-environment to configure the worktree:
-- Install dependencies
-- Copy environment files
-- Generate project-specific validation script
-- Set up git hooks
-- Verify tool availability
-</setup-environment>
+**Success criteria**: Clean worktree ready for development work.
 </worktree-setup>
 
 <autonomous-execution>
@@ -250,211 +213,46 @@ const reviewLevel = analyzeChanges({
 
 </adaptive-review-strategy>
 
-```bash
-echo "🔍 Running validation and review..."
+**Execution**:
 
-# Step 1: Git hooks handle the basics
+1. Stage all changes and run existing git hooks (husky/pre-commit)
+2. If hooks fail, attempt auto-fix (eslint --fix, prettier --write), then retry
+3. Analyze what changed to determine review intensity
+4. Launch appropriate review agents using Task tool based on analysis
+5. Address any feedback from review agents
 
-echo "🪝 Running pre-commit hooks..."
-git add .
-
-if [ -d ".husky" ]; then
-  npx husky run pre-commit || {
-    echo "❌ Pre-commit hooks failed, attempting fixes..."
-    npx eslint --fix . 2>/dev/null || true
-    npx prettier --write . 2>/dev/null || true
-    npx husky run pre-commit
-  }
-elif [ -f ".pre-commit-config.yaml" ]; then
-  pre-commit run --all-files || {
-    echo "❌ Pre-commit hooks failed, attempting fixes..."
-    pre-commit run --all-files
-  }
-fi
-
-# Step 2: Conditional agent review based on complexity
-
-echo "📊 Analyzing changes to determine review needs..."
-```
-
-Based on the analysis, I'll deploy appropriate review agents:
-
-```typescript
-// Examples of adaptive review
-if (hasSecurityChanges) {
-  await Task({
-    subagent_type: "code-review:code-reviewer",
-    description: "Security review",
-    prompt: "Review security implications of auth changes"
-  });
-}
-
-if (hasUIChanges && !isTrivial) {
-  await Task({
-    subagent_type: "dev-agents:ux-designer",
-    description: "UX review",
-    prompt: "Review user-facing text and accessibility"
-  });
-}
-
-// Skip review entirely for trivial changes that pass hooks
-if (isTrivial && hooksPass) {
-  console.log("✅ Trivial change with passing hooks - skipping review");
-}
-````
-
-**Smart Review Principles:**
-
-- Don't review what hooks already validated
-- Focus on what automation can't catch (design, security logic, UX)
-- Scale review effort with risk and complexity
-- Skip review for trivial changes that pass all hooks </validation-and-review>
+**Key insight**: The review strategy above guides agent selection, but you determine what's needed based on actual changes.
+</validation-and-review>
 
 <create-pr>
-Creating pull request with proper commit messages:
+**Goal**: Create a well-documented pull request ready for review.
 
-```bash
-# Stage all changes
-git add .
+**Requirements**:
+- Commit with proper format (emoji, imperative verb, concise description)
+- Include "🤖 Generated with Claude Code" and co-author line
+- Push to feature branch
+- Create PR with summary, changes, testing approach, and checklist
+- Follow project's commit message conventions (read git-commit-message.mdc if it exists)
 
-# Create comprehensive commit message
-COMMIT_MESSAGE=$(cat <<'EOF'
-{{COMMIT_TYPE}}: {{COMMIT_DESCRIPTION}}
-
-{{DETAILED_CHANGES}}
-
-Test coverage: {{COVERAGE}}%
-Performance impact: {{PERF_IMPACT}}
-
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)
-
-# Commit changes
-git commit -m "$COMMIT_MESSAGE"
-
-# Push to remote
-git push -u origin "$BRANCH_NAME"
-
-# Create PR using gh CLI
-gh pr create \
-  --title "{{PR_TITLE}}" \
-  --body "$(cat <<'EOF'
-## Summary
-{{PR_SUMMARY}}
-
-## Changes
-{{DETAILED_CHANGES_LIST}}
-
-## Testing
-{{TESTING_APPROACH}}
-
-## Checklist
-- [x] Tests pass locally
-- [x] Lint/format checks pass
-- [x] Build succeeds
-- [x] Security audit clean
-- [x] Documentation updated
-- [x] Follows all project standards
-
-## Screenshots
-{{SCREENSHOTS_IF_UI}}
-
-## Performance
-{{PERFORMANCE_METRICS}}
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-EOF
-)"
-
-# Get PR number for tracking
-PR_NUMBER=$(gh pr view --json number -q .number)
-echo "📝 PR created: #$PR_NUMBER"
-```
-
+**Success criteria**: PR created, all information clear, ready for bot/human review.
 </create-pr>
 
 <bot-feedback-loop>
-Autonomously handling bot feedback without waiting for user intervention:
+**Goal**: Autonomously address bot feedback without user intervention.
 
-```bash
-echo "⏳ Waiting for bot reviews to complete..."
-PR_NUMBER=$(gh pr view --json number -q .number)
+**Process**:
+1. Wait 3 minutes for bots to complete initial analysis
+2. Check for bot comments using GitHub API
+3. Categorize feedback:
+   - **CRITICAL**: Security, bugs, breaking changes → Fix immediately
+   - **VALID**: Legitimate improvements → Apply
+   - **CONTEXT-MISSING**: Bot lacks project knowledge → Explain in comment
+   - **FALSE-POSITIVE**: Bot incorrect → Explain reasoning
+4. Make fixes, commit, push
+5. Wait for bots to re-review (90s)
+6. Repeat up to 5 times if needed
 
-# Get repository info
-REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-
-# Initial wait for bots to run
-echo "⏰ Waiting 3 minutes for bots to complete initial analysis..."
-sleep 180
-
-MAX_ATTEMPTS=5
-ATTEMPT=0
-
-while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-  ATTEMPT=$((ATTEMPT + 1))
-  echo "🔄 Checking bot feedback (attempt $ATTEMPT/$MAX_ATTEMPTS)..."
-
-  # Get all bot comments
-  BOT_COMMENTS=$(gh api \
-    "repos/$REPO/pulls/$PR_NUMBER/comments" \
-    --jq '.[] | select(.user.type == "Bot" or .user.login | endswith("[bot]")) | {id: .id, body: .body, path: .path, line: .line}')
-
-  # Also check review comments
-  BOT_REVIEWS=$(gh api \
-    "repos/$REPO/pulls/$PR_NUMBER/reviews" \
-    --jq '.[] | select(.user.type == "Bot" or .user.login | endswith("[bot]")) | {state: .state, body: .body}')
-
-  # Check CI status
-  CI_STATUS=$(gh pr checks $PR_NUMBER --json name,status,conclusion)
-
-  if [ -z "$BOT_COMMENTS" ] && echo "$CI_STATUS" | grep -q '"conclusion":"success"'; then
-    echo "✅ All bot checks passed!"
-    break
-  fi
-
-  echo "🤖 Analyzing bot feedback..."
-
-  # Process each bot comment intelligently
-  # Categories:
-  # - CRITICAL: Security issues, bugs, breaking changes → Fix immediately
-  # - VALID: Legitimate improvements → Apply fix
-  # - CONTEXT-MISSING: Bot lacks project understanding → Add comment explaining
-  # - FALSE-POSITIVE: Bot is incorrect → Add comment with reasoning
-
-  # Make necessary fixes based on feedback
-  CHANGES_MADE=false
-
-  # [Intelligent processing of feedback and fixes here]
-  # Using appropriate agents to address specific feedback
-
-  if [ "$CHANGES_MADE" = true ]; then
-    echo "📝 Committing fixes for bot feedback..."
-    git add .
-    git commit -m "Address automated review feedback
-
-- Fixed: {{SPECIFIC_FIXES}}
-- Explained: {{WONTFIX_ITEMS}}
-
-🤖 Generated with Claude Code"
-
-    git push
-
-    echo "⏳ Waiting for bots to re-review (90 seconds)..."
-    sleep 90
-  else
-    echo "ℹ️ No changes needed or all feedback addressed"
-    break
-  fi
-done
-
-if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
-  echo "⚠️ Max attempts reached. Manual review may be needed."
-fi
-```
-
+**Success criteria**: All critical issues addressed, PR ready for human review.
 </bot-feedback-loop>
 
 <completion>
