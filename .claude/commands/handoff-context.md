@@ -12,9 +12,8 @@ cleanly copied and pasted to continue work in a new session.
 
 1. **Generate the handoff** - Create a complete context handoff following the
    XML-structured format
-2. **Save to temp file** - Use Write tool to save to `/tmp/context_handoff.md`
-3. **Copy to clipboard automatically** - Use `pbcopy < /tmp/context_handoff.md` without
-   asking
+2. **Save to temp file** - Use Write tool to save to a unique timestamped file
+3. **Copy to clipboard automatically** - Use pbcopy without asking
 4. **Show brief confirmation** - Just `📋 Copied to clipboard`
 
 ## Process
@@ -56,15 +55,19 @@ numbers] </work_completed>
 
 **DO NOT ASK** - Just do it:
 
-1. Use **Write tool** to save the handoff content to `/tmp/context_handoff.md`
-2. Use **Bash** to copy: `pbcopy < /tmp/context_handoff.md`
-3. Confirm: `📋 Copied to clipboard`
+1. Generate a unique filename: `/tmp/context_handoff_TIMESTAMP.md` where TIMESTAMP is the current Unix timestamp
+2. Use **Write tool** to save the handoff content to that unique filename
+3. Use **Bash** to copy the file you just created: `pbcopy < /tmp/context_handoff_TIMESTAMP.md`
+4. Confirm: `📋 Copied to clipboard`
+
+**Implementation:** First run `date +%s` to get the timestamp, then use that value in both the Write and Bash commands.
 
 **Why Write tool instead of heredoc?**
 
 - Avoids triggering git hooks (heredoc with `<<` can trigger branch protection)
 - Cleaner, no escaping issues
 - Faster execution
+- Timestamp-based filename prevents collisions between sessions
 
 ## Important Guidelines
 
@@ -87,9 +90,10 @@ numbers] </work_completed>
 
 **For Clipboard Operation:**
 
-1. Use Write tool to save to `/tmp/context_handoff.md` (avoids heredoc hook triggers)
-2. Run: `pbcopy < /tmp/context_handoff.md` (single fast command)
-3. Show: `📋 Copied to clipboard` (brief confirmation)
+1. First run `date +%s` to get current Unix timestamp
+2. Use Write tool to save to `/tmp/context_handoff_[timestamp].md`
+3. Run: `pbcopy < /tmp/context_handoff_[timestamp].md`
+4. Show: `📋 Copied to clipboard` (brief confirmation)
 
 ## Example Usage Flow
 
@@ -98,9 +102,10 @@ User: `/handoff-context`
 Assistant immediately:
 
 1. Generates the handoff content
-2. Uses Write tool to save to `/tmp/context_handoff.md`
-3. Runs `pbcopy < /tmp/context_handoff.md`
-4. Shows `📋 Copied to clipboard`
+2. Gets timestamp with `date +%s`
+3. Uses Write tool to save to `/tmp/context_handoff_[timestamp].md`
+4. Runs `pbcopy < /tmp/context_handoff_[timestamp].md`
+5. Shows `📋 Copied to clipboard`
 
 **Total time: ~2 seconds**
 
