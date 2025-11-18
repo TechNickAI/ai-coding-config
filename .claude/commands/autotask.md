@@ -470,10 +470,6 @@ Task execution complete! Here's your summary:
 
 📍 PR: {{PR_URL}}
 🌳 Worktree: .gitworktrees/{{BRANCH_NAME}}
-⏱️ Total time: {{TOTAL_TIME}}
-🤖 Agents used: {{AGENTS_USED}}
-📊 Test coverage: {{COVERAGE}}%
-🔄 Bot feedback cycles: {{FEEDBACK_CYCLES}}
 
 When you're ready:
 1. Review the PR at {{PR_URL}}
