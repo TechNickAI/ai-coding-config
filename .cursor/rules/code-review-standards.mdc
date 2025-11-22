@@ -1,0 +1,61 @@
+---
+description: When doing code reviews
+alwaysApply: false
+---
+
+# Code Review Standards
+
+This rule defines what feedback is actionable based on project priorities. Use this to
+focus reviews on issues that actually get addressed.
+
+## Core Philosophy
+
+We ship pragmatically. Fix critical bugs, ensure security, validate core behavior.
+Ignore theoretical edge cases, minor polish, and over-engineering. Trust runtime
+validation over compile-time perfection.
+
+## Skip These Issues
+
+Do not include them in reviews.
+
+### Transactions for Rare Race Conditions
+
+Only flag race conditions you can demonstrate happen in practice. Theoretical edge cases
+requiring contrived timing are accepted as-is. Added complexity for extremely rare
+scenarios is not justified.
+
+### Magic Numbers and String Constants
+
+Constants exist to stay DRY, not to avoid "magic strings." This isn't Java. If a value
+appears once and the meaning is clear from context, inline is better than indirection.
+Only flag repeated values that would require multiple updates to change. Extracting
+`METHOD_INITIALIZE = "initialize"` for a single use is cargo cult programming.
+
+### Accessibility Improvements
+
+ARIA labels, keyboard navigation, and screen reader support are not current project
+priorities.
+
+### Minor Type Safety Improvements
+
+When runtime checks handle edge cases correctly, compile-time type refinement is
+optional. TypeScript serves the code, not vice versa. Working code takes priority over
+perfect types.
+
+### Test Edge Cases
+
+Core behavior receives test coverage. Edge cases including malformed API responses,
+empty arrays, and boundary conditions are deferred unless they cause production issues.
+Target is 90% coverage, not 100%. Focus on user-facing functionality.
+
+### Performance Micro-Optimizations
+
+Optimize when metrics show actual problems. Skipping unnecessary queries, adding
+theoretical indexes, or batching operations for minor latency gains without profiling
+data is premature optimization.
+
+### Documentation Enhancements
+
+Core documentation exists. Troubleshooting sections, rate limit documentation, and
+explanatory comments are iterative improvements based on user feedback. Perfect
+documentation delays shipping.
