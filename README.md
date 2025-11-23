@@ -1,7 +1,8 @@
 # AI Coding Configuration
 
 **Professional AI development environment** with autonomous workflows, specialized
-agents, and intelligent coding standards for Claude Code and Cursor.
+agents, and intelligent coding standards for Claude Code, Cursor, Windsurf, Cline, and
+other AI coding tools.
 
 Transform how you work with AI: from manual prompting to autonomous task execution, from
 generic responses to specialized agent collaboration, from scattered configs to unified
@@ -45,7 +46,7 @@ Browse available plugins:
 /plugin search ai-coding-config
 ```
 
-### Cursor (Bootstrap)
+### Cursor, Windsurf, Cline & Others (Bootstrap)
 
 Run from any project:
 
@@ -53,15 +54,16 @@ Run from any project:
 curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
 ```
 
-Then in Cursor:
+Then in your AI coding tool:
 
 ```
 @ai-coding-config set up this project
 ```
 
-### Both Tools
+### All AI Coding Tools
 
-Interactive setup command works everywhere:
+Interactive setup command works in Claude Code, Cursor, Windsurf, Cline, and any tool
+that supports slash commands:
 
 ```
 /ai-coding-config
@@ -234,8 +236,8 @@ Each personality is a complete communication style overlay - see
 **Single source of truth**: `.cursor/rules/` and `.claude/commands/` are canonical.
 Plugins use symlinks for packaging.
 
-**Plugin distribution**: Claude Code uses marketplace.json. Cursor uses bootstrap
-script. Both reference same source files.
+**Plugin distribution**: Claude Code uses marketplace.json. Cursor, Windsurf, Cline, and
+others use bootstrap script. All reference same source files.
 
 **Project integration**: `/ai-coding-config` detects your stack and installs relevant
 configurations. Updates sync changes while preserving customizations.
@@ -377,9 +379,9 @@ Fork this repo to make it completely yours.
 - GitHub CLI (`gh`) installed and authenticated
 - Project dependency managers (npm/yarn/pip/etc.)
 
-**For Cursor**:
+**For Cursor, Windsurf, Cline & others**:
 
-- Cursor IDE with rules support
+- AI coding tool with rules/context support
 
 Most features work with basic installations. Advanced workflows (`/autotask`) need
 additional tools.
