@@ -1,0 +1,7 @@
+# Run full validation before pushing
+echo "🚀 Running full validation suite..."
+pnpm pre-push || {
+  echo "❌ Pre-push validation failed. Run 'pnpm pre-push' to see full output."
+  exit 1
+}
+echo "✅ All validations passed. Pushing..."

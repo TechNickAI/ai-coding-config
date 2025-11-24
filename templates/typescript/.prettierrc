@@ -1,0 +1,33 @@
+{
+    "printWidth": 100,
+    "tabWidth": 2,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "semi": true,
+    "arrowParens": "always",
+    "proseWrap": "preserve",
+    "plugins": ["prettier-plugin-tailwindcss"],
+    "overrides": [
+        {
+            "files": ["*.md", "*.mdc"],
+            "options": {
+                "parser": "markdown",
+                "tabWidth": 2,
+                "printWidth": 100,
+                "proseWrap": "preserve"
+            }
+        },
+        {
+            "files": ["*.json", "*.jsonc"],
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": ["*.yml", "*.yaml"],
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}

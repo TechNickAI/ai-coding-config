@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+pnpm-workspace.yaml
+package-lock.json
+
+# Build output
+.next
+out
+build
+dist
+
+# Cache
+.cache
+.turbo
+
+# Coverage
+coverage
+
+# Misc
+.DS_Store
+*.pem
+
+# Prisma
+prisma/migrations
+
+# IDE
+.vscode
+.idea

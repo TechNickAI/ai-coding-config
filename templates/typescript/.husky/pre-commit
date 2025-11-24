@@ -1,0 +1,7 @@
+# Run lint-staged to check and fix files before committing
+echo "🔍 Running pre-commit checks..."
+pnpm exec lint-staged || {
+  echo "❌ Pre-commit checks failed. Fix errors above and try again."
+  exit 1
+}
+echo "✅ Pre-commit checks passed"
