@@ -37,17 +37,50 @@ Available configurations:
 - Rules (`.cursor/rules/` subdirectories and files)
 - Personalities (one or none, common-personality always included)
 - Agents (specialized AI assistants, default to all)
-- Skills (modular packages, default to all)
+- Skills (intelligent selection based on project type - see skills-selection section)
 - Commands (always copy all, create in `.claude/commands/` with symlinks in `.cursor/commands/`)
 - Standard configs (VSCode settings, Prettier, GitHub workflows)
 
 Use AskUserQuestion to present personality options as quick-select.
 </configuration-presentation>
 
+<skills-selection>
+Walk through `~/.ai_coding_config/.claude/skills/` and evaluate each skill for relevance to the current project.
+
+For each skill directory:
+1. Read the SKILL.md frontmatter to get the description
+2. Evaluate whether the skill matches this project's context
+3. Categorize as: recommended (strong match), optional (might be useful), or skip (not relevant)
+
+Skill evaluation criteria:
+
+Universal skills (always recommend):
+- brainstorming: Useful for any project - refining ideas into designs
+- research: Useful for any project - web research for current information
+- systematic-debugging: Useful for any project with code - root cause analysis
+
+Project-specific skills (match against signals):
+- skill-creator: Only for ai-coding-config repo itself (check if current project IS the config repo)
+- youtube-transcript-analyzer: Projects with docs/, research/, or learning-focused goals
+
+When evaluating a skill you haven't seen before:
+1. Read its SKILL.md description carefully
+2. Look for "Use when..." triggers in the description
+3. Match triggers against project signals (package.json, file structure, existing configs)
+4. When uncertain, categorize as optional and let user decide
+
+Present skills grouped by category:
+- Recommended: Strong match for this project type
+- Optional: Might be useful depending on workflow
+- Skipping: Not relevant (explain briefly why)
+
+Use AskUserQuestion to confirm skill selection, showing recommended pre-selected.
+</skills-selection>
+
 <file-installation>
 Copy selected configurations intelligently, respecting existing customizations. Compare files with diff when they exist. For conflicts, use AskUserQuestion to offer choices (overwrite, skip, show diff, or custom action). Never silently overwrite.
 
-Installation mapping: Rules → `.cursor/rules/` (preserve subdirectory structure), Commands → `.claude/commands/` with symlinks in `.cursor/commands/`, Context → `.claude/context.md`, Agents → `.claude/agents/`, Skills → `.skills/` (entire directories), Personalities → `.cursor/rules/personalities/` (common always, additional with `alwaysApply: true`), VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`, Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`.
+Installation mapping: Rules → `.cursor/rules/` (preserve subdirectory structure), Commands → `.claude/commands/` with symlinks in `.cursor/commands/`, Context → `.claude/context.md`, Agents → `.claude/agents/`, Skills → `.claude/skills/` (copy entire skill directories for selected skills only), Personalities → `.cursor/rules/personalities/` (common always, additional with `alwaysApply: true`), VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`, Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`.
 
 Report what was copied, skipped, and how conflicts were handled.
 </file-installation>
