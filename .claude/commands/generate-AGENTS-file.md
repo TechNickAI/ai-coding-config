@@ -1,6 +1,6 @@
 ---
 description:
-  Generate or update AGENTS.md with essential project context for AI coding assistants
+  "Generate or update AGENTS.md with essential project context for AI coding assistants"
 ---
 
 # Generate AGENTS.md

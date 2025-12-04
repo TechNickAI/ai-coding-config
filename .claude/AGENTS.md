@@ -32,8 +32,8 @@ Specialized assistants with isolated context and focused tools. Frontmatter:
 ```yaml
 ---
 name: agent-name
-description: >
-  When to use this agent and what it does
+description:
+  "Invoke when [trigger conditions]. Does [what it does] using [key capabilities]."
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 ---
@@ -50,9 +50,7 @@ Capabilities Claude activates autonomously when relevant. Each skill is a direct
 ```yaml
 ---
 name: skill-name
-description:
-  Triggers that tell Claude when to activate this skill - be specific about activation
-  criteria
+description: "Use when [trigger conditions]. Does [what it does] to achieve [outcome]."
 ---
 ```
 

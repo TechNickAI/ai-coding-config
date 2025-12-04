@@ -1,6 +1,6 @@
 ---
 description:
-  Create optimized prompts for complex tasks and save them with descriptive names
+  "Create optimized prompts for complex tasks following prompt-engineering principles"
 argument-hint: <task description>
 ---
 
@@ -28,10 +28,10 @@ Structure the prompt using XML tags for clarity:
 Ensure .created-prompts/ directory exists and is in .gitignore.
 
 Save with descriptive Title-Case-With-Hyphens name:
+
 - Implement-User-Authentication.md
 - Fix-Database-Connection-Bug.md
-- Add-Dashboard-Analytics.md
-</file-management>
+- Add-Dashboard-Analytics.md </file-management>
 
 <execution-offer>
 After saving, offer to execute the prompt immediately using the Task tool (subagent_type: "general-purpose").

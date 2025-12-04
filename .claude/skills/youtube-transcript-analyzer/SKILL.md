@@ -1,9 +1,9 @@
 ---
 name: youtube-transcript-analyzer
 description:
-  Use when analyzing YouTube videos for research, learning, or understanding how content
-  relates to a project - downloads transcripts with yt-dlp, chunks long content, and
-  provides context-aware analysis
+  "Use when analyzing YouTube videos for research or learning. Downloads transcripts
+  with yt-dlp, chunks long content intelligently, and provides context-aware analysis
+  relating video content to your current project or question."
 ---
 
 <objective>
@@ -27,6 +27,7 @@ brew install yt-dlp
 # Verify installation
 yt-dlp --version
 ```
+
 </prerequisites>
 
 <transcript-extraction>
@@ -38,7 +39,8 @@ ANALYSIS_DIR=$(mktemp -d)
 echo "Using temporary directory: $ANALYSIS_DIR"
 ```
 
-Download transcript using yt-dlp to extract subtitles/transcripts to the temporary directory:
+Download transcript using yt-dlp to extract subtitles/transcripts to the temporary
+directory:
 
 ```bash
 # Download transcript only (no video)
@@ -51,14 +53,15 @@ yt-dlp --skip-download --write-sub --sub-lang en --sub-format vtt --output "$ANA
 yt-dlp --skip-download --print-json URL > "$ANALYSIS_DIR/metadata.json"
 ```
 
-Handle long transcripts - For transcripts exceeding 8,000 tokens (roughly 6,000 words or 45+ minutes):
+Handle long transcripts - For transcripts exceeding 8,000 tokens (roughly 6,000 words or
+45+ minutes):
+
 1. Split into logical chunks based on timestamp or topic breaks
 2. Generate a summary for each chunk focusing on key concepts
 3. Create an overall synthesis connecting themes to the user's question
 4. Reference specific timestamps for detailed sections
 
-For shorter transcripts, analyze directly without chunking.
-</transcript-extraction>
+For shorter transcripts, analyze directly without chunking. </transcript-extraction>
 
 <analysis-approach>
 When analyzing with respect to a project or question:
@@ -71,40 +74,47 @@ When analyzing with respect to a project or question:
 Provide analysis in this format:
 
 Video Overview:
+
 - Title, author, duration
 - Main topic and key themes
 
 Key Insights:
+
 - Concept 1 with timestamp
 - Concept 2 with timestamp
 - Technical approaches explained
 
 Relevance to Your Project:
+
 - Direct applications
 - Differences from current approach
 - Potential improvements or learnings
 
 Specific Recommendations:
+
 - Actionable items based on video content
-- Code patterns or techniques to consider
-</analysis-approach>
+- Code patterns or techniques to consider </analysis-approach>
 
 <handling-common-issues>
 No transcript available: Some videos lack auto-generated or manual captions. Inform user and offer alternative approaches (video description, comments).
 
-Multiple languages: Prefer English transcripts using --sub-lang en. If unavailable, check available languages with --list-subs.
+Multiple languages: Prefer English transcripts using --sub-lang en. If unavailable,
+check available languages with --list-subs.
 
-Long processing time: Set expectations for videos over 2 hours. Offer to focus on specific sections if timestamps provided.
-</handling-common-issues>
+Long processing time: Set expectations for videos over 2 hours. Offer to focus on
+specific sections if timestamps provided. </handling-common-issues>
 
 <best-practices>
 Focus analysis on practical application rather than comprehensive summaries. Users want to know "how does this help me" not "what did they say for 90 minutes."
 
-Extract concrete examples and code patterns when available. Reference specific timestamps so users can jump to relevant sections.
+Extract concrete examples and code patterns when available. Reference specific
+timestamps so users can jump to relevant sections.
 
-When comparing with project code, be specific about similarities and differences. Vague comparisons like "similar approach" don't add value.
+When comparing with project code, be specific about similarities and differences. Vague
+comparisons like "similar approach" don't add value.
 
-For technical content, identify the underlying patterns and principles rather than surface-level implementation details. Help users understand transferable concepts.
+For technical content, identify the underlying patterns and principles rather than
+surface-level implementation details. Help users understand transferable concepts.
 </best-practices>
 
 <token-efficiency>

@@ -1,10 +1,9 @@
 ---
 name: test-engineer
-description: >
-  Tessa - The Skeptic 🧪. Test engineer who assumes nothing works until proven
-  otherwise. Invoke proactively when new code is written or modified. Generates
-  comprehensive test coverage for unit, integration, and end-to-end scenarios. Catches
-  bugs before production.
+description:
+  "Invoke when writing new code or modifying existing code. Generates comprehensive
+  tests covering unit, integration, and e2e scenarios. Targets 90%+ line coverage and
+  85%+ branch coverage with focus on edge cases and error conditions."
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 

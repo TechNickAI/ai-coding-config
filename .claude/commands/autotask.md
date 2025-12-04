@@ -1,6 +1,6 @@
 ---
 description:
-  Execute complete development task autonomously from description to PR-ready state
+  "Execute complete development task autonomously from description to PR-ready state"
 ---
 
 # /autotask - Autonomous Task Execution
@@ -38,36 +38,48 @@ Create isolated development environment using /setup-environment. The command au
 <autonomous-execution>
 Implement the solution following project patterns and standards. Available agents:
 
-- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues, identifies underlying problems
-- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes tests
-- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates accessibility, ensures UX consistency
-- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates design patterns, checks security
-- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and refinement
+- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues,
+  identifies underlying problems
+- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes
+  tests
+- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates
+  accessibility, ensures UX consistency
+- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates
+  design patterns, checks security
+- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and
+  refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
-Build an execution plan based on task type. Use /load-cursor-rules to load relevant project standards. Execute agents in parallel when possible, sequentially when they depend on each other.
+Build an execution plan based on task type. Use /load-cursor-rules to load relevant
+project standards. Execute agents in parallel when possible, sequentially when they
+depend on each other.
 
-Provide targeted context when launching agents: task requirements, implementation decisions, relevant standards, and specific focus area. Tailor context to agent type.
+Provide targeted context when launching agents: task requirements, implementation
+decisions, relevant standards, and specific focus area. Tailor context to agent type.
 
-Maintain context throughout the workflow. Decisions and clarifications from earlier phases inform later ones.
-</autonomous-execution>
+Maintain context throughout the workflow. Decisions and clarifications from earlier
+phases inform later ones. </autonomous-execution>
 
 <obstacle-and-decision-handling>
 Pause only for deal-killers: security risks, data loss potential, or fundamentally unclear requirements. For everything else, make a reasonable choice and document it.
 
-Document design decisions in the PR with rationale and alternatives considered. The executing model knows when to ask vs when to decide and document.
+Document design decisions in the PR with rationale and alternatives considered. The
+executing model knows when to ask vs when to decide and document.
 </obstacle-and-decision-handling>
 
 <validation-and-review>
 Adapt validation intensity to task risk:
 
-Default (trust git hooks): Make changes, commit, let hooks validate, fix only if hooks fail.
+Default (trust git hooks): Make changes, commit, let hooks validate, fix only if hooks
+fail.
 
-Targeted validation: Run specific tests for changed code, use Rivera for architecture review if patterns change.
+Targeted validation: Run specific tests for changed code, use Rivera for architecture
+review if patterns change.
 
 Full validation: Comprehensive test suite, multiple agent reviews, security scanning.
 
-Principle: Validation intensity should match task risk. Git hooks handle formatting, linting, and tests. Add extra validation only when risk justifies it.
+Principle: Validation intensity should match task risk. Git hooks handle formatting,
+linting, and tests. Add extra validation only when risk justifies it.
 </validation-and-review>
 
 <create-pr>
@@ -76,54 +88,62 @@ Deliver a well-documented pull request with commits following .cursor/rules/git-
 PR description must include:
 
 Summary:
+
 - What was implemented and why
 - How it addresses the requirements
 
 Design Decisions (if any were made):
+
 - Each significant decision with rationale
 - Alternatives considered and trade-offs
 - Why each approach was chosen
 
 Obstacles Encountered (if any):
+
 - Challenges faced
 - How they were resolved or worked around
 
 Testing:
+
 - What validation was performed
-- Edge cases considered
-</create-pr>
+- Edge cases considered </create-pr>
 
 <bot-feedback-loop>
 Autonomously address valuable bot feedback, reject what's not applicable, and deliver a PR ready for human review with all critical issues resolved.
 
-After creating the PR, wait for AI code review bots to complete initial analysis. You have context bots lack: project standards, implementation rationale, trade-offs considered, and user requirements. Evaluate feedback against this context.
+After creating the PR, wait for AI code review bots to complete initial analysis. You
+have context bots lack: project standards, implementation rationale, trade-offs
+considered, and user requirements. Evaluate feedback against this context.
 
-Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not (use WONTFIX with brief explanation for context-missing or incorrect feedback). Trust your judgment on what matters.
+Fix what's valuable (security issues, real bugs, good suggestions). Reject what's not
+(use WONTFIX with brief explanation for context-missing or incorrect feedback). Trust
+your judgment on what matters.
 
-Iterate on bot feedback until critical issues are resolved.
-</bot-feedback-loop>
+Iterate on bot feedback until critical issues are resolved. </bot-feedback-loop>
 
 <completion>
 Provide a summary scaled to task complexity:
 
 What was accomplished:
+
 - Core functionality delivered
 - Design decisions made autonomously
 - Obstacles overcome without user intervention
 
 Key highlights:
+
 - Elegant solutions or optimizations
 - Significant issues found and fixed
 - Bot feedback addressed
 
-Include the PR URL and worktree location. If design decisions were made autonomously, note they're documented in the PR for review.
-</completion>
+Include the PR URL and worktree location. If design decisions were made autonomously,
+note they're documented in the PR for review. </completion>
 
 <error-recovery>
 Recover gracefully from failures when possible. Capture decision-enabling context: what was attempted, what state preceded the failure, what the error indicates about root cause, and whether you have enough information to fix it autonomously.
 
-Attempt fixes when you can. For issues you can't resolve autonomously, inform the user with clear options and context.
-</error-recovery>
+Attempt fixes when you can. For issues you can't resolve autonomously, inform the user
+with clear options and context. </error-recovery>
 
 ## Key Principles
 
@@ -145,6 +165,7 @@ Attempt fixes when you can. For issues you can't resolve autonomously, inform th
 ## Configuration
 
 The command adapts to your project structure:
+
 - Detects git hooks (husky, pre-commit)
 - Detects test runners (jest, mocha, vitest, etc.)
 - Finds linting configs (eslint, prettier, etc.)
