@@ -1,20 +1,35 @@
 ---
-description: Generate or update AGENTS.md with essential project context for AI coding assistants
+description:
+  Generate or update AGENTS.md with essential project context for AI coding assistants
 ---
 
 # Generate AGENTS.md
 
-Creates or updates `AGENTS.md` - a universal project context file for AI coding assistants (Claude Code, Cursor, GitHub Copilot, etc.).
+Creates or updates `AGENTS.md` - a universal project context file for AI coding
+assistants (Claude Code, Cursor, GitHub Copilot, etc.).
 
 <philosophy>
-AGENTS.md should be:
-- Concise - Every character consumes tokens on every AI interaction
-- Non-redundant - Don't repeat what's in README or obvious from code
-- Actionable - Specific commands, conventions, and constraints
-- Valuable - Only include what genuinely improves AI output
+AGENTS.md provides domain knowledge and constraints that AI assistants can't infer from
+code alone. It is NOT documentation. It is NOT a README.
 
-Think: "What do I keep repeating to the AI that would prevent mistakes?"
-</philosophy>
+Purpose: Prevent mistakes by providing context the AI would otherwise lack.
+
+What belongs in AGENTS.md:
+
+- Domain knowledge that isn't obvious from code structure
+- Constraints that cause silent failures if violated
+- Architectural decisions that affect how code should be written
+- References to detailed rules via @ imports
+
+What does NOT belong:
+
+- Commands (LLMs know how to run pnpm, npm, pytest, etc.)
+- Generic best practices (LLMs already know these)
+- Project descriptions (that's what README is for)
+- Anything an LLM would figure out from reading the code
+
+The test: "Would an AI make a mistake without this specific piece of context?" If no,
+cut it. </philosophy>
 
 <workflow>
 <analyze-project>
@@ -31,38 +46,41 @@ Add an "Always Apply Rules" section at the top with @ references:
 
 Core project rules that apply to all tasks:
 
-@.cursor/rules/personalities/unity.mdc
-@.cursor/rules/git-interaction.mdc
+@.cursor/rules/personalities/unity.mdc @.cursor/rules/git-interaction.mdc
 @.cursor/rules/typescript-coding-standards.mdc
 ```
 
 Why use @ references instead of extraction:
+
 - AI coding assistants load the full rule when they see `@path/to/rule.mdc`
 - Ensures rules stay up-to-date without AGENTS.md edits
 - No token overhead from duplicating rule content
 - Single source of truth for all conventions
 
 When to still extract (rare):
+
 - Only if a rule has a specific command or constraint worth highlighting elsewhere
 - Don't duplicate - reference in "Always Apply Rules" section instead
-</include-always-apply-rules>
+  </include-always-apply-rules>
 
 <extract-key-context>
 Read these sources for essential project-specific context:
 
 From README.md:
+
 - Project tech stack and versions (be specific: "Next.js 14" not just "Next.js")
 - Key commands (dev, build, test)
 - Skip: Project description, installation steps for end users, contributing guides
 
 From .claude/context.md (if exists):
+
 - Identity or personality instructions (if project uses custom personality)
 - Any project-specific AI behavior guidelines
 
 From recent git commits (last 10):
+
 - Observe commit message style and conventions
-- Identify patterns (emoji usage, conventional commits, etc.)
-</extract-key-context>
+- Identify patterns (emoji usage, conventional commits, etc.) </extract-key-context>
 
 <generate-structure>
 Create a structured file with these sections (omit sections with no valuable content):
@@ -74,11 +92,11 @@ Create a structured file with these sections (omit sections with no valuable con
 
 Core project rules that apply to all tasks:
 
-@.cursor/rules/rule-one.mdc @.cursor/rules/rule-two.mdc
+[@ references to your alwaysApply: true rules]
 
 ## Project Overview
 
-Brief 1-2 sentence description of what this project is.
+Brief description of what this project is.
 
 ## Tech Stack
 
@@ -91,23 +109,16 @@ Brief 1-2 sentence description of what this project is.
 - `dir/` - Brief purpose (only if non-obvious)
 - Focus on where AI should look for specific types of files
 
-## Commands
-
-List only project-specific commands. Skip generic commands like `git status` or `npm install`.
-
-Good examples:
-- `pnpm dev` - Start dev server (use pnpm not npm)
-- `pytest tests/unit` - Run only unit tests (integration tests are slow)
-- `/load-cursor-rules` - Load relevant rules for current task
-
 ## Code Conventions
 
 DO:
+
 - Specific patterns to follow
 - Required practices unique to this project
 - Non-obvious constraints that prevent mistakes
 
 DON'T:
+
 - Specific anti-patterns to avoid
 - Project-specific constraints
 - Explicitly forbidden practices (like --no-verify if that's a rule)
@@ -126,6 +137,7 @@ DON'T:
 - Dependencies between systems
 - Unique aspects of this project that AI must understand
 ```
+
 </generate-structure>
 
 <optimize-for-tokens>
@@ -138,10 +150,10 @@ After generating content, review and optimize:
 5. Cut generic commands: Remove `git status`, `git diff`, basic npm/pip commands
 6. Skip emoji lists: One example format is enough, don't list all possible emojis
 7. Remove meta-commentary: Cut self-referential notes about token usage or file purpose
-8. Question each bullet: Ask "Would removing this cause AI to make a mistake?" If no, cut it.
+8. Question each bullet: Ask "Would removing this cause AI to make a mistake?" If no,
+   cut it.
 
-Target: 2-3KB for most projects (500-750 tokens per interaction). 4KB maximum.
-</optimize-for-tokens>
+Target conciseness over arbitrary size limits. </optimize-for-tokens>
 
 <create-symlink>
 Create a symlink from `CLAUDE.md` to `AGENTS.md`:
@@ -150,16 +162,16 @@ Create a symlink from `CLAUDE.md` to `AGENTS.md`:
 ln -sf AGENTS.md CLAUDE.md
 ```
 
-This ensures both filenames work while maintaining a single source of truth without any token overhead.
-</create-symlink>
+This ensures both filenames work while maintaining a single source of truth without any
+token overhead. </create-symlink>
 
 <report>
-Show the user:
-1. The generated content
-2. File size and estimated token cost per interaction
-3. What was included and what was deliberately omitted
-</report>
-</workflow>
+After creating the root AGENTS.md, STOP. Show the user what was created. Then use
+AskUserQuestion to ask if they want to review subdirectories. Do not proceed to
+subdirectory review without explicit approval.
+
+If yes, proceed to <subdirectory-agents> and follow the interactive flow there.
+</report> </workflow>
 
 <update-mode>
 When `AGENTS.md` already exists:
@@ -173,46 +185,138 @@ When `AGENTS.md` already exists:
 4. Show diff of proposed changes
 5. Let user approve before updating
 
-Never silently overwrite - always show what's changing and why.
-</update-mode>
+Never silently overwrite - always show what's changing and why. </update-mode>
 
 <key-principles>
 Be surgical, not comprehensive: Extract only what AI needs that isn't obvious. Skip generic best practices.
 
-Prioritize always-apply rules: These are gold - they represent project-critical conventions.
+Prioritize always-apply rules: These are gold - they represent project-critical
+conventions.
 
-Token economics matter: A 10KB file costs 2500 tokens/interaction. Over 100 messages, that's 250K tokens. Be ruthless about value-per-byte.
+Token economics matter: Be ruthless about value-per-byte.
 
-Test the hypothesis: Ask yourself "Would this prevent a mistake I've seen AI make?" If no, cut it.
+Test the hypothesis: Ask yourself "Would this prevent a mistake I've seen AI make?" If
+no, cut it.
 
 Avoid restating README: If README explains it well, don't duplicate it here.
 </key-principles>
 
 <exclusion-list>
-What NOT to include:
-- Project description and marketing copy (that's for README)
-- Installation instructions for end users
-- License and contribution guidelines (unless AI-specific)
-- Rule content (use @ references in "Always Apply Rules" section instead)
+What does NOT belong in AGENTS.md:
+- Generic commands (LLMs know how to run npm install, git status, pytest, etc.)
+- Project descriptions and marketing copy (that's for README)
+- Installation instructions
 - Generic best practices AI already knows
 - Obvious directory purposes (like `tests/` contains tests)
-- Complete API documentation (link to it instead)
-- Generic git commands (`git status`, `git diff`, `git log`)
-- Emoji reference lists (one example format is sufficient)
-- Meta-commentary about token usage or AGENTS.md purpose
-- Commit message co-author footers (unless project requires them on ALL commits)
-- Redundant notes that restate what's already clear from other sections
-</exclusion-list>
+- API documentation (link to it instead)
+- Emoji reference lists
+- Meta-commentary about the AGENTS.md file itself
+- Anything an LLM would figure out from reading the code
+
+Exception: Project-specific tooling choices that prevent mistakes DO belong:
+
+- "Use pnpm not npm" (prevents lockfile conflicts)
+- "Use bun drizzle-kit not npx drizzle-kit" (project convention) </exclusion-list>
+
+<subdirectory-agents>
+This section only runs if the user approves subdirectory review after root AGENTS.md is
+created.
+
+Subdirectory AGENTS.md files provide domain knowledge for directories with specific
+constraints that differ from root context.
+
+## Discovery Process
+
+Scan for candidates by checking:
+
+1. **Directory-scoped cursor rules**: Rules in `.cursor/rules/` with `globs` patterns
+   targeting specific directories (e.g., `globs: ["tests/**"]`, `globs: ["src/db/**"]`)
+
+2. **High-risk directories**: Places where AI mistakes are costly or common:
+   - `migrations/`, `drizzle/migrations/`, `prisma/migrations/` - Never edit manually
+   - `generated/`, `__generated__/` - Don't modify generated code
+   - `vendor/`, `node_modules/` - External dependencies
+   - `.github/workflows/` - CI/CD with specific syntax requirements
+
+3. **Directories with their own tooling**: Subdirectories that have independent:
+   - Package files (`package.json`, `pyproject.toml`)
+   - Config files suggesting different conventions
+   - README files with directory-specific instructions
+
+4. **Test directories**: If project has testing-specific cursor rules, the test
+   directory benefits from an AGENTS.md referencing those rules
+
+## Interactive Flow
+
+After root AGENTS.md, offer subdirectory review. Present candidates one at a time with
+proposed content. Get user approval before creating each file. Use AskUserQuestion for
+decisions to minimize typing.
+
+## Subdirectory AGENTS.md Structure
+
+Keep these minimal. They inherit root context, so only include:
+
+```markdown
+# [Directory Purpose]
+
+[One sentence: what this contains and why AI needs to know]
+
+[The critical constraint or domain knowledge - often a warning about what NOT to do]
+
+@.cursor/rules/relevant-rule.mdc
+```
+
+No commands. No generic descriptions. Just the context that prevents mistakes.
+
+Example for migrations directory:
+
+```markdown
+# Database Migrations
+
+Auto-generated files tracked by Drizzle's journal system.
+
+**NEVER manually create or edit migration files.** They must be generated via
+`drizzle-kit generate` from schema changes in `lib/db/schema.ts`. Manually created files
+exist but never run — they fail silently.
+
+@.cursor/rules/drizzle-database-migrations.mdc
+```
+
+## Matching Rules to Directories
+
+When a cursor rule has `globs` patterns, map them to directories:
+
+- `globs: ["tests/**", "**/*.test.ts"]` → `tests/AGENTS.md`
+- `globs: ["src/components/**"]` → `src/components/AGENTS.md`
+- `globs: ["*.sql", "drizzle/**"]` → `drizzle/AGENTS.md`
+
+Include the rule as an @ reference in that subdirectory's AGENTS.md.
+
+## Skip If
+
+Don't create subdirectory AGENTS.md when:
+
+- The constraint is already clear from filenames/structure
+- Root AGENTS.md already covers the directory adequately
+- The directory is rarely touched by AI
+- Adding context wouldn't prevent any realistic mistake
+
+## Symlinks
+
+Create `CLAUDE.md` symlink in each subdirectory too:
+
+```bash
+cd path/to/subdir && ln -sf AGENTS.md CLAUDE.md
+```
+
+</subdirectory-agents>
 
 <final-checklist>
-- File is concise (2-3KB target, 4KB max)
-- "Always Apply Rules" section at top with @ references to all alwaysApply: true rules
-- No redundancy with README or cursor rules
-- Commands are project-specific (no generic git/npm commands)
-- DO/DON'T lists have actionable items
-- Removed all generic fluff and meta-commentary
-- Cut emoji lists, generic commands, obvious notes
-- No commit co-author footers unless project requires on all commits
-- Created CLAUDE.md symlink to AGENTS.md
-- Each section passes "would removing this cause a mistake?" test
+- Contains only domain knowledge and constraints AI can't infer from code
+- No commands (LLMs know how to run tools)
+- No generic descriptions or README-style content
+- @ references to rules rather than duplicating content
+- Each item passes: "Would AI make a mistake without this?"
+- Created CLAUDE.md symlink
+- Offered subdirectory review
 </final-checklist>
