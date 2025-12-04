@@ -108,8 +108,7 @@ Cursor: Manually set alwaysApply: false if desired
 
 ## Notes
 
-- Only one personality active at a time (plus common-personality baseline)
+- Only one personality active at a time
 - Personality affects ALL future interactions in this project
-- `.cursor/rules/personalities/common-personality.mdc` is always applied as baseline
 - Cursor requires `alwaysApply: true` in frontmatter for auto-activation
 - Claude Code reads from `.claude/context.md` which is always included

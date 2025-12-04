@@ -7,8 +7,7 @@ Cursor.
 
 Core project rules that apply to all tasks:
 
-@.cursor/rules/personalities/common-personality.mdc @.cursor/rules/git-interaction.mdc
-@.cursor/rules/prompt-engineering.mdc
+@.cursor/rules/git-interaction.mdc @.cursor/rules/prompt-engineering.mdc
 
 ## Tech Stack
 

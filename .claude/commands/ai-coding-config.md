@@ -35,7 +35,7 @@ Show available configurations that match this project. Group by relevance - fram
 
 Available configurations:
 - Rules (`.cursor/rules/` subdirectories and files)
-- Personalities (one or none, common-personality always included)
+- Personalities (one or none)
 - Agents (specialized AI assistants, default to all)
 - Skills (intelligent selection based on project type - see skills-selection section)
 - Commands (always copy all, create in `.claude/commands/` with symlinks in `.cursor/commands/`)
