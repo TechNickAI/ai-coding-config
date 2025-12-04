@@ -110,23 +110,55 @@ Show only genuinely useful recommendations.
 ---
 
 <update-mode>
-Update existing configs to latest versions from the repo.
+Systematically update all configuration types from the repo to latest versions.
 
-<repository-refresh>
-Pull latest changes from `~/.ai_coding_config`.
-</repository-refresh>
+Start by pulling latest from `~/.ai_coding_config` and comparing against the current project.
 
-<command-self-update>
-Compare this command file with repo version. If repo version is newer or different, copy it and re-read to follow latest instructions.
-</command-self-update>
+Configuration categories that must be checked (in this order):
 
-<configuration-comparison>
-Use diff to compare each config file. Categorize changes as trivial (typos, comments) or significant. List files in repo but not in project. List files in project but not in repo (possible local customizations).
+1. Personalities (`.cursor/rules/personalities/`)
+   - Compare each personality file in repo vs project
+   - Note: common-personality.mdc may have been deprecated or renamed in newer versions
+   - Show diffs for changes to frontmatter (description, alwaysApply)
 
-Explain what changed and why updates matter. Use AskUserQuestion for update strategy: "Update all", "Update none", "Pick individually", or custom instructions. Handle customized files carefully.
+2. Top-level Rules (`.cursor/rules/`)
+   - Universal rules apply to all projects regardless of framework
+   - Compare: autonomous-development-workflow, code-review-standards, external-apis,
+     fixing-github-actions-builds, git-commit-message, git-interaction, git-worktree-task,
+     naming-stuff, prompt-engineering, user-facing-language, heart-centered-ai-philosophy,
+     trust-and-decision-making
+   - Preserve project-specific rules (sentry, typescript-coding-standards, testing-standards-typescript, code-comments, etc.)
 
-Copy selected files. Never silently overwrite. Verify and highlight changes.
-</configuration-comparison>
+3. Rule Subdirectories (`.cursor/rules/`)
+   - Check each subdirectory: ai/, frontend/, observability/, django/, python/
+   - For MCP/Next.js projects: prioritize ai/ and frontend/
+   - For each subdirectory, compare all .mdc files in repo vs project
+   - Example: ai/agent-file-format.mdc, frontend/react-components.mdc
+
+4. Agents (`.claude/agents/`)
+   - Compare all agent files: design-reviewer.md, seo-specialist.md, site-keeper.md, plus project-custom agents
+   - Update repo agents (description and formatting improvements common)
+   - Preserve project-specific agents
+
+5. Commands (`.claude/commands/`)
+   - Update all commands that exist in both repo and project
+   - Add new commands from repo that don't exist in project
+   - Preserve project-specific commands
+   - Create symlinks in .cursor/commands/ for new commands
+
+6. Other Configs
+   - VSCode settings (.vscode/)
+   - Prettier config (.prettierrc)
+   - GitHub workflows (.github/workflows/)
+
+For each category: use diff to identify changes. Categorize as trivial (typos, formatting)
+or significant (logic, descriptions, instructions). List files new to repo or unique to project.
+
+Present update strategy to user: "Update all", "Update selectively", or custom approach.
+Show diffs for significant changes before applying. Never silently overwrite project customizations.
+
+After copying: verify files are in correct locations, symlinks point correctly, and
+descriptions in frontmatter were updated.
 </update-mode>
 
 ---
