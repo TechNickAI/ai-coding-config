@@ -300,6 +300,8 @@ Don't create subdirectory AGENTS.md when:
 - Root AGENTS.md already covers the directory adequately
 - The directory is rarely touched by AI
 - Adding context wouldn't prevent any realistic mistake
+- `.cursor/` or `.claude/` already have AGENTS.md from ai-coding-config (these explain
+  how to write rules/commands and reference prompt-engineering.mdc)
 
 ## Symlinks
 

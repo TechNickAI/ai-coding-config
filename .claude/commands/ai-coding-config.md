@@ -80,13 +80,13 @@ Use AskUserQuestion to confirm skill selection, showing recommended pre-selected
 <file-installation>
 Copy selected configurations intelligently, respecting existing customizations. Compare files with diff when they exist. For conflicts, use AskUserQuestion to offer choices (overwrite, skip, show diff, or custom action). Never silently overwrite.
 
-Installation mapping: Rules → `.cursor/rules/` (preserve subdirectory structure), Commands → `.claude/commands/` with symlinks in `.cursor/commands/`, Context → `.claude/context.md`, Agents → `.claude/agents/`, Skills → `.claude/skills/` (copy entire skill directories for selected skills only), Personalities → `.cursor/rules/personalities/` (common always, additional with `alwaysApply: true`), VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`, Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`.
+Installation mapping: Rules → `.cursor/rules/` (preserve subdirectory structure), Commands → `.claude/commands/` with symlinks in `.cursor/commands/`, Context → `.claude/context.md`, Agents → `.claude/agents/`, Skills → `.claude/skills/` (copy entire skill directories for selected skills only), Personalities → `.cursor/rules/personalities/` (common always, additional with `alwaysApply: true`), VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`, Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`, Directory context → `.cursor/AGENTS.md` and `.claude/AGENTS.md` (explains directory purpose and references prompt-engineering rules).
 
 Report what was copied, skipped, and how conflicts were handled.
 </file-installation>
 
 <installation-verification>
-Confirm files are in expected locations. List installed rules (framework-specific, then universal), commands, agents, skills. Confirm symlinks point correctly. Verify personality selection and `alwaysApply` setting. Confirm VSCode settings, Prettier config, GitHub workflows, and gitignore files.
+Confirm files are in expected locations. List installed rules (framework-specific, then universal), commands, agents, skills. Confirm symlinks point correctly. Verify personality selection and `alwaysApply` setting. Confirm VSCode settings, Prettier config, GitHub workflows, gitignore files, and directory AGENTS.md files.
 
 Provide clear summary without deep validation.
 </installation-verification>
