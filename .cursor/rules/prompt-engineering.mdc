@@ -39,6 +39,12 @@ you create for LLM consumption.
   prompts
 - Examples teach patterns: What you show is what the LLM will do
 - Clarity over brevity: Never sacrifice unambiguous interpretation for token savings
+- Explain motivation: Tell the LLM *why* a constraint exists - it generalizes from
+  reasoning better than from bare rules
+- Descriptive over directive: "Use this tool when modifying files" works better than
+  "CRITICAL: You MUST use this tool" - aggressive language can cause over-triggering
+- Positive framing: "Write in flowing prose" is clearer than "Don't use markdown" -
+  positive instructions are unambiguous, negative ones require constructing then negating
 
 ## Pattern Reinforcement Through Examples
 
