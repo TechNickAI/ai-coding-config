@@ -16,8 +16,8 @@ Rules are markdown files with `.mdc` extension containing YAML frontmatter:
 ```yaml
 ---
 description: Brief explanation of when this rule applies
-alwaysApply: false  # true = applies to every task, false = loaded on demand
-globs: ["pattern/**"]  # Optional: file patterns that trigger this rule
+alwaysApply: false # true = applies to every task, false = loaded on demand
+globs: ["pattern/**"] # Optional: file patterns that trigger this rule
 ---
 ```
 

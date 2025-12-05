@@ -151,7 +151,8 @@ Naming conventions:
 
 Extract constants to stay DRY, not to avoid "magic strings." This isn't Java.
 
-**Extract when the value is repeated** and changing it requires updating multiple places:
+**Extract when the value is repeated** and changing it requires updating multiple
+places:
 
 ```typescript
 // Good - used in multiple files for token validation
@@ -168,8 +169,9 @@ if (status === "CONNECTED") { ... }
 const timeout = 30000; // 30 seconds, obvious from variable name
 ```
 
-Extracting single-use values into named constants adds indirection without value. This is
-cargo cult programming from Java/C traditions that doesn't serve TypeScript codebases.
+Extracting single-use values into named constants adds indirection without value. This
+is cargo cult programming from Java/C traditions that doesn't serve TypeScript
+codebases.
 
 The test: if you change the value, do you need to update multiple places? Extract it. If
 not, inline is clearer.

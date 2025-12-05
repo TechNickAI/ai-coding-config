@@ -1,10 +1,12 @@
 ---
-description: Generate or update llms.txt file to help LLMs understand and navigate your site
+description:
+  Generate or update llms.txt file to help LLMs understand and navigate your site
 ---
 
 # Generate llms.txt
 
-Creates or updates llms.txt - a standardized file that helps Large Language Models understand and navigate your website or documentation at inference time.
+Creates or updates llms.txt - a standardized file that helps Large Language Models
+understand and navigate your website or documentation at inference time.
 
 <philosophy>
 llms.txt provides LLM-friendly navigation and context for websites and documentation. It should be:
@@ -26,8 +28,8 @@ Determine the appropriate location:
 - static/ directory for Django, Flask, Hugo
 - Repository root as fallback
 
-Choose the location that makes the file accessible at /llms.txt when the site is deployed.
-</file-placement>
+Choose the location that makes the file accessible at /llms.txt when the site is
+deployed. </file-placement>
 
 <content-structure>
 Follow the llmstxt.org standard format:
@@ -35,9 +37,12 @@ Follow the llmstxt.org standard format:
 ```markdown
 # Project Name
 
-> Brief 1-2 sentence description of what this project/site is and what it helps users accomplish.
+> Brief 1-2 sentence description of what this project/site is and what it helps users
+> accomplish.
 
-Additional context paragraph (optional): More detailed information about the project's purpose, key features, or important background that helps LLMs understand how to use the site effectively.
+Additional context paragraph (optional): More detailed information about the project's
+purpose, key features, or important background that helps LLMs understand how to use the
+site effectively.
 
 ## Documentation
 
@@ -63,6 +68,7 @@ Additional context paragraph (optional): More detailed information about the pro
 ```
 
 Structure requirements:
+
 - H1 title with project name
 - Blockquote summary for quick context
 - H2 sections organizing documentation by category
@@ -70,10 +76,10 @@ Structure requirements:
 - "Optional" section for less critical resources
 
 Link format:
+
 - Use relative paths for internal documentation
 - Use absolute URLs for external resources
-- Prioritize most important links first within each section
-</content-structure>
+- Prioritize most important links first within each section </content-structure>
 
 <content-discovery>
 Identify documentation and resources to include:
@@ -86,14 +92,14 @@ Identify documentation and resources to include:
 - Specialized agents from .claude/agents/
 
 Organize by importance:
+
 1. Getting started and quickstart guides
 2. Core concepts and tutorials
 3. API reference and technical documentation
 4. Advanced topics and edge cases
 5. Contributing and community resources
 
-Target file size: Under 2KB for focused navigation.
-</content-discovery>
+Target file size: Under 2KB for focused navigation. </content-discovery>
 
 <update-workflow>
 When llms.txt already exists:
@@ -109,9 +115,11 @@ Next.js project with comprehensive docs:
 ```markdown
 # AI Coding Config
 
-> Plugin marketplace for Claude Code and Cursor providing reusable coding standards, workflows, and AI agents.
+> Plugin marketplace for Claude Code and Cursor providing reusable coding standards,
+> workflows, and AI agents.
 
-Provides a marketplace of plugins that bundle coding rules, slash commands, and specialized agents. Plugins maintain single source of truth through symlinks.
+Provides a marketplace of plugins that bundle coding rules, slash commands, and
+specialized agents. Plugins maintain single source of truth through symlinks.
 
 ## Documentation
 
@@ -144,7 +152,8 @@ Django API project:
 
 > RESTful API for processing payments across multiple providers with unified interface.
 
-Supports Stripe, PayPal, and Square with automatic failover and transaction reconciliation.
+Supports Stripe, PayPal, and Square with automatic failover and transaction
+reconciliation.
 
 ## Documentation
 
@@ -169,6 +178,7 @@ Supports Stripe, PayPal, and Square with automatic failover and transaction reco
 - [Architecture](docs/architecture.md): System design
 - [Contributing](CONTRIBUTING.md): Development setup
 ```
+
 </examples>
 
 <quality-criteria>

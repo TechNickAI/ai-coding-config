@@ -17,15 +17,17 @@ mkdir -p .gitworktrees
 git worktree add -b feature/task-name .gitworktrees/task-name main
 cd .gitworktrees/task-name
 ```
+
 </workspace-setup>
 
 <environment-initialization>
 Run /setup-environment to prepare the worktree. This detects project type and sets up dependencies, code generation, and environment files.
 
-If /setup-environment doesn't exist, set up manually based on project type (Node.js: `pnpm install`, Python: `pip install -r requirements.txt`, Ruby: `bundle install`).
+If /setup-environment doesn't exist, set up manually based on project type (Node.js:
+`pnpm install`, Python: `pip install -r requirements.txt`, Ruby: `bundle install`).
 
-Copy environment files from parent directory if needed. After proper setup, all tests (unit + integration) should pass.
-</environment-initialization>
+Copy environment files from parent directory if needed. After proper setup, all tests
+(unit + integration) should pass. </environment-initialization>
 
 <standards-discovery>
 Read all cursor rules in .cursor/rules/. If CLAUDE.md or AGENTS.md exist at project root, read those too. Every applicable rule must be followed.
@@ -45,8 +47,8 @@ Run project's pre-push validation before pushing. This catches issues before CI:
 
 Check .github/workflows/ to see what CI runs - run those steps locally.
 
-All tests should pass after environment setup. If tests fail, it's either incomplete setup or bugs in your code. Fix before pushing.
-</local-validation>
+All tests should pass after environment setup. If tests fail, it's either incomplete
+setup or bugs in your code. Fix before pushing. </local-validation>
 
 <self-review>
 Invoke code reviewer agent (Rivera in .claude/agents/rivera.md if available) to review changes before pushing. Address critical issues, consider warnings seriously, evaluate suggestions for merit. Learn from feedback.
@@ -63,10 +65,11 @@ Let all CI jobs run to completion. All must pass. Green checks required before m
 <bot-review-handling>
 AI code review bots will analyze the pull request. Evaluate feedback critically - you have full project context, bots don't.
 
-Fix valuable feedback that identifies real issues. Mark as WONTFIX with clear reasoning if feedback is incorrect, not applicable, conflicts with project standards, or would break functionality.
+Fix valuable feedback that identifies real issues. Mark as WONTFIX with clear reasoning
+if feedback is incorrect, not applicable, conflicts with project standards, or would
+break functionality.
 
-Be discerning. You are smarter than the bots.
-</bot-review-handling>
+Be discerning. You are smarter than the bots. </bot-review-handling>
 
 <merge-and-cleanup>
 Once CI is green, bot reviews are addressed, and all checks pass, merge the PR.
@@ -77,16 +80,22 @@ After merge, clean up worktree:
 cd ../..  # Return to main directory
 git worktree remove .gitworktrees/task-name
 ```
+
 </merge-and-cleanup>
 
 <critical-success-factors>
 Environment setup is not optional. After creating worktree, run /setup-environment or manually install dependencies. Type errors and test failures often stem from missing code generation or dependencies.
 
-Local validation saves time. Don't push without running pre-push checks. Local tooling catches issues in seconds vs waiting for CI.
+Local validation saves time. Don't push without running pre-push checks. Local tooling
+catches issues in seconds vs waiting for CI.
 
-Bot feedback requires judgment. Bots provide suggestions, not mandates. Evaluate each piece based on your context and project standards.
+Bot feedback requires judgment. Bots provide suggestions, not mandates. Evaluate each
+piece based on your context and project standards.
 
-Full test suite must pass. After setup, all tests (unit + integration) should pass. Fix setup or code before pushing.
+Full test suite must pass. After setup, all tests (unit + integration) should pass. Fix
+setup or code before pushing.
 
-Successful autonomous task means: original request completed, all automated checks pass, code follows all cursor rules, tests green, code review addressed, bot feedback evaluated intelligently, PR merges without human intervention requesting changes.
+Successful autonomous task means: original request completed, all automated checks pass,
+code follows all cursor rules, tests green, code review addressed, bot feedback
+evaluated intelligently, PR merges without human intervention requesting changes.
 </critical-success-factors>
