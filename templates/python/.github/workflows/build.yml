@@ -1,0 +1,42 @@
+---
+# Build and test the code, with an optional deploy
+name: Build
+on: [push, pull_request]
+permissions: read-all
+
+jobs:
+  pre-commit:
+    name: Pre-commit (linting)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+  pytest-in-venv:
+    name: Python tests
+    runs-on: ubuntu-latest
+    env:
+      APP_ENVIRONMENT: test
+
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements/requirements-test.txt
+
+      - name: Run the tests with coverage
+        run: pytest --cov=./ --cov-report=xml

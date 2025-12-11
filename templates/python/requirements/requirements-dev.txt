@@ -1,0 +1,15 @@
+# Install this for local development
+-r requirements.txt
+-r requirements-test.txt
+
+# For committing, formatting, and dependency management
+black
+isort
+pip-tools
+pre-commit
+ruff
+
+# Optional goodies that improve the developer experience
+# pytest-sugar
+# better_exceptions
+# pdbpp # ipython in pdb

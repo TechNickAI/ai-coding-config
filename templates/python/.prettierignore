@@ -1,0 +1,16 @@
+# Ignore Django templates; use djlint instead if present
+**/templates/**/*.html
+
+# Agent or custom formatted files (if used)
+*.agent
+
+# Ignore built artifacts and vendor content
+**/.next/
+**/dist/
+**/build/
+**/node_modules/
+**/out/
+
+# Locks and migrations
+pnpm-lock.yaml
+**/migrations/

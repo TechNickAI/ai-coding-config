@@ -1,0 +1,11 @@
+*.egg-info/
+*.pyc
+*.swp
+.DS_Store
+.coverage
+.env
+.pytest_cache
+.vscode
+__pycache__
+build/
+dist/
