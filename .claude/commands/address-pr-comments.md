@@ -36,7 +36,17 @@ Code review bots comment in different places. Fetch both:
 
 Identify bot comments by author - automated usernames like cursor-bot,
 claude-code-review, greptile-bot. Human comments require different handling.
-</comment-sources>
+
+Different bots behave differently:
+
+- Claude Code Review: Posts one top-level PR comment per review. Only address the LAST
+  review - it's the only one that matters for current code state.
+
+- Cursor Bug Bot: Comments inline on specific code lines. Address all inline comments -
+  each one flags a specific location.
+
+The structure difference helps you fetch efficiently: Claude reviews show up as PR-level
+comments, Cursor reviews show up as line-level review comments. </comment-sources>
 
 <autonomous-wait-loop>
 This command runs autonomously - no user prompts, just do the work.
