@@ -88,7 +88,7 @@ Identify documentation and resources to include:
 - API documentation and references
 - Architecture and technical documentation
 - Contributing guidelines
-- Coding standards from .cursor/rules/
+- Coding standards from rules/
 - Specialized agents from .claude/agents/
 
 Organize by importance:
@@ -131,18 +131,18 @@ specialized agents. Plugins maintain single source of truth through symlinks.
 
 - [Creating Plugins](docs/creating-plugins.md): Build your own plugins
 - [Bootstrap Script](scripts/bootstrap.sh): Automated setup
-- [Git Workflow](.cursor/rules/git-interaction.mdc): Version control standards
+- [Git Workflow](rules/git-interaction.mdc): Version control standards
 
 ## Reference
 
-- [Cursor Rules](.cursor/rules/): Coding standards and conventions
+- [Cursor Rules](rules/): Coding standards and conventions
 - [Claude Commands](.claude/commands/): Available slash commands
 - [AI Agents](.claude/agents/): Specialized agent capabilities
 
 ## Optional
 
 - [Contributing](CONTRIBUTING.md): How to contribute
-- [Heart-Centered AI](.cursor/rules/heart-centered-ai-philosophy.mdc): Philosophy
+- [Heart-Centered AI](rules/heart-centered-ai-philosophy.mdc): Philosophy
 ```
 
 Django API project:

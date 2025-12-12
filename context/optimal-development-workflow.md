@@ -63,7 +63,7 @@ LLM intelligently chooses which agents to use based on the task:
 
 **No forced patterns. No classification rules.** Just intelligent agent selection.
 
-Automatically follows all `.cursor/rules/*.mdc` standards.
+Automatically follows all `rules/*.mdc` standards.
 
 ### Phase 4: Adaptive Validation & Review
 

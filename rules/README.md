@@ -60,8 +60,8 @@ ln -s $AI_CONFIG/.cursor .cursor
 ```bash
 # From your project directory
 mkdir -p .cursor/rules
-ln -s $AI_CONFIG/.cursor/rules/python .cursor/rules/python
-ln -s $AI_CONFIG/.cursor/rules/django .cursor/rules/django
+ln -s $AI_CONFIG/rules/python rules/python
+ln -s $AI_CONFIG/rules/django rules/django
 ```
 
 ### Pattern 3: Copy What You Need
@@ -69,8 +69,8 @@ ln -s $AI_CONFIG/.cursor/rules/django .cursor/rules/django
 ```bash
 # From your project directory
 mkdir -p .cursor/rules
-cp $AI_CONFIG/.cursor/rules/*.mdc .cursor/rules/
-cp -r $AI_CONFIG/.cursor/rules/python .cursor/rules/
+cp $AI_CONFIG/rules/*.mdc rules/
+cp -r $AI_CONFIG/rules/python rules/
 ```
 
 ## Manual Invocation

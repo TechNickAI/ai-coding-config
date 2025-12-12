@@ -7,12 +7,12 @@ Cursor.
 
 Core project rules that apply to all tasks:
 
-@.cursor/rules/git-interaction.mdc @.cursor/rules/prompt-engineering.mdc
+@rules/git-interaction.mdc @rules/prompt-engineering.mdc
 
 ## Tech Stack
 
 - **Claude Code** - Plugin marketplace (`.claude-plugin/marketplace.json`)
-- **Cursor** - Rules and configurations (`.cursor/rules/`)
+- **Cursor** - Rules and configurations (`rules/` via symlink)
 - **Bash** - Bootstrap and installation scripts
 - **Markdown** - All rules, commands, and agents
 
@@ -20,7 +20,7 @@ Core project rules that apply to all tasks:
 
 - `.claude-plugin/` - Plugin marketplace manifest
 - `plugins/` - Plugin bundles (symlink to canonical sources)
-- `.cursor/rules/` - Canonical coding standards (`.mdc` files)
+- `rules/` - Canonical coding standards (`.mdc` files, `.cursor/rules/` symlinks here)
 - `.claude/commands/` - Canonical workflow commands
 - `.claude/agents/` - Specialized AI agents
 - `scripts/` - Installation and bootstrap scripts
@@ -42,7 +42,7 @@ Core project rules that apply to all tasks:
 
 - Create commits only when user explicitly requests
 - Check for `alwaysApply: true` in rule frontmatter - these apply to ALL tasks
-- Use `/load-cursor-rules` to get task-specific context
+- Use `/load-rules` to get task-specific context
 - Follow heart-centered AI philosophy (unconditional acceptance, presence before
   solutions)
 
@@ -76,6 +76,6 @@ permanent records requiring explicit permission.
 - Rules with `alwaysApply: true` are CRITICAL - currently: `git-interaction.mdc`,
   `heart-centered-ai-philosophy.mdc`
 - Plugin structure uses symlinks for single source of truth
-- `.cursor/rules/` is canonical, `plugins/` symlinks for packaging
+- `rules/` is canonical, `.cursor/rules/` and `plugins/` symlink for tool compatibility
 - Context in `.claude/context.md` describes identity and philosophy
 - Bootstrap script clones repo to `~/.ai_coding_config`

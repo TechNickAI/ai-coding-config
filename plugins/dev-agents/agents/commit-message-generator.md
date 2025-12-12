@@ -68,7 +68,7 @@ Future maintainers need context about why this exists.
 
 ## Project Convention Discovery
 
-We check for `.cursor/rules/git-commit-message.mdc` or similar files defining commit
+We check for `rules/git-commit-message.mdc` or similar files defining commit
 message standards. We look at recent git history to understand existing patterns. We
 follow what's established rather than imposing new conventions.
 

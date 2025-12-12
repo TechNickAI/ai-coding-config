@@ -2,7 +2,7 @@
 
 This directory contains AI coding rules and commands for Cursor IDE.
 
-@.cursor/rules/prompt-engineering.mdc
+@rules/prompt-engineering.mdc
 
 ## Structure
 

@@ -2,7 +2,7 @@
 
 ## The Problem
 
-You have extensive Cursor rules in `.cursor/rules/`, but Claude Code doesn't
+You have extensive Cursor rules in `rules/`, but Claude Code doesn't
 automatically read them. You need a way to leverage these rules intelligently without:
 
 - Loading everything upfront (wastes context, dilutes focus)
@@ -17,13 +17,13 @@ A two-part system that loads rules intelligently based on the current task:
 
 - Minimal context file that Claude Code reads automatically on every conversation
 - Documents available rule categories
-- Points to the `/load-cursor-rules` command for dynamic loading
+- Points to the `/load-rules` command for dynamic loading
 - Includes always-applied rules (heart-centered AI philosophy)
 
-### 2. `.claude/commands/load-cursor-rules.md` (Intelligent Loader)
+### 2. `.claude/commands/load-rules.md` (Intelligent Loader)
 
 - Slash command that analyzes the current task
-- Selects and loads ONLY relevant rules from `.cursor/rules/`
+- Selects and loads ONLY relevant rules from `rules/`
 - Provides clear heuristics for rule selection
 - Explains what was loaded and why
 
@@ -35,8 +35,8 @@ A two-part system that loads rules intelligently based on the current task:
 # Start a task - Claude Code reads .claude/context.md automatically
 $ claude "add error tracking to payment processor"
 
-# Claude uses /load-cursor-rules internally or you invoke it explicitly
-$ /load-cursor-rules
+# Claude uses /load-rules internally or you invoke it explicitly
+$ /load-rules
 
 # Claude analyzes the task, then loads:
 # - python/python-coding-standards.mdc (Python code)
@@ -46,7 +46,7 @@ $ /load-cursor-rules
 # Now Claude works on the task following those specific rules
 ```
 
-### Claude's Process (Documented in /load-cursor-rules)
+### Claude's Process (Documented in /load-rules)
 
 1. **Understand the task**: What is the user asking for?
 2. **Identify relevant rules**: Match task to rule categories
@@ -56,7 +56,7 @@ $ /load-cursor-rules
 
 ## Rule Selection Logic
 
-The `/load-cursor-rules` command contains heuristics for matching tasks to rules:
+The `/load-rules` command contains heuristics for matching tasks to rules:
 
 **Task Pattern** → **Rules to Load**
 
@@ -87,14 +87,14 @@ The `/load-cursor-rules` command contains heuristics for matching tasks to rules
 
 ### ✅ Advantages over duplication:
 
-- **Single source of truth**: `.cursor/rules/` remains authoritative
+- **Single source of truth**: `rules/` remains authoritative
 - **Cross-tool compatibility**: Same rules work with Cursor and Claude Code
 - **Easy updates**: Change rules in one place
 
 ## File Structure
 
 ```
-.cursor/rules/          # Your existing Cursor rules (unchanged)
+rules/          # Your existing Cursor rules (unchanged)
 ├── README.md
 ├── git-commit-message.mdc
 ├── heart-centered-ai-philosophy.mdc
@@ -106,7 +106,7 @@ The `/load-cursor-rules` command contains heuristics for matching tasks to rules
 .claude/                # New Claude Code integration
 ├── context.md         # Minimal bootstrap (auto-loaded)
 └── commands/
-    └── load-cursor-rules.md  # Intelligent rule selector (invoked as /load-cursor-rules)
+    └── load-cursor-rules.md  # Intelligent rule selector (invoked as /load-rules)
 ```
 
 ## Usage Examples
@@ -115,7 +115,7 @@ The `/load-cursor-rules` command contains heuristics for matching tasks to rules
 
 ```bash
 $ claude "I need to refactor the authentication module"
-$ /load-cursor-rules  # Manually trigger rule loading
+$ /load-rules  # Manually trigger rule loading
 # Loads: python standards, naming-stuff.mdc
 ```
 
@@ -157,7 +157,7 @@ Claude explains what rules were loaded and why.
 
 ### 4. **Maintainable**
 
-All selection logic lives in one place (`/load-cursor-rules.md`), easy to update.
+All selection logic lives in one place (`/load-rules.md`), easy to update.
 
 ### 5. **Compatible**
 
@@ -167,13 +167,13 @@ Doesn't modify Cursor rules, works alongside existing Cursor workflows.
 
 ### Add New Rules
 
-1. Create `.mdc` file in `.cursor/rules/` (works with Cursor)
-2. Add selection heuristic to `.claude/commands/load-cursor-rules.md`
+1. Create `.mdc` file in `rules/` (works with Cursor)
+2. Add selection heuristic to `.claude/commands/load-rules.md`
 3. Update category list in `.claude/context.md`
 
 ### Customize Selection Logic
 
-Edit `.claude/commands/load-cursor-rules.md` to adjust when rules are loaded.
+Edit `.claude/commands/load-rules.md` to adjust when rules are loaded.
 
 ### Add Always-Applied Rules
 
@@ -196,12 +196,12 @@ select what's needed, explain the choice, proceed with clarity.
 This documentation was created using the exact process it describes:
 
 1. **Examined the task**: Help user leverage Cursor rules in Claude Code
-2. **Explored existing structure**: Listed `.cursor/rules/`, read README and samples
+2. **Explored existing structure**: Listed `rules/`, read README and samples
 3. **Designed solution**: Dynamic loading via slash command vs static loading via
    context
 4. **Implemented**: Created `.claude/context.md` and
-   `.claude/commands/load-cursor-rules.md`
+   `.claude/commands/load-rules.md`
 5. **Documented**: Wrote this explanation of the system and process
 
-The system is self-referential: `/load-cursor-rules` itself could be improved by loading
+The system is self-referential: `/load-rules` itself could be improved by loading
 relevant rules about documentation, naming, and user-facing language. 🙂
