@@ -59,7 +59,8 @@ ln -s $AI_CONFIG/.cursor .cursor
 
 ```bash
 # From your project directory
-mkdir -p .cursor/rules
+mkdir -p rules
+ln -s ../rules .cursor/rules  # Symlink for Cursor compatibility
 ln -s $AI_CONFIG/rules/python rules/python
 ln -s $AI_CONFIG/rules/django rules/django
 ```
@@ -68,7 +69,8 @@ ln -s $AI_CONFIG/rules/django rules/django
 
 ```bash
 # From your project directory
-mkdir -p .cursor/rules
+mkdir -p rules
+ln -s ../rules .cursor/rules  # Symlink for Cursor compatibility
 cp $AI_CONFIG/rules/*.mdc rules/
 cp -r $AI_CONFIG/rules/python rules/
 ```
