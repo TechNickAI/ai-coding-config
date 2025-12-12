@@ -2,6 +2,7 @@
 description:
   "Create optimized prompts for complex tasks following prompt-engineering principles"
 argument-hint: <task description>
+model: opus
 ---
 
 # Create Prompt

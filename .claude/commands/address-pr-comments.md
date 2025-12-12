@@ -1,6 +1,7 @@
 ---
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
+model: sonnet
 ---
 
 # Address PR Comments
