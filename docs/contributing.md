@@ -34,7 +34,7 @@ plugins/your-plugin-name/
 ```
 
 **Note:** Plugins contain agents (owned by plugin) and commands (copied). Rules live in
-`.cursor/rules/` and are accessed via `/load-cursor-rules` (not in plugins).
+`rules/` and are accessed via `/load-rules` (not in plugins).
 
 ### Creating a New Plugin
 
@@ -63,12 +63,12 @@ mkdir -p plugins/your-plugin-name/{.claude-plugin,rules,commands,agents}
 
 #### 3. Add Content
 
-**For rules** - Add to `.cursor/rules/` (not in plugins):
+**For rules** - Add to `rules/` (not in plugins):
 
 ```bash
 # Create your rule file
-touch .cursor/rules/your-category/your-rule.mdc
-# Rules are accessed via Cursor natively or /load-cursor-rules in Claude Code
+touch rules/your-category/your-rule.mdc
+# Rules are accessed via Cursor natively or /load-rules in Claude Code
 # No need to add to plugin
 ```
 
@@ -180,7 +180,7 @@ alwaysApply: true
 
 ## Quality Standards
 
-### Rules (.cursor/rules/)
+### Rules (rules/)
 
 - Use `.mdc` extension
 - Include frontmatter with `description` and optional `globs`
@@ -256,7 +256,7 @@ alwaysApply: true
 Your PR should include:
 
 - [ ] New plugin in `plugins/` directory with agents
-- [ ] Rules added to `.cursor/rules/` (if applicable)
+- [ ] Rules added to `rules/` (if applicable)
 - [ ] Commands added to `.claude/commands/` (if applicable)
 - [ ] Agent files in plugin directory
 - [ ] Entry in `.claude-plugin/marketplace.json`

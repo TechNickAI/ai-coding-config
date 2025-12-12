@@ -22,7 +22,7 @@ Change the active AI personality to create consistent behavior across Claude Cod
 <workflow>
 If no personality name provided, show available personalities and ask which to activate.
 
-Validate that `.cursor/rules/personalities/<name>.mdc` exists. If `none` requested,
+Validate that `rules/personalities/<name>.mdc` exists. If `none` requested,
 remove personality.
 
 For Claude Code: Read or create `.claude/context.md`. Check for existing
@@ -31,7 +31,7 @@ personality exists and matches requested, confirm already active and stop. If di
 remove entire section. If not removing (name != "none"), read personality file, strip
 frontmatter, append to `.claude/context.md` with HTML comments marking boundaries.
 
-For Cursor: Find all personality files in `.cursor/rules/personalities/`. For each file,
+For Cursor: Find all personality files in `rules/personalities/`. For each file,
 update frontmatter: set `alwaysApply: true` for selected personality, set
 `alwaysApply: false` for all others.
 

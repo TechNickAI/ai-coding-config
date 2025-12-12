@@ -2,7 +2,7 @@
 
 This directory contains commands, agents, and skills for Claude Code.
 
-@.cursor/rules/prompt-engineering.mdc
+@rules/prompt-engineering.mdc
 
 ## Structure
 

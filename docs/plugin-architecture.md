@@ -12,12 +12,12 @@ these canonical sources. This eliminates duplication while enabling flexible pac
 
 ## Canonical Locations
 
-### Rules: `.cursor/rules/`
+### Rules: `rules/`
 
 **What:** Coding standards, patterns, frameworks, conventions **Format:** `.mdc` files
 with frontmatter (description, globs, alwaysApply) **Used by:** Cursor IDE (native),
-Claude Code (via `/load-cursor-rules`) **Access:** `@rule-name` in Cursor,
-`/load-cursor-rules` in Claude Code
+Claude Code (via `/load-rules`) **Access:** `@rule-name` in Cursor,
+`/load-rules` in Claude Code
 
 ### Agents: `plugins/*/agents/`
 
@@ -47,8 +47,8 @@ plugins/plugin-name/
 
 ### Why This Structure?
 
-**Rules** stay in `.cursor/rules/` - Cursor's native location. Claude Code accesses them
-via `/load-cursor-rules`.
+**Rules** stay in `rules/` - Cursor's native location. Claude Code accesses them
+via `/load-rules`.
 
 **Commands** stay in `.claude/commands/` - both tools can access them natively.
 
@@ -66,7 +66,7 @@ the plugin.
 
 ### Claude Code
 
-- **Rules**: Via `/load-cursor-rules` bridge command
+- **Rules**: Via `/load-rules` bridge command
 - **Commands**: Native via `/command-name`
 - **Agents**: Native subagent system
 - **Plugins**: Native via `/plugin install`
@@ -75,16 +75,16 @@ the plugin.
 
 Bridges allow tools to access each other's native content:
 
-**`/load-cursor-rules`** - Claude Code → Cursor rules
+**`/load-rules`** - Claude Code → Cursor rules
 
 - Analyzes task
-- Loads relevant rules from `.cursor/rules/`
+- Loads relevant rules from `rules/`
 - Provides them as context
 
 **`/personality-change`** - Unified personality management
 
 - Updates `.claude/context.md` for Claude Code
-- Verifies `.cursor/rules/personalities/` for Cursor
+- Verifies `rules/personalities/` for Cursor
 - Works across both tools
 
 ## Personality System
@@ -101,7 +101,7 @@ plugins/personalities/personality-name/
 └── README.md
 ```
 
-**For Cursor:** Copied to `.cursor/rules/personalities/` with `alwaysApply: true`
+**For Cursor:** Copied to `rules/personalities/` with `alwaysApply: true`
 
 **For Claude Code:** Content appended to `.claude/context.md` under
 `## Active Personality` section
@@ -164,9 +164,9 @@ native strengths **Solution:** Let tools be themselves, bridge where needed
 
 ### Adding a Rule
 
-1. Create in `.cursor/rules/category/rule-name.mdc`
+1. Create in `rules/category/rule-name.mdc`
 2. Include frontmatter with description, globs
-3. That's it - rules are accessed via Cursor natively or `/load-cursor-rules` in Claude
+3. That's it - rules are accessed via Cursor natively or `/load-rules` in Claude
    Code
 4. No need to add to plugins
 
@@ -186,7 +186,7 @@ native strengths **Solution:** Let tools be themselves, bridge where needed
 
 ### Adding a Personality
 
-1. Create cursor version in `.cursor/rules/personalities/name.mdc`
+1. Create cursor version in `rules/personalities/name.mdc`
 2. Create claude version (same content, no frontmatter) in plugin
 3. Create plugin structure in `plugins/personalities/personality-name/`
 4. No symlinks needed - personalities are copied, not linked

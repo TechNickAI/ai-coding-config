@@ -52,6 +52,40 @@ cp ~/.ai_coding_config/.claude/commands/ai-coding-config.md .claude/commands/
 echo "✓ Copied ai-coding-config command"
 echo ""
 
+# Set up v2 cross-tool architecture if fresh install
+echo "📁 Setting up cross-tool architecture..."
+
+# Create .cursor directory structure
+mkdir -p .cursor/commands
+
+# For fresh installs without existing rules, create v2 structure
+if [ ! -d "rules" ] && [ ! -d ".cursor/rules" ]; then
+    mkdir -p rules
+    ln -s ../rules .cursor/rules
+    # Verify symlink was created
+    if [ ! -L ".cursor/rules" ]; then
+        echo "❌ Failed to create .cursor/rules symlink"
+        exit 1
+    fi
+    echo "✓ Created rules/ with .cursor/rules symlink (v2 architecture)"
+elif [ -d ".cursor/rules" ] && [ ! -L ".cursor/rules" ]; then
+    # Existing .cursor/rules as real directory - user needs to run /ai-coding-config update
+    echo "⚠️  Detected existing .cursor/rules/ directory"
+    echo "   Run /ai-coding-config update to migrate to v2 architecture"
+elif [ -d "rules" ] && [ -L ".cursor/rules" ]; then
+    echo "✓ Already using v2 architecture"
+elif [ -d "rules" ] && [ ! -e ".cursor/rules" ]; then
+    # rules/ exists but .cursor/rules is missing - create symlink
+    ln -s ../rules .cursor/rules
+    if [ ! -L ".cursor/rules" ]; then
+        echo "❌ Failed to create .cursor/rules symlink"
+        exit 1
+    fi
+    echo "✓ Created .cursor/rules symlink to existing rules/"
+fi
+
+echo ""
+
 echo "✨ Bootstrap complete!"
 echo ""
 echo "Next steps:"

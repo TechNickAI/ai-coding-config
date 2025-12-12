@@ -393,7 +393,7 @@ After successful installation, provide actionable next steps based on what was i
 Always recommend:
 
 1. Run `/generate-AGENTS-file` to document this setup in project context
-2. Available slash commands for this stack: `/load-cursor-rules`, `/personality-change`
+2. Available slash commands for this stack: `/load-rules`, `/personality-change`
 
 Conditional recommendations based on what was installed:
 

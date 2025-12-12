@@ -1,0 +1,1 @@
+../../.claude/commands/load-rules.md

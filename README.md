@@ -152,7 +152,7 @@ Or explore `plugins/` directory directly.
 
 - `/ai-coding-config` - Interactive setup wizard for any project
 - `/plugin install <name>` - Install specific plugin bundle
-- `/load-cursor-rules` - Load task-relevant coding standards
+- `/load-rules` - Load task-relevant coding standards
 
 ### Autonomous Workflows
 
@@ -219,7 +219,7 @@ Each personality is a complete communication style overlay - see
 │  ai-coding-config repo                  │
 │  (canonical source of truth)            │
 │                                         │
-│  .cursor/rules/     ← standards         │
+│  rules/     ← standards         │
 │  .claude/commands/  ← workflows         │
 │  plugins/*/agents/  ← specialists       │
 └─────────────────────────────────────────┘
@@ -233,7 +233,7 @@ Each personality is a complete communication style overlay - see
   (symlinks)     (copies)
 ```
 
-**Single source of truth**: `.cursor/rules/` and `.claude/commands/` are canonical.
+**Single source of truth**: `rules/` and `.claude/commands/` are canonical.
 Plugins use symlinks for packaging.
 
 **Plugin distribution**: Claude Code uses marketplace.json. Cursor, Windsurf, Cline, and
@@ -259,7 +259,7 @@ ai-coding-config/
 │   ├── code-standards/          # Universal standards
 │   └── personalities/           # 8 communication styles
 │
-├── .cursor/rules/               # CANONICAL: Coding standards (.mdc)
+├── rules/               # CANONICAL: Coding standards (.mdc)
 │   ├── python/
 │   ├── frontend/
 │   ├── django/
@@ -284,7 +284,7 @@ ai-coding-config/
 
 ## What You Get
 
-**Rules** ([`.cursor/rules/`](.cursor/rules/)) - LLM-optimized coding standards.
+**Rules** ([`rules/`](rules/)) - LLM-optimized coding standards.
 Framework patterns, testing approaches, commit formats, naming conventions. AI
 references these automatically based on file types and task context.
 
@@ -296,7 +296,7 @@ goals and adaptive behavior.
 domains - debugging, development, UX, code review, architecture. See
 [Claude Code agents docs](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents).
 
-**Personalities** ([`.cursor/rules/personalities/`](.cursor/rules/personalities/)) -
+**Personalities** ([`rules/personalities/`](rules/personalities/)) -
 Communication style overlays. Changes how AI talks to you without changing technical
 capabilities.
 
@@ -306,7 +306,7 @@ with Claude-powered automation.
 ## Prompt Engineering Framework
 
 One unique aspect: comprehensive guidance for **LLM-to-LLM communication** in
-[`.cursor/rules/prompt-engineering.mdc`](.cursor/rules/prompt-engineering.mdc).
+[`rules/prompt-engineering.mdc`](rules/prompt-engineering.mdc).
 
 When AI writes prompts for other AI to execute (commands, workflows, agent
 instructions), standard practices don't apply. This framework covers:

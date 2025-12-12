@@ -6,7 +6,7 @@ Rules and commands are not the same thing. They serve completely different purpo
 
 ### Cursor IDE
 
-An AI-powered code editor forked from VS Code. It uses `.cursor/rules/*.mdc` files for
+An AI-powered code editor forked from VS Code. It uses `rules/*.mdc` files for
 context and guidelines, `.cursor/settings.json` for preferences, and `@rule-name` to
 invoke specific rules. Developers write code with AI assistance where rules guide coding
 style, patterns, and best practices. The AI references rules automatically based on file
@@ -15,7 +15,7 @@ patterns or when explicitly invoked.
 ### Cursor CLI
 
 A command-line interface to Cursor's AI for CI/CD pipelines. It uses the same
-`.cursor/rules/*.mdc` as the IDE plus `.cursor/settings.json` for non-interactive
+`rules/*.mdc` as the IDE plus `.cursor/settings.json` for non-interactive
 settings. Developers run it in CI/CD pipelines to automate AI-assisted tasks and fix
 code from the terminal. Example: `cursor --fix-lint src/`
 
@@ -34,7 +34,7 @@ deploying. Agents provide specialized assistance for specific tasks.
 
 ### Rules vs Commands
 
-#### Rules (`.cursor/rules/*.mdc`)
+#### Rules (`rules/*.mdc`)
 
 Rules provide context and guidelines. They're passive, guiding how the AI codes.
 Examples include `python-coding-standards.mdc` for Python code style,
@@ -100,7 +100,7 @@ directly - you'd use rules instead to guide the AI in performing similar tasks.
 **Cursor IDE/CLI**:
 
 ```
-.cursor/rules/
+rules/
 ├── python/
 │   ├── python-coding-standards.mdc  ← HOW to code
 │   ├── pytest-what-to-test.mdc      ← HOW to test
@@ -141,7 +141,7 @@ directly - you'd use rules instead to guide the AI in performing similar tasks.
 ```bash
 # In GitHub Actions
 cursor --apply-rules --fix-issues src/
-# Uses .cursor/rules/ to guide fixes
+# Uses rules/ to guide fixes
 ```
 
 ---
@@ -187,7 +187,7 @@ Both are valuable but different. Rules tell the AI how to code correctly. Comman
 execute workflows efficiently. Together, they ensure the AI codes well while automating
 repetitive tasks.
 
-Note: The `.cursorrules` file is deprecated. Use the `.cursor/rules/` directory instead.
+Note: The `.cursorrules` file is deprecated. Use the `rules/` directory instead.
 
 ---
 
@@ -211,13 +211,13 @@ Note: The `.cursorrules` file is deprecated. Use the `.cursor/rules/` directory 
 
 ```bash
 # In CI pipeline
-cursor --rules .cursor/rules/ --check src/
+cursor --rules rules/ --check src/
 
 # Fix issues
-cursor --rules .cursor/rules/ --fix src/
+cursor --rules rules/ --fix src/
 
 # With specific rules
-cursor --rules .cursor/rules/python/ src/*.py
+cursor --rules rules/python/ src/*.py
 ```
 
 ### Using Claude Code
@@ -239,7 +239,7 @@ Select test-writer agent
 ## Configuration Strategy
 
 Store reusable configurations in `~/.ai_coding_config/` with subdirectories for
-`.cursor/rules/`, `.claude/commands/`, `.claude/agents/`, and `prompts/` for setup
+`rules/`, `.claude/commands/`, `.claude/agents/`, and `prompts/` for setup
 helpers.
 
 For project-specific overrides, symlink or copy the shared configs into your project
@@ -254,7 +254,7 @@ context.
 | Purpose    | Guide AI coding            | Execute workflows            |
 | Nature     | Passive (context)          | Active (actions)             |
 | Format     | `.mdc` files               | `.md` files with frontmatter |
-| Location   | `.cursor/rules/`           | `.claude/commands/`          |
+| Location   | `rules/`           | `.claude/commands/`          |
 | Invocation | `@rule-name` or auto       | `/command-name`              |
 | Used by    | Cursor IDE, Cursor CLI     | Claude Code                  |
 | Examples   | coding-standards, patterns | test, lint, deploy           |

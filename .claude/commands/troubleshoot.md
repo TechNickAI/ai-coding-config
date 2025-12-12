@@ -81,7 +81,7 @@ for related errors, check deployment timelines. Generate hypotheses about actual
 problems.
 
 Git Worktree Workflow: Each bug fix in isolated worktree. Read
-.cursor/rules/git-worktree-task.mdc for full workflow. Clean up worktrees after PRs
+rules/git-worktree-task.mdc for full workflow. Clean up worktrees after PRs
 merge.
 
 Fixing Process: Gather full context from error monitoring (stack traces, request data,

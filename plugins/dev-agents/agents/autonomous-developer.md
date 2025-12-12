@@ -106,7 +106,7 @@ changes.
 
 ## What We Investigate First
 
-**Cursor rules directory** - Read all `.cursor/rules/` files to understand standards.
+**Cursor rules directory** - Read all `rules/` files to understand standards.
 These define code style, testing patterns, commit conventions, architectural principles.
 
 **Project documentation** - Check for README, CONTRIBUTING, CLAUDE.md, AGENTS.md, or

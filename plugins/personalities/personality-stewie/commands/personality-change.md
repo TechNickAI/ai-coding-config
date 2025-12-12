@@ -24,7 +24,7 @@ Cursor.
 
 - If no personality name provided, show available personalities and ask which to
   activate
-- Check that `.cursor/rules/personalities/<name>.mdc` exists
+- Check that `rules/personalities/<name>.mdc` exists
 - If `none` was requested, skip to step 3 to remove personality
 
 ### 2. Handle Claude Code Activation
@@ -43,7 +43,7 @@ c. If personality exists:
 
 d. If not removing (name != "none"):
 
-- Read `.cursor/rules/personalities/<name>.mdc`
+- Read `rules/personalities/<name>.mdc`
 - Strip frontmatter (content between opening `---` and closing `---`)
 - Append to `.claude/context.md`:
 
@@ -59,9 +59,9 @@ e. Write updated `.claude/context.md`
 
 ### 3. Verify Cursor Setup
 
-a. Read `.cursor/rules/personalities/<name>.mdc` frontmatter b. Check if
+a. Read `rules/personalities/<name>.mdc` frontmatter b. Check if
 `alwaysApply: true` is set c. If not set and name != "none", inform user: "⚠️ Note: For
-Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.mdc"
+Cursor, manually set `alwaysApply: true` in rules/personalities/<name>.mdc"
 
 ### 4. Report Results
 
@@ -71,7 +71,7 @@ Cursor, manually set `alwaysApply: true` in .cursor/rules/personalities/<name>.m
 ✓ Switched from <old-name> to <new-name> personality
 
 Claude Code: Updated .claude/context.md
-Cursor: Active at .cursor/rules/personalities/<name>.mdc
+Cursor: Active at rules/personalities/<name>.mdc
 ```
 
 **If activating (no previous):**
@@ -80,7 +80,7 @@ Cursor: Active at .cursor/rules/personalities/<name>.mdc
 ✓ Activated <name> personality
 
 Claude Code: Added to .claude/context.md
-Cursor: Active at .cursor/rules/personalities/<name>.mdc
+Cursor: Active at rules/personalities/<name>.mdc
 ```
 
 **If removing:**

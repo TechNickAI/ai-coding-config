@@ -37,7 +37,7 @@ Detect project type by checking `package.json`, `pyproject.toml`, `Cargo.toml`, 
 </analyze-project>
 
 <include-always-apply-rules>
-Critical: Scan `.cursor/rules/` for rules with `alwaysApply: true` in frontmatter. These are the most important conventions - they apply to every task. Instead of extracting content, reference them directly.
+Critical: Scan `rules/` for rules with `alwaysApply: true` in frontmatter. These are the most important conventions - they apply to every task. Instead of extracting content, reference them directly.
 
 Add an "Always Apply Rules" section at the top with @ references:
 
@@ -46,8 +46,8 @@ Add an "Always Apply Rules" section at the top with @ references:
 
 Core project rules that apply to all tasks:
 
-@.cursor/rules/personalities/unity.mdc @.cursor/rules/git-interaction.mdc
-@.cursor/rules/typescript-coding-standards.mdc
+@rules/personalities/unity.mdc @rules/git-interaction.mdc
+@rules/typescript-coding-standards.mdc
 ```
 
 Why use @ references instead of extraction:
@@ -229,7 +229,7 @@ constraints that differ from root context.
 
 Scan for candidates by checking:
 
-1. **Directory-scoped cursor rules**: Rules in `.cursor/rules/` with `globs` patterns
+1. **Directory-scoped cursor rules**: Rules in `rules/` with `globs` patterns
    targeting specific directories (e.g., `globs: ["tests/**"]`, `globs: ["src/db/**"]`)
 
 2. **High-risk directories**: Places where AI mistakes are costly or common:
@@ -263,7 +263,7 @@ Keep these minimal. They inherit root context, so only include:
 
 [The critical constraint or domain knowledge - often a warning about what NOT to do]
 
-@.cursor/rules/relevant-rule.mdc
+@rules/relevant-rule.mdc
 ```
 
 No commands. No generic descriptions. Just the context that prevents mistakes.
@@ -279,7 +279,7 @@ Auto-generated files tracked by Drizzle's journal system.
 `drizzle-kit generate` from schema changes in `lib/db/schema.ts`. Manually created files
 exist but never run — they fail silently.
 
-@.cursor/rules/drizzle-database-migrations.mdc
+@rules/drizzle-database-migrations.mdc
 ```
 
 ## Matching Rules to Directories

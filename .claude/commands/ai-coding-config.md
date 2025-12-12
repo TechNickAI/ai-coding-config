@@ -12,7 +12,7 @@ personalities, and GitHub workflows.
 ## Usage
 
 - `/ai-coding-config` - Interactive setup for current project
-- `/ai-coding-config update` - Update existing configs to latest versions
+- `/ai-coding-config update` - Update existing configs to latest versions (includes architecture migration)
 - `/ai-coding-config add` - Add new command/skill/agent/plugin to the repo
 
 ## Interaction Guidelines
@@ -31,6 +31,56 @@ Walk through setting up AI coding configs for the current project.
 Ensure `~/.ai_coding_config` exists and is up to date. Clone if missing, pull latest if exists.
 </repository-management>
 
+<existing-config-detection>
+IMPORTANT: Before installing, detect what already exists in the project.
+
+Scenarios to handle:
+
+1. **Fresh project** (no existing AI configs)
+   - No `rules/`, no `.cursor/rules/`, no `CLAUDE.md`, no `AGENTS.md`
+   - Install with v2 (cross-tool) architecture from the start
+   - Create `rules/` as canonical, symlink `.cursor/rules/` → `../rules/`
+   - Create `AGENTS.md`, symlink `CLAUDE.md` → `AGENTS.md`
+
+2. **Existing Cursor rules, no AI coding config yet**
+   - Has `.cursor/rules/` as real directory with user's existing rules
+   - May have their own customizations to preserve
+   - Offer choice:
+     a. "Migrate existing rules to cross-tool structure" - Moves their rules to `rules/`, creates symlinks
+     b. "Add configs alongside existing rules" - Merges new rules into their `.cursor/rules/`
+   - ALWAYS preserve their existing rules, never overwrite without asking
+
+3. **Previous v1 (Cursor-first) AI coding config installation**
+   - `.cursor/rules/` is real directory
+   - `rules/` at root may symlink to `.cursor/rules/`
+   - `CLAUDE.md` is real file
+   - Offer migration to v2 (handled by architecture-check in update-mode)
+   - For setup, treat as scenario 2 if running setup again
+
+4. **Already on v2 (cross-tool) architecture**
+   - `rules/` is real directory at root
+   - `.cursor/rules/` symlinks to `../rules/`
+   - `AGENTS.md` exists, `CLAUDE.md` symlinks to it
+   - Proceed with normal setup/update within existing structure
+
+Detection commands:
+```bash
+# Check what exists
+test -d .cursor/rules && echo "has .cursor/rules"
+test -L .cursor/rules && echo ".cursor/rules is symlink"
+test -d rules && echo "has rules/"
+test -L rules && echo "rules is symlink"
+test -f CLAUDE.md && echo "has CLAUDE.md"
+test -L CLAUDE.md && echo "CLAUDE.md is symlink"
+test -f AGENTS.md && echo "has AGENTS.md"
+```
+
+When existing Cursor rules are detected:
+- List what rules the user already has
+- Explain that these will be preserved
+- Show where new rules will be added vs merged
+</existing-config-detection>
+
 <project-understanding>
 Detect project type and framework specifics. Django differs from FastAPI. React differs from Next.js. Look for existing configurations to avoid duplicates. Understand the project's purpose - API server, web app, CLI tool.
 </project-understanding>
@@ -40,7 +90,7 @@ Show available configurations that match this project. Group by relevance - fram
 
 Available configurations:
 
-- Rules (`.cursor/rules/` subdirectories and files)
+- Rules (`rules/` subdirectories and files, `.cursor/rules/` symlinks here)
 - Personalities (one or none)
 - Agents (specialized AI assistants, default to all)
 - Skills (intelligent selection based on project type - see skills-selection section)
@@ -95,11 +145,11 @@ Use AskUserQuestion to confirm skill selection, showing recommended pre-selected
 <file-installation>
 Copy selected configurations intelligently, respecting existing customizations. Compare files with diff when they exist. For conflicts, use AskUserQuestion to offer choices (overwrite, skip, show diff, or custom action). Never silently overwrite.
 
-Installation mapping: Rules → `.cursor/rules/` (preserve subdirectory structure),
+Installation mapping: Rules → `rules/` (preserve subdirectory structure, `.cursor/rules/` symlinks here),
 Commands → `.claude/commands/` with symlinks in `.cursor/commands/`, Context →
 `.claude/context.md`, Agents → `.claude/agents/`, Skills → `.claude/skills/` (copy
 entire skill directories for selected skills only), Personalities →
-`.cursor/rules/personalities/` (common always, additional with `alwaysApply: true`),
+`rules/personalities/` (common always, additional with `alwaysApply: true`),
 VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`,
 Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`, Directory context →
 `.cursor/AGENTS.md` and `.claude/AGENTS.md` (explains directory purpose and references
@@ -118,7 +168,7 @@ After successful installation, provide actionable next steps.
 Always recommend:
 
 1. Generate AGENTS.md if missing at project root (run /generate-AGENTS-file)
-2. List available commands (/load-cursor-rules, /personality-change, /create-prompt,
+2. List available commands (/load-rules, /personality-change, /create-prompt,
    /troubleshoot, /setup-environment, /handoff-context, /product-intel)
 
 Conditional recommendations:
@@ -134,17 +184,58 @@ Show only genuinely useful recommendations. </recommendations> </setup-mode>
 <update-mode>
 Systematically update all configuration types from the repo to latest versions.
 
-Start by pulling latest from `~/.ai_coding_config` and comparing against the current
-project.
+Start by pulling latest from `~/.ai_coding_config`.
+
+<architecture-check>
+IMPORTANT: Before updating configs, detect if this project uses the legacy architecture.
+
+Legacy architecture indicators (v1 - Cursor-first):
+- `.cursor/rules/` is a real directory (not a symlink)
+- `rules/` at root doesn't exist OR symlinks to `.cursor/rules/`
+- `CLAUDE.md` is a real file (not a symlink)
+- No `AGENTS.md` at project root
+
+Current architecture (v2 - Cross-tool):
+- `rules/` at project root is the canonical directory
+- `.cursor/rules/` symlinks to `../rules/`
+- `AGENTS.md` at project root is canonical
+- `CLAUDE.md` symlinks to `AGENTS.md`
+
+Detection: `test -L .cursor/rules && test -L CLAUDE.md && test -f AGENTS.md`
+
+If legacy architecture detected:
+1. Explain the architecture change clearly:
+   - "Your project uses the older Cursor-first structure. There's a newer cross-tool architecture that works better with Claude Code, Cursor, Windsurf, Aider, and other AI coding tools."
+   - "The key change: `rules/` becomes the canonical location at project root, with `.cursor/rules/` symlinked to it. This follows the emerging AGENTS.md standard (20,000+ GitHub repos)."
+
+2. Use AskUserQuestion to offer migration:
+   - "Migrate to cross-tool architecture (Recommended)" - Performs full migration
+   - "Skip migration, just update configs" - Updates within current structure
+   - "Show me what would change" - Explains changes in detail
+
+3. If migration accepted:
+   a. Create backup: `cp -r .cursor/rules rules-backup`
+   b. Move rules: `mv .cursor/rules rules`
+   c. Create symlink: `ln -s ../rules .cursor/rules`
+   d. Create AGENTS.md (copy from CLAUDE.md if exists, or create new)
+   e. Replace CLAUDE.md: `rm CLAUDE.md && ln -s AGENTS.md CLAUDE.md`
+   f. Update @ references in AGENTS.md from `.cursor/rules/` to `rules/`
+   g. Rename load-cursor-rules symlink to load-rules if exists
+   h. Report migration complete, then continue with normal update
+
+4. If migration skipped, continue updating within legacy structure (but warn that some new features may not work correctly)
+</architecture-check>
+
+Now compare against the current project.
 
 Configuration categories that must be checked (in this order):
 
-1. Personalities (`.cursor/rules/personalities/`)
+1. Personalities (`rules/personalities/`)
    - Compare each personality file in repo vs project
    - Note: common-personality.mdc may have been deprecated or renamed in newer versions
    - Show diffs for changes to frontmatter (description, alwaysApply)
 
-2. Top-level Rules (`.cursor/rules/`)
+2. Top-level Rules (`rules/`)
    - Universal rules apply to all projects regardless of framework
    - Compare: autonomous-development-workflow, code-review-standards, external-apis,
      fixing-github-actions-builds, git-commit-message, git-interaction,
@@ -153,7 +244,7 @@ Configuration categories that must be checked (in this order):
    - Preserve project-specific rules (sentry, typescript-coding-standards,
      testing-standards-typescript, code-comments, etc.)
 
-3. Rule Subdirectories (`.cursor/rules/`)
+3. Rule Subdirectories (`rules/`)
    - Check each subdirectory: ai/, frontend/, observability/, django/, python/
    - For MCP/Next.js projects: prioritize ai/ and frontend/
    - For each subdirectory, compare all .mdc files in repo vs project

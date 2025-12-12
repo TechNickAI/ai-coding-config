@@ -26,11 +26,11 @@ Run /setup-environment if available, otherwise install dependencies and set up e
 </environment-initialization>
 
 <standards-discovery>
-Read all cursor rules in .cursor/rules/. If CLAUDE.md or AGENTS.md exist at project root, read those too. Every applicable rule must be followed.
+Read all cursor rules in rules/. If CLAUDE.md or AGENTS.md exist at project root, read those too. Every applicable rule must be followed.
 </standards-discovery>
 
 <implementation>
-Write code that solves the problem following all cursor rules. Make commits along the way as logical units of work are completed. Follow git commit message guidelines in .cursor/rules/git-commit-message.mdc if it exists.
+Write code that solves the problem following all cursor rules. Make commits along the way as logical units of work are completed. Follow git commit message guidelines in rules/git-commit-message.mdc if it exists.
 </implementation>
 
 <local-validation>

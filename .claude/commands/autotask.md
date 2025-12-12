@@ -50,7 +50,7 @@ Implement the solution following project patterns and standards. Available agent
   refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
-Build an execution plan based on task type. Use /load-cursor-rules to load relevant
+Build an execution plan based on task type. Use /load-rules to load relevant
 project standards. Execute agents in parallel when possible, sequentially when they
 depend on each other.
 
@@ -83,7 +83,7 @@ linting, and tests. Add extra validation only when risk justifies it.
 </validation-and-review>
 
 <create-pr>
-Deliver a well-documented pull request with commits following .cursor/rules/git-commit-message.mdc.
+Deliver a well-documented pull request with commits following rules/git-commit-message.mdc.
 
 PR description must include:
 
@@ -160,7 +160,7 @@ with clear options and context. </error-recovery>
 
 - GitHub CLI (`gh`) installed and authenticated
 - Node.js/npm
-- Project standards accessible via /load-cursor-rules
+- Project standards accessible via /load-rules
 
 ## Configuration
 
