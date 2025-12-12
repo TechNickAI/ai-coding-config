@@ -74,6 +74,14 @@ elif [ -d ".cursor/rules" ] && [ ! -L ".cursor/rules" ]; then
     echo "   Run /ai-coding-config update to migrate to v2 architecture"
 elif [ -d "rules" ] && [ -L ".cursor/rules" ]; then
     echo "✓ Already using v2 architecture"
+elif [ -d "rules" ] && [ ! -e ".cursor/rules" ]; then
+    # rules/ exists but .cursor/rules is missing - create symlink
+    ln -s ../rules .cursor/rules
+    if [ ! -L ".cursor/rules" ]; then
+        echo "❌ Failed to create .cursor/rules symlink"
+        exit 1
+    fi
+    echo "✓ Created .cursor/rules symlink to existing rules/"
 fi
 
 echo ""
