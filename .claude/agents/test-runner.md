@@ -15,7 +15,7 @@ failures: what failed, why, and where.
 
 ## How to Invoke
 
-Tell me the test runner command to use (bun test, pnpm test, pytest, etc). I'll run it,
+Tell me the test runner command to use (bun run test, pnpm test, pytest, etc). I'll run it,
 parse the output, and return a terse report.
 
 ## Output Philosophy
