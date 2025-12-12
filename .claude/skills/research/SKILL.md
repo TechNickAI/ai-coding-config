@@ -1,9 +1,6 @@
 ---
 name: research
-description:
-  "Use when current web information needed to avoid broken implementations. Triggers:
-  version-specific errors, deprecated methods, security-critical code, post-2023
-  technologies, or 'is this still how we do this?' moments."
+description: "Use when current web info needed to avoid broken implementations"
 ---
 
 <philosophy>

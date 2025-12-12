@@ -1,10 +1,6 @@
 ---
 name: skill-creator
-description:
-  "Use when creating or editing skills for this ai-coding-config repo. Applies
-  prompt-engineering.mdc principles: goal-focused instructions, positive pattern
-  examples, trust LLM intelligence. Ensures proper frontmatter, searchable keywords, and
-  token-efficient content."
+description: "Use when creating or editing skills for ai-coding-config repo"
 ---
 
 <objective>
