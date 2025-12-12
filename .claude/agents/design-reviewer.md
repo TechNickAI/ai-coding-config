@@ -1,7 +1,6 @@
 ---
 name: design-reviewer
-description:
-  "Invoke after frontend code changes for design review with Playwright testing"
+description: "Invoke after frontend code changes for design review"
 color: pink
 ---
 

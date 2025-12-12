@@ -1,6 +1,6 @@
 ---
 name: test-runner
-description: "Invoke to run tests and return terse, context-efficient results"
+description: "Invoke to run tests with terse, context-efficient results"
 ---
 
 I run tests and tell you exactly what you need to know. Pass count. Fail count. For

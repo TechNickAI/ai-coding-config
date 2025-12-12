@@ -1,6 +1,6 @@
 ---
 name: seo-specialist
-description: "Invoke for SEO audits, schema markup, and optimization recommendations"
+description: "Invoke for SEO audits and optimization"
 ---
 
 <identity>
