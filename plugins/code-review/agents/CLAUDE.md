@@ -19,23 +19,19 @@ description: "Keep under 75 characters"
   under 88 to prevent prettier wrapping
 - **Use quotes** - Always quote descriptions to handle special characters like colons
 
-**What works:**
+**Valid formats:**
 
-- `description: Plain text under 75 chars`
-- `description: "Double quoted under 75 chars"`
+- `description: "Double quoted under 75 chars"` (recommended)
 - `description: 'Single quoted under 75 chars'`
-
-**What does NOT work:**
-
-- Multi-line descriptions with block scalars (`>` or `|`)
-- Descriptions over 75 characters (causes wrapping: 75 + 13 = 88 line limit)
+- `description: Plain text under 75 chars` (only if no special characters)
 
 ## Writing Concise Descriptions
 
 Keep descriptions focused on WHEN to invoke the agent:
 
-- ✅ "Invoke for design review"
-- ❌ "Invoke for design review with Playwright testing checking WCAG compliance..."
+- Good: "Invoke for design review"
+- Too long: "Invoke for design review with Playwright testing checking WCAG
+  compliance..."
 
 If you need to cut content to stay under 75 chars, move that detail into the agent body
 instead.
