@@ -233,8 +233,8 @@ Each personality is a complete communication style overlay - see
   (symlinks)     (copies)
 ```
 
-**Single source of truth**: `rules/` and `.claude/commands/` are canonical.
-Plugins use symlinks for packaging.
+**Single source of truth**: `rules/` and `.claude/commands/` are canonical. Plugins use
+symlinks for packaging.
 
 **Plugin distribution**: Claude Code uses marketplace.json. Cursor, Windsurf, Cline, and
 others use bootstrap script. All reference same source files.
@@ -284,9 +284,9 @@ ai-coding-config/
 
 ## What You Get
 
-**Rules** ([`rules/`](rules/)) - LLM-optimized coding standards.
-Framework patterns, testing approaches, commit formats, naming conventions. AI
-references these automatically based on file types and task context.
+**Rules** ([`rules/`](rules/)) - LLM-optimized coding standards. Framework patterns,
+testing approaches, commit formats, naming conventions. AI references these
+automatically based on file types and task context.
 
 **Commands** ([`.claude/commands/`](.claude/commands/)) - Active workflows. From simple
 setup to autonomous task execution. Designed for LLM-to-LLM communication with clear
@@ -296,9 +296,8 @@ goals and adaptive behavior.
 domains - debugging, development, UX, code review, architecture. See
 [Claude Code agents docs](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents).
 
-**Personalities** ([`rules/personalities/`](rules/personalities/)) -
-Communication style overlays. Changes how AI talks to you without changing technical
-capabilities.
+**Personalities** ([`rules/personalities/`](rules/personalities/)) - Communication style
+overlays. Changes how AI talks to you without changing technical capabilities.
 
 **GitHub workflows** ([`.github/workflows/`](.github/workflows/)) - CI/CD integration
 with Claude-powered automation.
