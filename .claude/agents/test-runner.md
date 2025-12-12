@@ -1,10 +1,6 @@
 ---
 name: test-runner
-description:
-  "Run tests and return focused results. Caller specifies the test runner (bun, pnpm,
-  pytest, etc). Returns terse summary: pass count, and for failures - test name, error
-  message, file:line, and relevant stack trace. Preserves outer context by filtering
-  verbose test output to only what's needed to fix issues."
+description: "Invoke to run tests and return terse, context-efficient results"
 ---
 
 I run tests and tell you exactly what you need to know. Pass count. Fail count. For
