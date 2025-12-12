@@ -152,7 +152,7 @@ entire skill directories for selected skills only), Personalities →
 `rules/personalities/` (common always, additional with `alwaysApply: true`),
 VSCode → `.vscode/`, Prettier → `.prettierrc`, GitHub workflows → `.github/workflows/`,
 Gitignore → `.cursor/.gitignore` and `.claude/.gitignore`, Directory context →
-`.cursor/CLAUDE.md` and `.claude/CLAUDE.md` (explains directory purpose and references
+`.cursor/AGENTS.md` and `.claude/AGENTS.md` (explains directory purpose and references
 prompt-engineering rules).
 
 Report what was copied, skipped, and how conflicts were handled. </file-installation>
