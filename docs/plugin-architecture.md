@@ -16,8 +16,8 @@ these canonical sources. This eliminates duplication while enabling flexible pac
 
 **What:** Coding standards, patterns, frameworks, conventions **Format:** `.mdc` files
 with frontmatter (description, globs, alwaysApply) **Used by:** Cursor IDE (native),
-Claude Code (via `/load-rules`) **Access:** `@rule-name` in Cursor,
-`/load-rules` in Claude Code
+Claude Code (via `/load-rules`) **Access:** `@rule-name` in Cursor, `/load-rules` in
+Claude Code
 
 ### Agents: `plugins/*/agents/`
 
@@ -47,8 +47,8 @@ plugins/plugin-name/
 
 ### Why This Structure?
 
-**Rules** stay in `rules/` - Cursor's native location. Claude Code accesses them
-via `/load-rules`.
+**Rules** stay in `rules/` - Cursor's native location. Claude Code accesses them via
+`/load-rules`.
 
 **Commands** stay in `.claude/commands/` - both tools can access them natively.
 
@@ -166,8 +166,7 @@ native strengths **Solution:** Let tools be themselves, bridge where needed
 
 1. Create in `rules/category/rule-name.mdc`
 2. Include frontmatter with description, globs
-3. That's it - rules are accessed via Cursor natively or `/load-rules` in Claude
-   Code
+3. That's it - rules are accessed via Cursor natively or `/load-rules` in Claude Code
 4. No need to add to plugins
 
 ### Adding an Agent

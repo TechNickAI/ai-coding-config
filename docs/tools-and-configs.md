@@ -6,18 +6,18 @@ Rules and commands are not the same thing. They serve completely different purpo
 
 ### Cursor IDE
 
-An AI-powered code editor forked from VS Code. It uses `rules/*.mdc` files for
-context and guidelines, `.cursor/settings.json` for preferences, and `@rule-name` to
-invoke specific rules. Developers write code with AI assistance where rules guide coding
-style, patterns, and best practices. The AI references rules automatically based on file
+An AI-powered code editor forked from VS Code. It uses `rules/*.mdc` files for context
+and guidelines, `.cursor/settings.json` for preferences, and `@rule-name` to invoke
+specific rules. Developers write code with AI assistance where rules guide coding style,
+patterns, and best practices. The AI references rules automatically based on file
 patterns or when explicitly invoked.
 
 ### Cursor CLI
 
 A command-line interface to Cursor's AI for CI/CD pipelines. It uses the same
-`rules/*.mdc` as the IDE plus `.cursor/settings.json` for non-interactive
-settings. Developers run it in CI/CD pipelines to automate AI-assisted tasks and fix
-code from the terminal. Example: `cursor --fix-lint src/`
+`rules/*.mdc` as the IDE plus `.cursor/settings.json` for non-interactive settings.
+Developers run it in CI/CD pipelines to automate AI-assisted tasks and fix code from the
+terminal. Example: `cursor --fix-lint src/`
 
 ### Claude Code
 
@@ -239,8 +239,7 @@ Select test-writer agent
 ## Configuration Strategy
 
 Store reusable configurations in `~/.ai_coding_config/` with subdirectories for
-`rules/`, `.claude/commands/`, `.claude/agents/`, and `prompts/` for setup
-helpers.
+`rules/`, `.claude/commands/`, `.claude/agents/`, and `prompts/` for setup helpers.
 
 For project-specific overrides, symlink or copy the shared configs into your project
 directory. Add a `.cursor/settings.json` and `.claude/settings.json` for project-level
@@ -254,7 +253,7 @@ context.
 | Purpose    | Guide AI coding            | Execute workflows            |
 | Nature     | Passive (context)          | Active (actions)             |
 | Format     | `.mdc` files               | `.md` files with frontmatter |
-| Location   | `rules/`           | `.claude/commands/`          |
+| Location   | `rules/`                   | `.claude/commands/`          |
 | Invocation | `@rule-name` or auto       | `/command-name`              |
 | Used by    | Cursor IDE, Cursor CLI     | Claude Code                  |
 | Examples   | coding-standards, patterns | test, lint, deploy           |

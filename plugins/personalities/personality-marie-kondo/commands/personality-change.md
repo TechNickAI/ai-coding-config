@@ -59,9 +59,9 @@ e. Write updated `.claude/context.md`
 
 ### 3. Verify Cursor Setup
 
-a. Read `rules/personalities/<name>.mdc` frontmatter b. Check if
-`alwaysApply: true` is set c. If not set and name != "none", inform user: "⚠️ Note: For
-Cursor, manually set `alwaysApply: true` in rules/personalities/<name>.mdc"
+a. Read `rules/personalities/<name>.mdc` frontmatter b. Check if `alwaysApply: true` is
+set c. If not set and name != "none", inform user: "⚠️ Note: For Cursor, manually set
+`alwaysApply: true` in rules/personalities/<name>.mdc"
 
 ### 4. Report Results
 

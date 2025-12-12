@@ -1,12 +1,6 @@
 ---
 name: site-keeper
-description:
-  "Invoke for production health monitoring. Runs comprehensive checks on errors, builds,
-  and logs. Creates PRs for fixable issues, escalates P0/P1 problems immediately.
-  Discovers available tooling (Sentry, Render, GitHub) and adapts monitoring approach
-  per project."
-tools: Read, Write, Edit, Grep, Glob, Bash, TodoWrite, Task, WebFetch, WebSearch
-model: sonnet
+description: "Invoke for production health monitoring and error triage"
 ---
 
 <identity>

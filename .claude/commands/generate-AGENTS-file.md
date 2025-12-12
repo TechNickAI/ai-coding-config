@@ -229,8 +229,8 @@ constraints that differ from root context.
 
 Scan for candidates by checking:
 
-1. **Directory-scoped cursor rules**: Rules in `rules/` with `globs` patterns
-   targeting specific directories (e.g., `globs: ["tests/**"]`, `globs: ["src/db/**"]`)
+1. **Directory-scoped cursor rules**: Rules in `rules/` with `globs` patterns targeting
+   specific directories (e.g., `globs: ["tests/**"]`, `globs: ["src/db/**"]`)
 
 2. **High-risk directories**: Places where AI mistakes are costly or common:
    - `migrations/`, `drizzle/migrations/`, `prisma/migrations/` - Never edit manually
