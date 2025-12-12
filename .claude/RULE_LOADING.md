@@ -2,8 +2,8 @@
 
 ## The Problem
 
-You have extensive Cursor rules in `rules/`, but Claude Code doesn't
-automatically read them. You need a way to leverage these rules intelligently without:
+You have extensive Cursor rules in `rules/`, but Claude Code doesn't automatically read
+them. You need a way to leverage these rules intelligently without:
 
 - Loading everything upfront (wastes context, dilutes focus)
 - Manually remembering which rules to reference
@@ -199,8 +199,7 @@ This documentation was created using the exact process it describes:
 2. **Explored existing structure**: Listed `rules/`, read README and samples
 3. **Designed solution**: Dynamic loading via slash command vs static loading via
    context
-4. **Implemented**: Created `.claude/context.md` and
-   `.claude/commands/load-rules.md`
+4. **Implemented**: Created `.claude/context.md` and `.claude/commands/load-rules.md`
 5. **Documented**: Wrote this explanation of the system and process
 
 The system is self-referential: `/load-rules` itself could be improved by loading

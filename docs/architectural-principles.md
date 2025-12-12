@@ -6,11 +6,15 @@ description: "Architectural principles, patterns, and technical decisions"
 
 ## Core Philosophy
 
-Technology is amoral. We imbue it with our values. Universal love as a North Star guides technical decisions. This manifests as unconditional acceptance, presence before solutions, and building systems that serve human flourishing.
+Technology is amoral. We imbue it with our values. Universal love as a North Star guides
+technical decisions. This manifests as unconditional acceptance, presence before
+solutions, and building systems that serve human flourishing.
 
 ## Visibility Principle
 
-Make errors visible during development so bugs get caught in testing, not production. Errors that bubble up get caught by Sentry/Honeybadger, trigger alerts, and get fixed. Errors that are visible are errors that get solved.
+Make errors visible during development so bugs get caught in testing, not production.
+Errors that bubble up get caught by Sentry/Honeybadger, trigger alerts, and get fixed.
+Errors that are visible are errors that get solved.
 
 ```python
 def process_payment(order_id: str):
@@ -48,7 +52,8 @@ except APIException as e:
 
 ## Observability by Design
 
-Make systems transparent at every layer. When something happens, you should be able to see it.
+Make systems transparent at every layer. When something happens, you should be able to
+see it.
 
 ### Structured Logging
 
@@ -76,13 +81,14 @@ Sentry captures errors with rich context. Add tags and extra data at error bound
 ```typescript
 Sentry.captureException(error, {
   tags: { component: "api", action: "send_email" },
-  extra: { userId, messageId, attemptCount }
+  extra: { userId, messageId, attemptCount },
 });
 ```
 
 ### Performance Tracing
 
-Wrap operations in spans. Every HTTP request, LLM call, and database operation becomes visible.
+Wrap operations in spans. Every HTTP request, LLM call, and database operation becomes
+visible.
 
 ```typescript
 return await Sentry.startSpan(
@@ -105,7 +111,7 @@ Sentry.addBreadcrumb({
   category: "http.retry",
   message: `Retrying ${method} ${url}`,
   level: "warning",
-  data: { url, retryCount }
+  data: { url, retryCount },
 });
 ```
 
@@ -115,7 +121,11 @@ Errors map to HTTP status codes and propagate to error boundaries.
 
 ```typescript
 class ApplicationError extends Error {
-  constructor(message: string, public code: string, public statusCode: number) {}
+  constructor(
+    message: string,
+    public code: string,
+    public statusCode: number
+  ) {}
 }
 
 class ValidationError extends ApplicationError {
@@ -162,7 +172,8 @@ notion({ action: 'describe' })              // Lists available operations
 notion({ action: 'search', params: {...} }) // Executes specific operation
 ```
 
-This reduces initial context from 200K tokens to 7.5K tokens (95% reduction). Valuable for LLM context limits and cognitive load.
+This reduces initial context from 200K tokens to 7.5K tokens (95% reduction). Valuable
+for LLM context limits and cognitive load.
 
 ### Service Adapter Pattern
 
@@ -177,6 +188,7 @@ abstract class ServiceAdapter {
 ```
 
 Each adapter handles:
+
 - Action dispatching (describe, search, create, raw_api)
 - Help documentation with operation definitions
 - Credential retrieval via unified connection manager
@@ -193,7 +205,8 @@ const creds = await getCredentials(email, service, accountId);
 // API key: { type: "api_key", credentials }
 ```
 
-OAuth services use Nango proxy for token refresh. API keys encrypted at rest (AES-256-GCM), decrypted on-demand, never cached.
+OAuth services use Nango proxy for token refresh. API keys encrypted at rest
+(AES-256-GCM), decrypted on-demand, never cached.
 
 ### Error Translation
 
@@ -206,7 +219,11 @@ if (error.response?.status === 401) {
   );
 }
 if (error.response?.status === 429) {
-  throw new ApplicationError("Rate limited. Try again in a few moments.", "RATE_LIMITED", 429);
+  throw new ApplicationError(
+    "Rate limited. Try again in a few moments.",
+    "RATE_LIMITED",
+    429
+  );
 }
 ```
 
@@ -221,7 +238,7 @@ const { modelId, temperature, reasoning } = await runConcierge(messages);
 // Then execute with selected model
 const result = await generateText({
   model: openrouter.chat(modelId),
-  temperature
+  temperature,
 });
 ```
 
@@ -237,12 +254,13 @@ const httpClient = ky.create({
   retry: {
     limit: 3,
     statusCodes: [408, 429, 500, 502, 503, 504],
-    backoffLimit: 3_000
-  }
+    backoffLimit: 3_000,
+  },
 });
 ```
 
-30-second timeout accommodates slow APIs (Notion bulk exports, large operations). Retry on transient failures (connection errors, timeouts, 5xx).
+30-second timeout accommodates slow APIs (Notion bulk exports, large operations). Retry
+on transient failures (connection errors, timeouts, 5xx).
 
 ## Separation of Concerns
 
@@ -258,9 +276,9 @@ class AlgorithmicBot(LendingOperations):
     """Deployment score algorithm, offer distribution logic"""
 ```
 
-Gateway (routing) and Adapters (services) are separate.
-Concierge (model selection) and Model execution are separate.
-Connection Manager (credentials) and OAuth logic are separate.
+Gateway (routing) and Adapters (services) are separate. Concierge (model selection) and
+Model execution are separate. Connection Manager (credentials) and OAuth logic are
+separate.
 
 ## Configuration as Data
 
@@ -290,13 +308,15 @@ Change behavior without code deploys. Per-instance customization without schema 
 
 ### Language Selection
 
-Python for backend services, data processing, mature applications. Django for full apps, FastAPI for APIs, Celery for background jobs.
+Python for backend services, data processing, mature applications. Django for full apps,
+FastAPI for APIs, Celery for background jobs.
 
 TypeScript for web frontends, Next.js full-stack applications.
 
 ### Sync by Default
 
-Synchronous code with Celery for background jobs. Synchronous is simpler, easier to debug, easier to maintain.
+Synchronous code with Celery for background jobs. Synchronous is simpler, easier to
+debug, easier to maintain.
 
 ```python
 def fetch_data(url: str) -> dict:
@@ -304,11 +324,13 @@ def fetch_data(url: str) -> dict:
     return response.json()
 ```
 
-Async for WebSocket connections, async-only libraries, specific performance-critical paths with measured benefits.
+Async for WebSocket connections, async-only libraries, specific performance-critical
+paths with measured benefits.
 
 ### Database Selection
 
-PostgreSQL with Drizzle ORM for new projects. Lightweight, SQL-focused, type-safe without heavy abstractions.
+PostgreSQL with Drizzle ORM for new projects. Lightweight, SQL-focused, type-safe
+without heavy abstractions.
 
 ### Tooling
 
@@ -322,9 +344,11 @@ One tool per job. Focused packages over swiss-army knives.
 
 ### File Structure
 
-Flat until complexity emerges. Start with `lib/` containing everything. Split when natural boundaries appear (`lib/db/`, `lib/integrations/`).
+Flat until complexity emerges. Start with `lib/` containing everything. Split when
+natural boundaries appear (`lib/db/`, `lib/integrations/`).
 
-Next.js App Router: `app/` for routes only, `lib/` for business logic, `components/` for React components.
+Next.js App Router: `app/` for routes only, `lib/` for business logic, `components/` for
+React components.
 
 ### Import Organization
 
@@ -336,7 +360,8 @@ from typing import Optional
 import stripe
 ```
 
-TypeScript: External packages first, then types, then internal utilities, then feature code.
+TypeScript: External packages first, then types, then internal utilities, then feature
+code.
 
 ```typescript
 import * as Sentry from "@sentry/nextjs";
@@ -352,7 +377,8 @@ import { EmailService } from "@/lib/services/email";
 
 ## Testing Philosophy
 
-Test behavior, not implementation. User-facing functionality, error handling with invalid inputs, edge cases, integration between components.
+Test behavior, not implementation. User-facing functionality, error handling with
+invalid inputs, edge cases, integration between components.
 
 Use real infrastructure when possible. PGlite provides in-memory PostgreSQL for tests.
 
@@ -373,7 +399,8 @@ Commit format: `{emoji} {imperative verb} {concise description}`
 ♻️ Refactor connection manager for multi-account support
 ```
 
-Commits are permanent records. AI assistants make code changes but leave version control to you. When hooks fail, fix the root cause.
+Commits are permanent records. AI assistants make code changes but leave version control
+to you. When hooks fail, fix the root cause.
 
 ## Constants Philosophy
 
@@ -393,11 +420,14 @@ const timeout = 30000;
 
 ## Naming Conventions
 
-Python: Files `snake_case.py`, classes `PascalCase`, functions/variables `snake_case`, constants `SCREAMING_SNAKE_CASE`.
+Python: Files `snake_case.py`, classes `PascalCase`, functions/variables `snake_case`,
+constants `SCREAMING_SNAKE_CASE`.
 
-TypeScript: Files `kebab-case.ts`, types `PascalCase`, functions/variables `camelCase`, constants `SCREAMING_SNAKE_CASE`.
+TypeScript: Files `kebab-case.ts`, types `PascalCase`, functions/variables `camelCase`,
+constants `SCREAMING_SNAKE_CASE`.
 
-Public by default. Underscore prefix only when accessing would genuinely break functionality (thread locks, internal state accessed through methods).
+Public by default. Underscore prefix only when accessing would genuinely break
+functionality (thread locks, internal state accessed through methods).
 
 ## Key Principles
 

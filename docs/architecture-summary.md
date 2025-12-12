@@ -4,16 +4,15 @@
 
 ### Cursor IDE
 
-An AI-powered code editor that uses `rules/*.mdc` files for context and
-guidelines. Rules guide how the AI codes - they're passive, providing standards and
-patterns. You invoke them with `@rule-name` or they apply automatically based on file
-patterns.
+An AI-powered code editor that uses `rules/*.mdc` files for context and guidelines.
+Rules guide how the AI codes - they're passive, providing standards and patterns. You
+invoke them with `@rule-name` or they apply automatically based on file patterns.
 
 ### Cursor CLI
 
-A command-line interface for CI/CD that uses the same `rules/` as the IDE. This
-runs AI operations from the terminal, typically with commands like `cursor --command`.
-It ensures your automated fixes follow the same standards as your interactive coding.
+A command-line interface for CI/CD that uses the same `rules/` as the IDE. This runs AI
+operations from the terminal, typically with commands like `cursor --command`. It
+ensures your automated fixes follow the same standards as your interactive coding.
 
 ### Claude Code
 
@@ -115,10 +114,10 @@ project starters.
 
 ## Key Points
 
-Rules and commands are fundamentally different. Cursor IDE and Cursor CLI share
-`rules/` while Claude Code has its own `.claude/commands/`. Agents can be
-referenced by both tools - they're markdown files with frontmatter. Never mention
-`.cursorrules` - it's deprecated.
+Rules and commands are fundamentally different. Cursor IDE and Cursor CLI share `rules/`
+while Claude Code has its own `.claude/commands/`. Agents can be referenced by both
+tools - they're markdown files with frontmatter. Never mention `.cursorrules` - it's
+deprecated.
 
 ## See Also
 

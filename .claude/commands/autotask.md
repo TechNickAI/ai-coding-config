@@ -50,9 +50,9 @@ Implement the solution following project patterns and standards. Available agent
   refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
-Build an execution plan based on task type. Use /load-rules to load relevant
-project standards. Execute agents in parallel when possible, sequentially when they
-depend on each other.
+Build an execution plan based on task type. Use /load-rules to load relevant project
+standards. Execute agents in parallel when possible, sequentially when they depend on
+each other.
 
 Provide targeted context when launching agents: task requirements, implementation
 decisions, relevant standards, and specific focus area. Tailor context to agent type.

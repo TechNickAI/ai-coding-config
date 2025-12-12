@@ -26,13 +26,13 @@ and MCP server configurations.
 
 **Cursor IDE** is an AI-powered code editor built on VS Code. It provides inline AI
 suggestions as you type (Tab to accept), quick edits with Cmd+K, and a chat interface
-that understands your codebase. The rules system in `rules/` guides how the AI
-codes - think coding standards, framework patterns, and best practices.
+that understands your codebase. The rules system in `rules/` guides how the AI codes -
+think coding standards, framework patterns, and best practices.
 
 **Cursor CLI** (using the `cursor-agent` command) brings the same AI to your terminal
-and CI/CD pipelines. It uses the same `rules/` as the IDE, so your AI behavior
-stays consistent whether you're coding interactively or running automated fixes in
-GitHub Actions. Install it from [cursor.com/cli](https://cursor.com/cli).
+and CI/CD pipelines. It uses the same `rules/` as the IDE, so your AI behavior stays
+consistent whether you're coding interactively or running automated fixes in GitHub
+Actions. Install it from [cursor.com/cli](https://cursor.com/cli).
 
 This repository provides comprehensive Cursor configurations including an extensive
 rules library for Python and TypeScript projects.
@@ -52,7 +52,7 @@ there's little we can standardize.
 | -------------- | ------------------ | ------------------ | ------------------- | ------------------- |
 | Type           | Full IDE           | CLI                | CLI                 | Chat App            |
 | AI Integration | Native             | Native             | Native              | Native              |
-| Configuration  | `rules/`   | Same as IDE        | `.claude/commands/` | MCP only            |
+| Configuration  | `rules/`           | Same as IDE        | `.claude/commands/` | MCP only            |
 | Primary Use    | Interactive coding | CI/CD              | Agentic workflows   | Research            |
 | Cost           | $20/mo             | Included with IDE  | $20/mo              | $20/mo              |
 | This Repo      | ✅ Fully supported | ✅ Fully supported | ✅ Fully supported  | ⚠️ MCP configs only |
