@@ -236,11 +236,11 @@ If legacy architecture detected:
 Check for deprecated files from previous versions and offer to remove them.
 
 Git consolidation (Dec 2024): Git standards consolidated into single
-`rules/git-interaction.mdc` with `gitter` agent. Deprecated files:
+`rules/git-interaction.mdc` with `git-writer` agent. Deprecated files:
 
 - `rules/git-commit-message.mdc` - merged into git-interaction.mdc
 - `plugins/git-commits/agents/commit-message-generator.md` - replaced by
-  `.claude/agents/gitter.md`
+  `.claude/agents/git-writer.md`
 
 If deprecated files found, offer removal with explanation: "Git standards consolidated
 into git-interaction.mdc + gitter agent. Remove old files?" </deprecated-files-check>

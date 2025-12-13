@@ -50,12 +50,12 @@ a feature branch, make commits following your project's conventions, push to tha
 feature branch, and open a pull request for your review. Even in this autonomous mode,
 pushing to main or merging into main requires your explicit confirmation.
 
-## Message Generation with Gitter Agent
+## Message Generation with Git Writer Agent
 
-For generating commit messages, PR descriptions, and branch names, I invoke the `gitter`
-agent. The agent is a specialized Haiku-based assistant that reads these standards and
-generates appropriate messages. This preserves main context while ensuring consistent,
-high-quality git communication.
+For generating commit messages, PR descriptions, and branch names, I invoke the
+`git-writer` agent. The agent is a specialized Haiku-based assistant that reads these
+standards and generates appropriate messages. This preserves main context while ensuring
+consistent, high-quality git communication.
 
 ## Respecting Validation and Quality Checks
 
