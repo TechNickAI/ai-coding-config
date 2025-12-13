@@ -29,6 +29,18 @@ Read @rules/code-review-standards.mdc for triage principles:
 Use provided PR number, or detect from current branch. Exit if no PR exists.
 </pr-detection>
 
+<hotfix-mode>
+If the branch name starts with `hotfix/`, switch to expedited review mode:
+
+- Only address security vulnerabilities and actual bugs
+- Decline ALL style, refactoring, and "improvement" suggestions
+- Skip theoretical concerns - focus on "will this break production?"
+- One pass only - don't wait for bot re-reviews after fixes
+- Speed over polish - this is an emergency
+
+Announce hotfix mode at start: "Hotfix branch detected - running expedited review.
+Addressing only security issues and bugs, declining all other feedback." </hotfix-mode>
+
 <comment-sources>
 Code review bots comment in different places. Fetch both:
 - PR comments (general feedback on the PR itself)

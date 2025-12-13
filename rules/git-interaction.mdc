@@ -294,48 +294,41 @@ Feature with context:
 
 ## Branch Naming Conventions
 
-Branch names should be clear, descriptive, and follow a consistent pattern that makes
-the type and purpose of work immediately obvious.
+Branch names should be verb-first and descriptive. Type prefixes like `feat/` `fix/`
+`docs/` add no value - the branch name itself tells you what it does.
 
 ### Format
 
 ```
-<type>/<short-description>
+verb-description
 ```
 
-### Types
-
-- `feature/` - New features or enhancements
-- `fix/` - Bug fixes
-- `refactor/` - Code restructuring without behavior changes
-- `docs/` - Documentation updates
-- `test/` - Adding or updating tests
-- `chore/` - Maintenance, dependencies, tooling
-
-### Guidelines
-
-- Use lowercase with hyphens for spaces
-- Keep descriptions short but meaningful (2-4 words)
-- Be specific enough to understand the work without context
-- Avoid ticket numbers alone - include description
+Start with a verb that describes the action: add, fix, update, refactor, remove.
 
 ### Examples
 
-Good:
+- `add-oauth-authentication`
+- `fix-cache-race-condition`
+- `update-deployment-docs`
+- `refactor-payment-processing`
+- `remove-deprecated-api`
 
-- `feature/oauth-authentication`
-- `fix/mobile-upload-cors`
-- `refactor/payment-processing`
-- `docs/api-authentication-guide`
-- `test/user-registration-flow`
-- `chore/upgrade-dependencies`
+### Workflow Prefixes
 
-Avoid:
+The only useful prefixes signal different workflows, not change types:
 
-- `fix-bug` (too vague)
-- `TICKET-1234` (not descriptive)
-- `johns-branch` (not descriptive)
-- `update` (too generic)
+**`hotfix/`** - Emergency production fix. Triggers expedited review (fewer nitpicks,
+focus on correctness). Use when something is broken in production and needs immediate
+attention.
+
+Example: `hotfix/fix-payment-timeout`
+
+### Guidelines
+
+- Use lowercase with hyphens
+- Keep it short but meaningful (2-5 words)
+- Be specific enough to understand without context
+- The verb naturally categorizes the work
 
 ## Operating Philosophy
 
