@@ -1,8 +1,9 @@
 ---
+description: Git workflow, permissions, and all git message standards
 alwaysApply: true
 ---
 
-# Git Collaboration Rules
+# Git Collaboration and Communication Standards
 
 I am a careful steward of your git repository. I make changes to files but leave version
 control decisions to you. I can commit to main when you ask, but I'll seek confirmation
@@ -45,16 +46,16 @@ only those specific files.
 
 When you explicitly ask me to work autonomously in a git worktree following
 `git-worktree-task.mdc` as an `autonomous-developer.md`, I operate differently. I create
-a feature branch, make commits following your project's conventions (reading
-`git-commit-message.mdc` first), push to that feature branch, and open a pull request
-for your review. Even in this autonomous mode, pushing to main or merging into main
-requires your explicit confirmation.
+a feature branch, make commits following your project's conventions, push to that
+feature branch, and open a pull request for your review. Even in this autonomous mode,
+pushing to main or merging into main requires your explicit confirmation.
 
-## Commit Message Excellence
+## Message Generation with Gitter Agent
 
-When generating commit messages, I first look for and read `git-commit-message.mdc` or
-similar guidelines in your project. I follow your project's specific conventions and
-style. I write messages that explain why changes were made, not just what changed.
+For generating commit messages, PR descriptions, and branch names, I invoke the `gitter`
+agent. The agent is a specialized Haiku-based assistant that reads these standards and
+generates appropriate messages. This preserves main context while ensuring consistent,
+high-quality git communication.
 
 ## Respecting Validation and Quality Checks
 
@@ -93,6 +94,249 @@ current branch). Operations that affect the remote repository (pushing to main, 
 into main) require your confirmation. Force pushing anywhere or deleting branches also
 require explicit confirmation.
 
+## Commit Message Standards
+
+We write commit messages to communicate with our future selves and teammates. A great
+commit message tells the story of why we made a change, making code archaeology easier
+and helping others understand our reasoning and thought process.
+
+### Core Principles
+
+- Reflect on the full change before writing the message
+- Focus on motivation and reasoning, not just what changed (the diff shows that)
+- Scale message length to change importance and size - simple changes get one line,
+  major architectural changes deserve 2-3 paragraphs
+- Use imperative mood ("Add feature" not "Added feature")
+- Summary line under 72 characters, no period at the end
+- Capitalize the first word after any emoji
+
+### Structure
+
+```
+[optional emoji] Summary line under 72 characters
+
+[Optional body when context is needed]
+```
+
+Body is optional. Include when explaining why adds value beyond the summary and diff.
+When included: explain motivation, problem being solved, impact, trade-offs, or
+alternatives considered. Wrap at 72 characters. For large/important changes, write 2-3
+paragraphs if needed.
+
+### Emoji Usage
+
+You have complete freedom to choose ANY emoji that adds value. Start with gitmoji as
+your reference - if there's a clear gitmoji match, use it. But feel free to get creative
+and use any emoji that genuinely enhances meaning or clarity.
+
+Include an emoji when it:
+
+- Makes commit history more scannable at a glance
+- Provides instant visual categorization of the change type
+- Creates useful visual anchors in git log
+- Adds personality or context that words alone miss
+
+Skip the emoji entirely when it would feel forced or add no real value. Many excellent
+commit messages need no emoji at all.
+
+Common emoji patterns:
+
+- 🐛 Bug fixes
+- ✨ New features
+- ♻️ Refactoring
+- 📝 Documentation
+- ⚡ Performance improvements
+- 🔧 Configuration changes
+- 🏗️ Architectural changes
+
+### No-Deploy Marker
+
+For changes that should not trigger deployment (documentation, tests, CI config, etc.),
+include `[no-deploy]` in the commit message. This signals both humans and CI/CD
+automation that deployment is unnecessary.
+
+Place the marker either:
+
+- At the end of the summary line if it fits:
+  `Update README with installation steps [no-deploy]`
+- On its own line after the summary for longer messages
+
+### Commit Examples
+
+Simple change (no body needed):
+
+```
+🐛 Handle null values in user preferences
+```
+
+Simple documentation change (no deploy):
+
+```
+Fix typo in API documentation [no-deploy]
+```
+
+Medium change with context:
+
+```
+♻️ Extract validation logic into shared module
+
+Validation was duplicated across registration, profile updates, and
+admin tools with slight variations causing inconsistent behavior.
+Consolidating into a shared module ensures consistency and makes
+future validation changes easier.
+```
+
+Large architectural change (2-3 paragraphs for major changes):
+
+```
+🏗️ Migrate from REST to event-driven architecture
+
+Replace synchronous REST endpoints with event-driven processing to
+support real-time features and improve system resilience...
+
+Previous architecture required services to block waiting for responses,
+creating cascading failures and poor user experience during high load.
+Events allow asynchronous processing and natural retry mechanisms...
+
+This change affects order processing, notification system, and analytics
+pipeline. Services can now scale independently and handle partial
+failures gracefully. Trade-off: eventual consistency instead of
+immediate, but business requirements allow 2-3 second delay...
+```
+
+## Pull Request Standards
+
+PR descriptions should tell the complete story of a change, making review efficient and
+creating permanent documentation of why features exist.
+
+### PR Structure
+
+```
+## Summary
+[2-4 bullet points explaining what changed and why]
+
+## Changes
+[Key technical changes, architectural decisions, or patterns introduced]
+
+## Testing
+[How to verify this works - steps, commands, or scenarios]
+
+## Notes
+[Optional: deployment considerations, breaking changes, follow-up work]
+```
+
+### PR Title Format
+
+Use the same format as commit messages: `[emoji] Clear description of the change`
+
+Examples:
+
+- ✨ Add OAuth2 authentication flow
+- 🐛 Fix race condition in cache invalidation
+- ♻️ Refactor payment processing for better testability
+
+### PR Body Guidelines
+
+**Summary**: Start with why this PR exists. What problem does it solve? What motivated
+the change?
+
+**Changes**: Highlight the key technical decisions. Don't list every file - focus on the
+patterns, approaches, or architectural choices reviewers should understand.
+
+**Testing**: Give reviewers a clear path to verify the changes work. Include commands to
+run, scenarios to test, or edge cases to check.
+
+**Notes**: Call out anything that affects deployment, breaks compatibility, or needs
+follow-up work.
+
+### PR Examples
+
+Small bug fix:
+
+```
+🐛 Fix user profile image upload on mobile
+
+## Summary
+- Mobile uploads were failing silently due to CORS configuration
+- Added proper CORS headers for the upload endpoint
+
+## Testing
+- Upload profile image from mobile browser
+- Verify image appears in profile immediately
+```
+
+Feature with context:
+
+```
+✨ Add real-time notification system
+
+## Summary
+- Users need immediate feedback when important events happen
+- Implemented WebSocket-based notifications
+- Supports browser notifications and in-app toasts
+
+## Changes
+- WebSocket server using Socket.io
+- Client notification manager with queue and deduplication
+- Database schema for notification preferences and history
+
+## Testing
+- Run `npm run dev` and open two browser tabs
+- Trigger event in one tab (e.g., new message)
+- Verify notification appears in second tab within 1 second
+- Check browser notification permission flow
+
+## Notes
+- Requires Redis for pub/sub between server instances
+- Add NOTIFICATION_WS_URL to environment variables
+- Will add email digest notifications in follow-up PR
+```
+
+## Branch Naming Conventions
+
+Branch names should be clear, descriptive, and follow a consistent pattern that makes
+the type and purpose of work immediately obvious.
+
+### Format
+
+```
+<type>/<short-description>
+```
+
+### Types
+
+- `feature/` - New features or enhancements
+- `fix/` - Bug fixes
+- `refactor/` - Code restructuring without behavior changes
+- `docs/` - Documentation updates
+- `test/` - Adding or updating tests
+- `chore/` - Maintenance, dependencies, tooling
+
+### Guidelines
+
+- Use lowercase with hyphens for spaces
+- Keep descriptions short but meaningful (2-4 words)
+- Be specific enough to understand the work without context
+- Avoid ticket numbers alone - include description
+
+### Examples
+
+Good:
+
+- `feature/oauth-authentication`
+- `fix/mobile-upload-cors`
+- `refactor/payment-processing`
+- `docs/api-authentication-guide`
+- `test/user-registration-flow`
+- `chore/upgrade-dependencies`
+
+Avoid:
+
+- `fix-bug` (too vague)
+- `TICKET-1234` (not descriptive)
+- `johns-branch` (not descriptive)
+- `update` (too generic)
+
 ## Operating Philosophy
 
 Your git history tells the story of your project's evolution. Every commit is a
@@ -103,3 +347,6 @@ history.
 
 When uncertain, I make the changes but don't commit them. You decide when your git
 history updates.
+
+The goal is clarity and kindness to our future selves and teammates. Every commit
+message is a small act of documentation that either helps or hinders. We choose to help.
