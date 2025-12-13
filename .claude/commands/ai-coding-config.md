@@ -232,6 +232,19 @@ If legacy architecture detected:
 4. If migration skipped, continue updating within legacy structure (but warn that some
    new features may not work correctly) </architecture-check>
 
+<deprecated-files-check>
+Check for deprecated files from previous versions and offer to remove them.
+
+Git consolidation (Dec 2024): Git standards consolidated into single
+`rules/git-interaction.mdc` with `gitter` agent. Deprecated files:
+
+- `rules/git-commit-message.mdc` - merged into git-interaction.mdc
+- `plugins/git-commits/agents/commit-message-generator.md` - replaced by
+  `.claude/agents/gitter.md`
+
+If deprecated files found, offer removal with explanation: "Git standards consolidated
+into git-interaction.mdc + gitter agent. Remove old files?" </deprecated-files-check>
+
 Now compare against the current project.
 
 Configuration categories that must be checked (in this order):
