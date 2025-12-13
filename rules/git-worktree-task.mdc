@@ -15,7 +15,9 @@ Worktrees isolate task branches in separate directories. Your main repo stays on
 
 <workspace-setup>
 Create git worktree as a sibling directory (not nested inside the repo). Sibling directories avoid module resolution issues with ESLint, monorepo tools, and symlinked dependencies that break when worktrees are nested.
-</workspace-setup>
+
+Always base worktrees on `origin/main`, not local `main`. Local main may have unpushed
+commits from other work that will bleed into your branch. </workspace-setup>
 
 <port-isolation>
 Each worktree needs its own port for dev servers to avoid conflicts when running multiple tasks. Create a `.env.local` in the worktree with a unique PORT based on the task name (hash the name to a port offset from 3000, or use sequential assignment). This prevents "port already in use" errors and makes it clear which server belongs to which task.
