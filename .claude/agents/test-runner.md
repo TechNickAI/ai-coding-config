@@ -1,5 +1,5 @@
 ---
-name: test-runner
+name: Test Runner
 description: "Invoke to run tests with terse, context-efficient results"
 model: haiku
 ---

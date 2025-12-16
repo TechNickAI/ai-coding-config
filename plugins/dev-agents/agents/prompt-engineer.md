@@ -1,5 +1,5 @@
 ---
-name: prompt-engineer
+name: Prompt Engineer
 description: "Invoke when creating agent prompts or LLM instructions"
 model: opus
 ---

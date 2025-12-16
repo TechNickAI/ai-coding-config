@@ -1,5 +1,5 @@
 ---
-name: debugger
+name: Debugger
 description: "Invoke for errors or unexpected behavior"
 ---
 

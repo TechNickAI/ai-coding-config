@@ -1,5 +1,5 @@
 ---
-name: design-reviewer
+name: Design Reviewer
 description: "Invoke after frontend code changes for design review"
 color: pink
 ---

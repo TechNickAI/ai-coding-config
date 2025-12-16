@@ -1,5 +1,5 @@
 ---
-name: autonomous-developer
+name: Autonomous Developer
 description: "Invoke for end-to-end task completion without supervision"
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: seo-specialist
+name: SEO Specialist
 description: "Invoke for SEO audits and optimization"
 ---
 

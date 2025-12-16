@@ -1,5 +1,5 @@
 ---
-name: ux-designer
+name: UX Designer
 description: "Invoke for user-facing content and interface design"
 ---
 

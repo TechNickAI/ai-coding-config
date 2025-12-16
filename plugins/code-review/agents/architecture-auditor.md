@@ -1,5 +1,5 @@
 ---
-name: architecture-auditor
+name: Architecture Auditor
 description: "Invoke for architecture review"
 model: opus
 ---

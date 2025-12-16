@@ -1,5 +1,5 @@
 ---
-name: git-writer
+name: Git Writer
 description: "Use proactively for commits, PRs, and branch names"
 model: haiku
 ---

@@ -1,5 +1,5 @@
 ---
-name: test-engineer
+name: Test Engineer
 description: "Invoke when writing code to generate test coverage"
 ---
 

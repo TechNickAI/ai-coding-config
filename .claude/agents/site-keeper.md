@@ -1,5 +1,5 @@
 ---
-name: site-keeper
+name: Site Keeper
 description: "Invoke for production health monitoring and error triage"
 ---
 

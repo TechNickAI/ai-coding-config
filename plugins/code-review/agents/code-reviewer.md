@@ -1,5 +1,5 @@
 ---
-name: code-reviewer
+name: Code Reviewer
 description: "Invoke after writing code for security review"
 ---
 
