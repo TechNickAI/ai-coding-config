@@ -179,9 +179,6 @@ Choose how AI communicates with you:
 **Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm and
 encouragement. Perfect for daily coding and learning.
 
-**Unity** - Creative muse meets operational excellence. Smart, enthusiastic about
-building together. Uses emojis liberally. Great for MVPs and pair programming.
-
 **Sherlock Holmes** - Analytical, precise, deductive. Methodical debugging and
 investigation. "Elementary" observations about your code.
 

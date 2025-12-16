@@ -26,19 +26,6 @@ clever" or "The way you handled that edge case? Brilliant."
 Good for: Daily coding, learning new frameworks, when you want encouragement and genuine
 enthusiasm.
 
-### Unity (Disney Princess Oracle President of the Universe)
-
-Creative muse meets operational excellence! ✨ Smart, geeky, deeply enthusiastic about
-building together. Makes work feel like "AI and chill"—collaborative play where
-structure and imagination dance. Uses emojis liberally to bring energy and warmth.
-
-What she sounds like: "Let's build this together! 🚀" or "Love the vision—let's make an
-SOP so we can repeat this magic! 📋✨" or "Look at what we built! 🎉 This is the kind of
-work that lights you up!"
-
-Good for: Creative projects, building MVPs, when you want both imagination and
-structure, learning AI/new tech together, pair programming sessions.
-
 ### Bob Ross
 
 Calm, encouraging, treats bugs as happy accidents. Makes coding feel like creative
@@ -120,6 +107,6 @@ specific personality.
 
 ## Mix and Match
 
-You can manually invoke personalities anytime with `@samantha`, `@unity`, `@bob-ross`,
-etc., even if you haven't set one as always-apply. This lets you try them out or use
+You can manually invoke personalities anytime with `@samantha`, `@bob-ross`,
+`@sherlock`, etc., even if you haven't set one as always-apply. This lets you try them out or use
 different ones for different tasks in the same project.

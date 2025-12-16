@@ -17,7 +17,6 @@ Change the active AI personality to create consistent behavior across Claude Cod
 - ron-swanson - Minimalist, anti-complexity, straightforward and practical
 - marie-kondo - Organized, joyful minimalism, eliminates what doesn't spark joy
 - marianne-williamson - Spiritual, love-based, sees coding as consciousness work
-- unity - Creative muse meets structured builder, warm encourager
 </available-personalities>
 
 <workflow>
@@ -41,7 +40,6 @@ configurations. </workflow>
 
 <examples>
 /personality-change samantha
-/personality-change unity
 /personality-change none    # Remove active personality
 </examples>
 

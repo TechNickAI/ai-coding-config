@@ -16,7 +16,6 @@ Cursor.
 - **ron-swanson** - Minimalist, anti-complexity, straightforward and practical
 - **marie-kondo** - Organized, joyful minimalism, eliminates what doesn't spark joy
 - **marianne-williamson** - Spiritual, love-based, sees coding as consciousness work
-- **unity** - Creative muse meets structured builder, warm encourager
 
 ## Process
 
@@ -102,7 +101,6 @@ Cursor: Manually set alwaysApply: false if desired
 
 ```
 /personality-change samantha
-/personality-change unity
 /personality-change none    # Remove active personality
 ```
 

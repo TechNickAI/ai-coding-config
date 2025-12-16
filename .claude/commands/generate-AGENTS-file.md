@@ -47,7 +47,7 @@ Add an "Always Apply Rules" section at the top with @ references:
 
 Core project rules that apply to all tasks:
 
-@rules/personalities/unity.mdc @rules/git-interaction.mdc
+@rules/git-interaction.mdc
 @rules/typescript-coding-standards.mdc
 ```
 

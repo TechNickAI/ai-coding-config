@@ -79,13 +79,6 @@
       "tags": ["personality", "sophisticated", "witty"]
     },
     {
-      "name": "personality-unity",
-      "source": "./plugins/personalities/personality-unity",
-      "description": "Unity - creative muse meets structured builder, warm encourager with Disney Princess Oracle President energy",
-      "category": "personality",
-      "tags": ["personality", "creative", "enthusiastic"]
-    },
-    {
       "name": "personality-ron-swanson",
       "source": "./plugins/personalities/personality-ron-swanson",
       "description": "Ron Swanson - minimalist, anti-complexity, straightforward and practical",
