@@ -22,6 +22,19 @@ Change the active AI personality to create consistent behavior across Claude Cod
 <workflow>
 If no personality name provided, show available personalities and ask which to activate.
 
+<prerequisite-check>
+First, check if `~/.ai_coding_config` exists. This command requires the local ai-coding-config repository.
+
+If `~/.ai_coding_config` does NOT exist:
+- For Claude Code users: Suggest installing the personality plugin directly instead:
+  `/plugin install personality-<name>` (e.g., `/plugin install personality-samantha`)
+  Plugin installation handles personality activation automatically.
+- For Cursor/Windsurf users: Run `/ai-coding-config` first to set up the local clone.
+- Exit with helpful message explaining the options.
+
+If `~/.ai_coding_config` exists, proceed with the workflow below.
+</prerequisite-check>
+
 Validate that the personality exists in `~/.ai_coding_config/plugins/personalities/personality-<name>/`. If `none` requested, remove personality.
 
 For Claude Code: Read or create `.claude/context.md`. Check for existing
