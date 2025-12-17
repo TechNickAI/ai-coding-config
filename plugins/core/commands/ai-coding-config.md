@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 1.0.0
+version: 1.1.0
 ---
 
 # AI Coding Configuration
@@ -201,8 +201,19 @@ End with: "Run `/ai-coding-config update` anytime to get the latest improvements
 <update-mode>
 Update all configurations to latest versions.
 
+<marketplace-update>
+Update the Claude Code plugin marketplace first. This pulls the latest plugin definitions and updates any installed plugins:
+
+```bash
+/plugin marketplace update ai-coding-config
+```
+
+This updates Claude Code's cached marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refreshes installed plugins.
+
+</marketplace-update>
+
 <repository-update>
-First, pull latest from `~/.ai_coding_config`:
+For bootstrap users (Cursor-only or manual setup), pull latest from `~/.ai_coding_config`:
 
 ```bash
 cd ~/.ai_coding_config && git pull
