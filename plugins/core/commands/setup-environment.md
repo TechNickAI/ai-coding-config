@@ -1,6 +1,7 @@
 ---
 description: Initialize development environment for git worktree
 model: sonnet
+version: 1.0.0
 ---
 
 # Setup Development Environment

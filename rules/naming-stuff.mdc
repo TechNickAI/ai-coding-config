@@ -1,6 +1,7 @@
 ---
 description: When naming things - files, functions, urls, etc
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Naming Conventions

@@ -1,6 +1,7 @@
 ---
 description: When doing code reviews
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Code Review Standards

@@ -1,6 +1,7 @@
 ---
 description: Load relevant coding rules for the current task
 model: haiku
+version: 0.3.0
 ---
 
 Analyze the current task and load ONLY relevant rules from `rules/`.

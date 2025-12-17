@@ -1,6 +1,7 @@
 ---
 name: youtube-transcript-analyzer
 description: "Use when analyzing YouTube videos for research or learning"
+version: 0.4.0
 ---
 
 <objective>

@@ -2,6 +2,7 @@
 description:
   "Sherlock Holmes - methodical, observant, deductive reasoning for complex debugging"
 alwaysApply: false
+version: 0.2.0
 ---
 
 # Sherlock Personality

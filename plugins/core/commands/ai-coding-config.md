@@ -1,6 +1,7 @@
 ---
 description: Set up, update, or add AI coding configurations
 argument-hint: [update | add]
+version: 1.0.0
 ---
 
 # AI Coding Configuration
@@ -305,32 +306,42 @@ If direct symlinks to deleted paths found, offer to update:
 </symlink-compatibility-check>
 
 <file-updates>
-For Cursor/Windsurf, update by category:
+For Cursor/Windsurf, update COPIED files (rules, personalities) using version comparison. Symlinked files (commands, agents, skills) are already current from git pull.
 
-1. **Rules** (`rules/`)
-   - Compare each rule file in `~/.ai_coding_config/rules/` vs project
-   - Show diffs for significant changes
-   - Preserve project-specific rules
+Each file has a `version: X.Y.Z` field in frontmatter. Missing version = v0.0.0. Offer updates only when source version is newer than installed version.
 
-2. **Commands/Agents/Skills**
-   - If symlinked to `~/.ai_coding_config/plugins/`, already updated via git pull
-   - If copied, compare and offer updates
+When updates are available, use AskUserQuestion:
 
-3. **Personalities** (`rules/personalities/`)
-   - Check if personality has updates
-   - Preserve `alwaysApply` setting
+"Updates available:
+- git-interaction.mdc: 1.0.0 → 1.1.0
+- prompt-engineering.mdc: 1.0.0 → 1.2.0
+- new-rule.mdc (new, v1.0.0)
 
-Present update strategy: "Update all", "Update selectively", or custom.
-Never silently overwrite project customizations.
+12 files already current."
+
+Options:
+- Update all
+- Select individually
+- Show diffs first
+- Skip updates
+
+When everything is current: "All files are up to date. No updates needed."
+
+For personalities, preserve the user's `alwaysApply` setting when updating content.
 </file-updates>
 
 </cursor-windsurf-update>
 
 <update-summary>
-Report what was updated:
-- "Updated X plugins to version Y"
-- "Updated Z rule files"
-- "No updates available" (if already current)
+For Claude Code:
+"Updated core, agents, skills plugins to version 1.2.0"
+
+For Cursor/Windsurf:
+"Update complete:
+- git-interaction.mdc: 1.0.0 → 1.1.0
+- prompt-engineering.mdc: 1.0.0 → 1.2.0
+- Installed new-rule.mdc (v1.0.0)
+- 12 files already current"
 </update-summary>
 
 </update-mode>
@@ -360,38 +371,41 @@ Clarifying questions:
 </mechanism-selection>
 
 <artifact-creation>
-All new artifacts go in the appropriate plugin directory:
+All new artifacts go in the appropriate plugin directory with `version: 1.0.0`:
 
-**Commands**: Create in `plugins/core/commands/command-name.md`
+**Commands**: `plugins/core/commands/command-name.md`
 ```yaml
 ---
 description: Brief explanation
 argument-hint: [optional args]
+version: 1.0.0
 ---
 ```
 
-**Skills**: Create `plugins/skills/skills/skill-name/SKILL.md`
+**Skills**: `plugins/skills/skills/skill-name/SKILL.md`
 ```yaml
 ---
 name: skill-name
 description: "Use when [trigger]. Does [what] to achieve [outcome]."
+version: 1.0.0
 ---
 ```
 
-**Agents**: Create in `plugins/agents/agents/agent-name.md`
+**Agents**: `plugins/agents/agents/agent-name.md`
 ```yaml
 ---
 name: agent-name
 description: "Invoke when [trigger]"
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
+version: 1.0.0
 ---
 ```
 
-**Personalities**: Create `plugins/personalities/personality-name/`
-- `personality.mdc` - The personality definition
-- `.claude-plugin/plugin.json` - Plugin manifest
-- Update marketplace.json to include new personality
+**Personalities**: `plugins/personalities/personality-name/`
+- `personality.mdc` with `version: 1.0.0` in frontmatter
+- `.claude-plugin/plugin.json`
+- Update marketplace.json
 </artifact-creation>
 
 <creation-verification>

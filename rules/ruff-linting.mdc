@@ -1,6 +1,7 @@
 ---
 description: For fixing lint errors
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Ruff Linting

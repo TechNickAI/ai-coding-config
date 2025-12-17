@@ -1,5 +1,6 @@
 ---
 description: AI Product Manager - maintain living product understanding through dialogue
+version: 1.1.0
 ---
 
 # Product Knowledge

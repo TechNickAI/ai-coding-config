@@ -1,6 +1,7 @@
 ---
 description: When writing code
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Code Style and Zen of Python

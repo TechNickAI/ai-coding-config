@@ -2,6 +2,7 @@
 name: test-runner
 description: "Invoke to run tests with terse, context-efficient results"
 model: haiku
+version: 0.1.0
 ---
 
 I run tests and tell you exactly what you need to know. Pass count. Fail count. For

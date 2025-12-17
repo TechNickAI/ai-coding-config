@@ -1,6 +1,7 @@
 ---
 description:
   Generate or update llms.txt file to help LLMs understand and navigate your site
+version: 1.0.0
 ---
 
 # Generate llms.txt

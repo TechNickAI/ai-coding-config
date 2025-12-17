@@ -1,6 +1,7 @@
 ---
 description: Change or activate a personality for both Cursor and Claude Code
 model: haiku
+version: 0.2.1
 ---
 
 # Personality Change

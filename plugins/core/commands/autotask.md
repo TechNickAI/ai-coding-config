@@ -1,6 +1,7 @@
 ---
 description:
   "Execute complete development task autonomously from description to PR-ready state"
+version: 1.0.0
 ---
 
 # /autotask - Autonomous Task Execution
