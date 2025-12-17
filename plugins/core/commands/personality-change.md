@@ -22,18 +22,16 @@ Change the active AI personality to create consistent behavior across Claude Cod
 <workflow>
 If no personality name provided, show available personalities and ask which to activate.
 
-Validate that `rules/personalities/<name>.mdc` exists. If `none` requested, remove
-personality.
+Validate that the personality exists in `~/.ai_coding_config/plugins/personalities/personality-<name>/`. If `none` requested, remove personality.
 
 For Claude Code: Read or create `.claude/context.md`. Check for existing
 `## Active Personality` section with `<!-- personality-<name> -->` comment. If
 personality exists and matches requested, confirm already active and stop. If different,
-remove entire section. If not removing (name != "none"), read personality file, strip
-frontmatter, append to `.claude/context.md` with HTML comments marking boundaries.
+remove entire section. If not removing (name != "none"), read personality file from `~/.ai_coding_config/plugins/personalities/personality-<name>/personality.mdc`, strip frontmatter, append to `.claude/context.md` with HTML comments marking boundaries.
 
-For Cursor: Find all personality files in `rules/personalities/`. For each file, update
-frontmatter: set `alwaysApply: true` for selected personality, set `alwaysApply: false`
-for all others.
+For Cursor: Create local copies of personality files in `rules/personalities/` (do not use symlinks - we need to edit frontmatter). Copy all personality files from `~/.ai_coding_config/plugins/personalities/*/personality.mdc` to `rules/personalities/<name>.mdc`. Then update frontmatter: set `alwaysApply: true` for selected personality, set `alwaysApply: false` for all others.
+
+IMPORTANT: Never edit symlinked files. Always work with local copies in `rules/personalities/` for Cursor, and `.claude/context.md` for Claude Code.
 
 Report results clearly showing what changed in both Claude Code and Cursor
 configurations. </workflow>
