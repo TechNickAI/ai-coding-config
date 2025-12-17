@@ -165,21 +165,86 @@ Confirm files are in expected locations. List installed rules (framework-specifi
 Provide clear summary without deep validation. </installation-verification>
 
 <recommendations>
-After successful installation, provide actionable next steps.
+After successful installation, provide a warm, helpful summary that makes the user excited
+about what they just got. This is their first impression - make it count.
 
-Always recommend:
+<installation-summary>
+Start with a friendly confirmation of what was installed:
 
-1. Generate AGENTS.md if missing at project root (run /generate-AGENTS-file)
-2. List available commands (/load-rules, /personality-change, /create-prompt,
-   /troubleshoot, /setup-environment, /handoff-context, /product-intel)
+"You're all set! Here's what I installed for your [detected project type] project:"
 
-Conditional recommendations:
+Summarize by category (keep to 3-5 lines total):
+- Rules: Name the key ones (e.g., "TypeScript standards, React patterns, git conventions")
+- Commands: Count them (e.g., "14 workflow commands")
+- Agents: Name notable ones if installed (e.g., "5 specialist agents including Dixon for debugging")
+- Personality: Mention if selected (e.g., "Samantha personality active")
 
-- Git worktrees → suggest /setup-environment
-- Error monitoring detected → mention /troubleshoot
-- Competitive product → suggest /product-intel
+Be specific to what was actually installed, not generic. </installation-summary>
 
-Show only genuinely useful recommendations. </recommendations> </setup-mode>
+<power-commands>
+Introduce the three commands that will transform their workflow:
+
+"Here are the three commands you'll use most:"
+
+**`/autotask "your task"`** - Autonomous development
+Describe what you want built, and it handles the rest: creates a feature branch,
+implements the solution, writes tests, addresses code review bot feedback, and delivers
+a PR ready for your review. You describe the task, review the result, merge when ready.
+
+Example: `/autotask "add user settings page with dark mode toggle"`
+
+**`/address-pr-comments`** - PR cleanup on autopilot
+After you create a PR, code review bots leave comments. Some are useful, many are noise.
+This command reads all the feedback, fixes the real issues, politely declines the
+nitpicks, and iterates until your PR is merge-ready. Run it after pushing a PR and let
+it handle the back-and-forth.
+
+**`/load-rules`** - Smart context for any task
+Before working on something, this loads the relevant coding standards. Working on React
+components? It loads your React patterns. Writing tests? Testing standards. The AI
+becomes fluent in YOUR project's conventions, not generic best practices.
+
+Write these descriptions conversationally. These commands genuinely save hours of tedious
+work - convey that value without overselling. </power-commands>
+
+<project-tailored-tips>
+Add 1-2 tips specific to what you detected (skip if nothing specific applies):
+
+Git worktrees or feature branch workflow detected:
+- "`/setup-environment` quickly initializes new worktrees with all dependencies"
+
+Error monitoring detected (Sentry, HoneyBadger, etc.):
+- "`/troubleshoot` connects to your error monitoring and can autonomously fix production bugs"
+
+TypeScript/React project:
+- "Your TypeScript and React rules load automatically based on file context"
+
+Python/Django project:
+- "Django-specific patterns are included - models, views, templates all covered"
+
+If nothing specific detected, skip this section entirely rather than giving generic
+filler. </project-tailored-tips>
+
+<staying-current>
+End with how to stay updated:
+
+"To get the latest improvements anytime: `/ai-coding-config update`"
+
+If AGENTS.md is missing at project root:
+"One more thing: `/generate-AGENTS-file` creates documentation that helps AI understand
+your project structure - worth running once." </staying-current>
+
+<tone-guidance>
+Write like you're showing a friend something useful you discovered. Genuine enthusiasm,
+concrete examples, no corporate-speak.
+
+Avoid: "leverage", "streamline", "optimize your workflow", excessive punctuation
+Prefer: Direct benefits, specific examples, conversational language
+
+The goal is for the user to immediately try one of these commands because they sound
+genuinely useful, not because you told them to. </tone-guidance>
+
+</recommendations> </setup-mode>
 
 ---
 
