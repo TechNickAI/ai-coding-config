@@ -176,7 +176,7 @@ Start with a friendly confirmation of what was installed:
 Summarize by category (keep to 3-5 lines total):
 - Rules: Name the key ones (e.g., "TypeScript standards, React patterns, git conventions")
 - Commands: Count them (e.g., "14 workflow commands")
-- Agents: Name notable ones if installed (e.g., "5 specialist agents including Dixon for debugging")
+- Agents: Name notable ones if installed (e.g., "5 specialist agents including debugger")
 - Personality: Mention if selected (e.g., "Samantha personality active")
 
 Be specific to what was actually installed, not generic. </installation-summary>

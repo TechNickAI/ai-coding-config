@@ -55,11 +55,11 @@ cd .gitworktrees/task-name
 
 LLM intelligently chooses which agents to use based on the task:
 
-- **Dixon** (debugger) - Root cause analysis for bugs
-- **Ada** (autonomous-developer) - Implementation work
-- **Phil** (ux-designer) - User-facing content review
-- **Rivera** (code-reviewer) - Architecture and security review
-- **Petra** (prompt-engineer) - Prompt optimization
+- **debugger** - Root cause analysis for bugs
+- **autonomous-developer** - Implementation work
+- **ux-designer** - User-facing content review
+- **code-reviewer** - Architecture and security review
+- **prompt-engineer** - Prompt optimization
 
 **No forced patterns. No classification rules.** Just intelligent agent selection.
 
@@ -85,15 +85,15 @@ Automatically follows all `rules/*.mdc` standards.
 **Targeted Review** (medium complexity):
 
 - Git hooks + one relevant agent
-- UI changes → Phil reviews UX
-- Bug fixes → Dixon spot-checks for edge cases
-- Refactoring → Rivera validates architecture
+- UI changes → ux-designer reviews UX
+- Bug fixes → debugger spot-checks for edge cases
+- Refactoring → code-reviewer validates architecture
 
 **Comprehensive Review** (high risk/complexity):
 
 - Git hooks + multiple agents
-- Security changes → Full Rivera security review
-- Major features → Rivera + Phil + Dixon
+- Security changes → Full code-reviewer security review
+- Major features → code-reviewer + ux-designer + debugger
 - Breaking changes → Extra scrutiny
 
 **Smart Principles**:
@@ -209,15 +209,15 @@ Execute this prompt? (y/n) y
 ✓ Environment setup complete
 
 🤖 Executing task...
-- Dixon analyzing existing auth patterns
-- Ada implementing OAuth2 flow
-- Ada writing comprehensive tests
-- Phil reviewing user-facing error messages
+- debugger analyzing existing auth patterns
+- autonomous-developer implementing OAuth2 flow
+- autonomous-developer writing comprehensive tests
+- ux-designer reviewing user-facing error messages
 
 🔍 Adaptive validation & review
   - Git hooks: ✓ (lint, format, type-check, tests)
-  - Security review: ✓ Rivera found + fixed rate limiting issue
-  - UX review: ✓ Phil improved error messages
+  - Security review: ✓ code-reviewer found + fixed rate limiting issue
+  - UX review: ✓ ux-designer improved error messages
   - Test coverage: 97%
 
 🔄 Creating PR...
@@ -251,28 +251,28 @@ Let the LLM intelligently choose. Common patterns:
 
 **Bug Fixes**:
 
-- Dixon analyzes root cause (not just symptoms)
-- Ada implements fix
-- Ada adds regression test
+- debugger analyzes root cause (not just symptoms)
+- autonomous-developer implements fix
+- autonomous-developer adds regression test
 
 **New Features**:
 
-- Ada reads all cursor rules
-- Ada implements feature
-- Phil reviews if user-facing
-- Ada writes comprehensive tests
+- autonomous-developer reads all cursor rules
+- autonomous-developer implements feature
+- ux-designer reviews if user-facing
+- autonomous-developer writes comprehensive tests
 
 **Refactoring**:
 
-- Ada creates safety net (tests for current behavior)
-- Ada refactors incrementally
-- Rivera reviews for architectural issues
-- Dixon checks for subtle bugs
+- autonomous-developer creates safety net (tests for current behavior)
+- autonomous-developer refactors incrementally
+- code-reviewer reviews for architectural issues
+- debugger checks for subtle bugs
 
 **Research/POCs**:
 
 - Explore agent investigates options
-- Ada implements proof-of-concept
+- autonomous-developer implements proof-of-concept
 - Document findings and recommendations
 
 ## Key Principles

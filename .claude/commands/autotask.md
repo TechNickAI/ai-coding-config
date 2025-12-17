@@ -38,16 +38,11 @@ Create isolated development environment using /setup-environment. The command au
 <autonomous-execution>
 Implement the solution following project patterns and standards. Available agents:
 
-- Dixon (.claude/agents/dev-agents/debugger.md): Root cause analysis, reproduces issues,
-  identifies underlying problems
-- Ada (.claude/agents/dev-agents/autonomous-developer.md): Implementation work, writes
-  tests
-- Phil (.claude/agents/dev-agents/ux-designer.md): Reviews user-facing text, validates
-  accessibility, ensures UX consistency
-- Rivera (.claude/agents/code-review/code-reviewer.md): Architecture review, validates
-  design patterns, checks security
-- Petra (.claude/agents/dev-agents/prompt-engineer.md): Prompt optimization and
-  refinement
+- debugger: Root cause analysis, reproduces issues, identifies underlying problems
+- autonomous-developer: Implementation work, writes tests
+- ux-designer: Reviews user-facing text, validates accessibility, ensures UX consistency
+- code-reviewer: Architecture review, validates design patterns, checks security
+- prompt-engineer: Prompt optimization and refinement
 - Explore (general-purpose): Investigation, research, evaluates trade-offs
 
 Build an execution plan based on task type. Use /load-rules to load relevant project
@@ -73,8 +68,8 @@ Adapt validation intensity to task risk:
 Default (trust git hooks): Make changes, commit, let hooks validate, fix only if hooks
 fail.
 
-Targeted validation: Run specific tests for changed code, use Rivera for architecture
-review if patterns change.
+Targeted validation: Run specific tests for changed code, use code-reviewer for
+architecture review if patterns change.
 
 Full validation: Comprehensive test suite, multiple agent reviews, security scanning.
 

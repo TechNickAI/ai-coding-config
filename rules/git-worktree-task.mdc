@@ -40,7 +40,7 @@ Run the project's pre-push validation before pushing. Check .github/workflows/ t
 </local-validation>
 
 <self-review>
-Invoke code reviewer agent (Rivera in .claude/agents/rivera.md if available) to review changes before pushing. Address critical issues, consider warnings seriously, evaluate suggestions for merit. Learn from feedback.
+Invoke code-reviewer agent to review changes before pushing. Address critical issues, consider warnings seriously, evaluate suggestions for merit. Learn from feedback.
 </self-review>
 
 <pull-request-creation>

@@ -37,8 +37,8 @@ Add this marketplace and install what you need:
 
 ```bash
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
-/plugin install dev-agents           # Dixon, Ada, Phil, and more
-/plugin install code-review          # Rivera and architecture audits
+/plugin install dev-agents           # debugger, autonomous-developer, ux-designer
+/plugin install code-review          # code-reviewer, architecture-auditor
 /plugin install python               # Python standards and patterns
 /plugin install personality-samantha # Warm, encouraging communication
 ```
@@ -113,16 +113,15 @@ becomes fluent in YOUR conventions.
 
 Specialized AI assistants that handle specific domains. [See all →](.claude/agents/)
 
-**Named specialists** (via `dev-agents` and `code-review` plugins):
+**Via `dev-agents` and `code-review` plugins:**
 
-- **Dixon** - Debugger. Root cause analysis, not band-aid fixes. Traces problems to their
-  source through systematic investigation.
-- **Ada** - Autonomous developer. Reads all project standards, implements features,
-  writes comprehensive tests, follows your patterns.
-- **Rivera** - Code reviewer. Architecture validation, security review, design pattern
-  checks.
-- **Phil** - UX designer. Reviews user-facing text, validates accessibility, ensures
-  consistent experience.
+- **debugger** - Root cause analysis, not band-aid fixes. Traces problems to their source
+  through systematic investigation.
+- **autonomous-developer** - Reads all project standards, implements features, writes
+  comprehensive tests, follows your patterns.
+- **code-reviewer** - Architecture validation, security review, design pattern checks.
+- **ux-designer** - Reviews user-facing text, validates accessibility, ensures consistent
+  experience.
 
 **Core agents** (always available):
 
@@ -232,8 +231,8 @@ ai-coding-config/
 │   └── marketplace.json         # Plugin marketplace manifest
 │
 ├── plugins/                     # Plugin bundles (symlinks to canonical)
-│   ├── dev-agents/              # Dixon, Ada, Phil, Petra
-│   ├── code-review/             # Rivera, architecture audits
+│   ├── dev-agents/              # debugger, autonomous-developer, ux-designer
+│   ├── code-review/             # code-reviewer, architecture-auditor
 │   ├── python/                  # Python standards
 │   ├── react/                   # React patterns
 │   ├── django/                  # Django framework
