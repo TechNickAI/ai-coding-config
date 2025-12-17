@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 1.1.0
+version: 1.2.0
 ---
 
 # AI Coding Configuration
@@ -19,6 +19,26 @@ The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`.
 Use AskUserQuestion when presenting discrete choices that save the user time (selecting
 tools, personalities, handling conflicts). This lets users quickly click options while
 still allowing free-form text via "Other".
+
+## Shell and Tool Best Practices
+
+**Prefer native tools over bash for file inspection.** The Read and Grep tools are more
+reliable than bash commands for checking file contents and versions. They don't have
+working directory issues and work consistently across environments.
+
+**Never change working directory with `cd`.** Use absolute paths for all file
+operations. Changing directories can break git hooks that expect to run from the project
+root. If you need to run a command in a different directory, use a subshell or absolute
+paths rather than `cd && command`.
+
+**Avoid bash loops entirely.** For loops and while loops are fragile across different
+shell environments. Instead of iterating over files in bash, use the Glob tool to list
+files, then process them one at a time with Read or individual bash commands. Multiple
+simple commands are more reliable than one complex loop.
+
+**When bash fails, switch tools.** If a bash command fails due to hook errors, path
+issues, or parse errors, don't retry with variations. Switch to native tools (Read,
+Grep, Glob) which don't have these failure modes.
 
 ---
 
@@ -343,7 +363,10 @@ If direct symlinks to deleted paths found, offer to update:
 <file-updates>
 All configuration files (rules, agents, skills, commands, personalities) use `version: X.Y.Z` in YAML frontmatter. Files without version metadata count as v0.0.0.
 
-To compare versions: use grep to extract version metadata from source and installed locations - simple single-line commands work reliably. Let bash extract the data, do the comparison logic yourself.
+**Version comparison strategy:** Use the Grep tool (not bash grep) to extract version
+metadata. Run one Grep call for source files with an absolute path like
+`~/.ai_coding_config/.cursor/rules/` and one for installed files. The Grep tool handles
+file iteration internally and returns clean results without shell parsing issues.
 
 For Cursor, compare COPIED files:
 - Rules: `~/.ai_coding_config/.cursor/rules/` vs `.cursor/rules/`
@@ -358,6 +381,9 @@ When updates available, use AskUserQuestion with options: Update all, Select ind
 When everything is current: "All files are up to date."
 
 For personalities, preserve the user's `alwaysApply` setting. Never silently overwrite customizations.
+
+**Copying files:** When copying updated files, use absolute paths for both source and
+destination. A single `cp` command with full paths is safer than changing directories.
 </file-updates>
 
 </cursor-update>
