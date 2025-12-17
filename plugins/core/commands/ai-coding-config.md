@@ -329,23 +329,23 @@ If direct symlinks to deleted paths found, offer to update:
   </symlink-compatibility-check>
 
 <file-updates>
-Compare source files in `~/.ai_coding_config/.cursor/rules/` with installed files in `.cursor/rules/`. Extract version from YAML frontmatter (`version: X.Y.Z`). Files without version metadata count as v0.0.0.
+All configuration files (rules, agents, skills, commands, personalities) use `version: X.Y.Z` in YAML frontmatter. Files without version metadata count as v0.0.0.
 
-Use grep to extract version metadata from both locations - simple single-line commands work reliably. Let bash extract the data, do the comparison logic yourself.
+To compare versions: use grep to extract version metadata from source and installed locations - simple single-line commands work reliably. Let bash extract the data, do the comparison logic yourself.
 
-Identify files where source version is newer than installed version. Report updates available with clear version progression (e.g., "git-interaction.mdc: 1.0.0 → 1.1.0").
+For Cursor, compare COPIED files:
+- Rules: `~/.ai_coding_config/.cursor/rules/` vs `.cursor/rules/`
+- Personalities: `~/.ai_coding_config/plugins/personalities/` vs `.cursor/rules/personalities/`
 
-When updates are available, use AskUserQuestion with options:
-- Update all
-- Select individually
-- Show diffs first
-- Skip updates
+Symlinked files (commands, agents, skills) are already current from repository git pull.
 
-When everything is current: "All files are up to date. No updates needed."
+Identify files where source version is newer. Report updates with clear version progression (e.g., "git-interaction.mdc: 1.0.0 → 1.1.0").
 
-For personalities, preserve the user's `alwaysApply` setting when updating content. Never silently overwrite project customizations.
+When updates available, use AskUserQuestion with options: Update all, Select individually, Show diffs first, Skip updates.
 
-Note: Symlinked files (commands, agents, skills) are already current from repository git pull and don't need version checking.
+When everything is current: "All files are up to date."
+
+For personalities, preserve the user's `alwaysApply` setting. Never silently overwrite customizations.
 </file-updates>
 
 </cursor-update>
