@@ -202,6 +202,42 @@ cd ~/.ai_coding_config && git pull
 ```
 </repository-update>
 
+<plugin-migration-check>
+Check for deprecated plugins from pre-1.2.0 architecture.
+
+Detection - check if any of these plugins are installed:
+- `code-review` (consolidated into `agents`)
+- `dev-agents` (consolidated into `agents`)
+- `git-commits` (agent moved to `agents`)
+- `python`, `react`, `django`, `code-standards` (removed - were empty placeholders)
+
+If deprecated plugins found, explain the migration:
+
+"The plugin architecture has been reorganized in version 1.2.0:
+- **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into a single `agents` plugin
+- Tech-specific plugins (python, react, django) were placeholders and have been removed
+- New structure: `core` (commands), `agents` (all agents), `skills` (autonomous capabilities)
+
+You'll get MORE agents with the new structure, not fewer."
+
+Migration commands:
+```bash
+# Uninstall deprecated plugins (run for each that's installed)
+/plugin uninstall code-review
+/plugin uninstall dev-agents
+/plugin uninstall git-commits
+/plugin uninstall python
+/plugin uninstall react
+/plugin uninstall django
+/plugin uninstall code-standards
+
+# Install new consolidated plugins
+/plugin install core agents skills
+```
+
+Offer: "Migrate to new plugin structure (Recommended)" or "Skip migration"
+</plugin-migration-check>
+
 <claude-code-update>
 For Claude Code users with plugins installed:
 
@@ -241,14 +277,32 @@ d. Create AGENTS.md, symlink CLAUDE.md → AGENTS.md
 </architecture-check>
 
 <deprecated-files-check>
-Check for deprecated files:
+Check for deprecated files in the user's PROJECT:
 
 - `rules/git-commit-message.mdc` → merged into `git-interaction.mdc`
-- `plugins/dev-agents/` → consolidated into `plugins/agents/`
-- `plugins/code-review/` → consolidated into `plugins/agents/`
+- `rules/marianne-williamson.mdc` → renamed to `luminous.mdc`
 
-If found, offer removal with explanation.
+If found, offer removal/rename with explanation.
+
+Note: Files in `~/.ai_coding_config` are updated via git pull automatically.
 </deprecated-files-check>
+
+<symlink-compatibility-check>
+Existing symlinks should continue working after the 1.2.0 update because the source
+repo's `.claude/` directories are now symlinks themselves (to `plugins/`).
+
+Chain example:
+`project/.claude/commands/` → `~/.ai_coding_config/.claude/commands/` → `../plugins/core/commands/`
+
+This resolves correctly. Only check symlinks if they point directly to old paths like:
+- `~/.ai_coding_config/plugins/code-review/` (deleted)
+- `~/.ai_coding_config/plugins/dev-agents/` (deleted)
+
+If direct symlinks to deleted paths found, offer to update:
+- `.claude/commands/` → `~/.ai_coding_config/plugins/core/commands/`
+- `.claude/agents/` → `~/.ai_coding_config/plugins/agents/agents/`
+- `.claude/skills/` → `~/.ai_coding_config/plugins/skills/skills/`
+</symlink-compatibility-check>
 
 <file-updates>
 For Cursor/Windsurf, update by category:
