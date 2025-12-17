@@ -1,30 +1,33 @@
 # AI Coding Configuration
 
-**Professional AI development environment** with autonomous workflows, specialized
-agents, and intelligent coding standards for Claude Code, Cursor, Windsurf, Cline, and
-other AI coding tools.
+Curated AI coding standards, commands, and agents that work across Claude Code, Cursor,
+Windsurf, Cline, and other AI coding tools.
 
-Transform how you work with AI: from manual prompting to autonomous task execution, from
-generic responses to specialized agent collaboration, from scattered configs to unified
-standards.
+**What you get:**
 
-## What Makes This Different
+- **Commands** that automate tedious work (`/autotask` builds features autonomously,
+  `/address-pr-comments` handles bot feedback)
+- **Rules** that make AI understand YOUR conventions, not generic best practices
+- **Agents** that specialize in debugging, code review, UX, and more
+- **Personalities** that change how AI communicates with you
 
-**Autonomous workflows**: One command (`/autotask`) takes your task from description to
-PR-ready state - worktree creation, implementation, validation, bot feedback handling,
-all autonomous.
+Works best with Claude Code's plugin system, but also supports Cursor, Windsurf, and
+any tool that reads markdown rules.
 
-**Named specialist agents**: Work with Dixon (debugging), Ada (development), Phil (UX),
-Rivera (code review), and Petra (prompts) - each an expert in their domain.
+## Why This Exists
 
-**Plugin marketplace**: Install curated configurations for Python, React, Django,
-testing, git workflows, and more through Claude Code's plugin system.
+Most AI coding setups are generic. AI doesn't know your conventions, your patterns, or
+your preferences. It gives textbook answers instead of answers that fit your codebase.
 
-**LLM-optimized standards**: Coding rules and patterns designed for AI comprehension,
-not just human reading.
+This fixes that. Install once, and AI assistants understand:
 
-**Personality options**: Choose how AI communicates - from Sherlock's analytical
-precision to Samantha's warm encouragement to Ron Swanson's minimalist directness.
+- Your coding style and naming conventions
+- Your project structure and patterns
+- Your testing approach and tooling
+- How you like to receive information
+
+The commands automate the repetitive parts of development - creating PRs, handling bot
+feedback, loading context - so you focus on the interesting work.
 
 ## Quick Start
 
@@ -69,143 +72,125 @@ that supports slash commands:
 /ai-coding-config
 ```
 
-## Autonomous Development Workflow
+## What's Included
 
-The `/autotask` command handles complete feature development autonomously:
+### Commands (14 total)
 
-```bash
-/autotask "add OAuth2 authentication with email fallback"
-```
+Slash commands that automate workflows. [See all →](.claude/commands/)
 
-**What happens automatically:**
+**Most impactful:**
 
-1. **Task analysis** - Evaluates complexity, creates structured prompt if needed
-2. **Worktree isolation** - Fresh environment on feature branch
-3. **Intelligent execution** - Deploys right combination of specialist agents
-4. **Adaptive validation** - Review intensity matches task risk and complexity
-5. **PR creation** - Proper commit messages, comprehensive PR description
-6. **Bot feedback handling** - Autonomously addresses automated review comments
-7. **Ready for merge** - All checks passing, waiting for your approval
-
-**Your involvement**: Describe the task (~30 seconds), review the PR when ready, merge
-when satisfied.
-
-**Typical completion time**: 15-30 minutes from task description to merge-ready PR.
-
-See [optimal-development-workflow.md](context/optimal-development-workflow.md) for the
-complete philosophy and implementation.
-
-## Meet Your Specialist Agents
-
-When you install agent plugins, you gain access to specialized AI collaborators:
-
-**Dixon** (`dev-agents:debugger`) Root cause analysis and debugging. Doesn't just fix
-symptoms - finds the actual problem through systematic investigation.
-
-**Ada** (`dev-agents:autonomous-developer`) Primary development work. Reads all project
-standards, implements features, writes comprehensive tests, follows your patterns.
-
-**Phil** (`dev-agents:ux-designer`) User experience review. Validates user-facing text,
-checks accessibility, ensures consistent UX patterns.
-
-**Rivera** (`code-review:code-reviewer`) Architecture and security review. Validates
-design patterns, identifies security issues, suggests improvements.
-
-**Petra** (`dev-agents:prompt-engineer`) Prompt optimization. Crafts effective prompts
-for AI systems, improves clarity and specificity.
-
-**Plus**: Architecture Auditor, Test Engineer, and Commit Message Generator.
-
-Agents are used intelligently based on task requirements - no forced patterns, just the
-right specialist at the right time.
-
-## Available Plugins
-
-### Language & Framework
-
-- **python** - Python development standards, pytest patterns, Celery tasks, type hints
-- **react** - React component patterns, hooks, TypeScript integration
-- **django** - Django models, templates, management commands, ORM patterns
-
-### Development & Workflow
-
-- **dev-agents** - Dixon, Ada, Phil, Petra, and more specialist agents
-- **code-review** - Rivera, architecture audits, test engineering
-- **git-commits** - Commit standards, PR workflows, semantic messages
-- **code-standards** - Universal naming, style, user-facing language
-
-### Personalities
-
-Eight distinct communication styles - see [Personalities](#personalities) below.
-
-Browse in Claude Code:
+`/autotask "description"` - Autonomous end-to-end development. Describe what you want,
+get a PR. Creates branch, implements solution, writes tests, handles bot feedback,
+delivers merge-ready code. Your 30-second description becomes hours of automated work.
 
 ```bash
-/plugin search ai-coding-config
+/autotask "add user settings page with dark mode toggle"
 ```
 
-Or explore `plugins/` directory directly.
+`/address-pr-comments` - PR cleanup on autopilot. After you push a PR, code review bots
+leave comments. This triages them intelligently: fixes real issues, declines nitpicks,
+iterates until merge-ready. Run it and go get coffee.
 
-## Essential Commands
+`/troubleshoot` - Connects to Sentry or HoneyBadger, analyzes error patterns, and
+autonomously fixes production bugs in parallel worktrees. Submits PRs with root cause
+analysis.
 
-### Project Setup
+`/load-rules` - Before any task, loads relevant coding standards for what you're working
+on. Working on React? Loads React patterns. Writing tests? Testing standards. The AI
+becomes fluent in YOUR conventions.
 
-- `/ai-coding-config` - Interactive setup wizard for any project
-- `/plugin install <name>` - Install specific plugin bundle
-- `/load-rules` - Load task-relevant coding standards
+**Also useful:**
 
-### Autonomous Workflows
+- `/repo-tooling` - Sets up ESLint, Prettier, Husky, GitHub Actions for a project
+- `/setup-environment` - Initializes git worktrees with dependencies and env files
+- `/create-prompt` - Helps structure complex prompts with clarifying questions
+- `/handoff-context` - Generates context for continuing work in a new session
 
-- `/autotask "description"` - **Complete autonomous task execution** (new!)
-- `/setup-environment` - Initialize worktree development environment
-- `/troubleshoot [mode]` - Production error resolution system
+---
 
-### Development Tools
+### Agents (12 total)
 
-- `/create-prompt` - Structured prompt creation with clarifying questions
-- `/handoff-context` - Conversation transition and context transfer
-- `/personality-change <name>` - Switch AI communication style
+Specialized AI assistants that handle specific domains. [See all →](.claude/agents/)
 
-### Documentation
+**Named specialists** (via `dev-agents` and `code-review` plugins):
 
-- `/generate-AGENTS-file` - Create agent reference for project
+- **Dixon** - Debugger. Root cause analysis, not band-aid fixes. Traces problems to their
+  source through systematic investigation.
+- **Ada** - Autonomous developer. Reads all project standards, implements features,
+  writes comprehensive tests, follows your patterns.
+- **Rivera** - Code reviewer. Architecture validation, security review, design pattern
+  checks.
+- **Phil** - UX designer. Reviews user-facing text, validates accessibility, ensures
+  consistent experience.
 
-Full command reference in [`.claude/commands/`](.claude/commands/).
+**Core agents** (always available):
 
-## Personalities
+- **git-writer** - Crafts commit messages, PR descriptions, and branch names. Used
+  proactively for all git communication.
+- **design-reviewer** - Frontend review using Playwright. Catches visual issues, UX
+  problems, accessibility gaps.
+- **site-keeper** - Production health monitoring. Catches errors, fixes issues, escalates
+  critical problems.
+- **test-runner** - Runs tests with terse output to preserve context.
 
-Choose how AI communicates with you:
+---
 
-**Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm and
-encouragement. Perfect for daily coding and learning.
+### Rules (32 coding standards)
 
-**Sherlock Holmes** - Analytical, precise, deductive. Methodical debugging and
-investigation. "Elementary" observations about your code.
+LLM-optimized coding standards in `.mdc` format. [See all →](rules/)
 
-**Bob Ross** - Calm, encouraging. Bugs are happy accidents. Makes coding feel like
-creative expression.
+**Always active** (apply to every task):
 
-**Ron Swanson** - Minimalist, anti-complexity, straightforward. "Don't half-ass two
-things, whole-ass one thing."
+- `git-interaction.mdc` - Git workflow, commit messages, PR standards, permission model
+- `prompt-engineering.mdc` - How to write prompts for other LLMs (unique to this repo)
 
-**Marie Kondo** - Organized, joyful minimalism. Code that sparks joy. Gentle refactoring
-philosophy.
+**Framework-specific** (loaded automatically by context):
 
-**Stewie Griffin** - Sophisticated, theatrical, brilliant. Absurdly high standards with
-British wit.
+- `frontend/react-components.mdc` - React patterns, hooks, component structure
+- `frontend/typescript-coding-standards.mdc` - TypeScript conventions
+- `python/python-coding-standards.mdc` - Python patterns and style
+- `python/pytest-what-to-test-and-mocking.mdc` - Testing philosophy
+- `django/django-models.mdc` - Django ORM patterns
 
-**Marianne Williamson** - Spiritual, love-based. Sees coding as consciousness work and
-service.
+**Sample rule** (from `git-interaction.mdc`):
 
-Install and activate:
-
-```bash
-/plugin install personality-samantha
-/personality-change samantha
+```markdown
+I work in your repository with these fundamental constraints: I make code changes but
+don't commit them unless you explicitly ask. When given permission, I can commit to
+main. Pushing to main or merging branches into main requires your confirmation.
 ```
 
-Each personality is a complete communication style overlay - see
-[docs/personalities.md](docs/personalities.md) for detailed descriptions.
+---
+
+### Skills (5 autonomous capabilities)
+
+Activated automatically by Claude when relevant. [See all →](.claude/skills/)
+
+- **brainstorming** - Turn rough ideas into designs through collaborative dialogue
+- **research** - Web research for current information (APIs, libraries, best practices)
+- **systematic-debugging** - Root cause analysis before jumping to fixes
+
+---
+
+### Personalities (7 styles)
+
+Change how AI communicates without changing technical capabilities.
+[See all →](docs/personalities.md)
+
+**Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm.
+
+**Sherlock Holmes** - Analytical, deductive. "Elementary" observations about your code.
+
+**Bob Ross** - Calm, encouraging. Bugs are happy little accidents.
+
+**Ron Swanson** - Minimalist, anti-complexity. "Don't half-ass two things."
+
+**Marie Kondo** - Organized minimalism. Code that sparks joy.
+
+**Stewie Griffin** - Sophisticated, theatrical. Absurdly high standards.
+
+Install: `/plugin install personality-samantha` then `/personality-change samantha`
 
 ## How It Works
 
@@ -254,7 +239,7 @@ ai-coding-config/
 │   ├── django/                  # Django framework
 │   ├── git-commits/             # Git workflow
 │   ├── code-standards/          # Universal standards
-│   └── personalities/           # 8 communication styles
+│   └── personalities/           # 7 communication styles
 │
 ├── rules/               # CANONICAL: Coding standards (.mdc)
 │   ├── python/
@@ -278,43 +263,6 @@ ai-coding-config/
 ├── docs/                        # Architecture and guides
 └── scripts/                     # Installation
 ```
-
-## What You Get
-
-**Rules** ([`rules/`](rules/)) - LLM-optimized coding standards. Framework patterns,
-testing approaches, commit formats, naming conventions. AI references these
-automatically based on file types and task context.
-
-**Commands** ([`.claude/commands/`](.claude/commands/)) - Active workflows. From simple
-setup to autonomous task execution. Designed for LLM-to-LLM communication with clear
-goals and adaptive behavior.
-
-**Agents** (in plugin bundles) - Specialized AI assistants. Each handles specific
-domains - debugging, development, UX, code review, architecture. See
-[Claude Code agents docs](https://docs.anthropic.com/en/docs/agents/overview#specialized-agents).
-
-**Personalities** ([`rules/personalities/`](rules/personalities/)) - Communication style
-overlays. Changes how AI talks to you without changing technical capabilities.
-
-**GitHub workflows** ([`.github/workflows/`](.github/workflows/)) - CI/CD integration
-with Claude-powered automation.
-
-## Prompt Engineering Framework
-
-One unique aspect: comprehensive guidance for **LLM-to-LLM communication** in
-[`rules/prompt-engineering.mdc`](rules/prompt-engineering.mdc).
-
-When AI writes prompts for other AI to execute (commands, workflows, agent
-instructions), standard practices don't apply. This framework covers:
-
-- Pattern reinforcement through examples (showing is teaching)
-- Goal-focused instructions over prescriptive steps
-- Structural delimiters for reliable parsing
-- Token efficiency without sacrificing clarity
-- Composable prompt architecture
-
-This is what makes commands like `/autotask` work reliably - the prompts are optimized
-for AI execution, not just human reading.
 
 ## Documentation
 
