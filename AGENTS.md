@@ -12,7 +12,7 @@ Core project rules that apply to all tasks:
 ## Tech Stack
 
 - **Claude Code** - Plugin marketplace (`.claude-plugin/marketplace.json`)
-- **Cursor** - Rules and configurations (`rules/` via symlink)
+- **Cursor** - Rules and configurations (`.cursor/rules/`)
 - **Bash** - Bootstrap and installation scripts
 - **Markdown** - All rules, commands, and agents
 
@@ -25,7 +25,8 @@ Core project rules that apply to all tasks:
 - `plugins/agents/` - All AI agents consolidated
 - `plugins/skills/` - Autonomous skills
 - `plugins/personalities/` - Personality variants
-- `rules/` - Coding standards for Cursor/Windsurf compatibility
+- `.cursor/rules/` - Cursor rules (canonical location)
+- `rules/` - Symlink to `.cursor/rules/` for visibility (THIS REPO ONLY)
 - `.claude/` - Symlinks to plugin content for local development
 - `scripts/` - Installation and bootstrap scripts
 
@@ -83,9 +84,13 @@ permanent records requiring explicit permission.
 - `.claude/commands/` → `plugins/core/commands/` (symlink)
 - `.claude/agents/` → `plugins/agents/agents/` (symlink)
 - `.claude/skills/` → `plugins/skills/skills/` (symlink)
-- `rules/personalities/` → copied from `plugins/personalities/` (not symlinked - needs
-  editing)
+- `rules/` → `.cursor/rules/` (symlink for visibility, THIS REPO ONLY)
+- `.cursor/rules/` contains the canonical Cursor rules
+- `.cursor/rules/personalities/` → copied from `plugins/personalities/` (not symlinked -
+  needs editing)
 - **Note**: Personality files are copied, not symlinked, because `/personality-change`
   edits frontmatter
+- **Architecture**: In THIS repo, `.cursor/rules/` is canonical and `rules/` symlinks to
+  it. In user projects, only `.cursor/rules/` exists (no root symlink)
 - Context in `plugins/core/context.md` describes identity and philosophy
 - Bootstrap script clones repo to `~/.ai_coding_config`
