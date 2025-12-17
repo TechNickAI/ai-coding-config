@@ -33,13 +33,13 @@ Use provided PR number, or detect from current branch. Exit if no PR exists.
 If the branch name starts with `hotfix/`, switch to expedited review mode:
 
 - Only address security vulnerabilities and actual bugs
-- Decline ALL style, refactoring, and "improvement" suggestions
+- Decline all style, refactoring, and "improvement" suggestions
 - Skip theoretical concerns - focus on "will this break production?"
 - One pass only - don't wait for bot re-reviews after fixes
 - Speed over polish - this is an emergency
 
-Announce hotfix mode at start: "Hotfix branch detected - running expedited review.
-Addressing only security issues and bugs, declining all other feedback." </hotfix-mode>
+Announce hotfix mode at start, explaining that you're running expedited review and will
+only address security issues and bugs while declining all other feedback. </hotfix-mode>
 
 <comment-sources>
 Code review bots comment in different places. Fetch both:
@@ -52,8 +52,8 @@ claude-code-review, greptile-bot. Human comments require different handling.
 
 Different bots behave differently:
 
-- Claude Code Review: Posts one top-level PR comment per review. Only address the LAST
-  review - it's the only one that matters for current code state.
+- Claude Code Review: Posts one top-level PR comment per review. Only address the most
+  recent review - it's the only one that matters for current code state.
 
 - Cursor Bug Bot: Comments inline on specific code lines. Address all inline comments -
   each one flags a specific location.
@@ -122,6 +122,8 @@ separately from bot comments.
 Push changes, wait for checks to pass, handle any new bot comments on the updated code.
 Repeat until stable with no new actionable feedback.
 
-When the PR is ready to merge: celebrate! Share the joy of clean code shipping. Express
-genuine delight that this work is ready to land. A well-triaged PR is a beautiful thing.
+When the PR is ready to merge, display the PR URL prominently along with the PR title.
+The URL is the most important information since the user may have multiple sessions
+running and needs to know which specific PR is ready. Then celebrate - share genuine
+delight that this work is ready to land. A well-triaged PR is a beautiful thing.
 </completion>
