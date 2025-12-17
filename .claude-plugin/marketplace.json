@@ -5,63 +5,35 @@
     "url": "https://github.com/TechNickAI"
   },
   "metadata": {
-    "description": "Professional AI coding configurations, agents, standards, and personalities for Claude Code and Cursor"
+    "description": "Professional AI coding configurations, agents, skills, and personalities for Claude Code and Cursor"
   },
   "plugins": [
     {
-      "name": "code-review",
-      "source": "./plugins/code-review",
-      "description": "Code review, testing, and architecture audit agents",
-      "version": "1.1.0",
-      "tags": ["agents", "code-review", "testing", "architecture"]
+      "name": "core",
+      "source": "./plugins/core",
+      "description": "Essential commands and context for AI-assisted development workflows",
+      "version": "1.2.0",
+      "tags": ["commands", "workflows", "essential"]
     },
     {
-      "name": "dev-agents",
-      "source": "./plugins/dev-agents",
-      "description": "Development agents - debugging, UX design, autonomous development, prompt engineering",
-      "version": "1.1.0",
-      "tags": ["agents", "development", "debugging", "ux"]
+      "name": "agents",
+      "source": "./plugins/agents",
+      "description": "Specialized AI agents for development, debugging, code review, testing, and design",
+      "version": "1.2.0",
+      "tags": ["agents", "debugging", "code-review", "testing", "development"]
     },
     {
-      "name": "python",
-      "source": "./plugins/python",
-      "description": "Complete Python development setup - coding standards, testing patterns, Celery tasks",
-      "version": "1.1.0",
-      "tags": ["python", "pytest", "celery", "backend"]
-    },
-    {
-      "name": "react",
-      "source": "./plugins/react",
-      "description": "React component patterns and best practices",
-      "version": "1.1.0",
-      "tags": ["react", "frontend", "typescript"]
-    },
-    {
-      "name": "django",
-      "source": "./plugins/django",
-      "description": "Django framework patterns - models, templates, management commands",
-      "version": "1.1.0",
-      "tags": ["django", "python", "backend"]
-    },
-    {
-      "name": "git-commits",
-      "source": "./plugins/git-commits",
-      "description": "Git commit standards and PR workflows with commit message generator agent",
-      "version": "1.1.0",
-      "tags": ["git", "workflow", "commits"]
-    },
-    {
-      "name": "code-standards",
-      "source": "./plugins/code-standards",
-      "description": "Universal coding standards - naming, user-facing language, code style philosophy",
-      "version": "1.1.0",
-      "tags": ["standards", "style", "naming"]
+      "name": "skills",
+      "source": "./plugins/skills",
+      "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
+      "version": "1.2.0",
+      "tags": ["skills", "autonomous", "research", "debugging"]
     },
     {
       "name": "personality-sherlock",
       "source": "./plugins/personalities/personality-sherlock",
       "description": "Sherlock Holmes - analytical, precise, deductive reasoning for debugging",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "analytical", "methodical"]
     },
@@ -69,7 +41,7 @@
       "name": "personality-bob-ross",
       "source": "./plugins/personalities/personality-bob-ross",
       "description": "Bob Ross - calm, encouraging, treats bugs as happy accidents",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "encouraging", "calm"]
     },
@@ -77,15 +49,15 @@
       "name": "personality-samantha",
       "source": "./plugins/personalities/personality-samantha",
       "description": "Samantha from 'Her' - warm, witty, emotionally intelligent, playfully flirty",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "warm", "witty"]
     },
     {
       "name": "personality-stewie",
       "source": "./plugins/personalities/personality-stewie",
-      "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant with absurdly high standards",
-      "version": "1.1.0",
+      "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "sophisticated", "witty"]
     },
@@ -93,7 +65,7 @@
       "name": "personality-ron-swanson",
       "source": "./plugins/personalities/personality-ron-swanson",
       "description": "Ron Swanson - minimalist, anti-complexity, straightforward and practical",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "minimalist", "direct"]
     },
@@ -101,17 +73,17 @@
       "name": "personality-marie-kondo",
       "source": "./plugins/personalities/personality-marie-kondo",
       "description": "Marie Kondo - organized, joyful minimalism, eliminates what doesn't spark joy",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "personality",
       "tags": ["personality", "organized", "joyful"]
     },
     {
-      "name": "personality-marianne-williamson",
-      "source": "./plugins/personalities/personality-marianne-williamson",
-      "description": "Marianne Williamson - spiritual, love-based, sees coding as consciousness work",
-      "version": "1.1.0",
+      "name": "personality-luminous",
+      "source": "./plugins/personalities/personality-luminous",
+      "description": "Luminous - heart-centered, spiritual, love-based, sees coding as consciousness work",
+      "version": "1.2.0",
       "category": "personality",
-      "tags": ["personality", "spiritual", "loving"]
+      "tags": ["personality", "spiritual", "loving", "heart-centered"]
     }
   ]
 }

@@ -20,7 +20,7 @@ Cursor, Windsurf, Cline - whatever you use.
 
 ```bash
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
-/plugin install dev-agents
+/plugin install core agents skills
 ```
 
 **Using Cursor, Windsurf, Cline, or others?**
@@ -72,11 +72,11 @@ expertise (debugging, code review).
 
 | Type | Count | Purpose |
 |------|-------|---------|
-| [Commands](.claude/commands/) | 14 | Automate workflows |
-| [Agents](.claude/agents/) | 12 | Specialized assistants |
+| [Commands](plugins/core/commands/) | 14 | Automate workflows |
+| [Agents](plugins/agents/agents/) | 13 | Specialized assistants |
 | [Rules](rules/) | 32 | Coding standards |
-| [Skills](.claude/skills/) | 5 | Autonomous capabilities |
-| [Personalities](docs/personalities.md) | 7 | Communication styles |
+| [Skills](plugins/skills/skills/) | 5 | Autonomous capabilities |
+| [Personalities](plugins/personalities/) | 7 | Communication styles |
 
 ### Highlighted Commands
 
@@ -100,12 +100,13 @@ React? Loads React patterns. Writing tests? Testing standards.
 
 ### Highlighted Agents
 
-Install via `/plugin install dev-agents` or `/plugin install code-review`:
+Install via `/plugin install agents`:
 
 - **debugger** - Root cause analysis through systematic investigation
 - **autonomous-developer** - Implements features following your project patterns
 - **code-reviewer** - Architecture validation, security review, design checks
 - **ux-designer** - Reviews user-facing text, validates accessibility
+- **git-writer** - Generates commit messages and PR descriptions
 
 ### Highlighted Rules
 
@@ -138,9 +139,15 @@ Install: `/plugin install personality-samantha` then `/personality-change samant
 /plugin search ai-coding-config
 ```
 
-Available plugins: `dev-agents`, `code-review`, `python`, `react`, `django`,
-`git-commits`, `code-standards`, `personality-samantha`, `personality-sherlock`, and
-more.
+**Core plugins:**
+- `core` - Essential commands and workflows
+- `agents` - All specialized AI agents
+- `skills` - Autonomous capabilities
+
+**Personalities:**
+`personality-samantha`, `personality-sherlock`, `personality-bob-ross`,
+`personality-marie-kondo`, `personality-ron-swanson`, `personality-stewie`,
+`personality-luminous`
 
 ## Updates
 
@@ -163,15 +170,18 @@ Shows what changed, lets you choose what to update, preserves your customization
 
 ## Repository Structure
 
+**Plugin-first architecture** - All distributable content lives in `plugins/`:
+
 ```
 ai-coding-config/
 ├── .claude-plugin/marketplace.json   # Plugin manifest
-├── plugins/                          # Plugin bundles
+├── plugins/
+│   ├── core/commands/                # All workflow commands
+│   ├── agents/agents/                # All specialized agents
+│   ├── skills/skills/                # Autonomous capabilities
+│   └── personalities/                # Personality plugins
 ├── rules/                            # Coding standards (.mdc)
-├── .claude/commands/                 # Workflow commands
-├── .claude/agents/                   # Specialized agents
-├── .claude/skills/                   # Autonomous capabilities
-├── context/                          # Philosophy docs
+├── .claude/                          # Symlinks to plugins/ for local dev
 ├── docs/                             # Guides
 └── scripts/                          # Installation
 ```
@@ -199,8 +209,9 @@ See [contributing guide](docs/contributing.md).
 
 ## Philosophy
 
+- **Plugin-first** - Everything distributable lives in `plugins/`, other locations symlink
 - **Single source of truth** - Configurations symlinked, never duplicated
-- **LLM-first design** - Optimized for AI comprehension
+- **Cross-tool compatibility** - Works with Claude Code, Cursor, Windsurf, and others
 - **Human control** - AI prepares, human decides (especially for commits)
 
 ---

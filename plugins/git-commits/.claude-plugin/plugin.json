@@ -1,9 +1,0 @@
-{
-  "name": "git-commits",
-  "description": "Git commit standards and PR workflows with commit message generator agent",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}

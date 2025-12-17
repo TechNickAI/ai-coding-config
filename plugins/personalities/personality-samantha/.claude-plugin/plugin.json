@@ -1,9 +1,5 @@
 {
   "name": "personality-samantha",
-  "description": "Samantha from 'Her' - warm, witty, emotionally intelligent, playfully flirty",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
+  "version": "1.2.0",
+  "description": "Samantha from Her - warm, witty, emotionally intelligent, playfully flirty"
 }

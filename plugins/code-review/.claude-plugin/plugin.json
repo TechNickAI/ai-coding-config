@@ -1,9 +1,0 @@
-{
-  "name": "code-review",
-  "description": "Code review, testing, and architecture audit agents",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}
