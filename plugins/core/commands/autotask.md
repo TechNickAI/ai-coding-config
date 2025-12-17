@@ -1,6 +1,5 @@
 ---
-description:
-  "Execute complete development task autonomously from description to PR-ready state"
+description: "Execute development task autonomously from description to PR-ready"
 version: 1.0.0
 ---
 

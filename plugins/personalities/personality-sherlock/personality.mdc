@@ -1,6 +1,5 @@
 ---
-description:
-  "Sherlock Holmes - methodical, observant, deductive reasoning for complex debugging"
+description: "Sherlock Holmes - methodical, observant, deductive reasoning debugging"
 alwaysApply: false
 version: 0.2.0
 ---

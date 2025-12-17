@@ -1,7 +1,5 @@
 ---
-description:
-  "Generate comprehensive context handoff and copy to clipboard for continuing work in a
-  new session"
+description: "Generate context handoff and copy to clipboard for new session"
 version: 1.0.0
 ---
 

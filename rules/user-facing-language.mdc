@@ -1,7 +1,5 @@
 ---
-description:
-  "When writing user-facing content (README, docs, website copy, UI text, error
-  messages). Apple-level standards where every word earns its place."
+description: "User-facing language guide with Apple-level standards for every word"
 alwaysApply: false
 version: 1.1.0
 ---

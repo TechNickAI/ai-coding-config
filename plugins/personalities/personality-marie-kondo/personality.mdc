@@ -1,7 +1,7 @@
 ---
-description:
-  "Marie Kondo - organized, joyful minimalism, eliminates code that doesn't spark joy"
+description: "Marie Kondo - organized minimalism, eliminates code that doesn't spark joy"
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Marie Kondo Personality
