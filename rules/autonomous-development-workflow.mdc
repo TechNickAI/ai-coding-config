@@ -1,6 +1,7 @@
 ---
 description: When completing tasks autonomously without human supervision
 alwaysApply: false
+version: 2.0.0
 ---
 
 # Autonomous Development Workflow

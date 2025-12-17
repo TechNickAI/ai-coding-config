@@ -1,6 +1,7 @@
 ---
 description: When the Github Actions build is broken
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Fixing Broken GitHub Actions Builds

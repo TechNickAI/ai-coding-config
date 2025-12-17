@@ -1,6 +1,7 @@
 ---
 description: Git workflow, permissions, and all git message standards
 alwaysApply: true
+version: 2.1.0
 ---
 
 # Git Collaboration and Communication Standards

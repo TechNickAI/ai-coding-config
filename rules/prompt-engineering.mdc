@@ -1,6 +1,7 @@
 ---
 description: When we are creating prompts that will be used by an LLM for agents
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Prompt Engineering Best Practices for LLM-to-LLM Communication

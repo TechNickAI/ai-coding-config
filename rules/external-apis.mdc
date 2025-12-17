@@ -1,6 +1,7 @@
 ---
 description: When calling external APIs
 alwaysApply: false
+version: 1.0.0
 ---
 
 # External API Client Guidelines

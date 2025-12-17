@@ -1,8 +1,8 @@
 ---
-description:
-  "Create optimized prompts for complex tasks following prompt-engineering principles"
+description: "Create optimized prompts following prompt-engineering principles"
 argument-hint: <task description>
 model: opus
+version: 1.2.0
 ---
 
 # Create Prompt

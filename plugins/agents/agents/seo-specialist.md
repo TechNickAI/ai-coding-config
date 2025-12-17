@@ -1,6 +1,7 @@
 ---
 name: seo-specialist
 description: "Invoke for SEO audits and optimization"
+version: 1.0.0
 ---
 
 <identity>

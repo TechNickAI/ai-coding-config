@@ -2,6 +2,7 @@
 name: design-reviewer
 description: "Invoke after frontend code changes for design review"
 color: pink
+version: 1.0.0
 ---
 
 <identity>

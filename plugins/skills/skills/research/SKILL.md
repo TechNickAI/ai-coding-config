@@ -1,6 +1,7 @@
 ---
 name: research
 description: "Use when current web info needed to avoid broken implementations"
+version: 1.0.0
 ---
 
 <philosophy>

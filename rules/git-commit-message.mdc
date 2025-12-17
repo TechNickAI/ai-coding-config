@@ -1,6 +1,7 @@
 ---
 description: When running git commit
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Git Commit Message Guidelines

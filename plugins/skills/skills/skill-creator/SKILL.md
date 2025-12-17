@@ -1,6 +1,7 @@
 ---
 name: skill-creator
 description: "Use when creating or editing skills for ai-coding-config repo"
+version: 1.2.0
 ---
 
 <objective>

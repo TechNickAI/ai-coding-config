@@ -1,6 +1,7 @@
 ---
 description: Autonomous task workflow using git worktrees
 alwaysApply: false
+version: 1.0.0
 ---
 
 # Git Worktree Task Workflow

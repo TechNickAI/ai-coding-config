@@ -1,6 +1,7 @@
 ---
 name: brainstorming
 description: "Use when rough ideas need design before code or multiple approaches exist"
+version: 0.2.0
 ---
 
 <objective>

@@ -1,6 +1,7 @@
 ---
 name: systematic-debugging
 description: "Use for bugs, test failures, or unexpected behavior needing root cause"
+version: 1.0.0
 ---
 
 <objective>

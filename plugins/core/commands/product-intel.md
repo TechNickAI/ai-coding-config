@@ -1,7 +1,7 @@
 ---
-description:
-  Run comprehensive product intelligence research on competitors and industry trends
+description: "Research product intelligence on competitors and industry trends"
 argument-hint: [competitor name | topic | "all"]
+version: 0.3.0
 ---
 
 # Product Intelligence Research
