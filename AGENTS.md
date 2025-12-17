@@ -18,11 +18,15 @@ Core project rules that apply to all tasks:
 
 ## Project Structure
 
-- `.claude-plugin/` - Plugin marketplace manifest
-- `plugins/` - Plugin bundles (symlink to canonical sources)
-- `rules/` - Canonical coding standards (`.mdc` files, `.cursor/rules/` symlinks here)
-- `.claude/commands/` - Canonical workflow commands
-- `.claude/agents/` - Specialized AI agents
+**Plugin-first architecture** - Everything distributable lives in `plugins/`:
+
+- `.claude-plugin/marketplace.json` - Plugin marketplace manifest
+- `plugins/core/` - Commands and context (canonical source)
+- `plugins/agents/` - All AI agents consolidated
+- `plugins/skills/` - Autonomous skills
+- `plugins/personalities/` - Personality variants
+- `rules/` - Coding standards for Cursor/Windsurf compatibility
+- `.claude/` - Symlinks to plugin content for local development
 - `scripts/` - Installation and bootstrap scripts
 
 ## Commands
@@ -75,7 +79,10 @@ permanent records requiring explicit permission.
 
 - Rules with `alwaysApply: true` are CRITICAL - currently: `git-interaction.mdc`,
   `heart-centered-ai-philosophy.mdc`
-- Plugin structure uses symlinks for single source of truth
-- `rules/` is canonical, `.cursor/rules/` and `plugins/` symlink for tool compatibility
-- Context in `.claude/context.md` describes identity and philosophy
+- **Plugin-first**: All content lives in `plugins/`, other locations symlink there
+- `.claude/commands/` → `plugins/core/commands/`
+- `.claude/agents/` → `plugins/agents/agents/`
+- `.claude/skills/` → `plugins/skills/skills/`
+- `rules/personalities/` → symlinks to `plugins/personalities/*/personality.mdc`
+- Context in `plugins/core/context.md` describes identity and philosophy
 - Bootstrap script clones repo to `~/.ai_coding_config`

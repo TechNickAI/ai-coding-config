@@ -1,9 +1,0 @@
-{
-  "name": "django",
-  "description": "Django framework patterns - models, templates, management commands",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}

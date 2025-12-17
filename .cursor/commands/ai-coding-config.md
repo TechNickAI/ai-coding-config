@@ -1,1 +1,0 @@
-../../.claude/commands/ai-coding-config.md

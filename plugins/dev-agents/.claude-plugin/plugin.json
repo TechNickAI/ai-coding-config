@@ -1,9 +1,0 @@
-{
-  "name": "dev-agents",
-  "description": "Development agents - debugging, UX design, autonomous development, prompt engineering",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}

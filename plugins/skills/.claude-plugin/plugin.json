@@ -1,0 +1,8 @@
+{
+  "name": "skills",
+  "version": "1.1.0",
+  "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
+  "claude": {
+    "skills": "../skills"
+  }
+}

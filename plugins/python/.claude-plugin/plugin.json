@@ -1,9 +1,0 @@
-{
-  "name": "python",
-  "description": "Complete Python development setup - coding standards, testing patterns, Celery tasks",
-  "version": "1.0.0",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}
