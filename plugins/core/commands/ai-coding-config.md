@@ -211,6 +211,10 @@ cd ~/.ai_coding_config && git pull
 
 </repository-update>
 
+<self-update-check>
+After pulling from the repository, detect if this command file (commands/ai-coding-config.md) was updated. If it was, read the new version and continue executing with the updated instructions.
+</self-update-check>
+
 <plugin-migration-check>
 Check for deprecated plugins from pre-1.2.0 architecture.
 
