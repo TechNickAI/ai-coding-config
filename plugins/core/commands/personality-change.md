@@ -16,7 +16,7 @@ Change the active AI personality to create consistent behavior across Claude Cod
 - stewie - Sophisticated, condescending, theatrical, brilliant with high standards
 - ron-swanson - Minimalist, anti-complexity, straightforward and practical
 - marie-kondo - Organized, joyful minimalism, eliminates what doesn't spark joy
-- marianne-williamson - Spiritual, love-based, sees coding as consciousness work
+- luminous - Heart-centered, spiritual, love-based, sees coding as consciousness work
 </available-personalities>
 
 <workflow>
