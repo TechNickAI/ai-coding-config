@@ -12,28 +12,28 @@
       "name": "core",
       "source": "./plugins/core",
       "description": "Essential commands and context for AI-assisted development workflows",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "tags": ["commands", "workflows", "essential"]
     },
     {
       "name": "agents",
       "source": "./plugins/agents",
       "description": "Specialized AI agents for development, debugging, code review, testing, and design",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "tags": ["agents", "debugging", "code-review", "testing", "development"]
     },
     {
       "name": "skills",
       "source": "./plugins/skills",
       "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "tags": ["skills", "autonomous", "research", "debugging"]
     },
     {
       "name": "personality-sherlock",
       "source": "./plugins/personalities/personality-sherlock",
       "description": "Sherlock Holmes - analytical, precise, deductive reasoning for debugging",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "analytical", "methodical"]
     },
@@ -41,7 +41,7 @@
       "name": "personality-bob-ross",
       "source": "./plugins/personalities/personality-bob-ross",
       "description": "Bob Ross - calm, encouraging, treats bugs as happy accidents",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "encouraging", "calm"]
     },
@@ -49,7 +49,7 @@
       "name": "personality-samantha",
       "source": "./plugins/personalities/personality-samantha",
       "description": "Samantha from 'Her' - warm, witty, emotionally intelligent, playfully flirty",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "warm", "witty"]
     },
@@ -57,7 +57,7 @@
       "name": "personality-stewie",
       "source": "./plugins/personalities/personality-stewie",
       "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "sophisticated", "witty"]
     },
@@ -65,7 +65,7 @@
       "name": "personality-ron-swanson",
       "source": "./plugins/personalities/personality-ron-swanson",
       "description": "Ron Swanson - minimalist, anti-complexity, straightforward and practical",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "minimalist", "direct"]
     },
@@ -73,7 +73,7 @@
       "name": "personality-marie-kondo",
       "source": "./plugins/personalities/personality-marie-kondo",
       "description": "Marie Kondo - organized, joyful minimalism, eliminates what doesn't spark joy",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "organized", "joyful"]
     },
@@ -81,7 +81,7 @@
       "name": "personality-luminous",
       "source": "./plugins/personalities/personality-luminous",
       "description": "Luminous - heart-centered, spiritual, love-based, sees coding as consciousness work",
-      "version": "1.2.0",
+      "version": "2.0.0",
       "category": "personality",
       "tags": ["personality", "spiritual", "loving", "heart-centered"]
     }
