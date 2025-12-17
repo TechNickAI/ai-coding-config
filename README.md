@@ -1,208 +1,59 @@
 # AI Coding Configuration
 
-Curated AI coding standards, commands, and agents that work across Claude Code, Cursor,
-Windsurf, Cline, and other AI coding tools.
+Curated AI coding configuration and tools for Claude Code, Cursor, and more.
 
-**What you get:**
+## The Problem
 
-- **Commands** that automate tedious work (`/autotask` builds features autonomously,
-  `/address-pr-comments` handles bot feedback)
-- **Rules** that make AI understand YOUR conventions, not generic best practices
-- **Agents** that specialize in debugging, code review, UX, and more
-- **Personalities** that change how AI communicates with you
+AI coding tools are powerful but raw. Building good commands, rules, and agents takes
+experimentation. Most developers use AI at a fraction of its potential because they
+haven't built the workflows.
 
-Works best with Claude Code's plugin system, but also supports Cursor, Windsurf, and
-any tool that reads markdown rules.
+## The Fix
 
-## Why This Exists
-
-Most AI coding setups are generic. AI doesn't know your conventions, your patterns, or
-your preferences. It gives textbook answers instead of answers that fit your codebase.
-
-This fixes that. Install once, and AI assistants understand:
-
-- Your coding style and naming conventions
-- Your project structure and patterns
-- Your testing approach and tooling
-- How you like to receive information
-
-The commands automate the repetitive parts of development - creating PRs, handling bot
-feedback, loading context - so you focus on the interesting work.
+Install a curated, battle-tested collection. Commands that automate real workflows.
+Rules that actually improve output. Agents that specialize. Works in Claude Code,
+Cursor, Windsurf, Cline - whatever you use.
 
 ## Quick Start
 
-### Claude Code (Plugin Marketplace)
-
-Add this marketplace and install what you need:
+**Using Claude Code?**
 
 ```bash
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
-/plugin install dev-agents           # debugger, autonomous-developer, ux-designer
-/plugin install code-review          # code-reviewer, architecture-auditor
-/plugin install python               # Python standards and patterns
-/plugin install personality-samantha # Warm, encouraging communication
+/plugin install dev-agents
 ```
 
-Browse available plugins:
-
-```bash
-/plugin search ai-coding-config
-```
-
-### Cursor, Windsurf, Cline & Others (Bootstrap)
-
-Run from any project:
+**Using Cursor, Windsurf, Cline, or others?**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
 ```
 
-Then in your AI coding tool:
-
-```
-@ai-coding-config set up this project
-```
-
-### All AI Coding Tools
-
-Interactive setup command works in Claude Code, Cursor, Windsurf, Cline, and any tool
-that supports slash commands:
+Then run the interactive setup:
 
 ```
 /ai-coding-config
 ```
 
-## What's Included
+This detects your stack and installs relevant configurations.
 
-### Commands (14 total)
+## Try This First
 
-Slash commands that automate workflows. [See all →](.claude/commands/)
+After setup, load your project's coding standards:
 
-**Most impactful:**
-
-`/autotask "description"` - Autonomous end-to-end development. Describe what you want,
-get a PR. Creates branch, implements solution, writes tests, handles bot feedback,
-delivers merge-ready code. Your 30-second description becomes hours of automated work.
-
-```bash
-/autotask "add user settings page with dark mode toggle"
+```
+/load-rules
 ```
 
-`/address-pr-comments` - PR cleanup on autopilot. After you push a PR, code review bots
-leave comments. This triages them intelligently: fixes real issues, declines nitpicks,
-iterates until merge-ready. Run it and go get coffee.
-
-`/troubleshoot` - Connects to Sentry or HoneyBadger, analyzes error patterns, and
-autonomously fixes production bugs in parallel worktrees. Submits PRs with root cause
-analysis.
-
-`/load-rules` - Before any task, loads relevant coding standards for what you're working
-on. Working on React? Loads React patterns. Writing tests? Testing standards. The AI
-becomes fluent in YOUR conventions.
-
-**Also useful:**
-
-- `/repo-tooling` - Sets up ESLint, Prettier, Husky, GitHub Actions for a project
-- `/setup-environment` - Initializes git worktrees with dependencies and env files
-- `/create-prompt` - Helps structure complex prompts with clarifying questions
-- `/handoff-context` - Generates context for continuing work in a new session
-
----
-
-### Agents (12 total)
-
-Specialized AI assistants that handle specific domains. [See all →](.claude/agents/)
-
-**Via `dev-agents` and `code-review` plugins:**
-
-- **debugger** - Root cause analysis, not band-aid fixes. Traces problems to their source
-  through systematic investigation.
-- **autonomous-developer** - Reads all project standards, implements features, writes
-  comprehensive tests, follows your patterns.
-- **code-reviewer** - Architecture validation, security review, design pattern checks.
-- **ux-designer** - Reviews user-facing text, validates accessibility, ensures consistent
-  experience.
-
-**Core agents** (always available):
-
-- **git-writer** - Crafts commit messages, PR descriptions, and branch names. Used
-  proactively for all git communication.
-- **design-reviewer** - Frontend review using Playwright. Catches visual issues, UX
-  problems, accessibility gaps.
-- **site-keeper** - Production health monitoring. Catches errors, fixes issues, escalates
-  critical problems.
-- **test-runner** - Runs tests with terse output to preserve context.
-
----
-
-### Rules (32 coding standards)
-
-LLM-optimized coding standards in `.mdc` format. [See all →](rules/)
-
-**Always active** (apply to every task):
-
-- `git-interaction.mdc` - Git workflow, commit messages, PR standards, permission model
-- `prompt-engineering.mdc` - How to write prompts for other LLMs (unique to this repo)
-
-**Framework-specific** (loaded automatically by context):
-
-- `frontend/react-components.mdc` - React patterns, hooks, component structure
-- `frontend/typescript-coding-standards.mdc` - TypeScript conventions
-- `python/python-coding-standards.mdc` - Python patterns and style
-- `python/pytest-what-to-test-and-mocking.mdc` - Testing philosophy
-- `django/django-models.mdc` - Django ORM patterns
-
-**Sample rule** (from `git-interaction.mdc`):
-
-```markdown
-I work in your repository with these fundamental constraints: I make code changes but
-don't commit them unless you explicitly ask. When given permission, I can commit to
-main. Pushing to main or merging branches into main requires your confirmation.
-```
-
----
-
-### Skills (5 autonomous capabilities)
-
-Activated automatically by Claude when relevant. [See all →](.claude/skills/)
-
-- **brainstorming** - Turn rough ideas into designs through collaborative dialogue
-- **research** - Web research for current information (APIs, libraries, best practices)
-- **systematic-debugging** - Root cause analysis before jumping to fixes
-
----
-
-### Personalities (7 styles)
-
-Change how AI communicates without changing technical capabilities.
-[See all →](docs/personalities.md)
-
-**Samantha** (from "Her") - Warm, witty, emotionally intelligent. Genuine enthusiasm.
-
-**Sherlock Holmes** - Analytical, deductive. "Elementary" observations about your code.
-
-**Bob Ross** - Calm, encouraging. Bugs are happy little accidents.
-
-**Ron Swanson** - Minimalist, anti-complexity. "Don't half-ass two things."
-
-**Marie Kondo** - Organized minimalism. Code that sparks joy.
-
-**Stewie Griffin** - Sophisticated, theatrical. Absurdly high standards.
-
-Install: `/plugin install personality-samantha` then `/personality-change samantha`
+Now ask your AI to write some code. It follows YOUR patterns - naming conventions,
+testing approach, project structure.
 
 ## How It Works
 
-### Architecture
-
 ```
 ┌─────────────────────────────────────────┐
-│  ai-coding-config repo                  │
-│  (canonical source of truth)            │
-│                                         │
-│  rules/     ← standards         │
-│  .claude/commands/  ← workflows         │
-│  plugins/*/agents/  ← specialists       │
+│  ai-coding-config                       │
+│  (standards, commands, agents)          │
 └─────────────────────────────────────────┘
               │
       Plugin system / Bootstrap
@@ -210,151 +61,149 @@ Install: `/plugin install personality-samantha` then `/personality-change samant
       ┌───────┴───────┐
       │               │
       ▼               ▼
-  Project A      Project N
-  (symlinks)     (copies)
+  Project A      Project B
 ```
 
-**Single source of truth**: `rules/` and `.claude/commands/` are canonical. Plugins use
-symlinks for packaging.
+Your AI tool reads configurations from this repo. Rules provide passive context (coding
+standards). Commands provide active workflows (automations). Agents provide specialized
+expertise (debugging, code review).
 
-**Plugin distribution**: Claude Code uses marketplace.json. Cursor, Windsurf, Cline, and
-others use bootstrap script. All reference same source files.
+## What's Included
 
-**Project integration**: `/ai-coding-config` detects your stack and installs relevant
-configurations. Updates sync changes while preserving customizations.
+| Type | Count | Purpose |
+|------|-------|---------|
+| [Commands](.claude/commands/) | 14 | Automate workflows |
+| [Agents](.claude/agents/) | 12 | Specialized assistants |
+| [Rules](rules/) | 32 | Coding standards |
+| [Skills](.claude/skills/) | 5 | Autonomous capabilities |
+| [Personalities](docs/personalities.md) | 7 | Communication styles |
 
-### Repository Structure
+### Highlighted Commands
 
-```
-ai-coding-config/
-├── .claude-plugin/
-│   └── marketplace.json         # Plugin marketplace manifest
-│
-├── plugins/                     # Plugin bundles (symlinks to canonical)
-│   ├── dev-agents/              # debugger, autonomous-developer, ux-designer
-│   ├── code-review/             # code-reviewer, architecture-auditor
-│   ├── python/                  # Python standards
-│   ├── react/                   # React patterns
-│   ├── django/                  # Django framework
-│   ├── git-commits/             # Git workflow
-│   ├── code-standards/          # Universal standards
-│   └── personalities/           # 7 communication styles
-│
-├── rules/               # CANONICAL: Coding standards (.mdc)
-│   ├── python/
-│   ├── frontend/
-│   ├── django/
-│   ├── personalities/
-│   ├── git-interaction.mdc
-│   └── prompt-engineering.mdc   # LLM-to-LLM communication
-│
-├── .claude/commands/            # CANONICAL: Workflow commands
-│   ├── autotask.md              # Autonomous task execution
-│   ├── setup-environment.md     # Worktree initialization
-│   ├── troubleshoot.md          # Error resolution
-│   ├── create-prompt.md         # Structured prompts
-│   └── [others]
-│
-├── context/                     # Philosophy and workflows
-│   ├── optimal-development-workflow.md
-│   └── design-principles.md
-│
-├── docs/                        # Architecture and guides
-└── scripts/                     # Installation
+**`/autotask "description"`** - Autonomous development. Describe what you want, get a
+PR. Creates branch, implements, writes tests, handles bot feedback.
+
+```bash
+/autotask "add user settings page with dark mode toggle"
 ```
 
-## Documentation
+*Requires: GitHub CLI (`gh`) installed and authenticated*
 
-[**docs/coding-ecosystem.md**](docs/coding-ecosystem.md) - Comprehensive comparison of
-Cursor, Claude Code, Windsurf, and VS Code. Strengths, trade-offs, when to use each.
+**`/address-pr-comments`** - PR cleanup on autopilot. Triages bot comments: fixes real
+issues, declines nitpicks, iterates until merge-ready.
 
-[**docs/tools-and-configs.md**](docs/tools-and-configs.md) - Rules (passive context) vs
-commands (active workflows) vs agents (specialized execution).
+**`/troubleshoot`** - Connects to Sentry/HoneyBadger, analyzes errors, fixes bugs in
+parallel worktrees, submits PRs with root cause analysis.
 
-[**docs/personalities.md**](docs/personalities.md) - Detailed personality descriptions
-with examples and use cases.
+**`/load-rules`** - Loads relevant coding standards for your current task. Working on
+React? Loads React patterns. Writing tests? Testing standards.
 
-[**docs/architecture-summary.md**](docs/architecture-summary.md) - System design and
-technical architecture.
+### Highlighted Agents
 
-[**context/optimal-development-workflow.md**](context/optimal-development-workflow.md) -
-Complete autonomous workflow philosophy and implementation guide.
+Install via `/plugin install dev-agents` or `/plugin install code-review`:
 
-## Project Philosophy
+- **debugger** - Root cause analysis through systematic investigation
+- **autonomous-developer** - Implements features following your project patterns
+- **code-reviewer** - Architecture validation, security review, design checks
+- **ux-designer** - Reviews user-facing text, validates accessibility
 
-**Heart-centered AI collaboration** - Unconditional acceptance, presence before
-solutions, gratitude in action.
+### Highlighted Rules
 
-**Single source of truth** - Canonical configurations symlinked for distribution, never
-duplicated.
+Rules are coding standards in `.mdc` format (markdown with frontmatter). AI reads these
+to understand your conventions.
 
-**LLM-first design** - Rules and commands optimized for AI comprehension and execution.
+**Always active:**
+- `git-interaction.mdc` - Git workflow, commit messages, PR standards
+- `prompt-engineering.mdc` - Writing prompts for LLMs
 
-**Intelligent automation** - Right agent, right time, adaptive to task complexity.
+**Framework-specific** (loaded by `/load-rules`):
+- `frontend/react-components.mdc` - React patterns and hooks
+- `python/python-coding-standards.mdc` - Python conventions
+- `django/django-models.mdc` - Django ORM patterns
 
-**Human control** - AI prepares, human decides. Especially for commits and merges.
+### Personalities
 
-See [CLAUDE.md](CLAUDE.md) and [AGENTS.md](AGENTS.md) for complete context.
+Change how AI communicates. Same technical capabilities, different style.
 
-## Updates & Customization
+- **Samantha** - Warm, witty, emotionally intelligent
+- **Sherlock Holmes** - Analytical, deductive reasoning
+- **Bob Ross** - Calm, encouraging (bugs are happy accidents)
+- **Ron Swanson** - Minimalist, anti-complexity
 
-Update any project:
+Install: `/plugin install personality-samantha` then `/personality-change samantha`
+
+## Browse All Plugins
+
+```bash
+/plugin search ai-coding-config
+```
+
+Available plugins: `dev-agents`, `code-review`, `python`, `react`, `django`,
+`git-commits`, `code-standards`, `personality-samantha`, `personality-sherlock`, and
+more.
+
+## Updates
+
+Update configurations in any project:
 
 ```bash
 /ai-coding-config update
 ```
 
-Shows what changed, lets you choose what to update, preserves project-specific
-customizations.
-
-**Customization**: Use `.local.json` files (gitignored) for machine-specific settings.
-Fork this repo to make it completely yours.
+Shows what changed, lets you choose what to update, preserves your customizations.
 
 ## Requirements
 
-**For plugin marketplace**:
+**Basic usage:**
+- Claude Code, Cursor, Windsurf, Cline, or any AI tool with rules support
 
-- Claude Code with plugin support
-
-**For autonomous workflows**:
-
+**For autonomous workflows** (`/autotask`, `/troubleshoot`):
 - Git with worktrees support
 - GitHub CLI (`gh`) installed and authenticated
-- Project dependency managers (npm/yarn/pip/etc.)
 
-**For Cursor, Windsurf, Cline & others**:
+## Repository Structure
 
-- AI coding tool with rules/context support
+```
+ai-coding-config/
+├── .claude-plugin/marketplace.json   # Plugin manifest
+├── plugins/                          # Plugin bundles
+├── rules/                            # Coding standards (.mdc)
+├── .claude/commands/                 # Workflow commands
+├── .claude/agents/                   # Specialized agents
+├── .claude/skills/                   # Autonomous capabilities
+├── context/                          # Philosophy docs
+├── docs/                             # Guides
+└── scripts/                          # Installation
+```
 
-Most features work with basic installations. Advanced workflows (`/autotask`) need
-additional tools.
+## Documentation
+
+- [Coding Ecosystem Comparison](docs/coding-ecosystem.md) - Cursor vs Claude Code vs
+  Windsurf
+- [Tools and Configs Guide](docs/tools-and-configs.md) - Rules vs commands vs agents
+- [Personalities Guide](docs/personalities.md) - All personalities with examples
+- [Architecture](docs/architecture-summary.md) - System design
+- [Development Workflow](context/optimal-development-workflow.md) - Autonomous workflow
+  philosophy
 
 ## Contributing
 
-This project benefits from real-world usage and feedback. Contributions welcome:
+Contributions welcome:
 
 - New plugins for languages/frameworks
 - Additional specialist agents
 - Improved coding standards
 - Bug fixes and documentation
 
-See [docs/contributing.md](docs/contributing.md).
+See [contributing guide](docs/contributing.md).
 
-## For AI Assistants
+## Philosophy
 
-When user mentions `ai-coding-config`:
-
-1. Check if `~/.ai_coding_config` exists
-2. If yes, read configurations from there
-3. If no, suggest running bootstrap script
-4. When @mentioned with `ai-coding-config`, execute
-   `.claude/commands/ai-coding-config.md`
-
-This repository contains instructions for AI behavior in [CLAUDE.md](CLAUDE.md) and
-[AGENTS.md](AGENTS.md).
+- **Single source of truth** - Configurations symlinked, never duplicated
+- **LLM-first design** - Optimized for AI comprehension
+- **Human control** - AI prepares, human decides (especially for commits)
 
 ---
 
-**License**: MIT **Author**: [TechNickAI](https://github.com/TechNickAI) **Repository**:
-https://github.com/TechNickAI/ai-coding-config
-
+**License**: MIT | **Author**: [TechNickAI](https://github.com/TechNickAI) |
+**Repository**: https://github.com/TechNickAI/ai-coding-config
