@@ -39,14 +39,24 @@ This detects your stack and installs relevant configurations.
 
 ## Try This First
 
-After setup, load your project's coding standards:
+Use this on your next PR:
+
+```
+/address-pr-comments
+```
+
+This triages all bot comments on your PR: fixes real issues, declines nitpicks, and
+iterates until merge-ready. No more manual back-and-forth with linters and type
+checkers.
+
+Then load your project's coding standards for all future work:
 
 ```
 /load-rules
 ```
 
-Now ask your AI to write some code. It follows YOUR patterns - naming conventions,
-testing approach, project structure.
+Now when you write code, your AI follows YOUR patterns - naming conventions, testing
+approach, project structure.
 
 ## How It Works
 
@@ -70,13 +80,13 @@ expertise (debugging, code review).
 
 ## What's Included
 
-| Type | Count | Purpose |
-|------|-------|---------|
-| [Commands](plugins/core/commands/) | 14 | Automate workflows |
-| [Agents](plugins/agents/agents/) | 13 | Specialized assistants |
-| [Rules](rules/) | 32 | Coding standards |
-| [Skills](plugins/skills/skills/) | 5 | Autonomous capabilities |
-| [Personalities](plugins/personalities/) | 7 | Communication styles |
+| Type                                    | Count | Purpose                 |
+| --------------------------------------- | ----- | ----------------------- |
+| [Commands](plugins/core/commands/)      | 14    | Automate workflows      |
+| [Agents](plugins/agents/agents/)        | 13    | Specialized assistants  |
+| [Rules](rules/)                         | 32    | Coding standards        |
+| [Skills](plugins/skills/skills/)        | 5     | Autonomous capabilities |
+| [Personalities](plugins/personalities/) | 7     | Communication styles    |
 
 ### Highlighted Commands
 
@@ -87,7 +97,7 @@ PR. Creates branch, implements, writes tests, handles bot feedback.
 /autotask "add user settings page with dark mode toggle"
 ```
 
-*Requires: GitHub CLI (`gh`) installed and authenticated*
+_Requires: GitHub CLI (`gh`) installed and authenticated_
 
 **`/address-pr-comments`** - PR cleanup on autopilot. Triages bot comments: fixes real
 issues, declines nitpicks, iterates until merge-ready.
@@ -114,10 +124,12 @@ Rules are coding standards in `.mdc` format (markdown with frontmatter). AI read
 to understand your conventions.
 
 **Always active:**
+
 - `git-interaction.mdc` - Git workflow, commit messages, PR standards
 - `prompt-engineering.mdc` - Writing prompts for LLMs
 
 **Framework-specific** (loaded by `/load-rules`):
+
 - `frontend/react-components.mdc` - React patterns and hooks
 - `python/python-coding-standards.mdc` - Python conventions
 - `django/django-models.mdc` - Django ORM patterns
@@ -140,14 +152,14 @@ Install: `/plugin install personality-samantha` then `/personality-change samant
 ```
 
 **Core plugins:**
+
 - `core` - Essential commands and workflows
 - `agents` - All specialized AI agents
 - `skills` - Autonomous capabilities
 
-**Personalities:**
-`personality-samantha`, `personality-sherlock`, `personality-bob-ross`,
-`personality-marie-kondo`, `personality-ron-swanson`, `personality-stewie`,
-`personality-luminous`
+**Personalities:** `personality-samantha`, `personality-sherlock`,
+`personality-bob-ross`, `personality-marie-kondo`, `personality-ron-swanson`,
+`personality-stewie`, `personality-luminous`
 
 ## Updates
 
@@ -162,9 +174,11 @@ Shows what changed, lets you choose what to update, preserves your customization
 ## Requirements
 
 **Basic usage:**
+
 - Claude Code, Cursor, Windsurf, Cline, or any AI tool with rules support
 
 **For autonomous workflows** (`/autotask`, `/troubleshoot`):
+
 - Git with worktrees support
 - GitHub CLI (`gh`) installed and authenticated
 
@@ -209,7 +223,8 @@ See [contributing guide](docs/contributing.md).
 
 ## Philosophy
 
-- **Plugin-first** - Everything distributable lives in `plugins/`, other locations symlink
+- **Plugin-first** - Everything distributable lives in `plugins/`, other locations
+  symlink
 - **Single source of truth** - Configurations symlinked, never duplicated
 - **Cross-tool compatibility** - Works with Claude Code, Cursor, Windsurf, and others
 - **Human control** - AI prepares, human decides (especially for commits)

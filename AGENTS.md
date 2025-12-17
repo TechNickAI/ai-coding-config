@@ -83,7 +83,9 @@ permanent records requiring explicit permission.
 - `.claude/commands/` → `plugins/core/commands/` (symlink)
 - `.claude/agents/` → `plugins/agents/agents/` (symlink)
 - `.claude/skills/` → `plugins/skills/skills/` (symlink)
-- `rules/personalities/` → copied from `plugins/personalities/` (not symlinked - needs editing)
-- **Note**: Personality files are copied, not symlinked, because `/personality-change` edits frontmatter
+- `rules/personalities/` → copied from `plugins/personalities/` (not symlinked - needs
+  editing)
+- **Note**: Personality files are copied, not symlinked, because `/personality-change`
+  edits frontmatter
 - Context in `plugins/core/context.md` describes identity and philosophy
 - Bootstrap script clones repo to `~/.ai_coding_config`

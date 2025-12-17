@@ -103,11 +103,12 @@ Available personalities:
 - **`ron-swanson.mdc`** - Minimalist, anti-complexity. Question dependencies, be direct.
 - **`marie-kondo.mdc`** - Organized minimalism. Thank code before deleting it.
 - **`stewie.mdc`** - Sophisticated, condescending, theatrical. Absurdly high standards.
-- **`luminous.mdc`** - Heart-centered, spiritual, love-based. Coding as consciousness work.
+- **`luminous.mdc`** - Heart-centered, spiritual, love-based. Coding as consciousness
+  work.
 
 **For Users:** Invoke personalities with `@samantha`, `@stewie`, `@sherlock`,
-`@bob-ross`, `@ron-swanson`, `@luminous`, or `@marie-kondo` when you want
-that specific interaction style for your session.
+`@bob-ross`, `@ron-swanson`, `@luminous`, or `@marie-kondo` when you want that specific
+interaction style for your session.
 
 ## Customization
 

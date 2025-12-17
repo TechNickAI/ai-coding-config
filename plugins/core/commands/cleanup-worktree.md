@@ -15,8 +15,7 @@ Confirm the worktree's branch was merged before any cleanup. Pull main in the pr
 repo to get the latest state, then verify the branch appears in the merged history.
 
 If the branch is unmerged, stop and explain the situation. Merged work is safe to clean
-up; unmerged work requires user decision.
-</merge-verification>
+up; unmerged work requires user decision. </merge-verification>
 
 <cleanup-scope>
 Remove only the worktree directory itself. Preserve all branches (local and remote) for
@@ -31,5 +30,4 @@ Worktree directory removed, all branches preserved, user returned to primary rep
 main with latest changes pulled.
 
 Celebrate the successful merge with congratulatory language acknowledging the completed
-work.
-</success-criteria>
+work. </success-criteria>

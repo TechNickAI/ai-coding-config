@@ -7,8 +7,7 @@ version: 1.0.0
 # AI Coding Configuration
 
 Plugin-first AI coding configurations for Claude Code, Cursor, Windsurf, and other AI
-coding tools. The marketplace lives at
-`https://github.com/TechNickAI/ai-coding-config`.
+coding tools. The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`.
 
 ## Usage
 
@@ -47,8 +46,8 @@ detected tools. Options:
 - Aider (AGENTS.md context)
 - Other (explain what you're using)
 
-If ONLY Claude Code detected (no Cursor/Windsurf), offer a pure plugin installation
-that skips rule files entirely.
+If ONLY Claude Code detected (no Cursor/Windsurf), offer a pure plugin installation that
+skips rule files entirely.
 
 </tool-detection>
 
@@ -63,19 +62,21 @@ else
   git clone https://github.com/TechNickAI/ai-coding-config.git ~/.ai_coding_config
 fi
 ```
+
 </repository-management>
 
 <claude-code-setup>
 For Claude Code users, guide them through the plugin marketplace:
 
-1. Explain the plugin system:
-   "Claude Code uses a plugin marketplace. You can install the plugins you want, and
-   they'll stay updated automatically."
+1. Explain the plugin system: "Claude Code uses a plugin marketplace. You can install
+   the plugins you want, and they'll stay updated automatically."
 
 2. Show available plugins from `~/.ai_coding_config/.claude-plugin/marketplace.json`:
    - **core** - Essential commands (autotask, troubleshoot, load-rules, etc.)
-   - **agents** - Specialized AI agents (debugger, code-reviewer, autonomous-developer, etc.)
-   - **skills** - Autonomous capabilities (research, brainstorming, systematic-debugging)
+   - **agents** - Specialized AI agents (debugger, code-reviewer, autonomous-developer,
+     etc.)
+   - **skills** - Autonomous capabilities (research, brainstorming,
+     systematic-debugging)
    - **personalities** - Pick one that matches your style
 
 3. Provide the commands to add the marketplace and install plugins:
@@ -116,31 +117,35 @@ Before installing, detect what already exists:
    - Proceed with update/refresh
 
 Detection:
+
 ```bash
 test -d .cursor/rules && echo "has .cursor/rules"
 test -L .cursor/rules && echo ".cursor/rules is symlink"
 test -d rules && echo "has rules/"
 test -f AGENTS.md && echo "has AGENTS.md"
 ```
+
 </existing-config-detection>
 
 <file-installation>
 Copy from `~/.ai_coding_config/plugins/` to project:
 
 Installation mapping:
+
 - Rules → `rules/` (copy from `~/.ai_coding_config/rules/`)
 - Commands → `.claude/commands/` symlink to `~/.ai_coding_config/plugins/core/commands/`
 - Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/agents/agents/`
 - Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/skills/skills/`
-- Personalities → `rules/personalities/` (copy selected personality, set `alwaysApply: true`)
+- Personalities → `rules/personalities/` (copy selected personality, set
+  `alwaysApply: true`)
 
 For Cursor/Windsurf:
+
 - `.cursor/rules/` → symlink to `../rules/`
 - `.cursor/commands/` → symlink to `.claude/commands/`
 - `.windsurf/rules/` → symlink to `../rules/` (if Windsurf)
 
-Handle conflicts with AskUserQuestion: overwrite, skip, show diff.
-</file-installation>
+Handle conflicts with AskUserQuestion: overwrite, skip, show diff. </file-installation>
 
 </cursor-windsurf-setup>
 
@@ -162,8 +167,8 @@ Use AskUserQuestion to present personality options:
 - **Luminous** - Heart-centered, spiritual, love-based
 - **None** - Use default Claude personality
 
-For Claude Code: Install the selected personality plugin.
-For Cursor/Windsurf: Copy personality file to `rules/personalities/` with `alwaysApply: true`.
+For Claude Code: Install the selected personality plugin. For Cursor/Windsurf: Copy
+personality file to `rules/personalities/` with `alwaysApply: true`.
 </personality-selection>
 
 <installation-verification>
@@ -174,13 +179,14 @@ For Cursor/Windsurf, confirm symlinks point correctly.
 <recommendations>
 Provide a warm summary of what was installed.
 
-For Claude Code users:
-"You're set up with the ai-coding-config plugin marketplace. Installed: [list plugins]"
+For Claude Code users: "You're set up with the ai-coding-config plugin marketplace.
+Installed: [list plugins]"
 
-For Cursor/Windsurf users:
-"Your project is configured with [X] rules, [Y] commands, and [Z] agents."
+For Cursor/Windsurf users: "Your project is configured with [X] rules, [Y] commands, and
+[Z] agents."
 
 Key commands to highlight:
+
 - `/autotask "your task"` - Autonomous development
 - `/address-pr-comments` - PR cleanup on autopilot
 - `/load-rules` - Smart context loading
@@ -201,12 +207,14 @@ First, pull latest from `~/.ai_coding_config`:
 ```bash
 cd ~/.ai_coding_config && git pull
 ```
+
 </repository-update>
 
 <plugin-migration-check>
 Check for deprecated plugins from pre-1.2.0 architecture.
 
 Detection - check if any of these plugins are installed:
+
 - `code-review` (consolidated into `agents`)
 - `dev-agents` (consolidated into `agents`)
 - `git-commits` (agent moved to `agents`)
@@ -215,13 +223,17 @@ Detection - check if any of these plugins are installed:
 If deprecated plugins found, explain the migration:
 
 "The plugin architecture has been reorganized in version 1.2.0:
-- **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into a single `agents` plugin
+
+- **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into
+  a single `agents` plugin
 - Tech-specific plugins (python, react, django) were placeholders and have been removed
-- New structure: `core` (commands), `agents` (all agents), `skills` (autonomous capabilities)
+- New structure: `core` (commands), `agents` (all agents), `skills` (autonomous
+  capabilities)
 
 You'll get MORE agents with the new structure, not fewer."
 
 Migration commands:
+
 ```bash
 # Uninstall deprecated plugins (run for each that's installed)
 /plugin uninstall code-review
@@ -267,15 +279,14 @@ Check for legacy architecture (v1 - Cursor-first):
 - `CLAUDE.md` is a real file (not symlink)
 
 If detected, offer migration:
-1. "Migrate to cross-tool architecture (Recommended)" - Moves rules to `rules/`, creates symlinks
+
+1. "Migrate to cross-tool architecture (Recommended)" - Moves rules to `rules/`, creates
+   symlinks
 2. "Skip migration, just update configs" - Updates within current structure
 
-Migration steps if accepted:
-a. `cp -r .cursor/rules rules-backup`
-b. `mv .cursor/rules rules`
-c. `ln -s ../rules .cursor/rules`
-d. Create AGENTS.md, symlink CLAUDE.md → AGENTS.md
-</architecture-check>
+Migration steps if accepted: a. `cp -r .cursor/rules rules-backup` b.
+`mv .cursor/rules rules` c. `ln -s ../rules .cursor/rules` d. Create AGENTS.md, symlink
+CLAUDE.md → AGENTS.md </architecture-check>
 
 <deprecated-files-check>
 Check for deprecated files in the user's PROJECT:
@@ -292,18 +303,20 @@ Note: Files in `~/.ai_coding_config` are updated via git pull automatically.
 Existing symlinks should continue working after the 1.2.0 update because the source
 repo's `.claude/` directories are now symlinks themselves (to `plugins/`).
 
-Chain example:
-`project/.claude/commands/` → `~/.ai_coding_config/.claude/commands/` → `../plugins/core/commands/`
+Chain example: `project/.claude/commands/` → `~/.ai_coding_config/.claude/commands/` →
+`../plugins/core/commands/`
 
 This resolves correctly. Only check symlinks if they point directly to old paths like:
+
 - `~/.ai_coding_config/plugins/code-review/` (deleted)
 - `~/.ai_coding_config/plugins/dev-agents/` (deleted)
 
 If direct symlinks to deleted paths found, offer to update:
+
 - `.claude/commands/` → `~/.ai_coding_config/plugins/core/commands/`
 - `.claude/agents/` → `~/.ai_coding_config/plugins/agents/agents/`
 - `.claude/skills/` → `~/.ai_coding_config/plugins/skills/skills/`
-</symlink-compatibility-check>
+  </symlink-compatibility-check>
 
 <file-updates>
 For Cursor/Windsurf, update COPIED files (rules, personalities) using version comparison. Symlinked files (commands, agents, skills) are already current from git pull.
@@ -316,7 +329,6 @@ When updates are available, use AskUserQuestion:
 - git-interaction.mdc: 1.0.0 → 1.1.0
 - prompt-engineering.mdc: 1.0.0 → 1.2.0
 - new-rule.mdc (new, v1.0.0)
-
 12 files already current."
 
 Options:
@@ -328,6 +340,8 @@ Options:
 When everything is current: "All files are up to date. No updates needed."
 
 For personalities, preserve the user's `alwaysApply` setting when updating content.
+Present update strategy: "Update all", "Update selectively", or custom.
+Never silently overwrite project customizations.
 </file-updates>
 
 </cursor-windsurf-update>
@@ -365,15 +379,16 @@ Decision framework:
 - **Personality**: Alternative interaction style
 
 Clarifying questions:
+
 1. Who triggers this - user manually or Claude autonomously?
 2. Needs isolated context window or uses main conversation?
-3. Must work in Cursor or Claude Code only acceptable?
-</mechanism-selection>
+3. Must work in Cursor or Claude Code only acceptable? </mechanism-selection>
 
 <artifact-creation>
 All new artifacts go in the appropriate plugin directory with `version: 1.0.0`:
 
-**Commands**: `plugins/core/commands/command-name.md`
+**Commands**: Create in `plugins/core/commands/command-name.md`
+
 ```yaml
 ---
 description: Brief explanation
@@ -382,7 +397,8 @@ version: 1.0.0
 ---
 ```
 
-**Skills**: `plugins/skills/skills/skill-name/SKILL.md`
+**Skills**: Create `plugins/skills/skills/skill-name/SKILL.md`
+
 ```yaml
 ---
 name: skill-name
@@ -391,7 +407,8 @@ version: 1.0.0
 ---
 ```
 
-**Agents**: `plugins/agents/agents/agent-name.md`
+**Agents**: Create in `plugins/agents/agents/agent-name.md`
+
 ```yaml
 ---
 name: agent-name
@@ -402,10 +419,11 @@ version: 1.0.0
 ---
 ```
 
-**Personalities**: `plugins/personalities/personality-name/`
-- `personality.mdc` with `version: 1.0.0` in frontmatter
-- `.claude-plugin/plugin.json`
-- Update marketplace.json
+**Personalities**: Create `plugins/personalities/personality-name/`
+
+- `personality.mdc` - The personality definition
+- `.claude-plugin/plugin.json` - Plugin manifest
+- Update marketplace.json to include new personality
 </artifact-creation>
 
 <creation-verification>

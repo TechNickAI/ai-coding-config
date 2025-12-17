@@ -27,25 +27,34 @@ If no personality name provided, show available personalities and ask which to a
 First, check if `~/.ai_coding_config` exists. This command requires the local ai-coding-config repository.
 
 If `~/.ai_coding_config` does NOT exist:
+
 - For Claude Code users: Suggest installing the personality plugin directly instead:
   `/plugin install personality-<name>` (e.g., `/plugin install personality-samantha`)
   Plugin installation handles personality activation automatically.
 - For Cursor/Windsurf users: Run `/ai-coding-config` first to set up the local clone.
 - Exit with helpful message explaining the options.
 
-If `~/.ai_coding_config` exists, proceed with the workflow below.
-</prerequisite-check>
+If `~/.ai_coding_config` exists, proceed with the workflow below. </prerequisite-check>
 
-Validate that the personality exists in `~/.ai_coding_config/plugins/personalities/personality-<name>/`. If `none` requested, remove personality.
+Validate that the personality exists in
+`~/.ai_coding_config/plugins/personalities/personality-<name>/`. If `none` requested,
+remove personality.
 
 For Claude Code: Read or create `.claude/context.md`. Check for existing
 `## Active Personality` section with `<!-- personality-<name> -->` comment. If
 personality exists and matches requested, confirm already active and stop. If different,
-remove entire section. If not removing (name != "none"), read personality file from `~/.ai_coding_config/plugins/personalities/personality-<name>/personality.mdc`, strip frontmatter, append to `.claude/context.md` with HTML comments marking boundaries.
+remove entire section. If not removing (name != "none"), read personality file from
+`~/.ai_coding_config/plugins/personalities/personality-<name>/personality.mdc`, strip
+frontmatter, append to `.claude/context.md` with HTML comments marking boundaries.
 
-For Cursor: Create local copies of personality files in `rules/personalities/` (do not use symlinks - we need to edit frontmatter). Copy all personality files from `~/.ai_coding_config/plugins/personalities/*/personality.mdc` to `rules/personalities/<name>.mdc`. Then update frontmatter: set `alwaysApply: true` for selected personality, set `alwaysApply: false` for all others.
+For Cursor: Create local copies of personality files in `rules/personalities/` (do not
+use symlinks - we need to edit frontmatter). Copy all personality files from
+`~/.ai_coding_config/plugins/personalities/*/personality.mdc` to
+`rules/personalities/<name>.mdc`. Then update frontmatter: set `alwaysApply: true` for
+selected personality, set `alwaysApply: false` for all others.
 
-IMPORTANT: Never edit symlinked files. Always work with local copies in `rules/personalities/` for Cursor, and `.claude/context.md` for Claude Code.
+IMPORTANT: Never edit symlinked files. Always work with local copies in
+`rules/personalities/` for Cursor, and `.claude/context.md` for Claude Code.
 
 Report results clearly showing what changed in both Claude Code and Cursor
 configurations. </workflow>

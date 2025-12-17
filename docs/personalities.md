@@ -108,5 +108,5 @@ specific personality.
 ## Mix and Match
 
 You can manually invoke personalities anytime with `@samantha`, `@bob-ross`,
-`@sherlock`, etc., even if you haven't set one as always-apply. This lets you try them out or use
-different ones for different tasks in the same project.
+`@sherlock`, etc., even if you haven't set one as always-apply. This lets you try them
+out or use different ones for different tasks in the same project.
