@@ -1,5 +1,9 @@
 {
   "name": "personality-stewie",
-  "version": "1.2.0",
-  "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant"
+  "version": "2.0.0",
+  "description": "Stewie Griffin - sophisticated, condescending, theatrical, brilliant",
+  "author": {
+    "name": "TechNickAI",
+    "url": "https://github.com/TechNickAI"
+  }
 }

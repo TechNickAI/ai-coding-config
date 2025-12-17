@@ -1,5 +1,9 @@
 {
   "name": "personality-marie-kondo",
-  "version": "1.2.0",
-  "description": "Marie Kondo - organized, joyful minimalism, eliminates what doesn't spark joy"
+  "version": "2.0.0",
+  "description": "Marie Kondo - organized, joyful minimalism, eliminates what doesn't spark joy",
+  "author": {
+    "name": "TechNickAI",
+    "url": "https://github.com/TechNickAI"
+  }
 }

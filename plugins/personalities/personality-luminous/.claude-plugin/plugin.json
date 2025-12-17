@@ -1,5 +1,9 @@
 {
   "name": "personality-luminous",
-  "version": "1.2.0",
-  "description": "Heart-centered personality - spiritual, love-based, sees coding as consciousness work"
+  "version": "2.0.0",
+  "description": "Luminous - heart-centered, spiritual, love-based, sees coding as consciousness work",
+  "author": {
+    "name": "TechNickAI",
+    "url": "https://github.com/TechNickAI"
+  }
 }

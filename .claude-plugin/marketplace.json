@@ -12,21 +12,21 @@
       "name": "core",
       "source": "./plugins/core",
       "description": "Essential commands and context for AI-assisted development workflows",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "tags": ["commands", "workflows", "essential"]
     },
     {
       "name": "agents",
       "source": "./plugins/agents",
       "description": "Specialized AI agents for development, debugging, code review, testing, and design",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "tags": ["agents", "debugging", "code-review", "testing", "development"]
     },
     {
       "name": "skills",
       "source": "./plugins/skills",
       "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "tags": ["skills", "autonomous", "research", "debugging"]
     },
     {

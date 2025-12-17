@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 1.2.0
+version: 2.0.1
 ---
 
 # AI Coding Configuration
@@ -250,16 +250,18 @@ After pulling from the repository, detect if this command file (commands/ai-codi
 <plugin-migration-check>
 Check for deprecated plugins from pre-1.2.0 architecture.
 
-Detection - check if any of these plugins are installed:
+**Detection method:** Read the installed plugins JSON file at `~/.claude/plugins/installed_plugins.json`. Look for these deprecated plugin names:
 
 - `code-review` (consolidated into `agents`)
 - `dev-agents` (consolidated into `agents`)
 - `git-commits` (agent moved to `agents`)
 - `python`, `react`, `django`, `code-standards` (removed - were empty placeholders)
 
+Only list plugins that are ACTUALLY in the installed_plugins.json file.
+
 If deprecated plugins found, explain the migration:
 
-"The plugin architecture has been reorganized in version 1.2.0:
+"The plugin architecture has been reorganized in version 2.0.0:
 
 - **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into
   a single `agents` plugin
@@ -269,21 +271,24 @@ If deprecated plugins found, explain the migration:
 
 You'll get MORE agents with the new structure, not fewer."
 
-Migration commands:
+**Migration execution:**
+
+For each deprecated plugin that IS installed, try to uninstall it. If uninstall fails (because the source was already removed from the marketplace), that's okay - continue with the next one. The goal is to clean up installed_plugins.json.
 
 ```bash
-# Uninstall deprecated plugins (run for each that's installed)
-/plugin uninstall code-review
-/plugin uninstall dev-agents
-/plugin uninstall git-commits
-/plugin uninstall python
-/plugin uninstall react
-/plugin uninstall django
-/plugin uninstall code-standards
-
-# Install new consolidated plugins
-/plugin install core agents skills
+# Example for one plugin - run via bash with claude CLI
+claude plugin uninstall code-review@ai-coding-config
 ```
+
+After cleaning up deprecated plugins, install the new consolidated plugins:
+
+```bash
+claude plugin install core@ai-coding-config
+claude plugin install agents@ai-coding-config
+claude plugin install skills@ai-coding-config
+```
+
+**Error handling:** If install fails with "Unrecognized key" errors, the plugin manifest format may be incompatible with the current Claude Code version. Report this to the user and suggest they update Claude Code or file an issue on the ai-coding-config repository.
 
 Offer: "Migrate to new plugin structure (Recommended)" or "Skip migration"
 </plugin-migration-check>
