@@ -1,6 +1,6 @@
 ---
-description: Set up, update, or add AI coding configurations
-argument-hint: [update | add]
+description: Set up or update AI coding configurations
+argument-hint: [update]
 version: 1.0.0
 ---
 
@@ -13,7 +13,6 @@ The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`.
 
 - `/ai-coding-config` - Interactive setup for current project
 - `/ai-coding-config update` - Update plugins and configs to latest versions
-- `/ai-coding-config add` - Add new command/skill/agent/plugin to the repo
 
 ## Interaction Guidelines
 
@@ -363,79 +362,6 @@ For Cursor:
 </update-summary>
 
 </update-mode>
-
----
-
-<add-mode>
-Help contributors add new functionality to the ai-coding-config repo itself.
-
-<understanding-need>
-Ask for functionality description. Work through clarifying questions to determine the
-right mechanism.
-</understanding-need>
-
-<mechanism-selection>
-Decision framework:
-
-- **Command**: User manually triggers, works in both Claude Code and Cursor
-- **Skill**: Claude autonomously activates, Claude Code only
-- **Agent**: Claude delegates focused work with isolated context
-- **Personality**: Alternative interaction style
-
-Clarifying questions:
-
-1. Who triggers this - user manually or Claude autonomously?
-2. Needs isolated context window or uses main conversation?
-3. Must work in Cursor or Claude Code only acceptable? </mechanism-selection>
-
-<artifact-creation>
-All new artifacts go in the appropriate plugin directory with `version: 1.0.0`:
-
-**Commands**: Create in `plugins/core/commands/command-name.md`
-
-```yaml
----
-description: Brief explanation
-argument-hint: [optional args]
-version: 1.0.0
----
-```
-
-**Skills**: Create `plugins/skills/skills/skill-name/SKILL.md`
-
-```yaml
----
-name: skill-name
-description: "Use when [trigger]. Does [what] to achieve [outcome]."
-version: 1.0.0
----
-```
-
-**Agents**: Create in `plugins/agents/agents/agent-name.md`
-
-```yaml
----
-name: agent-name
-description: "Invoke when [trigger]"
-tools: Read, Write, Edit, Grep, Glob, Bash
-model: sonnet
-version: 1.0.0
----
-```
-
-**Personalities**: Create `plugins/personalities/personality-name/`
-
-- `personality.mdc` - The personality definition
-- `.claude-plugin/plugin.json` - Plugin manifest
-- Update marketplace.json to include new personality
-</artifact-creation>
-
-<creation-verification>
-Verify files are in correct locations and symlinks work. Test the new functionality.
-Update marketplace.json if needed.
-</creation-verification>
-
-</add-mode>
 
 ---
 
