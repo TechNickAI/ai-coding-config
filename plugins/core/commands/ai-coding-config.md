@@ -205,10 +205,10 @@ Update all configurations to latest versions.
 Update the Claude Code plugin marketplace first. This pulls the latest plugin definitions and updates any installed plugins:
 
 ```bash
-/plugin marketplace update ai-coding-config
+claude /plugin marketplace update ai-coding-config
 ```
 
-This updates Claude Code's cached marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refreshes installed plugins.
+This invokes the Claude Code CLI to update the marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refreshes installed plugins.
 
 </marketplace-update>
 
