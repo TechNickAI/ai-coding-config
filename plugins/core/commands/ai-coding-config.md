@@ -6,8 +6,8 @@ version: 1.0.0
 
 # AI Coding Configuration
 
-Plugin-first AI coding configurations for Claude Code, Cursor, Windsurf, and other AI
-coding tools. The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`.
+Plugin-first AI coding configurations for Claude Code, Cursor, and other AI coding tools.
+The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`.
 
 ## Usage
 
@@ -31,7 +31,6 @@ Detect which AI coding tools the user has. Check for:
 ```bash
 # Detection commands
 test -d .cursor && echo "cursor"
-test -d .windsurf && echo "windsurf"
 test -d .claude && echo "claude-code"
 test -f .aider.conf.yml && echo "aider"
 test -d .continue && echo "continue"
@@ -42,12 +41,11 @@ detected tools. Options:
 
 - Claude Code (plugin marketplace)
 - Cursor (rules + commands via symlinks)
-- Windsurf (rules via symlinks)
 - Aider (AGENTS.md context)
 - Other (explain what you're using)
 
-If ONLY Claude Code detected (no Cursor/Windsurf), offer a pure plugin installation that
-skips rule files entirely.
+If ONLY Claude Code detected (no Cursor), offer a pure plugin installation that skips
+rule files entirely.
 
 </tool-detection>
 
@@ -97,14 +95,14 @@ For Claude Code users, guide them through the plugin marketplace:
 
 </claude-code-setup>
 
-<cursor-windsurf-setup>
-For Cursor and Windsurf users, set up symlinks to the plugin content.
+<cursor-setup>
+For Cursor users, set up symlinks to the plugin content.
 
 <existing-config-detection>
 Before installing, detect what already exists:
 
 1. **Fresh project** (no existing configs)
-   - Create `rules/` as canonical, symlink `.cursor/rules/` → `../rules/`
+   - Create `.cursor/rules/` directory
    - Create `AGENTS.md`, symlink `CLAUDE.md` → `AGENTS.md`
 
 2. **Existing rules, no AI coding config yet**
@@ -115,6 +113,11 @@ Before installing, detect what already exists:
 3. **Already has AI coding config**
    - Check for symlinks pointing to `~/.ai_coding_config`
    - Proceed with update/refresh
+
+Note: `.cursor/rules/` is the canonical location for Cursor rules. In user projects,
+rules live directly in `.cursor/rules/` with no root-level symlink. In the
+ai-coding-config repo itself, `rules/` exists as a symlink to `.cursor/rules/` for
+visibility.
 
 Detection:
 
@@ -132,22 +135,20 @@ Copy from `~/.ai_coding_config/plugins/` to project:
 
 Installation mapping:
 
-- Rules → `rules/` (copy from `~/.ai_coding_config/rules/`)
+- Rules → `.cursor/rules/` (copy from `~/.ai_coding_config/.cursor/rules/`)
 - Commands → `.claude/commands/` symlink to `~/.ai_coding_config/plugins/core/commands/`
 - Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/agents/agents/`
 - Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/skills/skills/`
-- Personalities → `rules/personalities/` (copy selected personality, set
+- Personalities → `.cursor/rules/personalities/` (copy selected personality, set
   `alwaysApply: true`)
 
-For Cursor/Windsurf:
+For Cursor:
 
-- `.cursor/rules/` → symlink to `../rules/`
 - `.cursor/commands/` → symlink to `.claude/commands/`
-- `.windsurf/rules/` → symlink to `../rules/` (if Windsurf)
 
 Handle conflicts with AskUserQuestion: overwrite, skip, show diff. </file-installation>
 
-</cursor-windsurf-setup>
+</cursor-setup>
 
 <project-understanding>
 Detect project type: Django, FastAPI, React, Next.js, etc. Look for package.json,
@@ -167,13 +168,13 @@ Use AskUserQuestion to present personality options:
 - **Luminous** - Heart-centered, spiritual, love-based
 - **None** - Use default Claude personality
 
-For Claude Code: Install the selected personality plugin. For Cursor/Windsurf: Copy
-personality file to `rules/personalities/` with `alwaysApply: true`.
+For Claude Code: Install the selected personality plugin. For Cursor: Copy personality
+file to `.cursor/rules/personalities/` with `alwaysApply: true`.
 </personality-selection>
 
 <installation-verification>
 Confirm files are in expected locations. For Claude Code, confirm plugins are installed.
-For Cursor/Windsurf, confirm symlinks point correctly.
+For Cursor, confirm symlinks point correctly.
 </installation-verification>
 
 <recommendations>
@@ -182,8 +183,8 @@ Provide a warm summary of what was installed.
 For Claude Code users: "You're set up with the ai-coding-config plugin marketplace.
 Installed: [list plugins]"
 
-For Cursor/Windsurf users: "Your project is configured with [X] rules, [Y] commands, and
-[Z] agents."
+For Cursor users: "Your project is configured with [X] rules, [Y] commands, and [Z]
+agents."
 
 Key commands to highlight:
 
@@ -270,23 +271,28 @@ For Claude Code users with plugins installed:
 
 </claude-code-update>
 
-<cursor-windsurf-update>
-For Cursor/Windsurf users with symlinks:
+<cursor-update>
+For Cursor users with symlinks:
 
 <architecture-check>
-Check for legacy architecture (v1 - Cursor-first):
-- `.cursor/rules/` is a real directory (not symlink)
-- `CLAUDE.md` is a real file (not symlink)
+Check for legacy v2 architecture (rules/ at root):
+- `rules/` is a real directory
+- `.cursor/rules/` is a symlink to `../rules/`
 
-If detected, offer migration:
+If detected, offer migration back to standard architecture:
 
-1. "Migrate to cross-tool architecture (Recommended)" - Moves rules to `rules/`, creates
-   symlinks
+1. "Migrate to standard architecture (Recommended)" - Moves rules back to `.cursor/rules/`, removes root symlink
 2. "Skip migration, just update configs" - Updates within current structure
 
-Migration steps if accepted: a. `cp -r .cursor/rules rules-backup` b.
-`mv .cursor/rules rules` c. `ln -s ../rules .cursor/rules` d. Create AGENTS.md, symlink
-CLAUDE.md → AGENTS.md </architecture-check>
+Migration steps if accepted:
+a. `rm .cursor/rules` (remove symlink)
+b. `mv rules .cursor/rules` (move real directory back)
+c. Update configs to point to `.cursor/rules/`
+
+Current architecture (no migration needed):
+- `.cursor/rules/` is a real directory
+- No `rules/` directory at root in user projects
+</architecture-check>
 
 <deprecated-files-check>
 Check for deprecated files in the user's PROJECT:
@@ -319,7 +325,8 @@ If direct symlinks to deleted paths found, offer to update:
   </symlink-compatibility-check>
 
 <file-updates>
-For Cursor/Windsurf, update COPIED files (rules, personalities) using version comparison. Symlinked files (commands, agents, skills) are already current from git pull.
+For Cursor, update COPIED files (rules, personalities) using version comparison.
+Symlinked files (commands, agents, skills) are already current from git pull.
 
 Each file has a `version: X.Y.Z` field in frontmatter. Missing version = v0.0.0. Offer updates only when source version is newer than installed version.
 
@@ -344,13 +351,13 @@ Present update strategy: "Update all", "Update selectively", or custom.
 Never silently overwrite project customizations.
 </file-updates>
 
-</cursor-windsurf-update>
+</cursor-update>
 
 <update-summary>
 For Claude Code:
 "Updated core, agents, skills plugins to version 1.2.0"
 
-For Cursor/Windsurf:
+For Cursor:
 "Update complete:
 - git-interaction.mdc: 1.0.0 → 1.1.0
 - prompt-engineering.mdc: 1.0.0 → 1.2.0
