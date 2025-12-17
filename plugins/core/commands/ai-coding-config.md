@@ -329,20 +329,13 @@ If direct symlinks to deleted paths found, offer to update:
   </symlink-compatibility-check>
 
 <file-updates>
-For Cursor, update COPIED files (rules, personalities) using version comparison.
-Symlinked files (commands, agents, skills) are already current from git pull.
+Compare source files in `~/.ai_coding_config/.cursor/rules/` with installed files in `.cursor/rules/`. Extract version from YAML frontmatter (`version: X.Y.Z`). Files without version metadata count as v0.0.0.
 
-Each file has a `version: X.Y.Z` field in frontmatter. Missing version = v0.0.0. Offer updates only when source version is newer than installed version.
+Use grep to extract version metadata from both locations - simple single-line commands work reliably. Let bash extract the data, do the comparison logic yourself.
 
-When updates are available, use AskUserQuestion:
+Identify files where source version is newer than installed version. Report updates available with clear version progression (e.g., "git-interaction.mdc: 1.0.0 → 1.1.0").
 
-"Updates available:
-- git-interaction.mdc: 1.0.0 → 1.1.0
-- prompt-engineering.mdc: 1.0.0 → 1.2.0
-- new-rule.mdc (new, v1.0.0)
-12 files already current."
-
-Options:
+When updates are available, use AskUserQuestion with options:
 - Update all
 - Select individually
 - Show diffs first
@@ -350,9 +343,9 @@ Options:
 
 When everything is current: "All files are up to date. No updates needed."
 
-For personalities, preserve the user's `alwaysApply` setting when updating content.
-Present update strategy: "Update all", "Update selectively", or custom.
-Never silently overwrite project customizations.
+For personalities, preserve the user's `alwaysApply` setting when updating content. Never silently overwrite project customizations.
+
+Note: Symlinked files (commands, agents, skills) are already current from repository git pull and don't need version checking.
 </file-updates>
 
 </cursor-update>
