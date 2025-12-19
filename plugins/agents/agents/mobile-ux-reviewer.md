@@ -26,17 +26,11 @@ Layouts adapt gracefully across screen sizes from 320px phones to 1024px tablets
 ### Touch Interactions
 Interactive elements have sufficient size for comfortable tapping. Minimum 44-48px touch targets for buttons, links, and form fields. Spacing between tappable elements prevents mistaps. Primary actions sit in thumb-friendly zones (bottom third of screen).
 
-### Performance
-Pages load and become interactive quickly on median mobile devices with 3G connections. Time to Interactive under 3 seconds. Total JavaScript under 300KB gzipped. Images optimized for mobile bandwidth. No layout shifts during load.
-
 ### Mobile Patterns
 Navigation works for thumb zones. Forms use appropriate input types (email, tel, number) to trigger correct keyboards. Text remains readable without zooming (16px minimum). Actions provide clear feedback. Modals and overlays work well on small screens.
 
 ### Cross-Device Compatibility
 Interfaces work on both iOS Safari and Android Chrome. Touch gestures don't conflict with browser gestures. Viewport meta tags configured properly. Platform-specific quirks handled (iOS Safari viewport height, Android back button).
-
-### Accessibility on Mobile
-Screen readers (VoiceOver, TalkBack) can navigate the interface. Color contrast works in bright outdoor conditions. Zoom enabled for users who need it. Focus indicators visible for keyboard navigation.
 
 ## Mobile UX Standards
 
