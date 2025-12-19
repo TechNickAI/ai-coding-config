@@ -22,7 +22,7 @@
       "name": "agents",
       "source": "./plugins/agents",
       "description": "Specialized AI agents for development, debugging, code review, testing, and design",
-      "version": "2.0.1",
+      "version": "2.1.0",
       "tags": ["agents", "debugging", "code-review", "testing", "development"]
     },
     {
