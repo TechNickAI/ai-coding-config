@@ -103,7 +103,7 @@ For Claude Code users, guide them through the plugin marketplace:
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
 
 # Install plugins
-/plugin install core agents skills
+/plugin install ai-coding-config agents skills
 
 # Optional: Install a personality
 /plugin install personality-samantha
@@ -248,10 +248,11 @@ After pulling from the repository, detect if this command file (commands/ai-codi
 </self-update-check>
 
 <plugin-migration-check>
-Check for deprecated plugins from pre-1.2.0 architecture.
+Check for deprecated or renamed plugins.
 
-**Detection method:** Read the installed plugins JSON file at `~/.claude/plugins/installed_plugins.json`. Look for these deprecated plugin names:
+**Detection method:** Read the installed plugins JSON file at `~/.claude/plugins/installed_plugins.json`. Look for these deprecated/renamed plugin names:
 
+- `core` (renamed to `ai-coding-config` in v3.0.0)
 - `code-review` (consolidated into `agents`)
 - `dev-agents` (consolidated into `agents`)
 - `git-commits` (agent moved to `agents`)
@@ -261,12 +262,16 @@ Only list plugins that are ACTUALLY in the installed_plugins.json file.
 
 If deprecated plugins found, explain the migration:
 
-"The plugin architecture has been reorganized in version 2.0.0:
+"The plugin architecture has been updated:
 
+**v3.0.0 changes:**
+- The `core` plugin has been renamed to `ai-coding-config` for clearer namespacing
+
+**v2.0.0 changes:**
 - **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into
   a single `agents` plugin
 - Tech-specific plugins (python, react, django) were placeholders and have been removed
-- New structure: `core` (commands), `agents` (all agents), `skills` (autonomous
+- Structure: `ai-coding-config` (commands), `agents` (all agents), `skills` (autonomous
   capabilities)
 
 You'll get MORE agents with the new structure, not fewer."
@@ -276,14 +281,15 @@ You'll get MORE agents with the new structure, not fewer."
 For each deprecated plugin that IS installed, try to uninstall it. If uninstall fails (because the source was already removed from the marketplace), that's okay - continue with the next one. The goal is to clean up installed_plugins.json.
 
 ```bash
-# Example for one plugin - run via bash with claude CLI
-claude plugin uninstall code-review@ai-coding-config
+# Uninstall renamed/deprecated plugins - run via bash with claude CLI
+claude plugin uninstall core@ai-coding-config  # renamed to ai-coding-config
+claude plugin uninstall code-review@ai-coding-config  # consolidated into agents
 ```
 
 After cleaning up deprecated plugins, install the new consolidated plugins:
 
 ```bash
-claude plugin install core@ai-coding-config
+claude plugin install ai-coding-config@ai-coding-config
 claude plugin install agents@ai-coding-config
 claude plugin install skills@ai-coding-config
 ```
@@ -296,7 +302,7 @@ Offer: "Migrate to new plugin structure (Recommended)" or "Skip migration"
 <local-duplicate-cleanup>
 Check for local file duplication when marketplace plugins are installed.
 
-**Detection method:** Read `~/.claude/plugins/installed_plugins.json` to see if marketplace plugins are installed (core, agents, skills). If plugins are installed, check if the user also has local copies in their project.
+**Detection method:** Read `~/.claude/plugins/installed_plugins.json` to see if marketplace plugins are installed (ai-coding-config, agents, skills). If plugins are installed, check if the user also has local copies in their project.
 
 Check for these local directories:
 - `.claude/commands/` (as a real directory, not symlink)
@@ -382,7 +388,7 @@ For Claude Code users with plugins installed:
 
 ```bash
 # Update all plugins from the marketplace
-/plugin update core
+/plugin update ai-coding-config
 /plugin update agents
 /plugin update skills
 # Update personality if installed
