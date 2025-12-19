@@ -88,7 +88,7 @@ expertise (debugging, code review).
 | [Commands](plugins/core/commands/)      | 14    | Automate workflows      |
 | [Agents](plugins/core/agents/)          | 13    | Specialized assistants  |
 | [Rules](rules/)                         | 32    | Coding standards        |
-| [Skills](plugins/skills/skills/)        | 5     | Autonomous capabilities |
+| [Skills](plugins/core/skills/)          | 5     | Autonomous capabilities |
 | [Personalities](plugins/personalities/) | 7     | Communication styles    |
 
 ### Highlighted Commands

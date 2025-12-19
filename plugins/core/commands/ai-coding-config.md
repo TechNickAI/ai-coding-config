@@ -157,7 +157,7 @@ Installation mapping:
 - Rules → `.cursor/rules/` (copy from `~/.ai_coding_config/.cursor/rules/`)
 - Commands → `.claude/commands/` symlink to `~/.ai_coding_config/plugins/core/commands/`
 - Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/core/agents/`
-- Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/skills/skills/`
+- Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/core/skills/`
 - Personalities → `.cursor/rules/personalities/` (copy selected personality, set
   `alwaysApply: true`)
 
@@ -299,8 +299,8 @@ For each directory type (commands, agents, skills):
 
 Example paths to check:
 - Commands: `~/.claude/plugins/cache/ai-coding-config/core/*/commands/` vs `.claude/commands/`
-- Agents: `~/.claude/plugins/cache/ai-coding-config/agents/*/agents/` vs `.claude/agents/`
-- Skills: `~/.claude/plugins/cache/ai-coding-config/skills/*/skills/` vs `.claude/skills/`
+- Agents: `~/.claude/plugins/cache/ai-coding-config/core/*/agents/` vs `.claude/agents/`
+- Skills: `~/.claude/plugins/cache/ai-coding-config/core/*/skills/` vs `.claude/skills/`
 
 Get the plugin version from installed_plugins.json to construct the correct path.
 
@@ -420,12 +420,14 @@ This resolves correctly. Only check symlinks if they point directly to old paths
 
 - `~/.ai_coding_config/plugins/code-review/` (deleted)
 - `~/.ai_coding_config/plugins/dev-agents/` (deleted)
+- `~/.ai_coding_config/plugins/skills/` (deleted)
+- `~/.ai_coding_config/plugins/agents/` (deleted)
 
 If direct symlinks to deleted paths found, offer to update:
 
 - `.claude/commands/` → `~/.ai_coding_config/plugins/core/commands/`
 - `.claude/agents/` → `~/.ai_coding_config/plugins/core/agents/`
-- `.claude/skills/` → `~/.ai_coding_config/plugins/skills/skills/`
+- `.claude/skills/` → `~/.ai_coding_config/plugins/core/skills/`
   </symlink-compatibility-check>
 
 <file-updates>
