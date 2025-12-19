@@ -5,7 +5,10 @@
     "url": "https://github.com/TechNickAI"
   },
   "metadata": {
-    "description": "Professional AI coding configurations, agents, skills, and personalities for Claude Code and Cursor"
+    "description": "Professional AI coding configurations, agents, skills, and personalities for Claude Code and Cursor",
+    "version": "3.0.0",
+    "license": "MIT",
+    "repository": "https://github.com/TechNickAI/ai-coding-config"
   },
   "plugins": [
     {
