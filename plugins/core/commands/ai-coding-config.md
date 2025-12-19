@@ -248,55 +248,31 @@ After pulling from the repository, detect if this command file (commands/ai-codi
 </self-update-check>
 
 <plugin-migration-check>
-Check for deprecated or renamed plugins.
+Dynamically detect and clean up deprecated or renamed plugins.
 
-**Detection method:** Read the installed plugins JSON file at `~/.claude/plugins/installed_plugins.json`. Look for these deprecated/renamed plugin names:
+**Detection method:**
 
-- `core` (renamed to `ai-coding-config` in v3.0.0)
-- `code-review` (consolidated into `agents`)
-- `dev-agents` (consolidated into `agents`)
-- `git-commits` (agent moved to `agents`)
-- `python`, `react`, `django`, `code-standards` (removed - were empty placeholders)
+1. Read `~/.claude/plugins/installed_plugins.json` to find all plugins installed from the `ai-coding-config` marketplace (keys ending in `@ai-coding-config`)
 
-Only list plugins that are ACTUALLY in the installed_plugins.json file.
+2. Read the current marketplace.json from the repo at `~/.ai_coding_config/.claude-plugin/marketplace.json` to get the list of valid plugin names
 
-If deprecated plugins found, explain the migration:
+3. Compare: Any installed plugin name that doesn't exist in the current marketplace = deprecated/removed
 
-"The plugin architecture has been updated:
-
-**v3.0.0 changes:**
-- The `core` plugin has been renamed to `ai-coding-config` for clearer namespacing
-
-**v2.0.0 changes:**
-- **code-review**, **dev-agents**, and **git-commits** agents are now consolidated into
-  a single `agents` plugin
-- Tech-specific plugins (python, react, django) were placeholders and have been removed
-- Structure: `ai-coding-config` (commands), `agents` (all agents), `skills` (autonomous
-  capabilities)
-
-You'll get MORE agents with the new structure, not fewer."
+This approach is future-proof and doesn't require maintaining a hardcoded list.
 
 **Migration execution:**
 
-For each deprecated plugin that IS installed, try to uninstall it. If uninstall fails (because the source was already removed from the marketplace), that's okay - continue with the next one. The goal is to clean up installed_plugins.json.
+For each deprecated plugin found:
 
-```bash
-# Uninstall renamed/deprecated plugins - run via bash with claude CLI
-claude plugin uninstall core@ai-coding-config  # renamed to ai-coding-config
-claude plugin uninstall code-review@ai-coding-config  # consolidated into agents
-```
+1. Try to uninstall it: `claude plugin uninstall {plugin}@ai-coding-config`
 
-After cleaning up deprecated plugins, install the new consolidated plugins:
+2. If uninstall fails (plugin already gone from marketplace), manually remove the entry from `~/.claude/plugins/installed_plugins.json`
 
-```bash
-claude plugin install ai-coding-config@ai-coding-config
-claude plugin install agents@ai-coding-config
-claude plugin install skills@ai-coding-config
-```
+3. After cleanup, install the current plugins that aren't already installed
 
 **Error handling:** If install fails with "Unrecognized key" errors, the plugin manifest format may be incompatible with the current Claude Code version. Report this to the user and suggest they update Claude Code or file an issue on the ai-coding-config repository.
 
-Offer: "Migrate to new plugin structure (Recommended)" or "Skip migration"
+Offer: "Clean up deprecated plugins (Recommended)" or "Skip cleanup"
 </plugin-migration-check>
 
 <local-duplicate-cleanup>

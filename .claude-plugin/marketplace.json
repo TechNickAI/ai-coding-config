@@ -15,7 +15,7 @@
       "name": "ai-coding-config",
       "source": "./plugins/core",
       "description": "Essential commands and context for AI-assisted development workflows",
-      "version": "2.1.1",
+      "version": "3.0.0",
       "tags": ["commands", "workflows", "essential"]
     },
     {
