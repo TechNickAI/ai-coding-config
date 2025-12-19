@@ -1,9 +1,0 @@
-{
-  "name": "agents",
-  "version": "2.1.0",
-  "description": "Specialized AI agents for development, debugging, code review, testing, and design",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}

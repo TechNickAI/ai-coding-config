@@ -156,7 +156,7 @@ Installation mapping:
 
 - Rules → `.cursor/rules/` (copy from `~/.ai_coding_config/.cursor/rules/`)
 - Commands → `.claude/commands/` symlink to `~/.ai_coding_config/plugins/core/commands/`
-- Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/agents/agents/`
+- Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/core/agents/`
 - Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/skills/skills/`
 - Personalities → `.cursor/rules/personalities/` (copy selected personality, set
   `alwaysApply: true`)
@@ -424,7 +424,7 @@ This resolves correctly. Only check symlinks if they point directly to old paths
 If direct symlinks to deleted paths found, offer to update:
 
 - `.claude/commands/` → `~/.ai_coding_config/plugins/core/commands/`
-- `.claude/agents/` → `~/.ai_coding_config/plugins/agents/agents/`
+- `.claude/agents/` → `~/.ai_coding_config/plugins/core/agents/`
 - `.claude/skills/` → `~/.ai_coding_config/plugins/skills/skills/`
   </symlink-compatibility-check>
 
