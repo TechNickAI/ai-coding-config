@@ -20,6 +20,9 @@ Cursor, Windsurf, Cline - whatever you use.
 
 ```bash
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
+```
+
+```bash
 /plugin install ai-coding-config agents skills
 ```
 
