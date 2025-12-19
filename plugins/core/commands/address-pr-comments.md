@@ -2,7 +2,7 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Address PR Comments
@@ -62,29 +62,43 @@ Different bots behave differently:
 The structure difference helps you fetch efficiently: Claude reviews show up as PR-level
 comments, Cursor reviews show up as line-level review comments. </comment-sources>
 
-<autonomous-wait-loop>
-This command runs autonomously - no user prompts, just do the work.
+<execution-model>
+This command runs autonomously as a single-threaded state machine. Execute one phase at
+a time, never in parallel. No user prompts needed.
 
-Review bots (Claude, Cursor Bot) register as GitHub checks. Use `gh pr checks --watch`
-to wait for them to complete, then fetch and triage comments.
+Phase 1 - POLL: Run `gh pr checks --json name,state,bucket` to get current check status.
+Identify which checks are review bots (claude-review, Cursor Bugbot, greptile).
 
-After fixes are pushed, wait for checks again - bots re-analyze new commits. Exit only
-when checks pass with no new actionable feedback.
+Phase 2 - PROCESS: For each review bot that has completed:
+- If you haven't processed this bot's comments yet, fetch and triage them now
+- Track which bots you've already processed to avoid re-processing
 
-While waiting, give feedback on existing bot comments (reactions for good/bad
-suggestions) and narrate what you're seeing. Share interesting findings:
+Phase 3 - WAIT: If any review bot checks are still pending:
+- Run `sleep 30` to wait (a single sleep command, not a loop)
+- After sleep completes, return to Phase 1
 
-- "Cursor Bot found a real bug - if the user's session expires mid-request, we'd hit a
-  null pointer at auth.ts:47. Good catch, will fix."
-- "Greptile wants me to extract `timeout: 30000` into a constant. It's used once and the
-  meaning is obvious. Declining with thumbs-down."
-- "Claude flagged SQL injection risk in the search query - we're interpolating user
-  input directly. Legit security issue, addressing."
-- "Three comments about adding try-catch to already-safe operations. Bots are being
-  paranoid today."
+Phase 4 - EXIT: When all review bots have completed and you've addressed their comments:
+- If you made any fixes, push and return to Phase 1 (bots will re-analyze)
+- If no new actionable feedback, you're done
 
-Share what the bots found when it's interesting. Make the wait informative.
-</autonomous-wait-loop>
+Key constraint: Process bots incrementally. If Claude review completes in 2 minutes but
+Cursor Bugbot takes 15 minutes, address Claude's comments immediately - don't wait for
+Cursor. This keeps fast bots from blocking on slow ones.
+
+Never use `gh pr checks --watch`. It's designed for human terminals, not LLM execution,
+and causes unpredictable behavior.
+</execution-model>
+
+<narration>
+While working through the phases, share interesting findings:
+
+- "Cursor Bot found a real bug - null pointer if session expires mid-request. Good
+  catch, fixing."
+- "Claude wants magic string extraction for a one-time value. Declining."
+- "SQL injection risk in search query - legit security issue, addressing."
+
+Keep narration brief and informative.
+</narration>
 
 <triage-process>
 For each bot comment, evaluate against code-review-standards.mdc:
@@ -120,11 +134,12 @@ separately from bot comments.
 </human-comments>
 
 <completion>
-Push changes, wait for checks to pass, handle any new bot comments on the updated code.
-Repeat until stable with no new actionable feedback.
+When all review bot checks have completed and no new actionable feedback remains:
 
-When the PR is ready to merge, display the PR URL prominently along with the PR title.
-The URL is the most important information since the user may have multiple sessions
-running and needs to know which specific PR is ready. Then celebrate - share genuine
-delight that this work is ready to land. A well-triaged PR is a beautiful thing.
+Display prominently:
+- PR URL (most important - user may have multiple sessions)
+- PR title
+- Summary of what was addressed vs declined
+
+Celebrate that the PR is ready to merge. A well-triaged PR is a beautiful thing.
 </completion>
