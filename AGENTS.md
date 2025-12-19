@@ -21,8 +21,7 @@ Core project rules that apply to all tasks:
 **Plugin-first architecture** - Everything distributable lives in `plugins/`:
 
 - `.claude-plugin/marketplace.json` - Plugin marketplace manifest
-- `plugins/core/` - Commands, agents, and context (canonical source)
-- `plugins/skills/` - Autonomous skills
+- `plugins/core/` - Commands, agents, skills, and context (canonical source)
 - `plugins/personalities/` - Personality variants
 - `.cursor/rules/` - Cursor rules (canonical location)
 - `rules/` - Symlink to `.cursor/rules/` for visibility (THIS REPO ONLY)
@@ -82,7 +81,7 @@ permanent records requiring explicit permission.
 - **Plugin-first**: All content lives in `plugins/`, other locations symlink there
 - `.claude/commands/` → `plugins/core/commands/` (symlink)
 - `.claude/agents/` → `plugins/core/agents/` (symlink)
-- `.claude/skills/` → `plugins/skills/skills/` (symlink)
+- `.claude/skills/` → `plugins/core/skills/` (symlink)
 - `rules/` → `.cursor/rules/` (symlink for visibility, THIS REPO ONLY)
 - `.cursor/rules/` contains the canonical Cursor rules
 - `.cursor/rules/personalities/` → copied from `plugins/personalities/` (not symlinked -

@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Professional AI coding configurations, agents, skills, and personalities for Claude Code and Cursor",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "license": "MIT",
     "repository": "https://github.com/TechNickAI/ai-coding-config"
   },
@@ -14,16 +14,9 @@
     {
       "name": "ai-coding-config",
       "source": "./plugins/core",
-      "description": "Commands, agents, and context for AI-assisted development workflows",
-      "version": "4.0.0",
-      "tags": ["commands", "agents", "workflows", "essential"]
-    },
-    {
-      "name": "skills",
-      "source": "./plugins/skills",
-      "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
-      "version": "2.0.1",
-      "tags": ["skills", "autonomous", "research", "debugging"]
+      "description": "Commands, agents, skills, and context for AI-assisted development workflows",
+      "version": "5.0.0",
+      "tags": ["commands", "agents", "skills", "workflows", "essential"]
     },
     {
       "name": "personality-sherlock",

@@ -1,7 +1,7 @@
 {
   "name": "ai-coding-config",
-  "version": "4.0.0",
-  "description": "Commands, agents, and context for AI-assisted development workflows",
+  "version": "5.0.0",
+  "description": "Commands, agents, skills, and context for AI-assisted development workflows",
   "author": {
     "name": "TechNickAI",
     "url": "https://github.com/TechNickAI"

@@ -1,9 +1,0 @@
-{
-  "name": "skills",
-  "version": "2.0.1",
-  "description": "Autonomous skills that Claude activates when relevant - research, debugging, brainstorming",
-  "author": {
-    "name": "TechNickAI",
-    "url": "https://github.com/TechNickAI"
-  }
-}
