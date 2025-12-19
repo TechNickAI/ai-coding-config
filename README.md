@@ -23,7 +23,7 @@ Cursor, Windsurf, Cline - whatever you use.
 ```
 
 ```bash
-/plugin install ai-coding-config agents skills
+/plugin install ai-coding-config skills
 ```
 
 **Using Cursor, Windsurf, Cline, or others?**
@@ -86,7 +86,7 @@ expertise (debugging, code review).
 | Type                                    | Count | Purpose                 |
 | --------------------------------------- | ----- | ----------------------- |
 | [Commands](plugins/core/commands/)      | 14    | Automate workflows      |
-| [Agents](plugins/agents/agents/)        | 13    | Specialized assistants  |
+| [Agents](plugins/core/agents/)          | 13    | Specialized assistants  |
 | [Rules](rules/)                         | 32    | Coding standards        |
 | [Skills](plugins/skills/skills/)        | 5     | Autonomous capabilities |
 | [Personalities](plugins/personalities/) | 7     | Communication styles    |
@@ -113,7 +113,7 @@ React? Loads React patterns. Writing tests? Testing standards.
 
 ### Highlighted Agents
 
-Install via `/plugin install agents`:
+Included in ai-coding-config plugin:
 
 - **debugger** - Root cause analysis through systematic investigation
 - **autonomous-developer** - Implements features following your project patterns

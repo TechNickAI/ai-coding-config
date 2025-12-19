@@ -21,8 +21,7 @@ Core project rules that apply to all tasks:
 **Plugin-first architecture** - Everything distributable lives in `plugins/`:
 
 - `.claude-plugin/marketplace.json` - Plugin marketplace manifest
-- `plugins/core/` - Commands and context (canonical source)
-- `plugins/agents/` - All AI agents consolidated
+- `plugins/core/` - Commands, agents, and context (canonical source)
 - `plugins/skills/` - Autonomous skills
 - `plugins/personalities/` - Personality variants
 - `.cursor/rules/` - Cursor rules (canonical location)
@@ -82,7 +81,7 @@ permanent records requiring explicit permission.
   `heart-centered-ai-philosophy.mdc`
 - **Plugin-first**: All content lives in `plugins/`, other locations symlink there
 - `.claude/commands/` → `plugins/core/commands/` (symlink)
-- `.claude/agents/` → `plugins/agents/agents/` (symlink)
+- `.claude/agents/` → `plugins/core/agents/` (symlink)
 - `.claude/skills/` → `plugins/skills/skills/` (symlink)
 - `rules/` → `.cursor/rules/` (symlink for visibility, THIS REPO ONLY)
 - `.cursor/rules/` contains the canonical Cursor rules
