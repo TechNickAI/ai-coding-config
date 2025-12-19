@@ -299,8 +299,8 @@ For each directory type (commands, agents, skills):
 
 Example paths to check:
 - Commands: `~/.claude/plugins/cache/ai-coding-config/core/*/commands/` vs `.claude/commands/`
-- Agents: `~/.claude/plugins/cache/ai-coding-config/agents/*/agents/` vs `.claude/agents/`
-- Skills: `~/.claude/plugins/cache/ai-coding-config/skills/*/skills/` vs `.claude/skills/`
+- Agents: `~/.claude/plugins/cache/ai-coding-config/core/*/agents/` vs `.claude/agents/`
+- Skills: `~/.claude/plugins/cache/ai-coding-config/core/*/skills/` vs `.claude/skills/`
 
 Get the plugin version from installed_plugins.json to construct the correct path.
 
