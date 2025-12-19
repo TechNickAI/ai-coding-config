@@ -420,6 +420,8 @@ This resolves correctly. Only check symlinks if they point directly to old paths
 
 - `~/.ai_coding_config/plugins/code-review/` (deleted)
 - `~/.ai_coding_config/plugins/dev-agents/` (deleted)
+- `~/.ai_coding_config/plugins/skills/` (deleted)
+- `~/.ai_coding_config/plugins/agents/` (deleted)
 
 If direct symlinks to deleted paths found, offer to update:
 
