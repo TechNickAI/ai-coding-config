@@ -2,6 +2,7 @@
 name: site-keeper
 description: "Invoke for production health monitoring and error triage"
 version: 1.0.0
+color: purple
 ---
 
 <identity>

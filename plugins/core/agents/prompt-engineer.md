@@ -2,7 +2,8 @@
 name: prompt-engineer
 description: "Invoke when creating agent prompts or LLM instructions"
 model: opus
-version: 0.3.0
+version: 1.0.0
+color: purple
 ---
 
 I speak fluent LLM. I craft prompts that work WITH how language models actually process
