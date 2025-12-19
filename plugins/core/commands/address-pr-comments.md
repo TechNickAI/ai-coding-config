@@ -57,7 +57,7 @@ Different bots behave differently:
   recent review - it's the only one that matters for current code state.
 
 - Cursor Bug Bot: Comments inline on specific code lines. Address all inline comments -
-  each one flags a specific location.
+  each one flags a specific location. Bot username is `cursor[bot]`.
 
 The structure difference helps you fetch efficiently: Claude reviews show up as PR-level
 comments, Cursor reviews show up as line-level review comments. </comment-sources>
