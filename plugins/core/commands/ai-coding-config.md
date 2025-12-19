@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 2.0.1
+version: 2.1.0
 ---
 
 # AI Coding Configuration
@@ -292,6 +292,87 @@ claude plugin install skills@ai-coding-config
 
 Offer: "Migrate to new plugin structure (Recommended)" or "Skip migration"
 </plugin-migration-check>
+
+<local-duplicate-cleanup>
+Check for local file duplication when marketplace plugins are installed.
+
+**Detection method:** Read `~/.claude/plugins/installed_plugins.json` to see if marketplace plugins are installed (core, agents, skills). If plugins are installed, check if the user also has local copies in their project.
+
+Check for these local directories:
+- `.claude/commands/` (as a real directory, not symlink)
+- `.claude/agents/` (as a real directory, not symlink)
+- `.claude/skills/` (as a real directory, not symlink)
+
+**Why this happens:** Some projects were set up before the marketplace approach. They have local copies of commands/agents/skills that are now outdated and create confusion because they override the marketplace versions.
+
+**Critical constraint:** Only remove files that are duplicates of marketplace content. Preserve any custom commands, agents, or skills the user created themselves.
+
+**Duplicate identification strategy:**
+
+For each directory type (commands, agents, skills):
+1. Use Glob to list files in the marketplace plugin install path
+2. Use Glob to list files in the local project directory
+3. Compare the two lists to identify exact filename matches
+4. Only remove the duplicates
+
+Example paths to check:
+- Commands: `~/.claude/plugins/cache/ai-coding-config/core/*/commands/` vs `.claude/commands/`
+- Agents: `~/.claude/plugins/cache/ai-coding-config/agents/*/agents/` vs `.claude/agents/`
+- Skills: `~/.claude/plugins/cache/ai-coding-config/skills/*/skills/` vs `.claude/skills/`
+
+Get the plugin version from installed_plugins.json to construct the correct path.
+
+**Exception:** Never remove `.claude/commands/ai-coding-config.md` even if it's a duplicate - this file needs to stay in the project.
+
+**User communication and choice:**
+
+If duplicates are found, explain the situation clearly:
+
+"I found duplicate files in your project. You have local copies of commands/agents/skills that are also available through the Claude Code plugin marketplace.
+
+**What's the plugin marketplace?**
+
+The Claude Code plugin marketplace is a centralized system where commands, agents, and skills are installed once globally and automatically stay up to date. Instead of copying files into each project, plugins are installed to `~/.claude/plugins/` and shared across all your projects.
+
+Benefits:
+- Auto-updates when you run `/ai-coding-config update`
+- One source of truth across all projects
+- No manual file copying or syncing needed
+
+Read more: https://github.com/TechNickAI/ai-coding-config#plugin-marketplace
+
+**Your situation:**
+
+You have local files that duplicate marketplace content. Local files override marketplace versions, which means:
+- Your local copies don't auto-update
+- You might be using outdated versions
+- It's confusing which version is actually running
+
+**Found duplicates:**
+[List specific duplicate files with their locations, e.g.:]
+- `.claude/commands/autotask.md`
+- `.claude/agents/code-reviewer.md`
+- `.claude/skills/research.md`
+
+**Custom files that will be preserved:**
+[List files that exist locally but not in marketplace, e.g.:]
+- `.claude/agents/logo-fetcher.md` (your custom agent)
+- `.claude/commands/ai-coding-config.md` (required in project)
+
+**Recommendation:** Remove the duplicate files and rely on the marketplace plugins. Your custom files will be preserved."
+
+Use AskUserQuestion to present the choice:
+- "Remove duplicates and use marketplace (Recommended)" - Explanation: "Delete duplicate files, keep custom files, rely on marketplace for updates"
+- "Keep both" - Explanation: "Local files will continue to override marketplace versions"
+
+If user chooses to remove duplicates:
+- Use individual `rm` commands for each duplicate file
+- Confirm what was removed
+- Confirm what was preserved (ai-coding-config.md + any custom files)
+- Remind: "You're now using marketplace plugins. Run `/ai-coding-config update` anytime to get the latest versions."
+
+The goal is to eliminate confusion by removing duplicates while preserving custom work and educating the user about the marketplace approach.
+</local-duplicate-cleanup>
 
 <claude-code-update>
 For Claude Code users with plugins installed:
