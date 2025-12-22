@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Professional AI coding configurations, agents, skills, and personalities for Claude Code and Cursor",
-    "version": "5.0.0",
+    "version": "5.1.0",
     "license": "MIT",
     "repository": "https://github.com/TechNickAI/ai-coding-config",
     "pluginRoot": "./plugins"
@@ -16,7 +16,7 @@
       "name": "ai-coding-config",
       "source": "core",
       "description": "Commands, agents, skills, and context for AI-assisted development workflows",
-      "version": "5.0.0",
+      "version": "5.1.0",
       "tags": ["commands", "agents", "skills", "workflows", "essential"]
     },
     {
