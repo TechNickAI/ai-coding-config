@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 2.1.0
+version: 3.0.0
 ---
 
 # AI Coding Configuration
@@ -58,8 +58,8 @@ test -d .continue && echo "continue"
 Based on detection, use AskUserQuestion to confirm which tools to set up. Pre-select
 detected tools. Options:
 
-- Claude Code (plugin marketplace)
-- Cursor (rules + commands via symlinks)
+- Claude Code (plugin marketplace - auto-updates)
+- Cursor (rules + commands copied to project)
 - Aider (AGENTS.md context)
 - Other (explain what you're using)
 
@@ -89,12 +89,8 @@ For Claude Code users, guide them through the plugin marketplace:
    the plugins you want, and they'll stay updated automatically."
 
 2. Show available plugins from `~/.ai_coding_config/.claude-plugin/marketplace.json`:
-   - **core** - Essential commands (autotask, troubleshoot, load-rules, etc.)
-   - **agents** - Specialized AI agents (debugger, code-reviewer, autonomous-developer,
-     etc.)
-   - **skills** - Autonomous capabilities (research, brainstorming,
-     systematic-debugging)
-   - **personalities** - Pick one that matches your style
+   - **ai-coding-config** - Commands, agents, and skills for AI-assisted development
+   - **personality-{name}** - Pick one that matches your style
 
 3. Provide the commands to add the marketplace and install plugins:
 
@@ -102,8 +98,8 @@ For Claude Code users, guide them through the plugin marketplace:
 # Add the marketplace (one time)
 /plugin marketplace add https://github.com/TechNickAI/ai-coding-config
 
-# Install plugins
-/plugin install ai-coding-config agents skills
+# Install the core plugin
+/plugin install ai-coding-config
 
 # Optional: Install a personality
 /plugin install personality-samantha
@@ -115,57 +111,46 @@ For Claude Code users, guide them through the plugin marketplace:
 </claude-code-setup>
 
 <cursor-setup>
-For Cursor users, set up symlinks to the plugin content.
+For Cursor users, copy files to the project. Cursor needs files physically present in
+the repository for portability and team collaboration.
 
 <existing-config-detection>
 Before installing, detect what already exists:
 
 1. **Fresh project** (no existing configs)
-   - Create `.cursor/rules/` directory
+   - Create `.cursor/rules/` and `.cursor/commands/` directories
    - Create `AGENTS.md`, symlink `CLAUDE.md` → `AGENTS.md`
 
 2. **Existing rules, no AI coding config yet**
-   - Has `.cursor/rules/` or `rules/` as real directory
-   - Offer choice: migrate to cross-tool structure OR merge alongside existing
-   - ALWAYS preserve existing rules
+   - Has `.cursor/rules/` as real directory
+   - Offer choice: merge new rules alongside existing OR skip rule installation
+   - ALWAYS preserve existing rules and commands
 
 3. **Already has AI coding config**
-   - Check for symlinks pointing to `~/.ai_coding_config`
-   - Proceed with update/refresh
-
-Note: `.cursor/rules/` is the canonical location for Cursor rules. In user projects,
-rules live directly in `.cursor/rules/` with no root-level symlink. In the
-ai-coding-config repo itself, `rules/` exists as a symlink to `.cursor/rules/` for
-visibility.
+   - Check for existing copied files from `~/.ai_coding_config`
+   - Proceed with update/refresh via version comparison
 
 Detection:
 
 ```bash
 test -d .cursor/rules && echo "has .cursor/rules"
-test -L .cursor/rules && echo ".cursor/rules is symlink"
-test -d rules && echo "has rules/"
+test -d .cursor/commands && echo "has .cursor/commands"
 test -f AGENTS.md && echo "has AGENTS.md"
 ```
 
 </existing-config-detection>
 
 <file-installation>
-Copy from `~/.ai_coding_config/plugins/` to project:
+Copy files from `~/.ai_coding_config/` to project for portability:
 
-Installation mapping:
+- Rules: `~/.ai_coding_config/.cursor/rules/` → `.cursor/rules/`
+- Commands: `~/.ai_coding_config/plugins/core/commands/` → `.cursor/commands/`
+- Personality: ONE selected file → `.cursor/rules/personalities/`
 
-- Rules → `.cursor/rules/` (copy from `~/.ai_coding_config/.cursor/rules/`)
-- Commands → `.claude/commands/` symlink to `~/.ai_coding_config/plugins/core/commands/`
-- Agents → `.claude/agents/` symlink to `~/.ai_coding_config/plugins/core/agents/`
-- Skills → `.claude/skills/` symlink to `~/.ai_coding_config/plugins/core/skills/`
-- Personalities → `.cursor/rules/personalities/` (copy selected personality, set
-  `alwaysApply: true`)
+Cursor does not support agents or skills directories.
 
-For Cursor:
-
-- `.cursor/commands/` → symlink to `.claude/commands/`
-
-Handle conflicts with AskUserQuestion: overwrite, skip, show diff. </file-installation>
+Handle conflicts with AskUserQuestion: overwrite, skip, show diff.
+</file-installation>
 
 </cursor-setup>
 
@@ -187,13 +172,17 @@ Use AskUserQuestion to present personality options:
 - **Luminous** - Heart-centered, spiritual, love-based
 - **None** - Use default Claude personality
 
-For Claude Code: Install the selected personality plugin. For Cursor: Copy personality
-file to `.cursor/rules/personalities/` with `alwaysApply: true`.
+For Claude Code: Install the selected personality plugin via marketplace.
+
+For Cursor: Copy the ONE selected personality file to `.cursor/rules/personalities/` and
+set `alwaysApply: true` in its frontmatter. Only one personality should be active.
+
+Source files are in `~/.ai_coding_config/plugins/personalities/personality-{name}/`.
 </personality-selection>
 
 <installation-verification>
 Confirm files are in expected locations. For Claude Code, confirm plugins are installed.
-For Cursor, confirm symlinks point correctly.
+For Cursor, confirm copied files exist in `.cursor/rules/` and `.cursor/commands/`.
 </installation-verification>
 
 <recommendations>
@@ -202,8 +191,7 @@ Provide a warm summary of what was installed.
 For Claude Code users: "You're set up with the ai-coding-config plugin marketplace.
 Installed: [list plugins]"
 
-For Cursor users: "Your project is configured with [X] rules, [Y] commands, and [Z]
-agents."
+For Cursor users: "Your project is configured with [X] rules and [Y] commands."
 
 Key commands to highlight:
 
@@ -224,13 +212,7 @@ Update all configurations to latest versions.
 <marketplace-update>
 Update the Claude Code plugin marketplace first. This pulls the latest plugin definitions and updates any installed plugins.
 
-The `/plugin` command is a native Claude Code CLI command that only works at the terminal level. Since this command executes within Claude Code itself, we invoke the CLI via bash using the `claude` command:
-
-```bash
-claude /plugin marketplace update ai-coding-config
-```
-
-This tells the Claude Code CLI to update the marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refresh all installed plugins.
+Marketplace updates happen automatically when you run this command within Claude Code. The system will update the marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refresh all installed plugins without requiring manual intervention.
 
 </marketplace-update>
 
@@ -238,7 +220,7 @@ This tells the Claude Code CLI to update the marketplace at `~/.claude/plugins/m
 For bootstrap users (Cursor-only or manual setup), pull latest from `~/.ai_coding_config`:
 
 ```bash
-cd ~/.ai_coding_config && git pull
+git -C ~/.ai_coding_config pull
 ```
 
 </repository-update>
@@ -363,10 +345,9 @@ For Claude Code users with plugins installed:
 2. Update all installed plugins:
 
 ```bash
-# Update all plugins from the marketplace
+# Update the core plugin
 /plugin update ai-coding-config
-/plugin update agents
-/plugin update skills
+
 # Update personality if installed
 /plugin update personality-samantha  # or whichever is installed
 ```
@@ -376,98 +357,61 @@ For Claude Code users with plugins installed:
 </claude-code-update>
 
 <cursor-update>
-For Cursor users with symlinks:
-
-<architecture-check>
-Check for legacy v2 architecture (rules/ at root):
-- `rules/` is a real directory
-- `.cursor/rules/` is a symlink to `../rules/`
-
-If detected, offer migration back to standard architecture:
-
-1. "Migrate to standard architecture (Recommended)" - Moves rules back to `.cursor/rules/`, removes root symlink
-2. "Skip migration, just update configs" - Updates within current structure
-
-Migration steps if accepted:
-a. `rm .cursor/rules` (remove symlink)
-b. `mv rules .cursor/rules` (move real directory back)
-c. Update configs to point to `.cursor/rules/`
-
-Current architecture (no migration needed):
-- `.cursor/rules/` is a real directory
-- No `rules/` directory at root in user projects
-</architecture-check>
+For Cursor users with copied files:
 
 <deprecated-files-check>
 Check for deprecated files in the user's PROJECT:
 
-- `rules/git-commit-message.mdc` → merged into `git-interaction.mdc`
-- `rules/marianne-williamson.mdc` → renamed to `luminous.mdc`
+- `.cursor/rules/git-commit-message.mdc` → merged into `git-interaction.mdc`
+- `.cursor/rules/marianne-williamson.mdc` → renamed to `luminous.mdc`
 
 If found, offer removal/rename with explanation.
-
-Note: Files in `~/.ai_coding_config` are updated via git pull automatically.
 </deprecated-files-check>
 
-<symlink-compatibility-check>
-Existing symlinks should continue working after the 1.2.0 update because the source
-repo's `.claude/` directories are now symlinks themselves (to `plugins/`).
+<legacy-symlink-migration>
+Check if the user has old symlinks from before the copy-based architecture:
 
-Chain example: `project/.claude/commands/` → `~/.ai_coding_config/.claude/commands/` →
-`../plugins/core/commands/`
+- `.cursor/commands/` as symlink → should be a real directory with copied files
+- `.claude/commands/` as symlink → remove if user is Cursor-only
 
-This resolves correctly. Only check symlinks if they point directly to old paths like:
-
-- `~/.ai_coding_config/plugins/code-review/` (deleted)
-- `~/.ai_coding_config/plugins/dev-agents/` (deleted)
-- `~/.ai_coding_config/plugins/skills/` (deleted)
-- `~/.ai_coding_config/plugins/agents/` (deleted)
-
-If direct symlinks to deleted paths found, offer to update:
-
-- `.claude/commands/` → `~/.ai_coding_config/plugins/core/commands/`
-- `.claude/agents/` → `~/.ai_coding_config/plugins/core/agents/`
-- `.claude/skills/` → `~/.ai_coding_config/plugins/core/skills/`
-  </symlink-compatibility-check>
+If symlinks found, offer to migrate to copy-based architecture. Remove the symlink and
+copy files from `~/.ai_coding_config/` instead.
+</legacy-symlink-migration>
 
 <file-updates>
-All configuration files (rules, agents, skills, commands, personalities) use `version: X.Y.Z` in YAML frontmatter. Files without version metadata count as v0.0.0.
+All configuration files use `version: X.Y.Z` in YAML frontmatter. Files without version
+metadata count as v0.0.0.
 
-**Version comparison strategy:** Use the Grep tool (not bash grep) to extract version
-metadata. Run one Grep call for source files with an absolute path like
-`~/.ai_coding_config/.cursor/rules/` and one for installed files. The Grep tool handles
-file iteration internally and returns clean results without shell parsing issues.
+Compare versions for all copied files:
 
-For Cursor, compare COPIED files:
 - Rules: `~/.ai_coding_config/.cursor/rules/` vs `.cursor/rules/`
-- Personalities: `~/.ai_coding_config/plugins/personalities/` vs `.cursor/rules/personalities/`
+- Commands: `~/.ai_coding_config/plugins/core/commands/` vs `.cursor/commands/`
+- Personality: `~/.ai_coding_config/plugins/personalities/` vs `.cursor/rules/personalities/`
 
-Symlinked files (commands, agents, skills) are already current from repository git pull.
+Use Grep tool to extract version metadata from source and installed files.
 
-Identify files where source version is newer. Report updates with clear version progression (e.g., "git-interaction.mdc: 1.0.0 → 1.1.0").
+Identify files where source version is newer. Report updates with clear version
+progression (e.g., "git-interaction.mdc: 1.0.0 → 1.1.0").
 
-When updates available, use AskUserQuestion with options: Update all, Select individually, Show diffs first, Skip updates.
+When updates available, use AskUserQuestion: Update all, Select individually, Show diffs
+first, Skip updates.
 
 When everything is current: "All files are up to date."
 
-For personalities, preserve the user's `alwaysApply` setting. Never silently overwrite customizations.
-
-**Copying files:** When copying updated files, use absolute paths for both source and
-destination. A single `cp` command with full paths is safer than changing directories.
+For personalities, preserve the user's `alwaysApply` setting when updating.
 </file-updates>
 
 </cursor-update>
 
 <update-summary>
 For Claude Code:
-"Updated core, agents, skills plugins to version 1.2.0"
+"Updated ai-coding-config plugin to version X.Y.Z"
 
 For Cursor:
 "Update complete:
-- git-interaction.mdc: 1.0.0 → 1.1.0
-- prompt-engineering.mdc: 1.0.0 → 1.2.0
-- Installed new-rule.mdc (v1.0.0)
-- 12 files already current"
+- Rules: git-interaction.mdc 1.0.0 → 1.1.0, prompt-engineering.mdc 1.0.0 → 1.2.0
+- Commands: autotask.md 1.0.0 → 1.1.0
+- 15 files already current"
 </update-summary>
 
 </update-mode>
