@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 #
-# Validates marketplace.json consistency with individual plugin.json files
-# - Checks that tags in marketplace.json match keywords in plugin.json
-# - Validates JSON syntax
+# Validates marketplace.json against Claude Code's schema requirements
+# and checks consistency with individual plugin.json files.
+#
+# Schema validations:
+# - Required fields: name, source, description, version
+# - source must start with "./"
+# - plugins array must not be empty
+#
+# Consistency validations:
+# - tags in marketplace.json should match keywords in plugin.json
+# - plugin.json must exist at the source path
 #
 
 set -euo pipefail
@@ -29,38 +37,113 @@ if ! command -v jq &> /dev/null; then
 fi
 
 # Validate marketplace.json syntax
-echo "Checking JSON syntax..."
+echo "=== JSON Syntax ==="
 if ! jq empty "$MARKETPLACE_FILE" 2>/dev/null; then
-    echo -e "${RED}Error: Invalid JSON in marketplace.json${NC}"
+    echo -e "${RED}✗ Invalid JSON in marketplace.json${NC}"
     exit 1
 fi
-echo -e "${GREEN}JSON syntax valid${NC}"
+echo -e "${GREEN}✓ JSON syntax valid${NC}"
 echo ""
 
-# Get plugin root from metadata
-PLUGIN_ROOT=$(jq -r '.metadata.pluginRoot // "."' "$MARKETPLACE_FILE")
+# Validate required top-level fields
+echo "=== Marketplace Schema ==="
 
-# Validate each plugin's keyword consistency
-echo "Checking keyword consistency..."
-echo ""
+# Check name field
+name=$(jq -r '.name // empty' "$MARKETPLACE_FILE")
+if [[ -z "$name" ]]; then
+    echo -e "${RED}✗ Missing required field: name${NC}"
+    ((errors++))
+else
+    echo -e "${GREEN}✓ name: $name${NC}"
+fi
 
-# Get plugin count
+# Check metadata.pluginRoot
+plugin_root=$(jq -r '.metadata.pluginRoot // empty' "$MARKETPLACE_FILE")
+if [[ -z "$plugin_root" ]]; then
+    echo -e "${YELLOW}⚠ Missing metadata.pluginRoot (using default '.')${NC}"
+    plugin_root="."
+else
+    echo -e "${GREEN}✓ metadata.pluginRoot: $plugin_root${NC}"
+fi
+
+# Check plugins array exists and is not empty
 plugin_count=$(jq '.plugins | length' "$MARKETPLACE_FILE")
+if [[ "$plugin_count" -eq 0 ]]; then
+    echo -e "${RED}✗ plugins array is empty${NC}"
+    ((errors++))
+else
+    echo -e "${GREEN}✓ plugins: $plugin_count entries${NC}"
+fi
+echo ""
+
+# Validate each plugin's schema
+echo "=== Plugin Schema Validation ==="
+echo ""
 
 for i in $(seq 0 $((plugin_count - 1))); do
-    # Get plugin info from marketplace
+    plugin_name=$(jq -r ".plugins[$i].name // empty" "$MARKETPLACE_FILE")
+    plugin_source=$(jq -r ".plugins[$i].source // empty" "$MARKETPLACE_FILE")
+    plugin_desc=$(jq -r ".plugins[$i].description // empty" "$MARKETPLACE_FILE")
+    plugin_version=$(jq -r ".plugins[$i].version // empty" "$MARKETPLACE_FILE")
+
+    plugin_errors=0
+    echo "Plugin: ${plugin_name:-"(unnamed)"}"
+
+    # Check required fields
+    if [[ -z "$plugin_name" ]]; then
+        echo -e "  ${RED}✗ Missing required field: name${NC}"
+        ((plugin_errors++))
+    fi
+
+    if [[ -z "$plugin_source" ]]; then
+        echo -e "  ${RED}✗ Missing required field: source${NC}"
+        ((plugin_errors++))
+    elif [[ "$plugin_source" != ./* ]]; then
+        echo -e "  ${RED}✗ source must start with './' (got: $plugin_source)${NC}"
+        ((plugin_errors++))
+    fi
+
+    if [[ -z "$plugin_desc" ]]; then
+        echo -e "  ${RED}✗ Missing required field: description${NC}"
+        ((plugin_errors++))
+    fi
+
+    if [[ -z "$plugin_version" ]]; then
+        echo -e "  ${RED}✗ Missing required field: version${NC}"
+        ((plugin_errors++))
+    fi
+
+    if [[ $plugin_errors -eq 0 ]]; then
+        echo -e "  ${GREEN}✓ Schema valid${NC}"
+    else
+        ((errors += plugin_errors))
+    fi
+done
+echo ""
+
+# Validate plugin paths and keyword consistency
+echo "=== Plugin Consistency ==="
+echo ""
+
+for i in $(seq 0 $((plugin_count - 1))); do
     plugin_name=$(jq -r ".plugins[$i].name" "$MARKETPLACE_FILE")
     plugin_source=$(jq -r ".plugins[$i].source" "$MARKETPLACE_FILE")
     marketplace_tags=$(jq -c ".plugins[$i].tags // []" "$MARKETPLACE_FILE")
 
+    # Strip leading "./" from source for path construction
+    source_path="${plugin_source#./}"
+
     # Construct path to plugin.json
-    plugin_json_path="$ROOT_DIR/$PLUGIN_ROOT/$plugin_source/.claude-plugin/plugin.json"
+    plugin_json_path="$ROOT_DIR/$plugin_root/$source_path/.claude-plugin/plugin.json"
+
+    echo "Plugin: $plugin_name"
 
     if [[ ! -f "$plugin_json_path" ]]; then
-        echo -e "${RED}  $plugin_name: plugin.json not found at $plugin_json_path${NC}"
+        echo -e "  ${RED}✗ plugin.json not found at: $plugin_json_path${NC}"
         ((errors++))
         continue
     fi
+    echo -e "  ${GREEN}✓ plugin.json exists${NC}"
 
     # Get keywords from plugin.json
     plugin_keywords=$(jq -c '.keywords // []' "$plugin_json_path")
@@ -70,27 +153,28 @@ for i in $(seq 0 $((plugin_count - 1))); do
     sorted_keywords=$(echo "$plugin_keywords" | jq -c 'sort')
 
     if [[ "$sorted_tags" == "$sorted_keywords" ]]; then
-        echo -e "${GREEN}  $plugin_name: keywords match${NC}"
+        echo -e "  ${GREEN}✓ Keywords match${NC}"
     else
-        echo -e "${RED}  $plugin_name: keyword mismatch${NC}"
-        echo -e "    marketplace.json tags: $marketplace_tags"
-        echo -e "    plugin.json keywords:  $plugin_keywords"
+        echo -e "  ${RED}✗ Keyword mismatch${NC}"
+        echo -e "    marketplace tags: $marketplace_tags"
+        echo -e "    plugin keywords:  $plugin_keywords"
 
         # Show the diff
         tags_only=$(echo "$marketplace_tags" | jq -c --argjson kw "$plugin_keywords" '. - $kw')
         keywords_only=$(echo "$plugin_keywords" | jq -c --argjson tags "$marketplace_tags" '. - $tags')
 
         if [[ "$tags_only" != "[]" ]]; then
-            echo -e "${YELLOW}    Only in marketplace tags: $tags_only${NC}"
+            echo -e "    ${YELLOW}Only in marketplace: $tags_only${NC}"
         fi
         if [[ "$keywords_only" != "[]" ]]; then
-            echo -e "${YELLOW}    Only in plugin keywords: $keywords_only${NC}"
+            echo -e "    ${YELLOW}Only in plugin: $keywords_only${NC}"
         fi
         ((errors++))
     fi
 done
 
 echo ""
+echo "=== Summary ==="
 if [[ $errors -gt 0 ]]; then
     echo -e "${RED}Validation failed with $errors error(s)${NC}"
     exit 1
