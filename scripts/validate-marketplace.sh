@@ -52,7 +52,7 @@ echo "=== Marketplace Schema ==="
 name=$(jq -r '.name // empty' "$MARKETPLACE_FILE")
 if [[ -z "$name" ]]; then
     echo -e "${RED}✗ Missing required field: name${NC}"
-    ((errors++))
+    errors=$((errors + 1))
 else
     echo -e "${GREEN}✓ name: $name${NC}"
 fi
@@ -70,7 +70,7 @@ fi
 plugin_count=$(jq '.plugins | length' "$MARKETPLACE_FILE")
 if [[ "$plugin_count" -eq 0 ]]; then
     echo -e "${RED}✗ plugins array is empty${NC}"
-    ((errors++))
+    errors=$((errors + 1))
 else
     echo -e "${GREEN}✓ plugins: $plugin_count entries${NC}"
 fi
@@ -92,31 +92,31 @@ for i in $(seq 0 $((plugin_count - 1))); do
     # Check required fields
     if [[ -z "$plugin_name" ]]; then
         echo -e "  ${RED}✗ Missing required field: name${NC}"
-        ((plugin_errors++))
+        plugin_errors=$((plugin_errors + 1))
     fi
 
     if [[ -z "$plugin_source" ]]; then
         echo -e "  ${RED}✗ Missing required field: source${NC}"
-        ((plugin_errors++))
+        plugin_errors=$((plugin_errors + 1))
     elif [[ "$plugin_source" != ./* ]]; then
         echo -e "  ${RED}✗ source must start with './' (got: $plugin_source)${NC}"
-        ((plugin_errors++))
+        plugin_errors=$((plugin_errors + 1))
     fi
 
     if [[ -z "$plugin_desc" ]]; then
         echo -e "  ${RED}✗ Missing required field: description${NC}"
-        ((plugin_errors++))
+        plugin_errors=$((plugin_errors + 1))
     fi
 
     if [[ -z "$plugin_version" ]]; then
         echo -e "  ${RED}✗ Missing required field: version${NC}"
-        ((plugin_errors++))
+        plugin_errors=$((plugin_errors + 1))
     fi
 
     if [[ $plugin_errors -eq 0 ]]; then
         echo -e "  ${GREEN}✓ Schema valid${NC}"
     else
-        ((errors += plugin_errors))
+        errors=$((errors + plugin_errors))
     fi
 done
 echo ""
@@ -140,7 +140,7 @@ for i in $(seq 0 $((plugin_count - 1))); do
 
     if [[ ! -f "$plugin_json_path" ]]; then
         echo -e "  ${RED}✗ plugin.json not found at: $plugin_json_path${NC}"
-        ((errors++))
+        errors=$((errors + 1))
         continue
     fi
     echo -e "  ${GREEN}✓ plugin.json exists${NC}"
@@ -169,7 +169,7 @@ for i in $(seq 0 $((plugin_count - 1))); do
         if [[ "$keywords_only" != "[]" ]]; then
             echo -e "    ${YELLOW}Only in plugin: $keywords_only${NC}"
         fi
-        ((errors++))
+        errors=$((errors + 1))
     fi
 done
 
