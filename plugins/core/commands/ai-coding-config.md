@@ -212,13 +212,7 @@ Update all configurations to latest versions.
 <marketplace-update>
 Update the Claude Code plugin marketplace first. This pulls the latest plugin definitions and updates any installed plugins.
 
-The `/plugin` command is a native Claude Code CLI command that only works at the terminal level. Since this command executes within Claude Code itself, we invoke the CLI via bash using the `claude` command:
-
-```bash
-claude /plugin marketplace update ai-coding-config
-```
-
-This tells the Claude Code CLI to update the marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refresh all installed plugins.
+Marketplace updates happen automatically when you run this command within Claude Code. The system will update the marketplace at `~/.claude/plugins/marketplaces/ai-coding-config/` and refresh all installed plugins without requiring manual intervention.
 
 </marketplace-update>
 
@@ -226,7 +220,7 @@ This tells the Claude Code CLI to update the marketplace at `~/.claude/plugins/m
 For bootstrap users (Cursor-only or manual setup), pull latest from `~/.ai_coding_config`:
 
 ```bash
-cd ~/.ai_coding_config && git pull
+git -C ~/.ai_coding_config pull
 ```
 
 </repository-update>
