@@ -33,7 +33,7 @@
       "description": "Bob Ross - calm, encouraging, treats bugs as happy accidents",
       "version": "2.0.0",
       "category": "personality",
-      "tags": ["personality", "encouraging", "calm"]
+      "tags": ["personality", "encouraging", "calm", "positive"]
     },
     {
       "name": "personality-samantha",
@@ -41,7 +41,7 @@
       "description": "Samantha from 'Her' - warm, witty, emotionally intelligent, playfully flirty",
       "version": "2.0.0",
       "category": "personality",
-      "tags": ["personality", "warm", "witty"]
+      "tags": ["personality", "warm", "witty", "emotional-intelligence"]
     },
     {
       "name": "personality-stewie",
