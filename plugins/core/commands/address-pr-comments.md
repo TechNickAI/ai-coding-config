@@ -2,7 +2,7 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Address PR Comments
@@ -43,50 +43,43 @@ Announce hotfix mode at start, explaining that you're running expedited review a
 only address security issues and bugs while declining all other feedback. </hotfix-mode>
 
 <comment-sources>
-Code review bots comment in different places. Fetch both:
-- PR comments (general feedback on the PR itself)
-- Review comments (inline on specific code lines)
-- Reviews (approval status with body text)
+Code review bots comment at different API levels. Fetch from both endpoints:
 
-Identify bot comments by author - automated usernames like cursor-bot,
-claude-code-review, greptile-bot. Human comments require different handling.
+PR-level comments (issues endpoint):
+`gh api repos/{owner}/{repo}/issues/{pr}/comments`
+Claude Code Review posts here. Username is `claude[bot]`. Only address the most recent
+Claude review - older ones reflect outdated code state.
 
-Different bots behave differently:
+Line-level review comments (pulls endpoint):
+`gh api repos/{owner}/{repo}/pulls/{pr}/comments`
+Cursor Bugbot posts here as inline comments on specific code lines. Username is
+`cursor[bot]`. Address all Cursor comments - each flags a distinct location.
 
-- Claude Code Review: Posts one top-level PR comment per review. Only address the most
-  recent review - it's the only one that matters for current code state.
+You can also use:
+- `gh pr view {number} --comments` for PR-level comments
+- `gh api repos/{owner}/{repo}/pulls/{pr}/reviews` for review status
 
-- Cursor Bug Bot: Comments inline on specific code lines. Address all inline comments -
-  each one flags a specific location. Bot username is `cursor[bot]`.
-
-The structure difference helps you fetch efficiently: Claude reviews show up as PR-level
-comments, Cursor reviews show up as line-level review comments. </comment-sources>
+Identify bot comments by author username. Human comments require different handling -
+flag them for user attention rather than auto-addressing. </comment-sources>
 
 <execution-model>
-This command runs autonomously as a single-threaded state machine. Execute one phase at
-a time, never in parallel. No user prompts needed.
+Process bot feedback incrementally as each bot completes. When one bot finishes, address
+its comments immediately while others are still running. Claude Code Review typically
+completes in 1-2 minutes. Cursor Bugbot takes 3-10 minutes. Process fast bots first
+rather than waiting for slow ones.
 
-Phase 1 - POLL: Run `gh pr checks --json name,state,bucket` to get current check status.
-Identify which checks are review bots (claude-review, Cursor Bugbot, greptile).
+Poll check status with `gh pr checks --json name,state,bucket`. Review bots include
+claude-review, Cursor Bugbot, and greptile.
 
-Phase 2 - PROCESS: For each review bot that has completed:
-- If you haven't processed this bot's comments yet, fetch and triage them now
-- Track which bots you've already processed to avoid re-processing
+When bots are still pending, sleep adaptively based on which bots remain. If only Claude
+is pending, sleep 30-60 seconds. If Cursor Bugbot is pending, sleep 2-3 minutes. Check
+status after each sleep and process any newly-completed bots before sleeping again.
 
-Phase 3 - WAIT: If any review bot checks are still pending:
-- Run `sleep 30` to wait (a single sleep command, not a loop)
-- After sleep completes, return to Phase 1
+After pushing fixes, return to polling since bots will re-analyze. Exit when all review
+bots have completed and no new actionable feedback remains.
 
-Phase 4 - EXIT: When all review bots have completed and you've addressed their comments:
-- If you made any fixes, push and return to Phase 1 (bots will re-analyze)
-- If no new actionable feedback, you're done
-
-Key constraint: Process bots incrementally. If Claude review completes in 2 minutes but
-Cursor Bugbot takes 15 minutes, address Claude's comments immediately - don't wait for
-Cursor. This keeps fast bots from blocking on slow ones.
-
-Never use `gh pr checks --watch`. It's designed for human terminals, not LLM execution,
-and causes unpredictable behavior.
+Avoid `gh pr checks --watch` - it's designed for human terminals and causes
+unpredictable LLM behavior.
 </execution-model>
 
 <narration>
