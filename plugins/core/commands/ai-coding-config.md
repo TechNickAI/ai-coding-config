@@ -1,7 +1,7 @@
 ---
 description: Set up or update AI coding configurations
 argument-hint: [update]
-version: 4.0.0
+version: 4.1.0
 ---
 
 # AI Coding Configuration
@@ -148,6 +148,11 @@ Copy files from `~/.ai_coding_config/` to project for portability:
 - Personality: ONE selected file → `.cursor/rules/personalities/`
 
 Cursor does not support agents or skills directories.
+
+**Important for hybrid users (Claude Code + Cursor):**
+- `.cursor/commands/` must be a REAL directory, not a symlink to `.claude/commands/`
+- Claude Code uses the plugin system; Cursor needs actual files
+- Symlinking these directories together causes conflicts and prevents proper updates
 
 Handle conflicts with AskUserQuestion: overwrite, skip, show diff.
 </file-installation>
@@ -393,14 +398,34 @@ After marketplace is healthy, check for outdated local files that duplicate mark
 content. Local files override marketplace versions, causing confusion and preventing
 auto-updates.
 
-Compare files in `.claude/commands/`, `.claude/agents/`, `.claude/skills/` against the
-marketplace cache. Identify duplicates by filename match.
+**What to look for in `.claude/commands/`, `.claude/agents/`, `.claude/skills/`:**
 
-Preserve custom files that exist only locally. The ai-coding-config.md command file
-stays in projects for discoverability.
+1. Symlinks pointing to ai-coding-config plugin cache - these are duplicates
+2. Copied files with same names as marketplace content - these override plugin versions
 
-If duplicates exist, explain the situation and offer to remove them so the user gets
-marketplace auto-updates.
+Detection:
+
+```bash
+# Find symlinks pointing to ai-coding-config cache
+find .claude/commands -type l 2>/dev/null | while read f; do
+  readlink "$f" | grep -q 'ai-coding-config' && echo "duplicate: $f"
+done
+```
+
+**What to preserve:**
+- Project-specific commands (not in marketplace)
+- The ai-coding-config.md command file (stays for discoverability)
+- Custom agents and skills unique to this project
+
+**What to remove:**
+- Symlinks to `~/.claude/plugins/cache/ai-coding-config/` (plugin provides these)
+- Copied files that match marketplace filenames (unless intentionally customized)
+
+Explain the situation: "Found X duplicate commands that the plugin already provides.
+Removing these lets you get auto-updates from the marketplace."
+
+Offer to remove duplicates. If user declines, warn that local files override plugin
+versions and won't auto-update.
 </local-duplicate-cleanup>
 
 <cursor-update>
@@ -428,8 +453,29 @@ Check if the project has old symlinks from before the copy-based architecture:
 - `.cursor/commands/` as symlink → should be a real directory with copied files
 - `.cursor/rules/` as symlink → should be a real directory with copied files
 
-If symlinks found, remove them and copy files from `~/.ai_coding_config/` instead. The
-copy-based approach ensures portability when the repo is cloned elsewhere.
+**Critical pattern to detect**: `.cursor/commands/` symlinked to `.claude/commands/`
+
+This creates a mess because Claude Code and Cursor need different things:
+- Claude Code: Uses plugin system, doesn't need ai-coding-config commands locally
+- Cursor: Needs all commands as files (can't use plugin system)
+
+When this pattern is found:
+1. Note which files are project-specific (not symlinks to ai-coding-config cache)
+2. Remove the `.cursor/commands/` symlink
+3. Create `.cursor/commands/` as a real directory
+4. Copy project-specific commands from `.claude/commands/`
+5. Copy ai-coding-config commands from `~/.ai_coding_config/plugins/core/commands/`
+6. Remove ai-coding-config symlinks from `.claude/commands/` (duplicates of plugin)
+
+Detection:
+
+```bash
+# Check if .cursor/commands is a symlink to .claude/commands
+readlink .cursor/commands | grep -q '.claude/commands' && echo "cursor-symlinked-to-claude"
+
+# List ai-coding-config symlinks in .claude/commands
+find .claude/commands -type l -exec readlink {} \; | grep -q 'ai-coding-config' && echo "has-plugin-symlinks"
+```
 
 For Claude Code users who are Cursor-only (no marketplace):
 - `.claude/commands/` as symlink → remove and skip (not needed for Cursor)
