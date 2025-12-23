@@ -1,6 +1,6 @@
 ---
 description: "Execute development task autonomously from description to PR-ready"
-version: 1.1.0
+version: 1.2.0
 ---
 
 # /autotask - Autonomous Task Execution
@@ -53,6 +53,16 @@ When the right choice isn't obvious, ask. A quick question beats guessing wrong.
 For worktree creation, use /setup-environment which handles branch naming and validation.
 </environment-setup>
 
+<context-preservation>
+Your context window is precious. Preserve it by delegating to specialized agents rather than doing exploratory work yourself.
+
+Use agents for: codebase exploration, pattern searching, documentation research, multi-file analysis, and any task requiring multiple rounds of search/read operations.
+
+Keep your context focused on: orchestration, decision-making, user communication, and synthesizing agent results.
+
+This isn't about avoiding work - it's about working at the right level. Agents return concise results; doing the same work yourself fills context with raw data.
+</context-preservation>
+
 <autonomous-execution>
 Implement the solution following project patterns and standards. Available agents:
 
@@ -94,6 +104,17 @@ Full validation: Comprehensive test suite, multiple agent reviews, security scan
 Principle: Validation intensity should match task risk. Git hooks handle formatting,
 linting, and tests. Add extra validation only when risk justifies it.
 </validation-and-review>
+
+<pre-pr-review>
+Before creating the PR, run a code review agent appropriate to the task:
+
+- code-reviewer: General architecture, patterns, security
+- pr-review-toolkit agents: Specialized reviews (type design, silent failures, test coverage)
+
+The review catches issues before they reach the PR, reducing review cycles. Fix what the agent finds before proceeding.
+
+Match review depth to task risk. Simple changes need a quick pass; architectural changes warrant thorough review.
+</pre-pr-review>
 
 <create-pr>
 Deliver a well-documented pull request with commits following rules/git-commit-message.mdc.
