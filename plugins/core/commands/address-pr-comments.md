@@ -2,7 +2,7 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Address PR Comments
@@ -85,10 +85,10 @@ unpredictable LLM behavior.
 <narration>
 While working through the phases, share interesting findings:
 
-- "Cursor Bot found a real bug - null pointer if session expires mid-request. Good
-  catch, fixing."
-- "Claude wants magic string extraction for a one-time value. Declining."
-- "SQL injection risk in search query - legit security issue, addressing."
+- "Cursor Bot found a real bug - null pointer if session expires mid-request. Great
+  catch, adding heart reaction and fixing."
+- "Claude wants magic string extraction for a one-time value. Thumbs down, declining."
+- "SQL injection risk in search query - security issue, rocket reaction and addressing."
 
 Keep narration brief and informative.
 </narration>
@@ -115,11 +115,45 @@ Decline with explanation:
 
 Show triage summary, then proceed autonomously. </triage-process>
 
-<addressing-comments>
-For addressable items: make the fix, commit, reply acknowledging the change.
+<feedback-as-training>
+Responding to bot comments serves two purposes: record-keeping and training. Bots learn
+from feedback patterns. Reactions and replies shape future review quality. Thoughtful
+feedback improves bot behavior over time.
 
-For declined items: reply with brief, professional explanation referencing project
-standards. Thumbs down for incorrect suggestions. </addressing-comments>
+Use reactions strategically:
+
+- 👍 (+1): Helpful feedback we addressed. Signals "more like this."
+- ❤️ (heart): Exceptional catch (security issue, subtle bug). Strongest positive signal.
+- 👎 (-1): Incorrect, irrelevant, or low-value suggestion. Signals "less like this."
+- 🚀 (rocket): For security vulnerabilities or critical bugs we fixed.
+
+Add reactions via API:
+`gh api repos/{owner}/{repo}/issues/comments/{comment_id}/reactions -f content="+1"`
+`gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions -f content="-1"`
+</feedback-as-training>
+
+<addressing-comments>
+Response methods differ by comment type:
+
+PR-level comments (Claude bot):
+These live in the issues endpoint. Reply with a new comment on the PR. Group responses
+logically - one comment addressing multiple points is fine.
+
+Line-level comments (Cursor bot):
+These support threaded replies. Reply directly to the comment thread:
+`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."`
+This keeps the conversation in context. The reply appears under the original comment,
+making it easy for anyone reviewing to see the resolution inline.
+
+For each comment:
+
+1. Add appropriate reaction first (training signal)
+2. Make the fix if addressing, commit the change
+3. Reply acknowledging the change or explaining the decline
+
+For declined items, reply with a brief, professional explanation referencing project
+standards. The thumbs-down reaction signals disagreement; the reply explains why.
+</addressing-comments>
 
 <human-comments>
 Human reviewer comments get flagged for user attention, not auto-handled. Present

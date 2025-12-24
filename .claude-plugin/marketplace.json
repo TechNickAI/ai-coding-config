@@ -15,7 +15,7 @@
       "name": "ai-coding-config",
       "source": "./plugins/core",
       "description": "Commands, agents, skills, and context for AI-assisted development workflows",
-      "version": "8.0.0",
+      "version": "8.1.0",
       "tags": ["commands", "agents", "skills", "workflows", "essential"]
     }
   ]
