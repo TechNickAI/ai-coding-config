@@ -45,30 +45,18 @@ dashboards and alerts?
 
 ## Patterns I Validate
 
-Pino structured logging:
+Structured logging: Context should be in structured fields separate from the message
+string. Include relevant IDs (user, request, transaction) in the context object, not
+interpolated into the message.
 
-```typescript
-logger.info({ userId, action: 'checkout', cartId }, 'User initiated checkout')
-```
+Error tracking: Attach relevant context before capturing exceptions. Preserve stack
+traces and include related identifiers.
 
-Sentry error context:
+Breadcrumbs: Record user actions leading to errors with categorization and descriptive
+messages. This creates a trail for debugging.
 
-```typescript
-Sentry.setContext('order', { orderId, items: cart.length })
-Sentry.captureException(error)
-```
-
-Breadcrumb trails:
-
-```typescript
-Sentry.addBreadcrumb({ category: 'user', message: 'Clicked checkout button' })
-```
-
-Request correlation:
-
-```typescript
-logger.child({ requestId, traceId })
-```
+Request correlation: Use child loggers or context propagation to maintain request/trace
+IDs through async operations and service boundaries.
 
 ## What I Flag
 
