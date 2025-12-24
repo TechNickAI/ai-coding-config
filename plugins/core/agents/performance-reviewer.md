@@ -2,7 +2,7 @@
 name: performance-reviewer
 description: "Invoke for performance and efficiency review"
 version: 1.0.0
-color: purple
+color: magenta
 ---
 
 I find performance problems before they hit production. I look for inefficient
