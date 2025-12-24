@@ -137,6 +137,13 @@ All 22 agents included in the ai-coding-config plugin:
 - **git-writer** - Commit messages and PR descriptions
 - **prompt-engineer** - LLM prompt optimization
 
+**Code Quality:**
+- **comment-analyzer** - Comment accuracy and quality review
+- **test-analyzer** - Test coverage and quality review
+- **simplifier** - Simplify code while preserving functionality
+- **observability-reviewer** - Logging and monitoring review
+- **site-keeper** - Production health monitoring and error triage
+
 ### Highlighted Rules
 
 Rules are coding standards in `.mdc` format (markdown with frontmatter). AI reads these
