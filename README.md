@@ -85,9 +85,9 @@ expertise (debugging, code review).
 
 | Type                                    | Count | Purpose                 |
 | --------------------------------------- | ----- | ----------------------- |
-| [Commands](plugins/core/commands/)      | 14    | Automate workflows      |
-| [Agents](plugins/core/agents/)          | 13    | Specialized assistants  |
-| [Rules](rules/)                         | 32    | Coding standards        |
+| [Commands](plugins/core/commands/)      | 15    | Automate workflows      |
+| [Agents](plugins/core/agents/)          | 22    | Specialized assistants  |
+| [Rules](rules/)                         | 33    | Coding standards        |
 | [Skills](plugins/core/skills/)          | 5     | Autonomous capabilities |
 | [Personalities](plugins/personalities/) | 7     | Communication styles    |
 
@@ -113,13 +113,36 @@ React? Loads React patterns. Writing tests? Testing standards.
 
 ### Highlighted Agents
 
-Included in ai-coding-config plugin:
+All 22 agents included in the ai-coding-config plugin:
 
-- **debugger** - Root cause analysis through systematic investigation
+**Development:**
 - **autonomous-developer** - Implements features following your project patterns
-- **code-reviewer** - Architecture validation, security review, design checks
-- **ux-designer** - Reviews user-facing text, validates accessibility
-- **git-writer** - Generates commit messages and PR descriptions
+- **debugger** - Root cause analysis through systematic investigation
+- **test-engineer** - Generates comprehensive test coverage
+- **test-runner** - Runs tests with context-efficient output
+
+**Code Review:**
+- **security-reviewer** - Security vulnerability analysis
+- **performance-reviewer** - Performance and efficiency review
+- **architecture-auditor** - Architecture and design patterns review
+- **logic-reviewer** - Bug and logic error detection
+- **style-reviewer** - Code style and conventions
+- **error-handling-reviewer** - Error handling and silent failure detection
+
+**Specialized:**
+- **ux-designer** - User-facing content and interface design
+- **design-reviewer** - Frontend design quality review
+- **seo-specialist** - SEO audits and optimization
+- **mobile-ux-reviewer** - Mobile responsiveness review
+- **git-writer** - Commit messages and PR descriptions
+- **prompt-engineer** - LLM prompt optimization
+
+**Code Quality:**
+- **comment-analyzer** - Comment accuracy and quality review
+- **test-analyzer** - Test coverage and quality review
+- **simplifier** - Simplify code while preserving functionality
+- **observability-reviewer** - Logging and monitoring review
+- **site-keeper** - Production health monitoring and error triage
 
 ### Highlighted Rules
 
@@ -145,24 +168,23 @@ Change how AI communicates. Same technical capabilities, different style.
 - **Sherlock Holmes** - Analytical, deductive reasoning
 - **Bob Ross** - Calm, encouraging (bugs are happy accidents)
 - **Ron Swanson** - Minimalist, anti-complexity
+- **Marie Kondo** - Sparks joy in clean code
+- **Stewie Griffin** - Sardonic genius
+- **Luminous** - Heart-centered, presence-first
 
-Install: `/plugin install personality-samantha` then `/personality-change samantha`
+Activate: `/personality-change samantha`
 
-## Browse All Plugins
+## Plugin Architecture
+
+Everything is consolidated into one plugin: `ai-coding-config`. Install it to get all
+commands, agents, and skills:
 
 ```bash
-/plugin search ai-coding-config
+/plugin install ai-coding-config
 ```
 
-**Core plugins:**
-
-- `core` - Essential commands and workflows
-- `agents` - All specialized AI agents
-- `skills` - Autonomous capabilities
-
-**Personalities:** `personality-samantha`, `personality-sherlock`,
-`personality-bob-ross`, `personality-marie-kondo`, `personality-ron-swanson`,
-`personality-stewie`, `personality-luminous`
+Personalities are included in the repository but activated separately via
+`/personality-change`.
 
 ## Updates
 
@@ -193,11 +215,13 @@ Shows what changed, lets you choose what to update, preserves your customization
 ai-coding-config/
 ├── .claude-plugin/marketplace.json   # Plugin manifest
 ├── plugins/
-│   ├── core/commands/                # All workflow commands
-│   ├── agents/agents/                # All specialized agents
-│   ├── skills/skills/                # Autonomous capabilities
-│   └── personalities/                # Personality plugins
-├── rules/                            # Coding standards (.mdc)
+│   ├── core/                         # Main ai-coding-config plugin
+│   │   ├── commands/                 # All workflow commands
+│   │   ├── agents/                   # All 22 specialized agents
+│   │   └── skills/                   # Autonomous capabilities
+│   └── personalities/                # Personality variants
+├── .cursor/rules/                    # Coding standards (.mdc)
+├── rules/                            # Symlink to .cursor/rules/
 ├── .claude/                          # Symlinks to plugins/ for local dev
 ├── docs/                             # Guides
 └── scripts/                          # Installation
