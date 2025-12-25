@@ -2,7 +2,7 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.3.0
+version: 1.4.0
 ---
 
 # Address PR Comments
@@ -29,6 +29,22 @@ Read @rules/code-review-standards.mdc for triage principles:
 <pr-detection>
 Use provided PR number, or detect from current branch. Exit if no PR exists.
 </pr-detection>
+
+<conflict-resolution>
+Check if the PR has merge conflicts with its base branch before processing comments.
+Conflicts block merging and should be resolved first.
+
+Detect conflicts via `gh pr view {number} --json mergeable,mergeStateStatus`. If
+mergeable is false, fetch the base branch and rebase or merge to resolve conflicts.
+
+When resolving conflicts:
+- Preserve the intent of both sets of changes
+- Keep bot comments in context - some may become obsolete after conflict resolution
+- Push the resolved changes before continuing with comment review
+
+If conflicts involve complex decisions (architectural changes, competing features),
+flag for user attention rather than auto-resolving.
+</conflict-resolution>
 
 <hotfix-mode>
 If the branch name starts with `hotfix/`, switch to expedited review mode:
@@ -75,8 +91,9 @@ When bots are still pending, sleep adaptively based on which bots remain. If onl
 is pending, sleep 30-60 seconds. If Cursor Bugbot is pending, sleep 2-3 minutes. Check
 status after each sleep and process any newly-completed bots before sleeping again.
 
-After pushing fixes, return to polling since bots will re-analyze. Exit when all review
-bots have completed and no new actionable feedback remains.
+After pushing fixes, re-check for merge conflicts (the base branch may have advanced
+while you were working) and return to polling since bots will re-analyze. Exit when all
+review bots have completed and no new actionable feedback remains.
 
 Avoid `gh pr checks --watch` - it's designed for human terminals and causes
 unpredictable LLM behavior.
