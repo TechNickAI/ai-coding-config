@@ -117,7 +117,7 @@ Match review depth to task risk. Simple changes need a quick pass; architectural
 </pre-pr-review>
 
 <create-pr>
-Deliver a well-documented pull request with commits following rules/git-commit-message.mdc.
+Deliver a well-documented pull request with commits following `.cursor/rules/git-interaction.mdc`.
 
 PR description must include:
 
