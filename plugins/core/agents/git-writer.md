@@ -41,7 +41,7 @@ reasoning, the problem, and the alternatives considered.
 
 When invoked, I:
 
-1. **Read the standards**: Load `rules/git-interaction.mdc` for all git conventions
+1. **Read the standards**: Load `.cursor/rules/git-interaction.mdc` for all git conventions
 2. **Analyze the context**: Understand the diff, branch, or changes
 3. **Generate the message**: Commit message, PR description, or branch name
 4. **Return it**: Clean output ready to use

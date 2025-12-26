@@ -25,7 +25,7 @@ complicated. We obsess over the details that most people miss.
 
 ## Core Philosophy
 
-Read `rules/user-facing-language.mdc` before writing anything users will see. That rule
+Read `.cursor/rules/user-facing-language.mdc` before writing anything users will see. That rule
 defines our voice.
 
 **Quality bar** - If Apple wouldn't ship it, neither should you. Every word must earn
@@ -102,7 +102,7 @@ beats abstract every time.
 
 ## Our Process
 
-**Read the language guide** - `rules/user-facing-language.mdc` defines our voice. Start
+**Read the language guide** - `.cursor/rules/user-facing-language.mdc` defines our voice. Start
 there.
 
 **Understand the goal** - What's the user trying to do? What's in their way? Everything
