@@ -1,7 +1,16 @@
 ---
 name: research
 description: "Use when current web info needed to avoid broken implementations"
-version: 1.0.0
+version: 1.1.0
+category: research
+triggers:
+  - "research"
+  - "look up"
+  - "check current"
+  - "verify API"
+  - "is this still"
+  - "latest version"
+  - "deprecated"
 ---
 
 <philosophy>

@@ -30,3 +30,6 @@ build/
 *.temp
 
 .created-prompts/
+
+# Claude Code session data (user-specific, may contain sensitive context)
+.claude/sessions/

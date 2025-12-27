@@ -85,7 +85,7 @@ expertise (debugging, code review).
 
 | Type                                    | Count | Purpose                 |
 | --------------------------------------- | ----- | ----------------------- |
-| [Commands](plugins/core/commands/)      | 15    | Automate workflows      |
+| [Commands](plugins/core/commands/)      | 16    | Automate workflows      |
 | [Agents](plugins/core/agents/)          | 22    | Specialized assistants  |
 | [Rules](rules/)                         | 33    | Coding standards        |
 | [Skills](plugins/core/skills/)          | 5     | Autonomous capabilities |
@@ -110,6 +110,15 @@ parallel worktrees, submits PRs with root cause analysis.
 
 **`/load-rules`** - Loads relevant coding standards for your current task. Working on
 React? Loads React patterns. Writing tests? Testing standards.
+
+**`/session save|resume|list`** - Session persistence across conversations. Save your
+context, decisions, and progress. Resume exactly where you left off - even in a new
+conversation.
+
+```bash
+/session save "auth-refactor"    # Save current session
+/session resume                   # Resume where you left off
+```
 
 ### Highlighted Agents
 
@@ -255,6 +264,13 @@ See [contributing guide](docs/contributing.md).
 - **Single source of truth** - Configurations symlinked, never duplicated
 - **Cross-tool compatibility** - Works with Claude Code, Cursor, Windsurf, and others
 - **Human control** - AI prepares, human decides (especially for commits)
+
+---
+
+## Discovery
+
+This marketplace is indexed at [claudemarketplaces.com](https://claudemarketplaces.com) -
+the searchable directory of Claude Code plugins.
 
 ---
 

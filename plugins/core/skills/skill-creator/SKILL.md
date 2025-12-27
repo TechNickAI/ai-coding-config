@@ -1,7 +1,14 @@
 ---
 name: skill-creator
 description: "Use when creating or editing skills for ai-coding-config repo"
-version: 1.2.0
+version: 1.3.0
+category: meta
+triggers:
+  - "create skill"
+  - "new skill"
+  - "write skill"
+  - "edit skill"
+  - "SKILL.md"
 ---
 
 <objective>
