@@ -258,5 +258,12 @@ See [contributing guide](docs/contributing.md).
 
 ---
 
+## Discovery
+
+This marketplace is indexed at [claudemarketplaces.com](https://claudemarketplaces.com) -
+the searchable directory of Claude Code plugins.
+
+---
+
 **License**: MIT | **Author**: [TechNickAI](https://github.com/TechNickAI) |
 **Repository**: https://github.com/TechNickAI/ai-coding-config
