@@ -1,7 +1,15 @@
 ---
 name: brainstorming
 description: "Use when rough ideas need design before code or multiple approaches"
-version: 0.2.0
+version: 0.3.0
+category: planning
+triggers:
+  - "brainstorm"
+  - "design session"
+  - "multiple approaches"
+  - "explore options"
+  - "unclear implementation"
+  - "fuzzy requirements"
 ---
 
 <objective>

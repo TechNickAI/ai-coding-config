@@ -1,7 +1,17 @@
 ---
 name: systematic-debugging
 description: "Use for bugs, test failures, or unexpected behavior needing root cause"
-version: 1.0.0
+version: 1.1.0
+category: debugging
+triggers:
+  - "debug"
+  - "investigate"
+  - "root cause"
+  - "why is this"
+  - "not working"
+  - "test failing"
+  - "unexpected behavior"
+  - "error"
 ---
 
 <objective>

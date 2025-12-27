@@ -1,7 +1,15 @@
 ---
 name: youtube-transcript-analyzer
 description: "Use when analyzing YouTube videos for research or learning"
-version: 0.4.0
+version: 0.5.0
+category: research
+triggers:
+  - "youtube"
+  - "video transcript"
+  - "analyze video"
+  - "watch this"
+  - "youtube.com"
+  - "youtu.be"
 ---
 
 <objective>
