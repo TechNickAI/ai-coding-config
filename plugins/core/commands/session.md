@@ -146,6 +146,14 @@ When resuming a session:
 This gets the user (and Claude) back up to speed quickly without re-explaining everything.
 </resumption-flow>
 
+<privacy-notice>
+Session files may contain sensitive information including architectural decisions, code
+context, and file paths. The `.claude/sessions/` directory is gitignored by default.
+
+Never commit session data to version control. Review session contents before sharing
+with team members.
+</privacy-notice>
+
 <best-practices>
 Save sessions when:
 - Ending a work session (lunch, EOD, context switch)
