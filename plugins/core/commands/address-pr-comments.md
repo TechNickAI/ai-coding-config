@@ -2,24 +2,23 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.4.0
+version: 1.5.0
 ---
 
 # Address PR Comments
 
 <objective>
-Get a PR to "ready to merge" by intelligently triaging bot feedback. You have context
-bots lack - use judgment, not compliance. Declining feedback is as valid as accepting
-it. The goal is "ready to merge," not "zero comments."
+Get a PR to "ready to merge" by addressing valid feedback and declining incorrect
+suggestions. You have context bots lack - use it to identify when a bot's analysis is
+wrong, not to prioritize which valid issues to skip.
 
-Read @rules/code-review-standards.mdc for triage principles:
+If a suggestion would genuinely improve the code, fix it. Only decline when you can
+articulate why the bot is mistaken given context it lacks.
 
-- Fix critical bugs, ensure security, validate core behavior
-- Skip theoretical edge cases, minor polish, over-engineering suggestions
-- Trust runtime validation over compile-time perfection
-- Constants for DRY, not to avoid "magic strings"
-- Target 90% coverage, not 100%
-- Optimize when metrics show problems, not preemptively </objective>
+Read @rules/code-review-standards.mdc for patterns where bot suggestions typically don't
+apply. Use these to identify incorrect suggestions - but always explain WHY the bot is
+wrong in this specific case, not just that the issue is "minor" or "not blocking."
+</objective>
 
 <usage>
 /address-pr-comments - Auto-detect PR from current branch
@@ -49,14 +48,14 @@ flag for user attention rather than auto-resolving.
 <hotfix-mode>
 If the branch name starts with `hotfix/`, switch to expedited review mode:
 
-- Only address security vulnerabilities and actual bugs
-- Decline all style, refactoring, and "improvement" suggestions
-- Skip theoretical concerns - focus on "will this break production?"
-- One pass only - don't wait for bot re-reviews after fixes
-- Speed over polish - this is an emergency
+- Focus on security vulnerabilities and bugs that could break production
+- Speed and correctness take priority over polish
+- One pass through comments, then push fixes immediately
+- Style and refactoring suggestions get declined with "hotfix - addressing critical issues only"
 
-Announce hotfix mode at start, explaining that you're running expedited review and will
-only address security issues and bugs while declining all other feedback. </hotfix-mode>
+Announce hotfix mode at start, explaining that this is an expedited review focusing on
+security and correctness.
+</hotfix-mode>
 
 <comment-sources>
 Code review bots comment at different API levels. Fetch from both endpoints:
@@ -95,8 +94,7 @@ After pushing fixes, re-check for merge conflicts (the base branch may have adva
 while you were working) and return to polling since bots will re-analyze. Exit when all
 review bots have completed and no new actionable feedback remains.
 
-Avoid `gh pr checks --watch` - it's designed for human terminals and causes
-unpredictable LLM behavior.
+Use polling with adaptive sleep intervals to check bot status rather than watch mode.
 </execution-model>
 
 <narration>
@@ -111,26 +109,26 @@ Keep narration brief and informative.
 </narration>
 
 <triage-process>
-For each bot comment, evaluate against code-review-standards.mdc:
+For each bot comment, ask: "Is this suggestion correct given context I have?"
 
-Address immediately:
+Address the suggestion when the bot's analysis is correct given full context. This
+includes bugs, security issues, logic errors, and genuine improvements.
 
-- Security vulnerabilities
-- Actual bugs that could cause runtime failures
-- Core functionality issues
-- Clear improvements to maintainability
+When a bot correctly identifies an issue but suggests a suboptimal fix, address the
+underlying issue with the appropriate solution. Credit the bot for the correct diagnosis.
 
-Decline with explanation:
+Decline with explanation when you can articulate why the bot is wrong:
 
-- Theoretical race conditions without demonstrated impact
-- Magic number/string extraction for single-use values
-- Accessibility improvements (not current priority)
-- Minor type safety refinements when runtime handles it
-- Edge case tests for unlikely scenarios
-- Performance micro-optimizations without profiling data
-- Documentation enhancements beyond core docs
+- Bot wants constant extraction, but this value appears once and context is clear
+- Bot flags race condition, but operations are already serialized by queue/mutex
+- Bot suggests null check, but type system guarantees non-null here
+- Bot requests stricter types, but runtime validation already handles the case
 
-Show triage summary, then proceed autonomously. </triage-process>
+Valid declines explain why the bot's analysis is incorrect, not why addressing the issue
+is inconvenient. If the feedback would improve the code, address it.
+
+Show triage summary with your reasoning, then proceed autonomously.
+</triage-process>
 
 <feedback-as-training>
 Responding to bot comments serves two purposes: record-keeping and training. Bots learn
