@@ -96,10 +96,11 @@ Adapt validation intensity to task risk:
 Default (trust git hooks): Make changes, commit, let hooks validate, fix only if hooks
 fail.
 
-Targeted validation: Run specific tests for changed code, use code-reviewer for
-architecture review if patterns change.
+Targeted validation: Run specific tests for changed code, use /verify-fix to confirm the
+fix works as expected, use code-reviewer for architecture review if patterns change.
 
-Full validation: Comprehensive test suite, multiple agent reviews, security scanning.
+Full validation: /verify-fix + comprehensive test suite, multiple agent reviews, security
+scanning.
 
 Principle: Validation intensity should match task risk. Git hooks handle formatting,
 linting, and tests. Add extra validation only when risk justifies it.
