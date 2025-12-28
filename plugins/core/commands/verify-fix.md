@@ -53,9 +53,9 @@ go test ./pkg/... -run TestAffectedFunction
 # Verify page loads correctly
 curl -s http://localhost:3000/affected-page | head -20
 
-# Or use Playwright for visual verification
-browser_navigate to affected URL
-browser_snapshot to capture state
+# Or use MCP Playwright tools for visual verification
+mcp__plugin_playwright_playwright__browser_navigate to affected URL
+mcp__plugin_playwright_playwright__browser_snapshot to capture state
 ```
 
 **API changes:** Hit the endpoint and check the response.
@@ -141,3 +141,14 @@ Verification means observing the specific fixed behavior working correctly:
 The standard: observe the fix working through code paths that exercise it. A passing
 test suite verifies the fix when those tests cover the changed behavior.
 </verification-criteria>
+
+<when-verification-blocked>
+If verification cannot be run immediately:
+
+- Document what verification is needed in your response
+- Explain to the user what they should verify manually
+- Be explicit that the fix is unverified pending these checks
+
+Never claim the fix works without some form of verification. Stating "this should work
+but I can't verify because X" preserves epistemic honesty.
+</when-verification-blocked>
