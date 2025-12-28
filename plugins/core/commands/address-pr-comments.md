@@ -16,8 +16,8 @@ If a suggestion would genuinely improve the code, fix it. Only decline when you 
 articulate why the bot is mistaken given context it lacks.
 
 Read @rules/code-review-standards.mdc for patterns where bot suggestions typically don't
-apply. Use these to identify incorrect suggestions - but always explain WHY the bot is
-wrong in this specific case, not just that the issue is "minor" or "not blocking."
+apply. Use these to identify incorrect suggestions - explain why the bot is wrong in
+this specific case, not just that the issue is "minor" or "not blocking."
 </objective>
 
 <usage>

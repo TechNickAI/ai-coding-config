@@ -65,5 +65,5 @@ the documentation would merely restate what the code already says clearly.
 
 Accessibility (ARIA labels, keyboard navigation, screen reader support) is a product
 priority decision that varies by project. Check project or user configuration for the
-team's stance. If no stance is declared, flag for user decision rather than assuming
-either way.
+team's stance. If no stance is declared, present the suggestion to the user with context
+about the scope and ask whether to address or decline.
