@@ -88,14 +88,18 @@ function cleanupOldTempFiles() {
 function getCodeToExecute() {
   const args = process.argv.slice(2);
 
-  if (args.length > 0 && fs.existsSync(args[0])) {
-    const filePath = path.resolve(args[0]);
-    console.log(`📄 Executing: ${filePath}`);
-    return fs.readFileSync(filePath, "utf8");
-  }
-
   if (args.length > 0) {
-    console.log("⚡ Executing inline code");
+    if (fs.existsSync(args[0])) {
+      const filePath = path.resolve(args[0]);
+      console.log(`📄 Executing: ${filePath}`);
+      return fs.readFileSync(filePath, "utf8");
+    }
+    // Warn if it looks like a file path but doesn't exist
+    if (args[0].endsWith(".js") || args[0].includes("/")) {
+      console.warn(`⚠️  '${args[0]}' not found, treating as inline code`);
+    } else {
+      console.log("⚡ Executing inline code");
+    }
     return args.join(" ");
   }
 
@@ -137,7 +141,10 @@ function getExtraHeaders() {
       if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
         return parsed;
       }
-    } catch {}
+      console.warn('⚠️  PW_EXTRA_HEADERS must be a JSON object, ignoring');
+    } catch (e) {
+      console.warn('⚠️  PW_EXTRA_HEADERS is invalid JSON:', e.message);
+    }
   }
   return null;
 }
