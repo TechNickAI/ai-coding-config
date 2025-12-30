@@ -1,0 +1,12 @@
+{
+  "name": "playwright-browser-skill",
+  "version": "1.0.0",
+  "description": "Playwright browser automation skill for Claude Code",
+  "private": true,
+  "scripts": {
+    "setup": "npm install && npx playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
