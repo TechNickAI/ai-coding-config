@@ -12,7 +12,6 @@
  *
  * Environment variables:
  *   PLAYWRIGHT_BASE_URL     - Base URL for testing (injected as BASE_URL)
- *   PLAYWRIGHT_HEADED       - Set to "true" for visible browser (default: headless)
  *   PW_HEADER_NAME          - Custom header name (with PW_HEADER_VALUE)
  *   PW_HEADER_VALUE         - Custom header value
  *   PW_EXTRA_HEADERS        - JSON object of multiple headers
@@ -32,13 +31,6 @@ function isCI() {
     process.env.CIRCLECI ||
     process.env.JENKINS_URL
   );
-}
-
-function shouldBeHeadless() {
-  // Explicit override wins
-  if (process.env.PLAYWRIGHT_HEADED === "true") return false;
-  // Default to headless (less intrusive)
-  return true;
 }
 
 function checkPlaywrightInstalled() {
@@ -153,14 +145,12 @@ const EXTRA_HEADERS = getExtraHeaders();
 }
 
 function wrapInlineCode(code) {
-  const headless = shouldBeHeadless();
   const ciArgs = isCI() ? "['--no-sandbox', '--disable-setuid-sandbox']" : "[]";
 
   return `
 const { chromium, firefox, webkit, devices } = require('playwright');
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || '';
-const HEADLESS = ${headless};
 const CI_ARGS = ${ciArgs};
 
 ${getExtraHeadersCode()}

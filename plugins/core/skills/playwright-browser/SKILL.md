@@ -1,7 +1,7 @@
 ---
 name: playwright-browser
 description: "Use when automating browsers, testing pages, or taking screenshots"
-version: 1.0.0
+version: 1.0.1
 category: testing
 triggers:
   - "browser"
@@ -38,9 +38,7 @@ $SKILL_DIR is where you loaded this file from.
 <headless-vs-headed>
 Default: headless (invisible, less intrusive).
 
-Use headed when user wants to see the browser. You know when that is.
-
-For headed: `PLAYWRIGHT_HEADED=true` env var or `{ headless: false }` in script.
+Use `{ headless: false }` when user wants to see the browser. You know when that is.
 </headless-vs-headed>
 
 <defaults>
@@ -51,7 +49,6 @@ Screenshots to /tmp. Use `slowMo: 100` for debugging.
 For inline code, these are available:
 
 - `BASE_URL` - from PLAYWRIGHT_BASE_URL env var
-- `HEADLESS` - true by default (set PLAYWRIGHT_HEADED=true for visible)
 - `CI_ARGS` - browser args for CI (`['--no-sandbox', '--disable-setuid-sandbox']`)
 - `EXTRA_HEADERS` - from PW_HEADER_NAME/VALUE or PW_EXTRA_HEADERS
 - `chromium`, `firefox`, `webkit`, `devices` - from playwright
@@ -59,7 +56,7 @@ For inline code, these are available:
 Example:
 ```bash
 node $SKILL_DIR/run.js "
-const browser = await chromium.launch({ headless: HEADLESS, args: CI_ARGS });
+const browser = await chromium.launch({ args: CI_ARGS });
 const page = await browser.newPage();
 await page.goto(BASE_URL || 'http://localhost:3000');
 console.log(await page.title());
