@@ -1,6 +1,6 @@
 ---
 name: playwright-browser
-description: "Use for browser automation, testing pages, screenshots, UX validation"
+description: "Use when automating browsers, testing pages, or taking screenshots"
 version: 1.0.0
 category: testing
 triggers:
