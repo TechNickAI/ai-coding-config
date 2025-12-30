@@ -36,21 +36,11 @@ $SKILL_DIR is where you loaded this file from.
 </execution>
 
 <headless-vs-headed>
-Default: headless (browser runs invisibly, less intrusive).
+Default: headless (invisible, less intrusive).
 
-Use headed (visible browser) when user says:
-- "show me", "watch", "let me see"
-- "debug", "what's happening"
-- "step through", "follow along"
+Use headed when user wants to see the browser. You know when that is.
 
-To run headed, set env var:
-```bash
-PLAYWRIGHT_HEADED=true node $SKILL_DIR/run.js /tmp/script.js
-```
-
-Or in the script: `chromium.launch({ headless: false })`
-
-Announce mode: "Running in headless mode" or "Opening visible browser..."
+For headed: `PLAYWRIGHT_HEADED=true` env var or `{ headless: false }` in script.
 </headless-vs-headed>
 
 <defaults>
