@@ -35,21 +35,41 @@ node $SKILL_DIR/run.js "const b = await chromium.launch(); const p = await b.new
 $SKILL_DIR is where you loaded this file from.
 </execution>
 
+<headless-vs-headed>
+Default: headless (browser runs invisibly, less intrusive).
+
+Use headed (visible browser) when user says:
+- "show me", "watch", "let me see"
+- "debug", "what's happening"
+- "step through", "follow along"
+
+To run headed, set env var:
+```bash
+PLAYWRIGHT_HEADED=true node $SKILL_DIR/run.js /tmp/script.js
+```
+
+Or in the script: `chromium.launch({ headless: false })`
+
+Announce mode: "Running in headless mode" or "Opening visible browser..."
+</headless-vs-headed>
+
 <defaults>
-Screenshots to /tmp. Use `slowMo: 100` for visibility.
+Screenshots to /tmp. Use `slowMo: 100` for debugging.
 </defaults>
 
 <injected-variables>
 For inline code, these are available:
 
-- `BASE_URL` - from PLAYWRIGHT_BASE_URL env var (empty string if not set)
-- `HEADLESS` - true in CI (GITHUB_ACTIONS, CI, etc.), false otherwise
+- `BASE_URL` - from PLAYWRIGHT_BASE_URL env var
+- `HEADLESS` - true by default (set PLAYWRIGHT_HEADED=true for visible)
+- `CI_ARGS` - browser args for CI (`['--no-sandbox', '--disable-setuid-sandbox']`)
+- `EXTRA_HEADERS` - from PW_HEADER_NAME/VALUE or PW_EXTRA_HEADERS
 - `chromium`, `firefox`, `webkit`, `devices` - from playwright
 
-Example inline usage:
+Example:
 ```bash
 node $SKILL_DIR/run.js "
-const browser = await chromium.launch({ headless: HEADLESS });
+const browser = await chromium.launch({ headless: HEADLESS, args: CI_ARGS });
 const page = await browser.newPage();
 await page.goto(BASE_URL || 'http://localhost:3000');
 console.log(await page.title());

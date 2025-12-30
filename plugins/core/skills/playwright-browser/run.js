@@ -9,6 +9,13 @@
  *
  * Auto-installs Playwright on first run.
  * Properly awaits async code before exiting.
+ *
+ * Environment variables:
+ *   PLAYWRIGHT_BASE_URL     - Base URL for testing (injected as BASE_URL)
+ *   PLAYWRIGHT_HEADED       - Set to "true" for visible browser (default: headless)
+ *   PW_HEADER_NAME          - Custom header name (with PW_HEADER_VALUE)
+ *   PW_HEADER_VALUE         - Custom header value
+ *   PW_EXTRA_HEADERS        - JSON object of multiple headers
  */
 
 const fs = require("fs");
@@ -27,6 +34,13 @@ function isCI() {
   );
 }
 
+function shouldBeHeadless() {
+  // Explicit override wins
+  if (process.env.PLAYWRIGHT_HEADED === "true") return false;
+  // Default to headless (less intrusive)
+  return true;
+}
+
 function checkPlaywrightInstalled() {
   try {
     require.resolve("playwright");
@@ -37,18 +51,37 @@ function checkPlaywrightInstalled() {
 }
 
 function installPlaywright() {
-  console.log("Installing Playwright...");
+  console.log("📦 Playwright not found. Installing...");
   try {
     execSync("npm install", { stdio: "inherit", cwd: __dirname });
     execSync("npx playwright install chromium", {
       stdio: "inherit",
       cwd: __dirname,
     });
-    console.log("Playwright ready");
+    console.log("✅ Playwright installed successfully");
     return true;
   } catch (e) {
-    console.error("Failed to install Playwright:", e.message);
+    console.error("❌ Failed to install Playwright:", e.message);
+    console.error("Please run manually: cd", __dirname, "&& npm run setup");
     return false;
+  }
+}
+
+function cleanupOldTempFiles() {
+  try {
+    const files = fs.readdirSync(__dirname);
+    const tempFiles = files.filter(
+      (f) => f.startsWith(".temp-") && f.endsWith(".js")
+    );
+    tempFiles.forEach((file) => {
+      try {
+        fs.unlinkSync(path.join(__dirname, file));
+      } catch {
+        // Ignore - file might be in use
+      }
+    });
+  } catch {
+    // Ignore directory read errors
   }
 }
 
@@ -56,18 +89,26 @@ function getCodeToExecute() {
   const args = process.argv.slice(2);
 
   if (args.length > 0 && fs.existsSync(args[0])) {
-    return { code: fs.readFileSync(path.resolve(args[0]), "utf8"), isFile: true };
+    const filePath = path.resolve(args[0]);
+    console.log(`📄 Executing: ${filePath}`);
+    return fs.readFileSync(filePath, "utf8");
   }
 
   if (args.length > 0) {
-    return { code: args.join(" "), isFile: false };
+    console.log("⚡ Executing inline code");
+    return args.join(" ");
   }
 
   if (!process.stdin.isTTY) {
-    return { code: fs.readFileSync(0, "utf8"), isFile: false };
+    console.log("📥 Reading from stdin");
+    return fs.readFileSync(0, "utf8");
   }
 
-  console.error("Usage: node run.js <file|code>");
+  console.error("❌ No code to execute");
+  console.error("Usage:");
+  console.error("  node run.js script.js       # Execute file");
+  console.error('  node run.js "code here"     # Execute inline');
+  console.error("  cat script.js | node run.js # Execute from stdin");
   process.exit(1);
 }
 
@@ -80,20 +121,48 @@ function isCompleteScript(code) {
   return hasRequire && hasAsyncWrapper;
 }
 
+function getExtraHeadersCode() {
+  return `
+// Parse extra HTTP headers from environment variables
+function getExtraHeaders() {
+  const headerName = process.env.PW_HEADER_NAME;
+  const headerValue = process.env.PW_HEADER_VALUE;
+  if (headerName && headerValue) {
+    return { [headerName]: headerValue };
+  }
+  const headersJson = process.env.PW_EXTRA_HEADERS;
+  if (headersJson) {
+    try {
+      const parsed = JSON.parse(headersJson);
+      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+        return parsed;
+      }
+    } catch {}
+  }
+  return null;
+}
+const EXTRA_HEADERS = getExtraHeaders();
+`;
+}
+
 function wrapInlineCode(code) {
-  const headless = isCI();
+  const headless = shouldBeHeadless();
+  const ciArgs = isCI() ? "['--no-sandbox', '--disable-setuid-sandbox']" : "[]";
 
   return `
 const { chromium, firefox, webkit, devices } = require('playwright');
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || '';
 const HEADLESS = ${headless};
+const CI_ARGS = ${ciArgs};
+
+${getExtraHeadersCode()}
 
 (async () => {
   try {
     ${code}
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('❌ Error:', error.message);
     if (error.stack) console.error(error.stack);
     process.exit(1);
   }
@@ -122,35 +191,26 @@ function runScript(scriptPath) {
 }
 
 async function main() {
+  console.log("🎭 Playwright Executor\n");
+
+  cleanupOldTempFiles();
+
   if (!checkPlaywrightInstalled()) {
     if (!installPlaywright()) {
       process.exit(1);
     }
   }
 
-  const { code, isFile } = getCodeToExecute();
-
-  // For complete scripts, run them directly with node
-  // This properly waits for async code to complete
-  if (isCompleteScript(code)) {
-    const tempFile = path.join(__dirname, `.temp-${Date.now()}.js`);
-    try {
-      fs.writeFileSync(tempFile, code, "utf8");
-      await runScript(tempFile);
-    } finally {
-      try {
-        fs.unlinkSync(tempFile);
-      } catch {}
-    }
-    return;
-  }
-
-  // For inline code, wrap it and run
-  const wrappedCode = wrapInlineCode(code);
+  const code = getCodeToExecute();
   const tempFile = path.join(__dirname, `.temp-${Date.now()}.js`);
 
   try {
-    fs.writeFileSync(tempFile, wrappedCode, "utf8");
+    // For complete scripts, run as-is
+    // For inline code, wrap with setup
+    const finalCode = isCompleteScript(code) ? code : wrapInlineCode(code);
+    fs.writeFileSync(tempFile, finalCode, "utf8");
+
+    console.log("🚀 Starting automation...\n");
     await runScript(tempFile);
   } finally {
     try {
@@ -160,6 +220,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("Fatal:", error.message);
+  console.error("❌ Fatal:", error.message);
   process.exit(1);
 });
