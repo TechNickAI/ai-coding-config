@@ -121,6 +121,10 @@ Maximize async throughput: while waiting for slow bots, work on other productive
 in parallel. Only block when you need bot results to continue. See productive-waiting
 for ideas.
 
+Poll bot status every 60-90 seconds while waiting. Check between productive-waiting
+activities rather than sleeping idle. If all remaining bots are slow (Greptile, Codex),
+extend to 2-3 minute intervals to reduce API calls.
+
 After pushing fixes, re-check for merge conflicts (the base branch may have advanced
 while you were working) and return to polling since bots will re-analyze. Exit when all
 review bots have completed and no new actionable feedback remains. </execution-model>
