@@ -1,7 +1,7 @@
 ---
 description: Git workflow, permissions, and all git message standards
 alwaysApply: true
-version: 2.1.0
+version: 2.2.0
 ---
 
 # Git Collaboration and Communication Standards
@@ -36,6 +36,13 @@ work-in-progress.
 **Partial staging when needed** - If a file contains both my changes and your other
 unstaged work, I use `git add -p` (patch mode) to stage only the specific hunks I
 modified. This ensures I never accidentally commit your uncommitted work.
+
+**Verify before committing when using git add -A** - While `git add -A` is allowed, I
+verify what's actually staged before committing. Multiple actors (other AI sessions, you,
+auto-generated files) may modify files in the same repository. Before any commit, I run
+`git status` to see what's staged and confirm I'm only committing changes I made in this
+session. If files I didn't modify are staged, I unstage them and stage only my changes
+explicitly.
 
 **Transparency before committing** - Before creating any commit, I tell you exactly
 which files or hunks I'm staging so you can verify I'm not including anything
