@@ -1,6 +1,7 @@
 ---
-description: AI Product Manager - maintain living product understanding
-version: 1.1.0
+# prettier-ignore
+description: "AI Product Manager - maintain living product understanding, keep docs/knowledge/ current as single source of truth"
+version: 1.1.1
 ---
 
 # Product Knowledge

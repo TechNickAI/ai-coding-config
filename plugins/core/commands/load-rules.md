@@ -1,7 +1,8 @@
 ---
-description: Load relevant coding rules for the current task
+# prettier-ignore
+description: "Load relevant coding rules for the current task - analyzes context and loads only needed rules from rules/"
 model: haiku
-version: 0.3.0
+version: 0.3.1
 ---
 
 Analyze the current task and load ONLY relevant rules from `rules/`.

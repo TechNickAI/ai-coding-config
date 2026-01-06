@@ -1,7 +1,8 @@
 ---
-description: "Save and resume development sessions across conversations"
+# prettier-ignore
+description: "Save and resume development sessions across conversations - preserves context, decisions, and progress for continuity"
 argument-hint: "save|resume|list [name]"
-version: 1.0.0
+version: 1.0.1
 ---
 
 <objective>
@@ -21,6 +22,7 @@ Sessions are stored in `.claude/sessions/` with this structure:
     ├── progress.json     # Completed steps, current step, blockers
     └── files.json        # Key files being worked on
 ```
+
 </session-structure>
 
 <commands>
@@ -54,6 +56,7 @@ Save current session state for later resumption.
 6. Update active.json to point to this session
 
 Example:
+
 ```bash
 /session save "auth-refactor"
 ```
@@ -71,6 +74,7 @@ Resume a saved session.
 If no name/id provided, resume the active session (from active.json).
 
 Example:
+
 ```bash
 /session resume auth-refactor
 /session resume      # Resume active session
@@ -79,28 +83,29 @@ Example:
 ## /session list
 
 Show all saved sessions with:
+
 - Session name and ID
 - Creation date
 - Branch
 - Brief task description
 - Progress status (X of Y steps)
 
-Sort by most recently modified.
-</commands>
+Sort by most recently modified. </commands>
 
 <context-capture>
 When saving context, capture decisions that matter for resumption:
 
 Good context entries:
+
 - "Using event-driven architecture for loose coupling between services"
 - "Chose PostgreSQL over MongoDB for ACID compliance requirements"
 - "Auth flow: JWT with refresh tokens, 15min access / 7day refresh"
 
 Skip transient details:
+
 - Specific error messages (they'll be different on resume)
 - File contents (read them fresh)
-- Conversation history (that's what context.md replaces)
-</context-capture>
+- Conversation history (that's what context.md replaces) </context-capture>
 
 <progress-tracking>
 Progress entries should be actionable:
@@ -113,15 +118,11 @@ Progress entries should be actionable:
     "Add authentication middleware"
   ],
   "current": "Writing login endpoint tests",
-  "blockers": [
-    "Need to decide on rate limiting strategy"
-  ],
-  "next": [
-    "Implement password reset flow",
-    "Add email verification"
-  ]
+  "blockers": ["Need to decide on rate limiting strategy"],
+  "next": ["Implement password reset flow", "Add email verification"]
 }
 ```
+
 </progress-tracking>
 
 <auto-save>
@@ -131,8 +132,7 @@ Consider auto-saving sessions:
 - At natural breakpoints (commit, PR creation)
 - When context window gets full (before compaction)
 
-Ask before auto-saving: "Save session before [action]? (y/n)"
-</auto-save>
+Ask before auto-saving: "Save session before [action]? (y/n)" </auto-save>
 
 <resumption-flow>
 When resuming a session:
@@ -143,16 +143,15 @@ When resuming a session:
 4. **Blockers**: Any open questions or blockers noted
 5. **Ready check**: "Ready to continue with [current step]?"
 
-This gets the user (and Claude) back up to speed quickly without re-explaining everything.
-</resumption-flow>
+This gets the user (and Claude) back up to speed quickly without re-explaining
+everything. </resumption-flow>
 
 <privacy-notice>
 Session files may contain sensitive information including architectural decisions, code
 context, and file paths. The `.claude/sessions/` directory is gitignored by default.
 
 Never commit session data to version control. Review session contents before sharing
-with team members.
-</privacy-notice>
+with team members. </privacy-notice>
 
 <best-practices>
 Save sessions when:
@@ -162,8 +161,8 @@ Save sessions when:
 - When you'd want to remember "where was I?"
 
 Resume sessions when:
+
 - Starting a new Claude Code conversation
 - Returning to a task after a break
 - Handing off to another developer
-- Context got compacted and you lost state
-</best-practices>
+- Context got compacted and you lost state </best-practices>

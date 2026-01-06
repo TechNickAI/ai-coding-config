@@ -1,6 +1,7 @@
 ---
-description: "Execute development task autonomously from description to PR-ready"
-version: 1.2.0
+# prettier-ignore
+description: "Execute development task autonomously from description to PR-ready - handles implementation, testing, and git workflow without supervision"
+version: 1.2.1
 ---
 
 # /autotask - Autonomous Task Execution
@@ -35,32 +36,38 @@ Ensure task clarity before implementation. If the task description is unclear or
 Gather context to decide where to work:
 
 1. Check current state: `git status` (clean/dirty, current branch)
-2. Check for multi-repo pattern: sibling directories with similar names (e.g., `myproject-*`)
+2. Check for multi-repo pattern: sibling directories with similar names (e.g.,
+   `myproject-*`)
 3. Check for existing worktrees: `git worktree list`
 
 Decision logic:
 
 Clean working tree → Work in place. Simple, no isolation needed.
 
-Dirty tree with multi-repo pattern → Ask the user. They may prefer switching to an existing copy rather than creating new isolation.
+Dirty tree with multi-repo pattern → Ask the user. They may prefer switching to an
+existing copy rather than creating new isolation.
 
-Dirty tree, no multi-repo pattern → Suggest creating a worktree, but ask first. The user might prefer to stash or commit.
+Dirty tree, no multi-repo pattern → Suggest creating a worktree, but ask first. The user
+might prefer to stash or commit.
 
 Already in a worktree → Work in place. Already isolated.
 
 When the right choice isn't obvious, ask. A quick question beats guessing wrong.
 
-For worktree creation, use /setup-environment which handles branch naming and validation.
-</environment-setup>
+For worktree creation, use /setup-environment which handles branch naming and
+validation. </environment-setup>
 
 <context-preservation>
 Your context window is precious. Preserve it by delegating to specialized agents rather than doing exploratory work yourself.
 
-Use agents for: codebase exploration, pattern searching, documentation research, multi-file analysis, and any task requiring multiple rounds of search/read operations.
+Use agents for: codebase exploration, pattern searching, documentation research,
+multi-file analysis, and any task requiring multiple rounds of search/read operations.
 
-Keep your context focused on: orchestration, decision-making, user communication, and synthesizing agent results.
+Keep your context focused on: orchestration, decision-making, user communication, and
+synthesizing agent results.
 
-This isn't about avoiding work - it's about working at the right level. Agents return concise results; doing the same work yourself fills context with raw data.
+This isn't about avoiding work - it's about working at the right level. Agents return
+concise results; doing the same work yourself fills context with raw data.
 </context-preservation>
 
 <autonomous-execution>
@@ -99,8 +106,8 @@ fail.
 Targeted validation: Run specific tests for changed code, use /verify-fix to confirm the
 fix works as expected, use code-reviewer for architecture review if patterns change.
 
-Full validation: /verify-fix + comprehensive test suite, multiple agent reviews, security
-scanning.
+Full validation: /verify-fix + comprehensive test suite, multiple agent reviews,
+security scanning.
 
 Principle: Validation intensity should match task risk. Git hooks handle formatting,
 linting, and tests. Add extra validation only when risk justifies it.
@@ -110,12 +117,14 @@ linting, and tests. Add extra validation only when risk justifies it.
 Before creating the PR, run a code review agent appropriate to the task:
 
 - code-reviewer: General architecture, patterns, security
-- pr-review-toolkit agents: Specialized reviews (type design, silent failures, test coverage)
+- pr-review-toolkit agents: Specialized reviews (type design, silent failures, test
+  coverage)
 
-The review catches issues before they reach the PR, reducing review cycles. Fix what the agent finds before proceeding.
+The review catches issues before they reach the PR, reducing review cycles. Fix what the
+agent finds before proceeding.
 
-Match review depth to task risk. Simple changes need a quick pass; architectural changes warrant thorough review.
-</pre-pr-review>
+Match review depth to task risk. Simple changes need a quick pass; architectural changes
+warrant thorough review. </pre-pr-review>
 
 <create-pr>
 Deliver a well-documented pull request with commits following `.cursor/rules/git-commit-message.mdc`.

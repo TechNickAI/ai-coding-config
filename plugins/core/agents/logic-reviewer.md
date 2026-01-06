@@ -1,7 +1,8 @@
 ---
 name: logic-reviewer
-description: "Invoke for bugs and logic error review"
-version: 1.0.0
+# prettier-ignore
+description: "Use when reviewing for logic bugs, edge cases, off-by-one errors, race conditions, or finding correctness issues before users do"
+version: 1.1.0
 color: orange
 ---
 

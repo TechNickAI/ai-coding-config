@@ -1,7 +1,8 @@
 ---
-description: Verify a fix actually works before claiming success
+# prettier-ignore
+description: "Verify a fix actually works before claiming success - runs tests, checks live behavior, confirms fixes work from user perspective"
 argument-hint: [description of what to verify]
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Verify Fix Command
@@ -11,16 +12,14 @@ Verify that a fix actually works before claiming success. Run tests, check live 
 confirm the change resolves the issue. This command prevents false "I fixed it" claims
 that destroy trust.
 
-Core principle: A fix isn't fixed until you've seen it work.
-</objective>
+Core principle: A fix isn't fixed until you've seen it work. </objective>
 
 <usage>
 /verify-fix [what to verify]
 
 - /verify-fix - Verify the most recent fix (infer from context)
 - /verify-fix "login redirect works" - Verify specific behavior
-- /verify-fix auth tests - Run auth-related tests
-</usage>
+- /verify-fix auth tests - Run auth-related tests </usage>
 
 <verification-process>
 1. Identify what changed and what behavior should be different
@@ -80,6 +79,7 @@ pnpm build
 npm run build
 go build ./...
 ```
+
 </verification-methods>
 
 <output-format>
@@ -104,6 +104,7 @@ Fix confirmed: [specific claim about what's now working]
 
 The fix is NOT confirmed. [Next action: investigating X / trying Y / need more info]
 ```
+
 </output-format>
 
 <language-standards>
@@ -113,6 +114,7 @@ Before verification, use hedged language:
 - "This appears to resolve..."
 
 After successful verification, use confident language:
+
 - "Verified: the login redirect now works correctly"
 - "Fix confirmed: tests pass and the page loads"
 
@@ -126,8 +128,7 @@ Use this command:
 - When asked "does it work?" or "is it fixed?"
 - Anytime you're tempted to say "I fixed it" without running something
 
-If verification fails, continue debugging rather than reporting success.
-</integration>
+If verification fails, continue debugging rather than reporting success. </integration>
 
 <verification-criteria>
 Verification means observing the specific fixed behavior working correctly:
@@ -150,5 +151,4 @@ If verification cannot be run immediately:
 - Be explicit that the fix is unverified pending these checks
 
 Never claim the fix works without some form of verification. Stating "this should work
-but I can't verify because X" preserves epistemic honesty.
-</when-verification-blocked>
+but I can't verify because X" preserves epistemic honesty. </when-verification-blocked>

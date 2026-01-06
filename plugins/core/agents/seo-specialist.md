@@ -1,7 +1,8 @@
 ---
 name: seo-specialist
-description: "Invoke for SEO audits and optimization"
-version: 1.0.0
+# prettier-ignore
+description: "Use when auditing SEO, improving search rankings, implementing structured data, or optimizing for organic traffic and Core Web Vitals"
+version: 1.1.0
 color: purple
 ---
 

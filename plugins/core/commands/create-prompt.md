@@ -1,8 +1,9 @@
 ---
-description: "Create optimized prompts following prompt-engineering principles"
+# prettier-ignore
+description: "Create optimized prompts following prompt-engineering principles - uses LLM mechanics and pattern reinforcement for effective prompts"
 argument-hint: <task description>
 model: opus
-version: 1.2.0
+version: 1.2.1
 ---
 
 # Create Prompt

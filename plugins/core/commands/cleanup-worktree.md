@@ -1,5 +1,6 @@
 ---
-description: Clean up a git worktree after its PR has been merged
+# prettier-ignore
+description: "Clean up a git worktree after its PR has been merged - verifies merge status and safely removes the worktree directory"
 model: haiku
 ---
 

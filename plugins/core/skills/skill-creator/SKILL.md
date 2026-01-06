@@ -1,7 +1,8 @@
 ---
 name: skill-creator
-description: "Use when creating or editing skills for ai-coding-config repo"
-version: 1.3.0
+# prettier-ignore
+description: "Use when creating skills, writing SKILL.md files, editing skill definitions, or adding new reusable techniques to ai-coding-config"
+version: 1.4.0
 category: meta
 triggers:
   - "create skill"

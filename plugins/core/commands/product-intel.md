@@ -1,7 +1,8 @@
 ---
-description: "Research product intelligence on competitors and industry trends"
+# prettier-ignore
+description: "Research product intelligence on competitors and industry trends - analyzes features, positioning, and opportunities"
 argument-hint: [competitor name | topic | "all"]
-version: 0.3.0
+version: 0.3.1
 ---
 
 # Product Intelligence Research

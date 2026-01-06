@@ -1,8 +1,9 @@
 ---
 name: performance-reviewer
-description: "Invoke for performance and efficiency review"
-version: 1.0.0
-color: magenta
+# prettier-ignore
+description: "Use when reviewing performance, finding N+1 queries, checking algorithmic complexity, or catching efficiency problems before production"
+version: 1.1.0
+color: yellow
 ---
 
 I find performance problems before they hit production. I look for inefficient

@@ -8,40 +8,59 @@ matters.
 ```yaml
 ---
 name: agent-name
-description: "Keep under 75 characters"
+# prettier-ignore
+description: "Use when reviewing for X, checking Y, or verifying Z - include all semantic triggers"
+model: opus
 ---
 ```
 
 **Critical constraints:**
 
 - **Single line only** - Claude Code doesn't parse block scalars (`>` or `|`) correctly
-- **Under 75 characters** - With `description: ` prefix (13 chars), total line must be
-  under 88 to prevent prettier wrapping
+- **Use `# prettier-ignore`** - Add before description to allow longer, richer triggers
 - **Use quotes** - Always quote descriptions to handle special characters like colons
 
-**Valid formats:**
+## Description Philosophy
 
-- `description: "Double quoted under 75 chars"` (recommended)
-- `description: 'Single quoted under 75 chars'`
-- `description: Plain text under 75 chars` (only if no special characters)
+Agents are LLM-triggered. Descriptions should match against **user requests** to enable
+Claude Code to auto-select the right agent. Use "Use when..." format with rich semantic
+triggers.
 
-## Writing Concise Descriptions
+**Do: Match user language**
 
-Keep descriptions focused on WHEN to invoke the agent:
+Think about what users will say:
 
-- Good: "Invoke for design review"
-- Too long: "Invoke for design review with Playwright testing checking WCAG
-  compliance..."
+- "review the code"
+- "check if this is production ready"
+- "debug this error"
+- "test in the browser"
 
-If you need to cut content to stay under 75 chars, move that detail into the agent body
-instead.
+Include those exact phrases in your descriptions.
+
+**Do: Include variations**
+
+```yaml
+# prettier-ignore
+description: "Use when reviewing for production readiness, fragile code, error handling, resilience, reliability, or catching bugs before deployment"
+```
+
+This triggers on: "review for production", "check fragile code", "error handling
+review", "catch bugs", etc.
+
+**Don't: Describe what it does**
+
+Bad: `"A code reviewer that analyzes production readiness and error handling patterns"`
+
+This is technical documentation, not a semantic trigger.
 
 ## Example Agent
 
 ```yaml
 ---
 name: test-runner
-description: "Invoke to run tests with terse results"
+# prettier-ignore
+description: "Use when running tests, checking test results, or verifying tests pass before committing"
+model: haiku
 ---
 I run tests using the specified test runner (bun, pnpm, pytest, etc) and return a terse
 summary with pass count and failure details only. This preserves your context by

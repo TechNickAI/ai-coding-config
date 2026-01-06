@@ -1,7 +1,8 @@
 ---
 name: brainstorming
-description: "Use when rough ideas need design before code or multiple approaches"
-version: 0.3.0
+# prettier-ignore
+description: "Use when rough ideas need design before code, requirements are fuzzy, multiple approaches exist, or you need to explore options before implementation"
+version: 0.4.0
 category: planning
 triggers:
   - "brainstorm"

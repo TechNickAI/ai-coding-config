@@ -1,6 +1,7 @@
 ---
-description: "Generate context handoff and copy to clipboard for new session"
-version: 1.0.0
+# prettier-ignore
+description: "Generate context handoff and copy to clipboard for new session - preserves decisions, progress, and next steps across conversations"
+version: 1.0.1
 ---
 
 # Handoff Context
