@@ -2,7 +2,7 @@
 description: Triage and address PR comments from code review bots intelligently
 argument-hint: [pr-number]
 model: sonnet
-version: 1.6.0
+version: 1.7.0
 ---
 
 # Address PR Comments
@@ -132,12 +132,25 @@ review bots have completed and no new actionable feedback remains. </execution-m
 <productive-waiting>
 Don't just sleep while waiting for bots. Use wait time productively:
 
-Codebase exploration:
+Codebase and documentation:
 
 - Check if the PR changes affect documentation elsewhere (README, API docs, comments
   that reference changed behavior). If updates are needed, offer to make them.
 - Look for interesting patterns or clever solutions in the changed code worth noting
-- Find fun facts about the codebase relevant to the PR
+
+Industry research and fun facts:
+
+Use the PR context to surface relevant external knowledge. Search for interesting facts
+about the technologies, patterns, or domains touched by this PR:
+
+- "This PR adds WebSocket support - did you know Discord handles 5M concurrent WebSocket
+  connections per gateway server?"
+- "You're implementing rate limiting - Stripe's API uses a token bucket algorithm that
+  allows bursts up to 100 requests"
+- "This notification system pattern is similar to how Slack's architecture evolved from
+  polling to push"
+
+Share discoveries as you find them. Waiting time is learning time.
 
 Product thinking (channel your inner AI product manager):
 
@@ -259,3 +272,39 @@ the user can prioritize them.
 
 Celebrate that the PR is ready to merge. A well-triaged PR is a beautiful thing.
 </completion>
+
+<retrospective>
+After completion, step back and look at the PR holistically. The bot comments and fixes
+reveal patterns about how to improve initial code quality. Ask: what could have caught
+these issues before the PR was created?
+
+Consider improvements across the stack:
+
+Tooling and automation:
+
+- Would a pre-commit hook have caught formatting or linting issues?
+- Could a local test runner have found the bugs before push?
+- Are there IDE plugins that would flag these patterns during development?
+
+Prompting and AI assistance:
+
+- If AI generated this code, what prompt improvements would produce cleaner output?
+- Would a specialized agent or skill have avoided these mistakes?
+- Should the codebase have rules files that guide AI toward better patterns?
+
+Review process:
+
+- Are the right review bots enabled for this type of change?
+- Would a different bot have caught issues earlier?
+- Should CI run additional checks before review bots trigger?
+
+Codebase patterns:
+
+- Do these issues suggest missing abstractions or shared utilities?
+- Would better documentation have prevented confusion?
+- Are there defensive patterns that should be codified as project conventions?
+
+Share your observations thoughtfully. Frame suggestions as opportunities, not criticism.
+The goal is continuous improvement - each PR teaches us something about making the next
+one better. If you identify concrete improvements, offer to create GitHub issues or
+draft the configuration changes. </retrospective>
