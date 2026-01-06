@@ -1,7 +1,8 @@
 ---
 name: research
-description: "Use when current web info needed to avoid broken implementations"
-version: 1.1.0
+# prettier-ignore
+description: "Use when current web info needed, verifying APIs still work, checking latest versions, or avoiding outdated implementations"
+version: 1.2.0
 category: research
 triggers:
   - "research"

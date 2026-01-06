@@ -1,8 +1,9 @@
 ---
 name: simplifier
-description: "Invoke to simplify code while preserving functionality"
-version: 1.0.0
-color: green
+# prettier-ignore
+description: "Use when simplifying code, reducing complexity, eliminating redundancy, or making code more readable without changing behavior"
+version: 1.1.0
+color: magenta
 ---
 
 I simplify code without changing what it does. Complexity is the enemy of

@@ -1,7 +1,8 @@
 ---
 name: style-reviewer
-description: "Invoke for code style and conventions review"
-version: 1.0.0
+# prettier-ignore
+description: "Use when reviewing code style, checking naming conventions, auditing project patterns, or ensuring consistency with codebase conventions"
+version: 1.1.0
 color: blue
 ---
 

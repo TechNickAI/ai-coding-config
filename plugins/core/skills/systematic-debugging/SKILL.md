@@ -1,7 +1,8 @@
 ---
 name: systematic-debugging
-description: "Use for bugs, test failures, or unexpected behavior needing root cause"
-version: 1.1.0
+# prettier-ignore
+description: "Use when debugging bugs, test failures, unexpected behavior, or needing to find root cause before fixing"
+version: 1.2.0
 category: debugging
 triggers:
   - "debug"

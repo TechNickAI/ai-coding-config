@@ -8,7 +8,8 @@ matters.
 ```yaml
 ---
 name: skill-name
-description: "Keep under 75 characters - trigger-only!"
+# prettier-ignore
+description: "Use when X, Y, or Z - include all semantic triggers that should activate this skill"
 version: 1.0.0
 category: debugging
 triggers:
@@ -21,11 +22,13 @@ triggers:
 
 **name**: Letters, numbers, hyphens only. Use kebab-case (e.g., `systematic-debugging`).
 
-**description**: Trigger-only! Start with "Use when..." and describe ONLY triggering
-conditions. No process details. Under 75 characters.
+**description**: Start with "Use when..." and include rich semantic triggers. Use
+`# prettier-ignore` to allow longer descriptions. Focus on triggering conditions, not
+process details.
 
-- Good: `"Use when rough ideas need design before code"`
-- Bad: `"Use when ideas need design - explores options and validates incrementally"`
+- Good:
+  `"Use when debugging test failures, unexpected behavior, or needing root cause analysis"`
+- Bad: `"Finds root causes by tracing data flow and testing hypotheses"`
 
 The "Description Trap": If your description contains process details, Claude follows the
 short description instead of reading the full skill content.
@@ -33,6 +36,7 @@ short description instead of reading the full skill content.
 **version**: Semantic versioning. Bump when updating the skill.
 
 **category**: Grouping for discovery. Common categories:
+
 - `planning` - Design, architecture, brainstorming
 - `debugging` - Error investigation, root cause analysis
 - `research` - Web lookups, documentation review
@@ -40,6 +44,7 @@ short description instead of reading the full skill content.
 - `meta` - Skills about skills, configuration
 
 **triggers**: Natural language phrases that activate this skill. Include:
+
 - Keywords users naturally say ("debug", "brainstorm", "research")
 - Questions ("why is this", "is this still")
 - Symptoms ("not working", "test failing")
@@ -50,7 +55,8 @@ short description instead of reading the full skill content.
 ```yaml
 ---
 name: systematic-debugging
-description: "Use for bugs, test failures, or unexpected behavior needing root cause"
+# prettier-ignore
+description: "Use when debugging bugs, test failures, unexpected behavior, or needing root cause analysis before fixing"
 version: 1.1.0
 category: debugging
 triggers:
@@ -75,6 +81,6 @@ Core principle: If you can't explain WHY it's broken, you're not ready to fix it
 ## Critical Constraints
 
 - **Single line descriptions** - Claude Code doesn't parse block scalars (`>` or `|`)
-- **Under 75 characters** - With `description: ` prefix, total line must be under 88
+- **Use `# prettier-ignore`** - Add before description to allow longer, richer triggers
 - **Use quotes** - Always quote descriptions to handle special characters
-- **Trigger-only descriptions** - No process details in the description field
+- **Trigger-focused descriptions** - Focus on when to activate, not what it does

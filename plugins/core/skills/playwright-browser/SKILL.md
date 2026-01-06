@@ -1,7 +1,8 @@
 ---
 name: playwright-browser
-description: "Use when automating browsers, testing pages, or taking screenshots"
-version: 1.0.1
+# prettier-ignore
+description: "Use when automating browsers, testing pages, taking screenshots, checking UI, verifying login flows, or testing responsive behavior"
+version: 1.1.0
 category: testing
 triggers:
   - "browser"
@@ -32,8 +33,7 @@ For inline code (variables are auto-injected, see below):
 node $SKILL_DIR/run.js "const b = await chromium.launch(); const p = await b.newPage(); await p.goto('http://localhost:3000'); console.log(await p.title()); await b.close();"
 ```
 
-$SKILL_DIR is where you loaded this file from.
-</execution>
+$SKILL_DIR is where you loaded this file from. </execution>
 
 <headless-vs-headed>
 Default: headless (invisible, less intrusive).
@@ -54,6 +54,7 @@ For inline code, these are available:
 - `chromium`, `firefox`, `webkit`, `devices` - from playwright
 
 Example:
+
 ```bash
 node $SKILL_DIR/run.js "
 const browser = await chromium.launch({ args: CI_ARGS });
@@ -63,6 +64,7 @@ console.log(await page.title());
 await browser.close();
 "
 ```
+
 </injected-variables>
 
 <auto-install>

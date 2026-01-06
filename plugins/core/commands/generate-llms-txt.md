@@ -1,6 +1,7 @@
 ---
-description: "Generate or update llms.txt to help LLMs understand your site"
-version: 1.0.0
+# prettier-ignore
+description: "Generate or update llms.txt to help LLMs understand your site - standardized file for AI assistants to navigate documentation"
+version: 1.0.1
 ---
 
 # Generate llms.txt

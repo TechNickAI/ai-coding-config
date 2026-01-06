@@ -1,7 +1,8 @@
 ---
 name: youtube-transcript-analyzer
-description: "Use when analyzing YouTube videos for research or learning"
-version: 0.5.0
+# prettier-ignore
+description: "Use when analyzing YouTube videos, extracting insights from tutorials, researching video content, or learning from talks and presentations"
+version: 0.6.0
 category: research
 triggers:
   - "youtube"

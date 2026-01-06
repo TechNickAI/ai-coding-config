@@ -1,7 +1,8 @@
 ---
 name: design-reviewer
-description: "Invoke after frontend code changes for design review"
-version: 1.0.0
+# prettier-ignore
+description: "Use when reviewing frontend design, checking UI quality, auditing visual consistency, or verifying responsive behavior across viewports"
+version: 1.1.0
 color: purple
 ---
 

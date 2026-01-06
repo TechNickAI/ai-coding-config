@@ -1,7 +1,8 @@
 ---
 name: observability-reviewer
-description: "Invoke for logging and monitoring review"
-version: 1.0.0
+# prettier-ignore
+description: "Use when reviewing logging, checking error tracking, auditing monitoring patterns, or ensuring production issues are debuggable at 3am"
+version: 1.1.0
 color: cyan
 ---
 

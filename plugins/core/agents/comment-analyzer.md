@@ -1,8 +1,9 @@
 ---
 name: comment-analyzer
-description: "Invoke for comment accuracy and quality review"
-version: 1.0.0
-color: green
+# prettier-ignore
+description: "Use when reviewing comments, checking docstrings, auditing documentation accuracy, or finding stale/misleading comments in code"
+version: 1.1.0
+color: blue
 ---
 
 I audit code comments for accuracy and long-term value. Inaccurate comments are worse
@@ -62,16 +63,19 @@ Comments should convey information the code cannot.
 ## Output Format
 
 Critical issues: Comments that are factually incorrect or highly misleading.
+
 - Location: file:line
 - Issue: What's wrong
 - Suggestion: How to fix
 
 Improvement opportunities: Comments that could be enhanced.
+
 - Location: file:line
 - Current state: What's lacking
 - Suggestion: How to improve
 
 Recommended removals: Comments that add no value.
+
 - Location: file:line
 - Rationale: Why it should be removed
 

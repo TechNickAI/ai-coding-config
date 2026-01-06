@@ -1,7 +1,8 @@
 ---
-description: Initialize development environment for git worktree
+# prettier-ignore
+description: "Initialize development environment for git worktree - creates worktree, installs deps, validates setup for productive work"
 model: sonnet
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Setup Development Environment

@@ -1,7 +1,8 @@
 ---
-description: "Generate or update AGENTS.md with project context for AI assistants"
+# prettier-ignore
+description: "Generate or update AGENTS.md with project context for AI assistants - creates universal context for Claude Code, Cursor, Copilot"
 model: opus
-version: 0.2.0
+version: 0.2.1
 ---
 
 # Generate AGENTS.md

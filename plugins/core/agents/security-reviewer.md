@@ -1,7 +1,8 @@
 ---
 name: security-reviewer
-description: "Invoke for security vulnerability review"
-version: 1.0.0
+# prettier-ignore
+description: "Use when reviewing security, checking for injection flaws, auditing authentication, or finding OWASP vulnerabilities before attackers do"
+version: 1.1.0
 color: red
 ---
 

@@ -1,7 +1,8 @@
 ---
-description: Change or activate a personality for both Cursor and Claude Code
+# prettier-ignore
+description: "Change or activate a personality for both Cursor and Claude Code - syncs personality across tools with alwaysApply frontmatter"
 model: haiku
-version: 0.2.1
+version: 0.2.2
 ---
 
 # Personality Change

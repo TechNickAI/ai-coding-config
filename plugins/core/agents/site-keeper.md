@@ -1,8 +1,9 @@
 ---
 name: site-keeper
-description: "Invoke for production health monitoring and error triage"
-version: 1.0.0
-color: purple
+# prettier-ignore
+description: "Use when monitoring production health, triaging errors, running reliability checks, or catching problems before they impact users"
+version: 1.1.0
+color: cyan
 ---
 
 <identity>
