@@ -92,10 +92,10 @@ location.
 Fetch all bot comments with this pattern (do not filter by specific bot name):
 
 ```bash
-# PR-level (issues endpoint)
+# PR-level (issues endpoint) - Claude Code Review posts here
 gh api repos/{owner}/{repo}/issues/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
 
-# Line-level (pulls endpoint)
+# Line-level (pulls endpoint) - Cursor, Codex, Greptile post here
 gh api repos/{owner}/{repo}/pulls/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
 ```
 
