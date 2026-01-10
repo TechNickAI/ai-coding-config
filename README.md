@@ -120,38 +120,51 @@ conversation.
 /session resume                   # Resume where you left off
 ```
 
-### Highlighted Agents
+### Agents (24 specialized reviewers)
 
-All 22 agents included in the ai-coding-config plugin:
+**🚀 When building features**
 
-**Development:**
-- **autonomous-developer** - Implements features following your project patterns
+- **autonomous-developer** - Implements features end-to-end following your patterns
+- **test-engineer** - Writes comprehensive test coverage
+- **test-runner** - Runs tests with terse, context-efficient output
+
+**🐛 When debugging**
+
 - **debugger** - Root cause analysis through systematic investigation
-- **test-engineer** - Generates comprehensive test coverage
-- **test-runner** - Runs tests with context-efficient output
+- **site-keeper** - Production health monitoring and error triage
 
-**Code Review:**
-- **security-reviewer** - Security vulnerability analysis
-- **performance-reviewer** - Performance and efficiency review
-- **architecture-auditor** - Architecture and design patterns review
+**✅ When reviewing code for correctness**
+
 - **logic-reviewer** - Bug and logic error detection
-- **style-reviewer** - Code style and conventions
 - **error-handling-reviewer** - Error handling and silent failure detection
+- **security-reviewer** - Security vulnerabilities (injection, auth, OWASP top 10)
+- **robustness-reviewer** - Production readiness and resilience
 
-**Specialized:**
+**⚡ When optimizing**
+
+- **performance-reviewer** - Performance bottlenecks and efficiency
+- **simplifier** - Reduce complexity while preserving functionality
+
+**🎨 When building UX**
+
+- **empathy-reviewer** - User experience from the user's chair (Norman, Krug, Rams)
 - **ux-designer** - User-facing content and interface design
-- **design-reviewer** - Frontend design quality review
-- **seo-specialist** - SEO audits and optimization
-- **mobile-ux-reviewer** - Mobile responsiveness review
+- **design-reviewer** - Visual quality and responsive behavior
+- **mobile-ux-reviewer** - Mobile responsiveness and touch interactions
+
+**📐 When reviewing architecture**
+
+- **architecture-auditor** - Design patterns and structural decisions
+- **style-reviewer** - Code style and project conventions
+- **observability-reviewer** - Logging, monitoring, debuggability
+
+**📝 When polishing**
+
+- **comment-analyzer** - Comment accuracy and staleness
+- **test-analyzer** - Test coverage gaps and brittle tests
+- **seo-specialist** - SEO, meta tags, structured data
 - **git-writer** - Commit messages and PR descriptions
 - **prompt-engineer** - LLM prompt optimization
-
-**Code Quality:**
-- **comment-analyzer** - Comment accuracy and quality review
-- **test-analyzer** - Test coverage and quality review
-- **simplifier** - Simplify code while preserving functionality
-- **observability-reviewer** - Logging and monitoring review
-- **site-keeper** - Production health monitoring and error triage
 
 ### Highlighted Rules
 
@@ -269,8 +282,9 @@ See [contributing guide](docs/contributing.md).
 
 ## Discovery
 
-This marketplace is indexed at [claudemarketplaces.com](https://claudemarketplaces.com) -
-the searchable directory of Claude Code plugins.
+This marketplace is indexed at
+[claudemarketplaces.com](https://claudemarketplaces.com) - the searchable directory of
+Claude Code plugins.
 
 ---
 
