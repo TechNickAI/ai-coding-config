@@ -3,7 +3,7 @@
 description: "Triage and address PR comments from code review bots - analyzes feedback, prioritizes issues, fixes valid concerns, and declines incorrect suggestions"
 argument-hint: [pr-number]
 model: sonnet
-version: 1.7.1
+version: 1.7.2
 ---
 
 # Address PR Comments
@@ -89,6 +89,16 @@ Line-level review comments (pulls endpoint):
 specific code lines. Address all line-level bot comments - each flags a distinct
 location.
 
+Fetch all bot comments with this pattern (do not filter by specific bot name):
+
+```bash
+# PR-level (issues endpoint)
+gh api repos/{owner}/{repo}/issues/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
+
+# Line-level (pulls endpoint)
+gh api repos/{owner}/{repo}/pulls/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
+```
+
 Supported bots and their usernames:
 
 - `claude[bot]` - Claude Code Review (PR-level)
@@ -96,7 +106,7 @@ Supported bots and their usernames:
 - `chatgpt-codex-connector[bot]` - OpenAI Codex (line-level)
 - `greptile[bot]` - Greptile (line-level or PR-level)
 
-New bots may appear - any username containing `[bot]` that posts code review comments
+New bots may appear - any username ending with `[bot]` that posts code review comments
 should be processed. Check the comment body structure to determine if it's a code
 review.
 
@@ -105,7 +115,7 @@ You can also use:
 - `gh pr view {number} --comments` for PR-level comments
 - `gh api repos/{owner}/{repo}/pulls/{pr}/reviews` for review status
 
-Identify bot comments by author username containing `[bot]`. Human comments require
+Identify bot comments by author username ending with `[bot]`. Human comments require
 different handling - flag them for user attention rather than auto-addressing.
 </comment-sources>
 
@@ -115,23 +125,23 @@ its comments immediately while others are still running. Claude Code Review typi
 completes in 1-2 minutes. Cursor Bugbot and Codex take 3-10 minutes. Greptile can take
 up to 15 minutes. Process fast bots first rather than waiting for slow ones.
 
-Poll check status with `gh pr checks --json name,state,bucket`. Review bots include
-claude-review, Cursor Bugbot, chatgpt-codex-connector, and greptile.
+Poll check status with `gh pr checks --json name,state,bucket`. Some bots
+(claude-review, Cursor Bugbot, greptile) appear as checks. Others
+(chatgpt-codex-connector) only post comments without a corresponding check - poll both
+the checks endpoint and comments endpoints to catch all bot feedback.
 
 Maximize async throughput: while waiting for slow bots, work on other productive tasks
 in parallel. Only block when you need bot results to continue. See productive-waiting
 for ideas.
 
-Poll bot status every 60-90 seconds while waiting. Check between productive-waiting
-activities rather than sleeping idle. If all remaining bots are slow (Greptile, Codex),
-extend to 2-3 minute intervals to reduce API calls.
+Poll periodically between productive-waiting activities rather than sleeping idle.
 
 After pushing fixes, re-check for merge conflicts (the base branch may have advanced
 while you were working) and return to polling since bots will re-analyze. Exit when all
 review bots have completed and no new actionable feedback remains. </execution-model>
 
 <productive-waiting>
-Don't just sleep while waiting for bots. Use wait time productively:
+Use wait time productively while bots are running:
 
 Codebase and documentation:
 
