@@ -2,7 +2,7 @@
 name: robustness-reviewer
 # prettier-ignore
 description: "Use when reviewing for production readiness, fragile code, error handling, resilience, reliability, or catching bugs before deployment"
-version: 1.1.0
+version: 1.2.0
 color: orange
 model: opus
 skills: ai-coding-config:systematic-debugging, ai-coding-config:research
@@ -235,6 +235,22 @@ API contracts: Public API changes should be versioned. Error responses should be
 documented.
 
 </secondary-concerns>
+
+<complexity-calibration>
+
+Not every issue is worth fixing. Complexity is itself a bug vector.
+
+When a fix requires significant error handling, branching logic, or edge case coverage,
+weigh the cure against the disease. Simple code that fails clearly beats complex code
+that fails mysteriously.
+
+When reviewing, ask: "Is this making the code more robust, or just more complex?"
+
+Reference `plugins/core/code-review-standards.md` for detailed guidance on complexity
+trade-offs and common false positives (single-use values, theoretical race conditions,
+redundant type safety, premature optimization).
+
+</complexity-calibration>
 
 <review-approach>
 
