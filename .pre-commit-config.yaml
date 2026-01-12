@@ -1,0 +1,60 @@
+# Pre-commit hooks for ai-coding-config
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+
+exclude: '\.git/|__pycache__/'
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        name: Block large files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+        name: Detect merge conflicts
+      - id: check-symlinks
+        name: Validate symlinks
+      - id: check-yaml
+        name: Validate YAML syntax
+        args: [--allow-multiple-documents]
+      - id: trailing-whitespace
+        name: Trim whitespace
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: remove-tabs
+        name: Replace tabs with spaces
+
+  - repo: https://github.com/sirosen/texthooks
+    rev: 0.7.1
+    hooks:
+      - id: fix-smartquotes
+        name: Fix smart quotes
+      - id: forbid-bidi-controls
+        name: Forbid bidirectional text (security)
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+        name: Check GitHub Actions
+
+  # Custom frontmatter validation for Claude Code and Cursor files
+  - repo: local
+    hooks:
+      - id: validate-frontmatter
+        name: Validate markdown frontmatter
+        entry: python scripts/validate-frontmatter.py
+        language: python
+        additional_dependencies: [pyyaml]
+        files: |
+          (?x)^(
+            (\.claude|plugins/core)/commands/.*\.md$|
+            (\.claude|plugins/core)/agents/.*\.md$|
+            (\.claude|plugins/core)/skills/.*/SKILL\.md$|
+            \.cursor/rules/.*\.mdc$
+          )
+        # Exclude documentation files without frontmatter
+        exclude: CLAUDE\.md$

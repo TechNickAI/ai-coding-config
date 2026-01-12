@@ -1,6 +1,6 @@
 ---
 description: When writing Django models
-globs: **/models.py
+globs: "**/models.py"
 alwaysApply: false
 ---
 

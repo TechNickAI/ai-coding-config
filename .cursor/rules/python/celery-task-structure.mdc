@@ -1,6 +1,6 @@
 ---
 description: When writing Celery tasks
-globs: **/tasks.py
+globs: "**/tasks.py"
 alwaysApply: false
 ---
 

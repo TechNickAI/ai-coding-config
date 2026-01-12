@@ -1,6 +1,6 @@
 ---
 description: When writing React components
-globs: **/*.tsx, **/*.jsx
+globs: ["**/*.tsx", "**/*.jsx"]
 alwaysApply: false
 ---
 

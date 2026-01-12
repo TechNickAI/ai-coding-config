@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
-description: Multi-agent code review with diverse perspectives - run multiple specialized reviewers in parallel for comprehensive analysis
-argument-hint: [count]
+description: "Multi-agent code review with diverse perspectives - run multiple specialized reviewers in parallel for comprehensive analysis"
+argument-hint: "[count]"
 version: 2.1.0
 model: inherit
 ---

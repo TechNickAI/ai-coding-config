@@ -1,7 +1,6 @@
 ---
 # prettier-ignore
 description: "Set up repos with linting, formatting, and CI/CD - configures ESLint, Prettier, Husky, Ruff based on detected language"
-argument-hint: ""
 ---
 
 # Repository Tooling Setup
