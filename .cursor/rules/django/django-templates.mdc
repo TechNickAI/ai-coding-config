@@ -1,6 +1,6 @@
 ---
 description: When writing Django templates
-globs: **/*.html, **/*.django
+globs: ["**/*.html", "**/*.django"]
 alwaysApply: false
 ---
 

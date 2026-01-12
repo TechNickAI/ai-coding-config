@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Verify a fix actually works before claiming success - runs tests, checks live behavior, confirms fixes work from user perspective"
-argument-hint: [description of what to verify]
+argument-hint: "[description of what to verify]"
 version: 1.0.1
 ---
 

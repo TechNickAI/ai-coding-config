@@ -1,6 +1,6 @@
 ---
 description: When writing Django management commands
-globs: **/management/commands/*.py
+globs: "**/management/commands/*.py"
 alwaysApply: false
 ---
 

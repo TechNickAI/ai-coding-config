@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Autonomous production error resolution system - analyzes, prioritizes, and fixes errors from Sentry or error logs"
-argument-hint: [mode | error keywords | error number]
+argument-hint: "[mode | error keywords | error number]"
 ---
 
 # Troubleshoot Command

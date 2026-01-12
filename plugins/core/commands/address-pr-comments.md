@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Triage and address PR comments from code review bots - analyzes feedback, prioritizes issues, fixes valid concerns, and declines incorrect suggestions"
-argument-hint: [pr-number]
+argument-hint: "[pr-number]"
 model: sonnet
 version: 1.7.2
 ---
