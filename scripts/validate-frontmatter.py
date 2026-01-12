@@ -29,14 +29,12 @@ VALID_MODELS = {"haiku", "sonnet", "opus", "inherit"}
 def extract_frontmatter(content: str) -> tuple[dict | None, str | None]:
     """Extract YAML frontmatter from markdown content.
 
-    Returns (None, None) for files without frontmatter (skip, not error).
-    Returns (None, error_msg) for files with invalid frontmatter.
+    Returns (None, error_msg) for files without or with invalid frontmatter.
     Returns (data, None) for valid frontmatter.
     """
     match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
     if not match:
-        # No frontmatter = skip this file (not an error)
-        return None, None
+        return None, "No frontmatter found (must start with ---)"
 
     frontmatter_text = match.group(1)
 
@@ -166,10 +164,6 @@ def validate_file(filepath: Path) -> list[str]:
     data, error = extract_frontmatter(content)
     if error:
         return [error]
-
-    if data is None:
-        # No frontmatter - skip this file
-        return []
 
     if not data:
         return ["Frontmatter parsed but is empty"]

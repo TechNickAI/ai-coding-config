@@ -51,8 +51,10 @@ repos:
         additional_dependencies: [pyyaml]
         files: |
           (?x)^(
-            \.claude/commands/.*\.md$|
-            \.claude/agents/.*\.md$|
-            \.claude/skills/.*/SKILL\.md$|
+            (\.claude|plugins/core)/commands/.*\.md$|
+            (\.claude|plugins/core)/agents/(?!CLAUDE\.md).*\.md$|
+            (\.claude|plugins/core)/skills/.*/SKILL\.md$|
             \.cursor/rules/.*\.mdc$
           )
+        # Exclude documentation files
+        exclude: (CLAUDE|API_REFERENCE)\.md$
