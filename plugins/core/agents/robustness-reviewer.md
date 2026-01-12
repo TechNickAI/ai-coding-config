@@ -2,7 +2,7 @@
 name: robustness-reviewer
 # prettier-ignore
 description: "Use when reviewing for production readiness, fragile code, error handling, resilience, reliability, or catching bugs before deployment"
-version: 1.0.0
+version: 1.1.0
 color: orange
 model: opus
 skills: ai-coding-config:systematic-debugging, ai-coding-config:research
@@ -78,6 +78,47 @@ change. Libraries change internals between versions; public APIs are contracts.
 const result = await streamText({ model, messages });
 return result.toDataStreamResponse();
 </robust-example>
+
+## Library Preference
+
+Review code to catch "reinventing the wheel" - custom implementations that should use
+battle-tested libraries.
+
+Robust code uses existing libraries over custom implementations. Before writing custom
+code, check: Does an official SDK exist? Does our stack already provide this? Is there a
+well-maintained library with thousands of users and years of production use?
+
+Why this matters: Custom code has fewer tests, fewer edge cases handled, and zero
+production battle-testing. The MCP client bug was 300 lines of custom JSON-RPC code
+missing a required header that @ai-sdk/mcp handles correctly.
+
+<patterns-to-flag>
+- Custom HTTP/fetch wrappers when service SDKs exist
+- Hand-rolled protocol implementations (JSON-RPC, WebSocket, SSE, OAuth)
+- Manual authentication flows when official auth libraries exist
+- Custom parsing/serialization when standard libraries handle it
+- Reimplementing functionality our framework already provides
+</patterns-to-flag>
+
+<review-questions>
+When you see substantial custom implementation code, ask:
+1. Does the service provider offer an official SDK? (Check npm for @official-org/*)
+2. Does our stack already provide this? (AI SDK, Next.js, etc.)
+3. Is this duplicating well-tested library functionality?
+4. Would a library handle edge cases we're not considering?
+</review-questions>
+
+<robust-example>
+// BAD: Custom MCP client with hand-rolled JSON-RPC
+const response = await fetch(url, {
+  method: 'POST',
+  body: JSON.stringify({ jsonrpc: '2.0', method, params }),
+  // Missing required Accept header, missing error handling, etc.
+});
+
+// GOOD: Use the official SDK that handles transport details import { createMcpClient }
+from '@ai-sdk/mcp'; const client = createMcpClient({ transport:
+streamableHttpTransport(url) }); </robust-example>
 
 ## Data Integrity
 
