@@ -87,8 +87,27 @@ most recent Claude review - older ones reflect outdated code state.
 **Line-level comments** (pulls endpoint): Cursor, Codex, Greptile post inline comments
 on specific code lines. Address all of them - each flags a distinct location.
 
-Identify bots by username ending with `[bot]`. New bots may appear; process any bot that
-posts code review comments. </comment-sources>
+Known bots:
+
+- `claude[bot]` - Claude Code Review (PR-level)
+- `cursor[bot]` - Cursor Bugbot (line-level)
+- `chatgpt-codex-connector[bot]` - OpenAI Codex (line-level)
+- `greptile[bot]` - Greptile (line-level or PR-level)
+
+New bots may appear - process any username ending with `[bot]` that posts code review
+comments.
+
+Fetch bot comments from both endpoints:
+
+```bash
+# PR-level (issues endpoint)
+gh api repos/{owner}/{repo}/issues/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
+
+# Line-level (pulls endpoint)
+gh api repos/{owner}/{repo}/pulls/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
+```
+
+</comment-sources>
 
 <reaction-protocol>
 Every bot comment gets a reaction. No exceptions.
