@@ -3,7 +3,7 @@
 description: "Triage and address PR comments from code review bots - analyzes feedback, prioritizes issues, fixes valid concerns, and declines incorrect suggestions"
 argument-hint: "[pr-number]"
 model: sonnet
-version: 2.0.0
+version: 2.1.0
 ---
 
 # Address PR Comments
@@ -119,8 +119,15 @@ Reactions are training signals that shape future bot behavior:
 - 👎 (-1): Incorrect, irrelevant, or wrong analysis. "Less like this."
 - 🚀 (rocket): Critical security vulnerability or production bug you fixed
 
-API hint: PR-level comments use the issues endpoint for reactions; line-level comments
-use the pulls endpoint. The reaction content values are `+1`, `-1`, `heart`, `rocket`.
+Add reactions via API:
+
+```bash
+# PR-level comments (issues endpoint)
+gh api repos/{owner}/{repo}/issues/comments/{comment_id}/reactions -f content="+1"
+
+# Line-level comments (pulls endpoint)
+gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions -f content="+1"
+```
 
 After processing all comments, verify every bot comment has a reaction before declaring
 complete. </reaction-protocol>
@@ -191,6 +198,9 @@ diagnosis.
 - Fix would be a separate feature or improvement
 - Investigation needed beyond current PR context
 
+Example: Bot finds a bug in a shared utility function used by your PR. Fixing the
+utility would affect 10 other files. Create an issue rather than expanding PR scope.
+
 Create the issue and link it in your reply so it's trackable.
 
 Never decline just because fixing is inconvenient. If the code would be better with the
@@ -205,9 +215,23 @@ whichever bot's comments are available first rather than waiting for all bots. M
 fixes, commit, push, then process the next bot that completes.
 
 After pushing fixes, re-poll since bots will re-analyze. Continue until all bots
-complete and no new actionable feedback remains. If you've done 3+ fix cycles and bots
-keep finding new issues, flag for user attention - something systematic may be wrong.
+complete and no new actionable feedback remains. If you've pushed 3+ times and bots keep
+finding new issues, flag for user attention - something systematic may be wrong.
 </parallel-execution>
+
+<iteration-tracking>
+Track processed comments by ID to avoid re-processing on subsequent iterations. Each
+GitHub comment has a unique ID in the API response.
+
+On re-poll after fixes:
+
+- Skip comments with IDs you've already processed
+- Only process new comments from bot re-analysis
+- If a bot posts a new comment on a line you already fixed, it's new feedback
+
+When called multiple times (e.g., from /autotask iterating), maintain awareness of
+previously addressed feedback. Don't re-react to the same comment or re-announce the
+same fix. </iteration-tracking>
 
 <stall-detection>
 Track waiting time. If you've been waiting more than 5 minutes for a specific bot with
@@ -266,8 +290,22 @@ When all bots have completed and no actionable feedback remains, report:
 
 - PR URL (prominent - user may have multiple sessions)
 - PR title
-- Summary: issues fixed, suggestions declined with reasons, GitHub issues created
+- Structured counts: Fixed (N), Declined (N), Issues Created (N)
+- Brief summary of what was fixed and why key suggestions were declined
 - Any human comments still needing attention
+
+Report format for callers (e.g., /autotask):
+
+```
+## Bot Feedback Addressed
+
+**PR:** #123 - [title]
+**Fixed:** 5 issues
+**Declined:** 3 issues (2 incorrect analysis, 1 WONTFIX)
+**Issues Created:** 1
+
+Ready for human review.
+```
 
 Verify completeness: Did every bot comment get a reaction? If you missed any, go back
 and add reactions before declaring complete.
