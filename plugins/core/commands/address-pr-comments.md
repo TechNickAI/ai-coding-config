@@ -256,18 +256,6 @@ resolving, bots will re-run. Some previous comments may become obsolete.
 For complex conflicts involving architectural decisions, flag for user attention rather
 than auto-resolving. </conflict-resolution>
 
-<hotfix-mode>
-If branch name starts with `hotfix/`, the core mandate shifts: fix only critical issues
-(security, correctness, bugs that could break production). This overrides the usual "fix
-every valid issue" rule.
-
-- Decline style/refactoring suggestions with "hotfix - critical issues only"
-- One pass through comments, push fixes immediately
-- Speed matters more than polish
-
-Announce hotfix mode at start so the user understands the expedited approach.
-</hotfix-mode>
-
 <human-comments>
 Human reviewer comments require user attention, not auto-handling. Present separately
 and clearly flag them for user review.
