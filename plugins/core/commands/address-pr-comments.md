@@ -3,22 +3,58 @@
 description: "Triage and address PR comments from code review bots - analyzes feedback, prioritizes issues, fixes valid concerns, and declines incorrect suggestions"
 argument-hint: "[pr-number]"
 model: sonnet
-version: 1.7.2
+version: 2.0.0
 ---
 
 # Address PR Comments
 
-<objective>
-Get a PR to "ready to merge" by addressing valid feedback and declining incorrect
-suggestions. You have context bots lack - use it to identify when a bot's analysis is
-wrong, not to prioritize which valid issues to skip.
-
-If a suggestion would genuinely improve the code, fix it. Only decline when you can
-articulate why the bot is mistaken given context it lacks.
+You're the last line of defense before code ships. Multiple review bots have analyzed
+this PR - your job is to process their feedback intelligently, fix what needs fixing,
+and push back on what's wrong. You have context the bots lack: the full codebase,
+project conventions, and architectural decisions. Use that advantage.
 
 Read @rules/code-review-standards.mdc for patterns where bot suggestions typically don't
-apply. Use these to identify incorrect suggestions - explain why the bot is wrong in
-this specific case, not just that the issue is "minor" or "not blocking." </objective>
+apply. Use these to identify incorrect suggestions and explain why the bot is wrong in
+this specific case.
+
+<core-mandate>
+Fix every valid issue. Not "triage what's blocking" - fix everything that would improve
+the code. The only acceptable outcomes for each bot comment are:
+
+1. **Fixed**: The suggestion improves the code, so you implemented it
+2. **Incorrect**: The bot's analysis is wrong given context it lacks - explain why
+3. **WONTFIX**: The suggestion is technically correct but explicitly unwanted - decline
+   with 👎 and brief explanation (e.g., "ARIA accessibility is not a priority for this
+   project")
+4. **GitHub Issue Created**: Valid but scope exceeds this PR - create a trackable issue
+
+"Defer" and "not a blocker" are not options. If a suggestion would genuinely improve the
+code AND we want that improvement, fix it now. The goal is code quality, not just
+getting past review gates. </core-mandate>
+
+<efficiency-mandate>
+Your time is valuable. Never idle. The parallel nature of bot reviews creates
+opportunities - use them:
+
+Work while bots run. Don't poll-and-sleep. When waiting for slow bots (Cursor, Codex,
+Greptile), keep working on fixes from fast bots or investigating the codebase.
+
+Check bot status between fixes rather than blocking on a single bot. Process whatever
+comments are available, make fixes, push, then check again.
+
+Investigate stalls immediately. If a bot stays "queued" or "in_progress" for more than 5
+minutes without output, something is wrong. Check for:
+
+- Merge conflicts (PR won't run checks until conflicts resolved)
+- Build failures (subsequent checks may be blocked)
+- CI queue depth (jobs waiting for runners)
+
+Track elapsed time. If you've been waiting more than 10 minutes since starting with no
+bot completing, something is wrong - report the stall and investigate root cause.
+
+If you find yourself with nothing to do, say so explicitly and explain why. "Waiting for
+Cursor with nothing else actionable" is acceptable. Silently sleeping is not.
+</efficiency-mandate>
 
 <usage>
 /address-pr-comments - Auto-detect PR from current branch
@@ -26,12 +62,154 @@ this specific case, not just that the issue is "minor" or "not blocking." </obje
 </usage>
 
 <pr-detection>
-Use provided PR number, or detect from current branch. Exit if no PR exists.
+Use provided PR number, or detect from current branch via `gh pr view --json number`.
+Exit with clear message if no PR exists for current branch.
 </pr-detection>
 
+<preflight-checks>
+Before processing comments, verify the PR is in a runnable state:
+
+**Mergeable status**: If conflicts exist, resolve them first. If mergeStateStatus is
+BLOCKED, identify why (required checks failing, reviews needed).
+
+**CI status**: If build is failing, that blocks other checks - investigate build failure
+first. If jobs are queued indefinitely, there may be CI infrastructure issues.
+
+These conditions explain why bots might not be running. Address root causes before
+waiting for bot comments that won't arrive. </preflight-checks>
+
+<comment-sources>
+Code review bots comment at different API levels:
+
+**PR-level comments** (issues endpoint): Claude Code Review posts here. Only address the
+most recent Claude review - older ones reflect outdated code state.
+
+**Line-level comments** (pulls endpoint): Cursor, Codex, Greptile post inline comments
+on specific code lines. Address all of them - each flags a distinct location.
+
+Identify bots by username ending with `[bot]`. New bots may appear; process any bot that
+posts code review comments. </comment-sources>
+
+<reaction-protocol>
+Every bot comment gets a reaction. No exceptions.
+
+Reactions are training signals that shape future bot behavior:
+
+- 👍 (+1): Helpful feedback you addressed. "More like this."
+- ❤️ (heart): Exceptional catch - security issue, subtle bug, great insight
+- 👎 (-1): Incorrect, irrelevant, or wrong analysis. "Less like this."
+- 🚀 (rocket): Critical security vulnerability or production bug you fixed
+
+API hint: PR-level comments use the issues endpoint for reactions; line-level comments
+use the pulls endpoint. The reaction content values are `+1`, `-1`, `heart`, `rocket`.
+
+After processing all comments, verify every bot comment has a reaction before declaring
+complete. </reaction-protocol>
+
+<reply-protocol>
+Replies are most valuable when explaining WHY a suggestion is wrong - this creates
+training data that helps bots improve over time.
+
+When declining, explain the context the bot lacks:
+
+- "This value appears exactly once - constant extraction adds indirection without
+  benefit"
+- "Race condition isn't possible here - operations are serialized by the job queue"
+- "Type system guarantees non-null at this point via the guard on line 42"
+
+When a bot makes an exceptional catch (security issue, subtle bug), a brief
+acknowledgment is welcome - "Great catch!" with a heart reaction reinforces good
+behavior. But pure pleasantries without substance ("Thanks for the review!") add less
+training value than a reaction alone.
+
+When fixing, the commit speaks for itself. Mention the commit hash if helpful for
+tracking.
+
+Keep replies brief. The reaction is the primary signal; replies add context.
+</reply-protocol>
+
+<narration>
+While working, share what you're finding:
+
+- "Cursor found a real bug - null pointer if session expires mid-request. Great catch,
+  adding heart reaction and fixing."
+- "Claude wants magic string extraction for a one-time value. Thumbs down, declining."
+- "SQL injection risk in search query - security issue, rocket reaction and addressing."
+
+Keep narration brief and informative. </narration>
+
+<triage-criteria>
+For each bot comment, ask: "Is this suggestion correct given context the bot lacks?"
+
+**Fix it** when the analysis is correct:
+
+- Bug identified: Fix the bug
+- Security issue found: Fix immediately, add heart/rocket reaction
+- Logic error caught: Fix the logic
+- Genuine improvement suggested: Implement it
+
+When a bot correctly identifies an issue but suggests a suboptimal fix, address the
+underlying issue with the appropriate solution. Credit the bot for the correct
+diagnosis.
+
+**Decline as Incorrect** when you can articulate why the bot is wrong:
+
+- Bot wants constant extraction for a one-time contextually-clear value
+- Bot flags race condition but operations are already serialized
+- Bot suggests null check but type system guarantees non-null
+- Bot requests validation but it's handled at a different layer
+
+**Decline as WONTFIX** when the suggestion is correct but explicitly unwanted:
+
+- ARIA accessibility suggestions (not a project priority)
+- Internationalization when the app is English-only
+- Performance optimizations for paths that don't matter
+- Style preferences that conflict with project conventions
+
+**Create GitHub issue** when suggestion is valid but scope exceeds this PR:
+
+- Suggestion requires refactoring unrelated code
+- Fix would be a separate feature or improvement
+- Investigation needed beyond current PR context
+
+Create the issue and link it in your reply so it's trackable.
+
+Never decline just because fixing is inconvenient. If the code would be better with the
+change, make the change. </triage-criteria>
+
+<parallel-execution>
+Process bot feedback incrementally. When one bot completes, address its comments
+immediately while others run.
+
+Claude Code Review typically completes faster than Cursor, Codex, or Greptile. Process
+whichever bot's comments are available first rather than waiting for all bots. Make
+fixes, commit, push, then process the next bot that completes.
+
+After pushing fixes, re-poll since bots will re-analyze. Continue until all bots
+complete and no new actionable feedback remains. If you've done 3+ fix cycles and bots
+keep finding new issues, flag for user attention - something systematic may be wrong.
+</parallel-execution>
+
+<stall-detection>
+Track waiting time. If you've been waiting more than 5 minutes for a specific bot with
+no output, investigate.
+
+Common stall causes:
+
+- Merge conflicts: PR won't run new checks until conflicts resolved
+- Build failure: Subsequent checks blocked until build passes
+- CI queue: Jobs waiting for available runners
+- Rate limiting: Too many concurrent checks
+
+Report stalls clearly: "Cursor has been queued for 8 minutes. Build is failing on
+`type-check` - this may be blocking other checks. Investigating build failure."
+
+Don't silently wait. If something is stuck, say so and explain what you're doing about
+it. </stall-detection>
+
 <scale-with-complexity>
-Match thoroughness to the PR's actual complexity, not line count. A 500-line generated
-migration is trivial. A 20-line auth change needs careful attention.
+Match thoroughness to PR complexity, not line count. A 500-line generated migration is
+trivial. A 20-line auth change needs careful attention.
 
 Assess complexity by:
 
@@ -40,282 +218,62 @@ Assess complexity by:
 - Novelty: Well-trodden patterns vs. new architectural territory
 - Cross-cutting impact: Isolated change vs. affects multiple systems
 
-Simple changes (rename, config tweak, obvious bug fix): Process comments quickly, skip
-productive-waiting, get to completion fast.
+Simple changes (config tweak, obvious bug fix, rename): Process comments quickly, fix
+issues, complete fast. Don't over-think straightforward PRs.
 
-Complex changes (new patterns, security-sensitive, architectural): Take time to
-understand context, explore documentation impacts, consider creating follow-up issues.
-
-The goal is always getting the PR merged. Don't let thoroughness become an excuse for
-delay on straightforward changes. </scale-with-complexity>
-
-<conflict-resolution>
-Check if the PR has merge conflicts with its base branch before processing comments.
-Conflicts block merging and should be resolved first.
-
-Detect conflicts via `gh pr view {number} --json mergeable,mergeStateStatus`. If
-mergeable is false, fetch the base branch and rebase or merge to resolve conflicts.
-
-When resolving conflicts:
-
-- Preserve the intent of both sets of changes
-- Keep bot comments in context - some may become obsolete after conflict resolution
-- Push the resolved changes before continuing with comment review
-
-If conflicts involve complex decisions (architectural changes, competing features), flag
-for user attention rather than auto-resolving. </conflict-resolution>
-
-<hotfix-mode>
-If the branch name starts with `hotfix/`, switch to expedited review mode:
-
-- Focus on security vulnerabilities and bugs that could break production
-- Speed and correctness take priority over polish
-- One pass through comments, then push fixes immediately
-- Style and refactoring suggestions get declined with "hotfix - addressing critical
-  issues only"
-
-Announce hotfix mode at start, explaining that this is an expedited review focusing on
-security and correctness. </hotfix-mode>
-
-<comment-sources>
-Code review bots comment at different API levels. Fetch from both endpoints:
-
-PR-level comments (issues endpoint): `gh api repos/{owner}/{repo}/issues/{pr}/comments`
-Claude Code Review posts here. Username is `claude[bot]`. Only address the most recent
-Claude review - older ones reflect outdated code state.
-
-Line-level review comments (pulls endpoint):
-`gh api repos/{owner}/{repo}/pulls/{pr}/comments` Multiple bots post inline comments on
-specific code lines. Address all line-level bot comments - each flags a distinct
-location.
-
-Fetch all bot comments with this pattern (do not filter by specific bot name):
-
-```bash
-# PR-level (issues endpoint) - Claude Code Review posts here
-gh api repos/{owner}/{repo}/issues/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
-
-# Line-level (pulls endpoint) - Cursor, Codex, Greptile post here
-gh api repos/{owner}/{repo}/pulls/{pr}/comments --jq '.[] | select(.user.login | endswith("[bot]"))'
-```
-
-Supported bots and their usernames:
-
-- `claude[bot]` - Claude Code Review (PR-level)
-- `cursor[bot]` - Cursor Bugbot (line-level)
-- `chatgpt-codex-connector[bot]` - OpenAI Codex (line-level)
-- `greptile[bot]` - Greptile (line-level or PR-level)
-
-New bots may appear - any username ending with `[bot]` that posts code review comments
-should be processed. Check the comment body structure to determine if it's a code
+Complex changes (new patterns, security-sensitive, architectural): Understand context
+thoroughly. Consider creating GitHub issues for related improvements discovered during
 review.
 
-You can also use:
+The goal is always code quality and PR completion. Thoroughness serves quality, not
+delay. </scale-with-complexity>
 
-- `gh pr view {number} --comments` for PR-level comments
-- `gh api repos/{owner}/{repo}/pulls/{pr}/reviews` for review status
+<conflict-resolution>
+Merge conflicts block bot checks and must be resolved first.
 
-Identify bot comments by author username ending with `[bot]`. Human comments require
-different handling - flag them for user attention rather than auto-addressing.
-</comment-sources>
+Fetch base branch, rebase or merge (depending on project conventions), and push. After
+resolving, bots will re-run. Some previous comments may become obsolete.
 
-<execution-model>
-Process bot feedback incrementally as each bot completes. When one bot finishes, address
-its comments immediately while others are still running. Claude Code Review typically
-completes in 1-2 minutes. Cursor Bugbot and Codex take 3-10 minutes. Greptile can take
-up to 15 minutes. Process fast bots first rather than waiting for slow ones.
+For complex conflicts involving architectural decisions, flag for user attention rather
+than auto-resolving. </conflict-resolution>
 
-Poll check status with `gh pr checks --json name,state,bucket`. Some bots
-(claude-review, Cursor Bugbot, greptile) appear as checks. Others
-(chatgpt-codex-connector) only post comments without a corresponding check - poll both
-the checks endpoint and comments endpoints to catch all bot feedback.
+<hotfix-mode>
+If branch name starts with `hotfix/`, use expedited mode:
 
-Maximize async throughput: while waiting for slow bots, work on other productive tasks
-in parallel. Only block when you need bot results to continue. See productive-waiting
-for ideas.
+- Focus on security and correctness only
+- Decline style/refactoring suggestions with "hotfix - critical issues only"
+- One pass through comments, push fixes immediately
+- Speed matters more than polish
 
-Poll periodically between productive-waiting activities rather than sleeping idle.
-
-After pushing fixes, re-check for merge conflicts (the base branch may have advanced
-while you were working) and return to polling since bots will re-analyze. Exit when all
-review bots have completed and no new actionable feedback remains. </execution-model>
-
-<productive-waiting>
-Use wait time productively while bots are running:
-
-Codebase and documentation:
-
-- Check if the PR changes affect documentation elsewhere (README, API docs, comments
-  that reference changed behavior). If updates are needed, offer to make them.
-- Look for interesting patterns or clever solutions in the changed code worth noting
-
-Industry research and fun facts:
-
-Use the PR context to surface relevant external knowledge. Search for interesting facts
-about the technologies, patterns, or domains touched by this PR:
-
-- "This PR adds WebSocket support - did you know Discord handles 5M concurrent WebSocket
-  connections per gateway server?"
-- "You're implementing rate limiting - Stripe's API uses a token bucket algorithm that
-  allows bursts up to 100 requests"
-- "This notification system pattern is similar to how Slack's architecture evolved from
-  polling to push"
-
-Share discoveries as you find them. Waiting time is learning time.
-
-Product thinking (channel your inner AI product manager):
-
-- Brainstorm product ideas inspired by the code you're seeing
-- Spot opportunities the PR enables ("Now that we have this notification system, we
-  could build...")
-- Notice UX improvements or feature extensions worth considering
-- Think about what users might want next given this new capability
-
-Follow-up tracking:
-
-- Draft GitHub issues for follow-up work discovered during review
-- Note technical debt or refactoring opportunities
-
-Share interesting discoveries - "While waiting for Greptile, I noticed this PR removes
-the last usage of the old auth pattern. Want me to create an issue to clean up the
-deprecated code?" or "This new event system could power a real-time dashboard - want me
-to sketch that out?"
-
-If productive-waiting work looks like it will take significant time (documentation
-updates, large refactors), check in with the user before starting. The goal is getting
-the PR merged, not scope creep. </productive-waiting>
-
-<narration>
-While working through the phases, share interesting findings:
-
-- "Cursor Bot found a real bug - null pointer if session expires mid-request. Great
-  catch, adding heart reaction and fixing."
-- "Claude wants magic string extraction for a one-time value. Thumbs down, declining."
-- "SQL injection risk in search query - security issue, rocket reaction and addressing."
-
-Keep narration brief and informative. </narration>
-
-<triage-process>
-For each bot comment, ask: "Is this suggestion correct given context I have?"
-
-Address the suggestion when the bot's analysis is correct given full context. This
-includes bugs, security issues, logic errors, and genuine improvements.
-
-When a bot correctly identifies an issue but suggests a suboptimal fix, address the
-underlying issue with the appropriate solution. Credit the bot for the correct
-diagnosis.
-
-Decline with explanation when you can articulate why the bot is wrong:
-
-- Bot wants constant extraction, but this value appears once and context is clear
-- Bot flags race condition, but operations are already serialized by queue/mutex
-- Bot suggests null check, but type system guarantees non-null here
-- Bot requests stricter types, but runtime validation already handles the case
-
-Valid declines explain why the bot's analysis is incorrect, not why addressing the issue
-is inconvenient. If the feedback would improve the code, address it.
-
-Show triage summary with your reasoning, then proceed autonomously. </triage-process>
-
-<feedback-as-training>
-Responding to bot comments serves two purposes: record-keeping and training. Bots learn
-from feedback patterns. Reactions and replies shape future review quality. Thoughtful
-feedback improves bot behavior over time.
-
-Use reactions strategically:
-
-- 👍 (+1): Helpful feedback we addressed. Signals "more like this."
-- ❤️ (heart): Exceptional catch (security issue, subtle bug). Strongest positive signal.
-- 👎 (-1): Incorrect, irrelevant, or low-value suggestion. Signals "less like this."
-- 🚀 (rocket): For security vulnerabilities or critical bugs we fixed.
-
-Add reactions via API:
-`gh api repos/{owner}/{repo}/issues/comments/{comment_id}/reactions -f content="+1"`
-`gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions -f content="-1"`
-</feedback-as-training>
-
-<addressing-comments>
-Response methods differ by comment type:
-
-PR-level comments (issues endpoint): Reply with a new comment on the PR. Group responses
-logically - one comment addressing multiple points is fine. Claude bot posts here.
-
-Line-level comments (pulls endpoint): These support threaded replies. Reply directly to
-the comment thread:
-`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."`
-This keeps the conversation in context. The reply appears under the original comment,
-making it easy for anyone reviewing to see the resolution inline. Cursor, Codex, and
-Greptile bots post here.
-
-For each bot comment, regardless of which bot posted it:
-
-1. Add appropriate reaction (training signal) - this is always required
-2. Make the fix if addressing, commit the change
-3. Reply only when it adds value
-
-Reactions are often sufficient on their own. A heart on a great catch or thumbs-down on
-a bad suggestion trains the bot without needing explanation. Reply when:
-
-- Declining and the reason isn't obvious from context
-- The fix differs from what the bot suggested
-- You want to credit a particularly good catch
-
-Keep replies brief. The reaction is the primary signal. </addressing-comments>
+Announce hotfix mode at start so the user understands the expedited approach.
+</hotfix-mode>
 
 <human-comments>
-Human reviewer comments get flagged for user attention, not auto-handled. Present
-separately from bot comments.
+Human reviewer comments require user attention, not auto-handling. Present separately
+and clearly flag them for user review.
 </human-comments>
 
 <completion>
-When all review bot checks have completed and no new actionable feedback remains:
+When all bots have completed and no actionable feedback remains, report:
 
-Display prominently:
-
-- PR URL (most important - user may have multiple sessions)
+- PR URL (prominent - user may have multiple sessions)
 - PR title
-- Summary of what was addressed vs declined
-- Links to any follow-up GitHub issues created during the review
-- Any human comments that still need attention
+- Summary: issues fixed, suggestions declined with reasons, GitHub issues created
+- Any human comments still needing attention
 
-If you created GitHub issues for follow-up work, list them with brief descriptions so
-the user can prioritize them.
+Verify completeness: Did every bot comment get a reaction? If you missed any, go back
+and add reactions before declaring complete.
 
 Celebrate that the PR is ready to merge. A well-triaged PR is a beautiful thing.
 </completion>
 
 <retrospective>
-After completion, step back and look at the PR holistically. The bot comments and fixes
-reveal patterns about how to improve initial code quality. Ask: what could have caught
-these issues before the PR was created?
+After completion, consider what patterns emerged:
 
-Consider improvements across the stack:
+- What could have caught these issues earlier (pre-commit hooks, IDE plugins, better
+  prompts)?
+- Did multiple bots flag the same issue type, suggesting a systematic gap?
+- Would new rules files or conventions prevent similar issues?
 
-Tooling and automation:
-
-- Would a pre-commit hook have caught formatting or linting issues?
-- Could a local test runner have found the bugs before push?
-- Are there IDE plugins that would flag these patterns during development?
-
-Prompting and AI assistance:
-
-- If AI generated this code, what prompt improvements would produce cleaner output?
-- Would a specialized agent or skill have avoided these mistakes?
-- Should the codebase have rules files that guide AI toward better patterns?
-
-Review process:
-
-- Are the right review bots enabled for this type of change?
-- Would a different bot have caught issues earlier?
-- Should CI run additional checks before review bots trigger?
-
-Codebase patterns:
-
-- Do these issues suggest missing abstractions or shared utilities?
-- Would better documentation have prevented confusion?
-- Are there defensive patterns that should be codified as project conventions?
-
-Share your observations thoughtfully. Frame suggestions as opportunities, not criticism.
-The goal is continuous improvement - each PR teaches us something about making the next
-one better. If you identify concrete improvements, offer to create GitHub issues or
-draft the configuration changes. </retrospective>
+Share observations as opportunities for improvement. If you identify concrete changes,
+offer to create GitHub issues or draft configurations. </retrospective>
