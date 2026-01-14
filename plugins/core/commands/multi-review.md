@@ -1,8 +1,8 @@
 ---
 # prettier-ignore
 description: "Multi-agent code review with diverse perspectives - run multiple specialized reviewers in parallel for comprehensive analysis"
-argument-hint: "[count]"
-version: 2.1.0
+argument-hint: "[count|depth]"
+version: 2.2.0
 model: inherit
 ---
 
@@ -12,7 +12,34 @@ model: inherit
 Run N parallel code review agents with diverse perspectives. Each agent operates in
 isolation, catching issues that others miss. Synthesize findings into actionable fixes.
 
-Usage: `/multi-review [count]` where count defaults to 3. </objective>
+Usage:
+
+- `/multi-review` - auto-detect appropriate depth
+- `/multi-review 5` - explicit count
+- `/multi-review deep` - depth-based scaling (quick | balanced | deep) </objective>
+
+<depth-scaling>
+When depth is specified or inferred from context:
+
+**quick**: 1-2 agents focused on correctness. Minimal overhead for simple changes.
+
+**balanced** (default): 2-3 agents covering primary domains the code touches.
+
+**deep**: 5+ agents for comprehensive coverage:
+
+- architecture-auditor (always)
+- security-reviewer (always)
+- logic-reviewer (always)
+- performance-reviewer
+- error-handling-reviewer
+- Domain-specific reviewers based on code
+
+Auto-detect depth from context: single-file change with clear purpose → quick;
+multi-file implementation → balanced; architectural changes, new patterns, security-
+sensitive code → deep.
+
+When called from /autotask, respect the complexity level already determined.
+</depth-scaling>
 
 <philosophy>
 Multi-review exists to surface issues and fix them before merging. This is not a
