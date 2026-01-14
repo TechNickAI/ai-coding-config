@@ -125,10 +125,11 @@ and read it.
 
 - Does the branch still exist?
 - If PR listed, is it still open?
-- Are referenced files still modified?
+- Are there commits on the branch since it was created?
 
-If state is stale (branch merged, PR closed), report and start fresh rather than
-continuing with invalid context.
+If state is stale (branch merged, PR closed, or no work done), report and start fresh
+rather than continuing with invalid context. A clean working tree is normal after
+commits - don't treat it as stale.
 
 ## Workflow
 
