@@ -1,24 +1,30 @@
 # Comprehensive Competitor Analysis: AI Coding Configuration Projects
 
-**Analysis Date**: December 18, 2025
-**Analyzed Repositories**: 28 repositories across direct competitors, infrastructure patterns, and related tools
-**Purpose**: Identify features, patterns, and best practices to enhance ai-coding-config
+**Analysis Date**: December 18, 2025 **Analyzed Repositories**: 28 repositories across
+direct competitors, infrastructure patterns, and related tools **Purpose**: Identify
+features, patterns, and best practices to enhance ai-coding-config
 
 ---
 
 ## Executive Summary
 
-This analysis reveals several high-impact patterns and features from the competitive landscape:
+This analysis reveals several high-impact patterns and features from the competitive
+landscape:
 
 ### Key Findings:
-1. **Natural Language Skill Activation** is emerging as the dominant pattern over slash commands
-2. **Multi-agent orchestration** with specialized agents is the gold standard for complex tasks
+
+1. **Natural Language Skill Activation** is emerging as the dominant pattern over slash
+   commands
+2. **Multi-agent orchestration** with specialized agents is the gold standard for
+   complex tasks
 3. **Hook-based lifecycle management** enables powerful workflow automation
 4. **Plugin marketplaces** with composable features are the preferred distribution model
-5. **Session persistence and memory systems** enable continuity across development sessions
+5. **Session persistence and memory systems** enable continuity across development
+   sessions
 6. **Mandatory workflow enforcement** ensures quality through systematic processes
 
 ### Immediate Opportunities:
+
 - Add natural language skill activation
 - Implement session persistence and resume capability
 - Create specialized multi-agent review patterns
@@ -32,11 +38,12 @@ This analysis reveals several high-impact patterns and features from the competi
 ### HIGH PRIORITY - Direct Competitors
 
 #### 1. claude-flow (ruvnet)
-**URL**: https://github.com/ruvnet/claude-flow
-**Stars**: High engagement
-**Key Innovation**: Hive-mind swarm intelligence with natural language skill activation
+
+**URL**: https://github.com/ruvnet/claude-flow **Stars**: High engagement **Key
+Innovation**: Hive-mind swarm intelligence with natural language skill activation
 
 **What They Offer**:
+
 - 25 specialized skills that activate via natural language (no commands needed)
 - 64+ specialized agents organized by category
 - Hive-mind architecture: Queen agent coordinates specialized workers
@@ -47,18 +54,24 @@ This analysis reveals several high-impact patterns and features from the competi
 - Session management with persistence and resume
 
 **Agent Organization** (`.claude/agents/`):
-- analysis/, architecture/, consensus/, core/, data/, development/, devops/, documentation/
+
+- analysis/, architecture/, consensus/, core/, data/, development/, devops/,
+  documentation/
 - flow-nexus/, github/, goal/, hive-mind/, neural/, optimization/, reasoning/
 - sparc/, specialized/, swarm/, templates/, testing/
 
 **Notable Skills**:
-- `pair-programming`: Driver/Navigator/Switch modes with automatic role switching, truth-score verification
-- `github-code-review`: Multi-agent PR review (security, performance, architecture, style, accessibility)
+
+- `pair-programming`: Driver/Navigator/Switch modes with automatic role switching,
+  truth-score verification
+- `github-code-review`: Multi-agent PR review (security, performance, architecture,
+  style, accessibility)
 - `swarm-orchestration`: Hive-mind coordination for complex projects
 - `agentdb-vector-search`: Semantic search with HNSW indexing
 - `hooks-automation`: Pre/post operation workflow automation
 
 **Novel Patterns**:
+
 - Natural language skill activation (no slash commands)
 - Truth-score verification with automatic rollback
 - Multi-agent review with specialized agents
@@ -68,10 +81,12 @@ This analysis reveals several high-impact patterns and features from the competi
 ---
 
 #### 2. superpowers (obra)
-**URL**: https://github.com/obra/superpowers
-**Key Innovation**: Mandatory workflow system that triggers automatically before tasks
+
+**URL**: https://github.com/obra/superpowers **Key Innovation**: Mandatory workflow
+system that triggers automatically before tasks
 
 **What They Offer**:
+
 - Complete software development workflow built on composable skills
 - Skills activate automatically based on context
 - Subagent-driven development with two-stage review (spec compliance, then code quality)
@@ -79,42 +94,54 @@ This analysis reveals several high-impact patterns and features from the competi
 - Git worktree integration for isolated workspaces
 
 **Core Workflow** (7 steps):
+
 1. `brainstorming` → Interactive design refinement (Socratic method)
 2. `using-git-worktrees` → Isolated workspace setup
 3. `writing-plans` → Break work into 2-5 minute tasks
-4. `subagent-driven-development` OR `executing-plans` → Autonomous execution with reviews
+4. `subagent-driven-development` OR `executing-plans` → Autonomous execution with
+   reviews
 5. `test-driven-development` → RED-GREEN-REFACTOR enforcement
 6. `requesting-code-review` → Review against plan
 7. `finishing-a-development-branch` → Merge/PR/cleanup
 
 **Skills Library**:
+
 - Testing: `test-driven-development` (with anti-patterns reference)
-- Debugging: `systematic-debugging` (4-phase root cause), `verification-before-completion`
-- Collaboration: `brainstorming`, `writing-plans`, `executing-plans`, `dispatching-parallel-agents`
+- Debugging: `systematic-debugging` (4-phase root cause),
+  `verification-before-completion`
+- Collaboration: `brainstorming`, `writing-plans`, `executing-plans`,
+  `dispatching-parallel-agents`
 - Meta: `writing-skills`, `using-superpowers`
 
 **Philosophy**:
+
 - Test-Driven Development (tests first, always)
 - Systematic over ad-hoc
 - Complexity reduction
 - Evidence over claims
 
-**Key Innovation**: Agent checks for relevant skills BEFORE any task, making workflows mandatory rather than optional
+**Key Innovation**: Agent checks for relevant skills BEFORE any task, making workflows
+mandatory rather than optional
 
 ---
 
 #### 3. dotai (udecode)
-**URL**: https://github.com/udecode/dotai
-**Key Innovation**: Dynamic hook-based prompt injection at specific lifecycle points
+
+**URL**: https://github.com/udecode/dotai **Key Innovation**: Dynamic hook-based prompt
+injection at specific lifecycle points
 
 **What They Offer**:
-- Uses [skiller](https://github.com/udecode/skiller) to apply same rules to all coding agents
-- Dynamic prompt injection system (before-start, before-complete, post-compact, session-start)
+
+- Uses [skiller](https://github.com/udecode/skiller) to apply same rules to all coding
+  agents
+- Dynamic prompt injection system (before-start, before-complete, post-compact,
+  session-start)
 - Conditional todo execution ("SKIP if...", "ONLY if...")
 - Mandatory first response enforcement
 - "No Rationalization" system to prevent excuse-making
 
 **Plugin Architecture**:
+
 1. `dotai` - Complete development toolkit
 2. `skills` - Meta-skills for finding/using/writing skills
 3. `plan` - Planning and brainstorming workflows
@@ -123,6 +150,7 @@ This analysis reveals several high-impact patterns and features from the competi
 6. `debug` - Systematic debugging framework
 
 **Prompt System** (`.claude/prompt.json`):
+
 ```json
 {
   "beforeStart": [
@@ -148,19 +176,22 @@ This analysis reveals several high-impact patterns and features from the competi
 ```
 
 **Hook Scripts**:
+
 - `user-prompt-submit.sh` - before-start/before-complete
 - `post-compact.sh` - context recovery after compaction
 - `session-start.sh` - load skills at session start
 
-**Key Innovation**: Lifecycle hook system with conditional execution enables fine-grained workflow control
+**Key Innovation**: Lifecycle hook system with conditional execution enables
+fine-grained workflow control
 
 ---
 
 #### 4. awesome-claude-code
-**URL**: https://github.com/awesome-claude-code
-**Type**: Curated resource collection
+
+**URL**: https://github.com/awesome-claude-code **Type**: Curated resource collection
 
 **What They Catalog**:
+
 - Agent Skills (general, testing, debugging, collaboration)
 - Workflows & Knowledge Guides
 - Tooling (IDE integrations, usage monitors, orchestrators, status lines)
@@ -170,6 +201,7 @@ This analysis reveals several high-impact patterns and features from the competi
 - Alternative Clients
 
 **Categories of Slash Commands**:
+
 - Version Control & Git
 - Code Analysis & Testing
 - Context Loading & Priming
@@ -182,11 +214,79 @@ This analysis reveals several high-impact patterns and features from the competi
 
 ---
 
+#### 4b. awesome-claude-code-subagents (VoltAgent)
+
+**URL**: https://github.com/VoltAgent/awesome-claude-code-subagents **Stars**: Growing
+**Key Innovation**: Large-scale agent marketplace with checklist-driven expertise and
+structured wrap-ups
+
+**What They Offer**:
+
+- 128 specialized subagents across 10 numbered categories
+- Plugin marketplace distribution (`.claude-plugin/marketplace.json`)
+- Modular discovery commands (`/subagent-catalog:search`, `:list`, `:fetch`)
+- Sophisticated bash installer with GitHub API caching
+
+**Agent Categories** (10):
+
+1. 01-core-development (10 agents)
+2. 02-language-specialists (26 agents - largest)
+3. 03-infrastructure (14 agents)
+4. 04-quality-security (14 agents)
+5. 05-data-ai (12 agents)
+6. 06-developer-experience (13 agents)
+7. 07-specialized-domains (12 agents)
+8. 08-business-product (11 agents)
+9. 09-meta-orchestration (10 agents)
+10. 10-research-analysis (6 agents)
+
+**Notable Patterns**:
+
+_Checklist-Driven Expertise_: Every agent includes domain-specific checklists that serve
+as both documentation AND completion criteria:
+
+```
+Backend development checklist:
+- RESTful API design with proper HTTP semantics
+- Database schema optimization and indexing
+- Test coverage exceeding 80%
+```
+
+_Structured Wrap-Up Templates_: Agents complete with specific, measurable summaries:
+
+```
+"Backend implementation complete. Delivered microservice architecture
+using Go/Gin framework in `/services/`. Features include PostgreSQL
+persistence, Redis caching. Achieved 88% test coverage with sub-100ms
+p95 latency."
+```
+
+_Tool Assignment Philosophy_: Explicit guidance on permissions per agent type:
+
+- Reviewers/auditors: `Read, Grep, Glob` (read-only)
+- Code writers: `Read, Write, Edit, Bash, Glob, Grep`
+- Research agents: `Read, Grep, Glob, WebFetch, WebSearch`
+
+**What to Skip**: Their JSON inter-agent communication protocol is over-engineered. LLMs
+excel at natural language - forcing them into rigid JSON schemas adds friction without
+benefit.
+
+**What to Steal**:
+
+1. Checklist sections in agents (self-prompting for completeness)
+2. Wrap-up templates with specific metrics and file locations
+3. Numbered category prefixes (01-, 02-) for consistent sorting
+4. Modular discovery commands instead of monolithic search
+
+---
+
 #### 5. awesome-cursorrules
-**URL**: https://github.com/PatrickJS/awesome-cursorrules
-**Type**: Curated Cursor rules collection
+
+**URL**: https://github.com/PatrickJS/awesome-cursorrules **Type**: Curated Cursor rules
+collection
 
 **What They Catalog**:
+
 - Frontend Frameworks and Libraries (19 variations)
 - Backend and Full-Stack (36 variations)
 - Mobile Development (7 variations)
@@ -201,6 +301,7 @@ This analysis reveals several high-impact patterns and features from the competi
 - Documentation (2 variations)
 
 **Distribution Model**:
+
 - Two directories: CursorList.com and cursor.directory
 
 **Key Insight**: Shows massive demand for framework/language-specific rules
@@ -208,39 +309,47 @@ This analysis reveals several high-impact patterns and features from the competi
 ---
 
 #### 6. ai-prompts (instructa)
+
 **URL**: https://github.com/instructa/ai-prompts
 
 **What They Offer**:
+
 - Structured prompt collection with metadata
 - `.mdc` files with YAML front-matter
 - `aiprompt.json` metadata per prompt
 - Multi-tool support (Cursor, GitHub Copilot, Zed, Windsurf, Cline)
 
 **Prompt Organization**:
+
 - `prompts/<category>/<prompt-name>/`
 - Metadata in `aiprompt.json`
 - Rules in `.mdc` format with frontmatter
 
 **Categories**:
+
 - clerk-next (setup, feature addition, coding standards)
 - angular-19 (multiple rule variations: min, ext, full)
 - next-fal-image-ai (step-by-step guide: 7 phases)
 - Framework-specific setups (supabase-svelte, auth0-vue, drizzle-remix, etc.)
 
-**Key Innovation**: Step-by-step implementation guides (01, 02, 03, etc.) for complex features
+**Key Innovation**: Step-by-step implementation guides (01, 02, 03, etc.) for complex
+features
 
 ---
 
 #### 7. single-file-agents (indydevdan)
+
 **URL**: https://github.com/indydevtools/single-file-agents
 
 **What They Offer**:
+
 - Self-contained agents in single Python files
 - Powered by [uv](https://github.com/astral/uv) for fast dependency management
 - Cross-provider support (Gemini, OpenAI, Anthropic)
 - Minimal, precise agents focused on one task
 
 **Agent Types**:
+
 - JQ Command Agent (JSON processing)
 - DuckDB Agents (SQL query generation, 3 provider variations)
 - SQLite Agent
@@ -249,47 +358,59 @@ This analysis reveals several high-impact patterns and features from the competi
 - Web Scraper Agent (Firecrawl integration)
 - Meta Prompt Generator
 
-**Key Innovation**: Ultra-focused single-file agents demonstrating precise prompt engineering patterns
+**Key Innovation**: Ultra-focused single-file agents demonstrating precise prompt
+engineering patterns
 
 ---
 
 #### 8. indydevtools
+
 **URL**: https://github.com/indydevtools/indydevtools
 
 **What They Offer**:
+
 - Opinionated agentic engineering toolbox
 - CLI-based multi-agent systems
 - Modular, composable function architecture
 
 **Core Tools**:
+
 1. Simple Prompt System (`idt sps`) - Save and reuse prompts with variable templating
 2. YouTube Metadata Generation (`idt yt`) - Multi-agent content generation
 
 **Principles**:
+
 - USE THE RIGHT TOOL (AGENT) FOR THE JOB
 - EVERYTHING IS A FUNCTION
 - GREAT QUESTIONS YIELD GREAT ANSWERS
 - CREATE REUSABLE BUILDING BLOCKS
 - Prompts are THE new fundamental unit of programming
 
-**Key Innovation**: Template-based prompt system with variable substitution and file storage
+**Key Innovation**: Template-based prompt system with variable substitution and file
+storage
 
 ---
 
 #### 9. commands (wshobson)
+
 **URL**: https://github.com/wshobson/commands
 
 **What They Offer**:
+
 - 57 production-ready slash commands (15 workflows, 42 tools)
 - Multi-agent orchestration workflows
 - Specialized single-purpose tools
 
 **Workflows** (15):
+
 - Core Development: `feature-development`, `full-review`, `smart-fix`, `tdd-cycle`
-- Process Automation: `git-workflow`, `improve-agent`, `legacy-modernize`, `multi-platform`, `workflow-automate`
-- Advanced: `full-stack-feature`, `security-hardening`, `data-driven-feature`, `performance-optimization`, `incident-response`
+- Process Automation: `git-workflow`, `improve-agent`, `legacy-modernize`,
+  `multi-platform`, `workflow-automate`
+- Advanced: `full-stack-feature`, `security-hardening`, `data-driven-feature`,
+  `performance-optimization`, `incident-response`
 
 **Tools** (42 across categories):
+
 - AI and Machine Learning (4)
 - Agent Collaboration (3)
 - Architecture and Code Quality (4)
@@ -298,6 +419,7 @@ This analysis reveals several high-impact patterns and features from the competi
 - And more...
 
 **Command Invocation Pattern**:
+
 ```bash
 /workflows:feature-development implement OAuth2 authentication
 /tools:security-scan perform vulnerability assessment
@@ -308,28 +430,34 @@ This analysis reveals several high-impact patterns and features from the competi
 ---
 
 #### 10. Personal_AI_Infrastructure
-**URL**: https://github.com/Personal_AI_Infrastructure
-*(Scan shows less relevant - more personal configuration)*
+
+**URL**: https://github.com/Personal_AI_Infrastructure _(Scan shows less relevant - more
+personal configuration)_
 
 ---
 
 #### 11. taches-cc-prompts
-**URL**: https://github.com/taches-cc-prompts
-*(Smaller collection, less differentiated)*
+
+**URL**: https://github.com/taches-cc-prompts _(Smaller collection, less
+differentiated)_
 
 ---
 
 #### 12. dotfiles/AI configuration repos
-*(Multiple repos showing personal setups - useful for patterns but less for feature ideas)*
+
+_(Multiple repos showing personal setups - useful for patterns but less for feature
+ideas)_
 
 ---
 
 ### MEDIUM PRIORITY - Infrastructure/Patterns
 
 #### 13. claude-quickstarts
+
 **URL**: https://github.com/anthropics/claude-quickstarts
 
 **What They Offer**:
+
 - Official Anthropic quick-start guides
 - Integration patterns for common use cases
 - Best practices from Anthropic
@@ -339,9 +467,11 @@ This analysis reveals several high-impact patterns and features from the competi
 ---
 
 #### 14. claude-code-hooks-multi-agent-observability
+
 **URL**: https://github.com/claude-code-hooks-multi-agent-observability
 
 **What They Offer**:
+
 - Observability patterns for multi-agent systems
 - Hooks for monitoring and logging
 - Agent coordination tracking
@@ -351,15 +481,18 @@ This analysis reveals several high-impact patterns and features from the competi
 ---
 
 #### 15. opcode
+
 **URL**: https://github.com/opcode
 
 **What They Offer**:
+
 - Code operation patterns
 - Structured approach to code transformations
 
 ---
 
 #### 16. leaked-system-prompts
+
 **URL**: https://github.com/leaked-system-prompts
 
 **Value**: Real-world system prompts showing professional prompt engineering
@@ -368,7 +501,8 @@ This analysis reveals several high-impact patterns and features from the competi
 
 ### LOWER PRIORITY - Chat UIs/SDKs
 
-*(Scanned but less relevant for ai-coding-config - focused on chat interfaces rather than coding workflows)*
+_(Scanned but less relevant for ai-coding-config - focused on chat interfaces rather
+than coding workflows)_
 
 ---
 
@@ -423,6 +557,7 @@ Based on competitive analysis, these specialized agents would add significant va
 ### New Commands to Add
 
 1. **Multi-Agent Review Commands** (from claude-flow)
+
    ```
    /code-review:multi-agent - Deploy specialized review agents
    /code-review:security - Security-focused review
@@ -431,6 +566,7 @@ Based on competitive analysis, these specialized agents would add significant va
    ```
 
 2. **Session Management Commands** (from claude-flow, superpowers)
+
    ```
    /session:save - Save current session state
    /session:resume <id> - Resume previous session
@@ -439,6 +575,7 @@ Based on competitive analysis, these specialized agents would add significant va
    ```
 
 3. **Workflow Orchestration Commands** (from commands repo)
+
    ```
    /workflows:feature-development - End-to-end feature workflow
    /workflows:tdd-cycle - Test-driven development cycle
@@ -446,6 +583,7 @@ Based on competitive analysis, these specialized agents would add significant va
    ```
 
 4. **Skill Management Commands** (from dotai)
+
    ```
    /skills:find - Search available skills
    /skills:load - Load specific skill
@@ -453,6 +591,7 @@ Based on competitive analysis, these specialized agents would add significant va
    ```
 
 5. **Plan Execution Commands** (from superpowers)
+
    ```
    /plan:brainstorm - Interactive design refinement
    /plan:write - Create implementation plan
@@ -551,6 +690,7 @@ Based on competitive analysis, these specialized agents would add significant va
 ### Prompt Engineering Improvements
 
 1. **Frontmatter Standardization** (from claude-flow, dotai)
+
    ```yaml
    ---
    name: Skill Name
@@ -561,7 +701,7 @@ Based on competitive analysis, these specialized agents would add significant va
    author: Author
    requires: [dependency1, dependency2]
    capabilities: [capability1, capability2]
-   triggers: [trigger phrase 1, trigger phrase 2]  # NEW
+   triggers: [trigger phrase 1, trigger phrase 2] # NEW
    ---
    ```
 
@@ -675,6 +815,7 @@ Based on competitive analysis, these specialized agents would add significant va
 ### Integration Patterns
 
 1. **GitHub CLI Integration** (from claude-flow)
+
    ```bash
    gh pr view 123 --json files,diff | command
    gh pr comment 123 --body "review results"
@@ -704,19 +845,23 @@ Based on competitive analysis, these specialized agents would add significant va
 
 ### 1. Add Natural Language Skill Activation
 
-**What**: Skills that trigger based on conversational context rather than explicit slash commands
+**What**: Skills that trigger based on conversational context rather than explicit slash
+commands
 
 **Why It's High Impact**:
+
 - More intuitive user experience
 - Reduces command memorization burden
 - Enables "invisible" workflows that just work
 - Competitive differentiation
 
 **Which Repos Inspired It**:
+
 - claude-flow (25 natural language skills)
 - superpowers (automatic skill activation before tasks)
 
 **Implementation Notes**:
+
 ```yaml
 # Add to skill frontmatter
 triggers:
@@ -731,8 +876,8 @@ Before responding to any request:
 3. Apply skill context to response
 ```
 
-**Effort**: Medium (need detection logic + trigger metadata)
-**Value**: Very High (fundamental UX improvement)
+**Effort**: Medium (need detection logic + trigger metadata) **Value**: Very High
+(fundamental UX improvement)
 
 ---
 
@@ -741,16 +886,19 @@ Before responding to any request:
 **What**: Deploy specialized agents in parallel for comprehensive code review
 
 **Why It's High Impact**:
+
 - Catches more issues than single-perspective review
 - Each agent specializes in one domain (security, performance, etc.)
 - Parallel execution = faster reviews
 - Professional quality output
 
 **Which Repos Inspired It**:
+
 - claude-flow (github-code-review skill with 5 specialized agents)
 - commands (multi-agent-review tool)
 
 **Implementation Notes**:
+
 ```
 Create agents:
 1. security-reviewer.md - OWASP, CVE, secrets, permissions
@@ -767,26 +915,30 @@ Create command:
   - Generates structured feedback
 ```
 
-**Effort**: Medium-High (5 specialized agents + orchestration)
-**Value**: Very High (major quality improvement)
+**Effort**: Medium-High (5 specialized agents + orchestration) **Value**: Very High
+(major quality improvement)
 
 ---
 
 ### 3. Build Hook System for Lifecycle Automation
 
-**What**: Pre/post operation hooks that execute automatically at specific lifecycle points
+**What**: Pre/post operation hooks that execute automatically at specific lifecycle
+points
 
 **Why It's High Impact**:
+
 - Enforces quality gates automatically
 - Enables workflow automation without manual steps
 - Consistency across all operations
 - Foundation for advanced features
 
 **Which Repos Inspired It**:
+
 - dotai (beforeStart, beforeComplete, afterCompact, sessionStart hooks)
 - claude-flow (pre-task, pre-edit, post-edit, post-task hooks)
 
 **Implementation Notes**:
+
 ```
 Hook types:
 - beforeStart: Execute before agent responds
@@ -805,8 +957,8 @@ Implementation:
 4. Add conditional execution support (SKIP/ONLY)
 ```
 
-**Effort**: Medium (hook system + script infrastructure)
-**Value**: Very High (enables automation ecosystem)
+**Effort**: Medium (hook system + script infrastructure) **Value**: Very High (enables
+automation ecosystem)
 
 ---
 
@@ -815,16 +967,19 @@ Implementation:
 **What**: Save session state and resume where you left off
 
 **Why It's High Impact**:
+
 - Continuity across development sessions
 - Preserve context and progress
 - Better experience for long-running features
 - Competitive advantage
 
 **Which Repos Inspired It**:
+
 - claude-flow (session management with persistence and resume)
 - superpowers (session tracking and state)
 
 **Implementation Notes**:
+
 ```
 Session state includes:
 - Current task/feature being worked on
@@ -848,8 +1003,8 @@ Storage:
   - progress.json (task completion tracking)
 ```
 
-**Effort**: Medium-High (state management + resume logic)
-**Value**: High (significant UX improvement)
+**Effort**: Medium-High (state management + resume logic) **Value**: High (significant
+UX improvement)
 
 ---
 
@@ -858,16 +1013,19 @@ Storage:
 **What**: Rules and checklist items that execute conditionally based on context
 
 **Why It's High Impact**:
+
 - Reduces noise (only relevant checks run)
 - More intelligent automation
 - Better developer experience
 - Foundation for smart workflows
 
 **Which Repos Inspired It**:
+
 - dotai (SKIP if/ONLY if patterns in prompt.json)
 - superpowers (context-aware skill activation)
 
 **Implementation Notes**:
+
 ```yaml
 # In prompt.json or rules
 beforeComplete:
@@ -877,6 +1035,7 @@ beforeComplete:
       - "Test coverage (SKIP if quick fix): Ensure >90% coverage"
       - "Security scan (ONLY if auth code changed): Run security audit"
 
+
 # In rules with frontmatter
 ---
 name: Python Type Checking
@@ -885,12 +1044,12 @@ applyIf:
   - codeContains: "def "
 skipIf:
   - messageContains: "quick"
-  - fileSize: "> 1000 lines"  # Skip for large files
+  - fileSize: "> 1000 lines" # Skip for large files
 ---
 ```
 
-**Effort**: Medium (condition parser + evaluation logic)
-**Value**: High (smarter automation)
+**Effort**: Medium (condition parser + evaluation logic) **Value**: High (smarter
+automation)
 
 ---
 
@@ -899,44 +1058,45 @@ skipIf:
 Low-effort, high-value additions:
 
 ### 1. Add Anti-Patterns Reference (1-2 hours)
-**From**: superpowers
-**What**: Create `rules/testing-anti-patterns.mdc` documenting common testing mistakes
-**Value**: Prevents common errors, educational
+
+**From**: superpowers **What**: Create `rules/testing-anti-patterns.mdc` documenting
+common testing mistakes **Value**: Prevents common errors, educational
 
 ### 2. Standardize Skill Frontmatter (1 hour)
-**From**: claude-flow, dotai
-**What**: Add version, category, tags, capabilities to all skills
-**Value**: Better discoverability, metadata-driven features
+
+**From**: claude-flow, dotai **What**: Add version, category, tags, capabilities to all
+skills **Value**: Better discoverability, metadata-driven features
 
 ### 3. Add Comment Templates (2 hours)
-**From**: claude-flow github-code-review
-**What**: Create structured templates for code review feedback
-**Value**: Consistent, professional output
+
+**From**: claude-flow github-code-review **What**: Create structured templates for code
+review feedback **Value**: Consistent, professional output
 
 ### 4. Create Workflow Separation (2 hours)
-**From**: commands repo
-**What**: Separate commands into `workflows/` (multi-agent) and `tools/` (single-purpose)
-**Value**: Clear organization, easier discovery
+
+**From**: commands repo **What**: Separate commands into `workflows/` (multi-agent) and
+`tools/` (single-purpose) **Value**: Clear organization, easier discovery
 
 ### 5. Add Step-by-Step Guides (3 hours)
-**From**: ai-prompts
-**What**: For complex features, create numbered step files (01-setup.md, 02-implementation.md, etc.)
-**Value**: Better onboarding, phased implementation
+
+**From**: ai-prompts **What**: For complex features, create numbered step files
+(01-setup.md, 02-implementation.md, etc.) **Value**: Better onboarding, phased
+implementation
 
 ### 6. Evidence-Based Completion Rule (1 hour)
-**From**: superpowers
-**What**: Add rule requiring fresh evidence before claiming completion
-**Value**: Quality gate, prevents premature "done"
+
+**From**: superpowers **What**: Add rule requiring fresh evidence before claiming
+completion **Value**: Quality gate, prevents premature "done"
 
 ### 7. Prompt Template Storage (2 hours)
-**From**: indydevtools
-**What**: Add command to save/reuse prompt templates with variable substitution
-**Value**: Productivity boost, consistency
+
+**From**: indydevtools **What**: Add command to save/reuse prompt templates with
+variable substitution **Value**: Productivity boost, consistency
 
 ### 8. Agent Organization by Category (2 hours)
-**From**: claude-flow
-**What**: Reorganize agents/ into subdirectories (analysis/, development/, testing/, etc.)
-**Value**: Better navigation, clearer structure
+
+**From**: claude-flow **What**: Reorganize agents/ into subdirectories (analysis/,
+development/, testing/, etc.) **Value**: Better navigation, clearer structure
 
 ---
 
@@ -945,52 +1105,52 @@ Low-effort, high-value additions:
 More complex additions requiring significant work:
 
 ### 1. Hive-Mind Multi-Agent System (1-2 weeks)
-**From**: claude-flow
-**What**: Queen agent coordinates specialized worker agents for complex projects
-**Why**: Enables truly autonomous development on large features
+
+**From**: claude-flow **What**: Queen agent coordinates specialized worker agents for
+complex projects **Why**: Enables truly autonomous development on large features
 **Complexity**: High (coordination logic, agent specialization, result aggregation)
 
 ### 2. Memory System with Vector Search (1-2 weeks)
-**From**: claude-flow (AgentDB integration)
-**What**: Persistent memory with semantic vector search
-**Why**: Enables learning from past work, pattern recognition
+
+**From**: claude-flow (AgentDB integration) **What**: Persistent memory with semantic
+vector search **Why**: Enables learning from past work, pattern recognition
 **Complexity**: High (vector DB, embedding generation, search algorithms)
 
 ### 3. Subagent-Driven Development (1 week)
-**From**: superpowers
-**What**: Fresh subagent per task with two-stage review
-**Why**: Isolation, focus, quality enforcement
-**Complexity**: Medium-High (subagent spawning, review orchestration)
+
+**From**: superpowers **What**: Fresh subagent per task with two-stage review **Why**:
+Isolation, focus, quality enforcement **Complexity**: Medium-High (subagent spawning,
+review orchestration)
 
 ### 4. Session Management System (1 week)
-**From**: claude-flow, superpowers
-**What**: Full session persistence, resume, history
-**Why**: Continuity, better UX for long features
-**Complexity**: Medium-High (state management, persistence layer)
+
+**From**: claude-flow, superpowers **What**: Full session persistence, resume, history
+**Why**: Continuity, better UX for long features **Complexity**: Medium-High (state
+management, persistence layer)
 
 ### 5. Advanced Hook System (1 week)
-**From**: dotai, claude-flow
-**What**: Comprehensive lifecycle hooks with conditional execution
-**Why**: Foundation for advanced automation
-**Complexity**: Medium (hook infrastructure, script execution)
+
+**From**: dotai, claude-flow **What**: Comprehensive lifecycle hooks with conditional
+execution **Why**: Foundation for advanced automation **Complexity**: Medium (hook
+infrastructure, script execution)
 
 ### 6. Natural Language Skill Detection (1 week)
-**From**: claude-flow
-**What**: Automatic skill activation based on conversation analysis
-**Why**: Invisible workflows, better UX
-**Complexity**: Medium (trigger matching, skill loading)
+
+**From**: claude-flow **What**: Automatic skill activation based on conversation
+analysis **Why**: Invisible workflows, better UX **Complexity**: Medium (trigger
+matching, skill loading)
 
 ### 7. GitHub Integration Suite (1 week)
-**From**: claude-flow
-**What**: Deep GitHub integration (PR management, multi-repo, releases, workflows)
-**Why**: Complete GitHub workflow automation
-**Complexity**: Medium (GitHub API, gh CLI integration)
+
+**From**: claude-flow **What**: Deep GitHub integration (PR management, multi-repo,
+releases, workflows) **Why**: Complete GitHub workflow automation **Complexity**: Medium
+(GitHub API, gh CLI integration)
 
 ### 8. Plan-First Development Workflow (3-4 days)
-**From**: superpowers
-**What**: Mandatory design → plan → execute → review workflow
-**Why**: Quality enforcement, systematic development
-**Complexity**: Medium (workflow enforcement, plan formats)
+
+**From**: superpowers **What**: Mandatory design → plan → execute → review workflow
+**Why**: Quality enforcement, systematic development **Complexity**: Medium (workflow
+enforcement, plan formats)
 
 ---
 
@@ -999,85 +1159,90 @@ More complex additions requiring significant work:
 Key patterns observed across competitors:
 
 ### Pattern: Natural Language Skill Activation
-**Description**: Skills trigger based on conversational triggers rather than explicit commands
-**Seen In**: claude-flow, superpowers
-**Implementation**: Frontmatter with trigger phrases, detection logic in CLAUDE.md
+
+**Description**: Skills trigger based on conversational triggers rather than explicit
+commands **Seen In**: claude-flow, superpowers **Implementation**: Frontmatter with
+trigger phrases, detection logic in CLAUDE.md
 
 ### Pattern: Multi-Agent Orchestration
-**Description**: Deploy specialized agents in parallel for complex tasks
-**Seen In**: claude-flow, commands
-**Implementation**: Queen/coordinator agent + specialized worker agents
+
+**Description**: Deploy specialized agents in parallel for complex tasks **Seen In**:
+claude-flow, commands **Implementation**: Queen/coordinator agent + specialized worker
+agents
 
 ### Pattern: Two-Stage Review
-**Description**: First check spec compliance, then code quality
-**Seen In**: superpowers
+
+**Description**: First check spec compliance, then code quality **Seen In**: superpowers
 **Implementation**: Separate review agents for different concerns
 
 ### Pattern: Conditional Execution
-**Description**: Rules and checklist items that execute based on context
-**Seen In**: dotai
-**Implementation**: SKIP if/ONLY if conditions with evaluation logic
+
+**Description**: Rules and checklist items that execute based on context **Seen In**:
+dotai **Implementation**: SKIP if/ONLY if conditions with evaluation logic
 
 ### Pattern: Lifecycle Hooks
-**Description**: Pre/post operation hooks that execute automatically
-**Seen In**: dotai, claude-flow
-**Implementation**: Hook scripts in .claude/scripts/, configured in prompt.json
+
+**Description**: Pre/post operation hooks that execute automatically **Seen In**: dotai,
+claude-flow **Implementation**: Hook scripts in .claude/scripts/, configured in
+prompt.json
 
 ### Pattern: Session Persistence
-**Description**: Save and resume development sessions
-**Seen In**: claude-flow
+
+**Description**: Save and resume development sessions **Seen In**: claude-flow
 **Implementation**: Session metadata storage, context preservation
 
 ### Pattern: Truth-Score Verification
-**Description**: Quality scoring with automatic rollback on failures
-**Seen In**: claude-flow
-**Implementation**: Verification function, threshold checking, rollback logic
+
+**Description**: Quality scoring with automatic rollback on failures **Seen In**:
+claude-flow **Implementation**: Verification function, threshold checking, rollback
+logic
 
 ### Pattern: Mandatory Workflows
-**Description**: Agent must check for and apply relevant skills before tasks
-**Seen In**: superpowers
-**Implementation**: Pre-task skill check, workflow enforcement
+
+**Description**: Agent must check for and apply relevant skills before tasks **Seen
+In**: superpowers **Implementation**: Pre-task skill check, workflow enforcement
 
 ### Pattern: Evidence-Based Completion
-**Description**: Fresh evidence required before claiming "done"
-**Seen In**: superpowers
+
+**Description**: Fresh evidence required before claiming "done" **Seen In**: superpowers
 **Implementation**: Verification checklist, evidence requirements
 
 ### Pattern: Plan-First Development
-**Description**: Design and plan required before coding
-**Seen In**: superpowers
+
+**Description**: Design and plan required before coding **Seen In**: superpowers
 **Implementation**: Workflow enforcement, plan formats
 
 ### Pattern: Git Worktree Automation
-**Description**: Automatic isolated workspaces per feature
-**Seen In**: superpowers
+
+**Description**: Automatic isolated workspaces per feature **Seen In**: superpowers
 **Implementation**: Worktree creation, branch management, cleanup
 
 ### Pattern: Template-Based Prompts
-**Description**: Save and reuse prompts with variable substitution
-**Seen In**: indydevtools
-**Implementation**: Template storage, variable parsing
+
+**Description**: Save and reuse prompts with variable substitution **Seen In**:
+indydevtools **Implementation**: Template storage, variable parsing
 
 ### Pattern: Step-by-Step Guides
-**Description**: Numbered sequential files for phased implementation
-**Seen In**: ai-prompts
-**Implementation**: 01-phase1.md, 02-phase2.md, etc.
+
+**Description**: Numbered sequential files for phased implementation **Seen In**:
+ai-prompts **Implementation**: 01-phase1.md, 02-phase2.md, etc.
 
 ### Pattern: Anti-Pattern Detection
-**Description**: Reference library of what NOT to do
-**Seen In**: superpowers
+
+**Description**: Reference library of what NOT to do **Seen In**: superpowers
 **Implementation**: Anti-patterns documentation, detection in review
 
 ### Pattern: Skill Metadata
-**Description**: Rich frontmatter for skills (version, category, triggers, etc.)
-**Seen In**: claude-flow, dotai
-**Implementation**: YAML frontmatter standardization
+
+**Description**: Rich frontmatter for skills (version, category, triggers, etc.) **Seen
+In**: claude-flow, dotai **Implementation**: YAML frontmatter standardization
 
 ---
 
 ## Appendix: Full Repository List Analyzed
 
 ### High Priority (12):
+
 1. awesome-claude-code
 2. awesome-cursorrules
 3. ai-prompts (instructa)
@@ -1092,12 +1257,14 @@ Key patterns observed across competitors:
 12. indydevtools
 
 ### Medium Priority (4):
+
 13. claude-quickstarts
 14. claude-code-hooks-multi-agent-observability
 15. opcode
 16. leaked-system-prompts
 
 ### Lower Priority (Scanned but less relevant):
+
 17-28. Various chat UIs, SDKs, and infrastructure projects
 
 ---
@@ -1105,15 +1272,20 @@ Key patterns observed across competitors:
 ## Conclusion
 
 The competitive landscape reveals a clear evolution toward:
+
 1. Natural language interfaces over command memorization
 2. Multi-agent orchestration for complex tasks
 3. Lifecycle automation through hooks
 4. Session persistence and continuity
 5. Mandatory workflows for quality
 
-The ai-coding-config project has a strong foundation. Adding the top 5 recommendations would provide significant competitive advantage and user value. The quick wins offer immediate improvements with minimal effort. Long-term improvements position the project as a comprehensive, professional-grade development workflow system.
+The ai-coding-config project has a strong foundation. Adding the top 5 recommendations
+would provide significant competitive advantage and user value. The quick wins offer
+immediate improvements with minimal effort. Long-term improvements position the project
+as a comprehensive, professional-grade development workflow system.
 
 **Next Steps**:
+
 1. Prioritize top 5 recommendations
 2. Implement quick wins first for momentum
 3. Build toward long-term improvements iteratively
