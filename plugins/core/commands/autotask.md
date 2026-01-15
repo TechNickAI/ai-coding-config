@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Execute development task autonomously from description to PR-ready - handles implementation, testing, and git workflow without supervision"
-version: 2.0.3
+version: 2.1.0
 ---
 
 # /autotask - Autonomous Task Execution
@@ -82,54 +82,12 @@ Architectural changes, new patterns, high-risk, multiple valid approaches.
 
 Signals: "thorough", "deep", "ultrathink", architectural scope, new patterns
 
-## State Persistence
+## Compaction Handling
 
-Create `autotask-state.md` in project root at session start. This file survives context
-compaction and enables recovery.
-
-```markdown
-# Autotask Session: [task-name]
-
-Started: [timestamp] Complexity: [quick|balanced|deep]
-
-## Phase: [current-phase]
-
-## Requirements
-
-- [extracted from task description]
-
-## Todos
-
-- [ ] Planning
-- [ ] Implementation
-- [ ] Validation
-- [ ] Review
-- [ ] PR Creation
-- [ ] Bot Feedback
-- [ ] Completion
-
-## Decisions Made
-
-[populated as work progresses]
-
-## Blockers
-
-[populated if encountered]
-```
-
-Update this file as phases complete. On resume after compaction, read this file to
-restore context. The file appears as uncommitted, naturally prompting the LLM to notice
-and read it.
-
-**On resume, validate state matches reality:**
-
-- Does the branch still exist?
-- If PR listed, is it still open?
-- Are there commits on the branch since it was created?
-
-If state is stale (branch merged, PR closed, or no work done), report and start fresh
-rather than continuing with invalid context. A clean working tree is normal after
-commits - don't treat it as stale.
+If context compaction occurs mid-task, **save your todos to the todo list before
+compaction completes**. The TodoWrite tool persists across compaction when you actively
+maintain it. After compaction, check git state (branch, commits, PR status) to re-orient
+and continue from where you left off.
 
 ## Workflow
 
@@ -191,8 +149,8 @@ Launch agents in parallel when independent, sequentially when dependent. Provide
 targeted context: task requirements, implementation decisions, relevant standards,
 specific focus area.
 
-Update autotask-state.md after significant steps. Capture decisions made and any
-blockers encountered. </implementation>
+Capture decisions made and any blockers encountered for the PR description.
+</implementation>
 
 <obstacle-handling>
 Pause only for deal-killers: security risks, data loss potential, fundamentally unclear
@@ -266,19 +224,7 @@ Execute /address-pr-comments on the PR. This is not optional.
 Fix valuable feedback (security issues, real bugs, good suggestions). Decline with
 WONTFIX and rationale where bot lacks context. Iterate until critical issues resolved.
 
-Update autotask-state.md to mark bot feedback complete. </bot-feedback-loop>
-
-<cleanup>
-Remove `autotask-state.md` from the project root. This file served its purpose during
-execution and should not persist after completion. Leaving it creates stale state that
-confuses future sessions.
-
-```bash
-rm autotask-state.md
-```
-
-This cleanup happens after bot feedback is resolved but before reporting completion.
-</cleanup>
+</bot-feedback-loop>
 
 <completion-verification>
 Autotask is complete when ALL are true:
@@ -287,7 +233,6 @@ Autotask is complete when ALL are true:
 - Review bots have completed (or confirmed none configured)
 - /address-pr-comments executed
 - All "Fix" items resolved or documented
-- State file shows all phases complete
 
 Report format:
 
@@ -308,8 +253,6 @@ Report format:
 **Bot feedback addressed:**
 - Fixed: [count]
 - Declined: [count with reasons]
-
-**State file:** Cleaned up (was autotask-state.md)
 ```
 
 </completion-verification>
@@ -324,9 +267,6 @@ log and suggest waiting. PR creation fails → check branch exists remotely, ret
 **Sub-agent failures**: Log which agent failed. Retry once with simplified scope. If
 still fails, continue without that input and note the gap.
 
-**State file issues**: Cannot write → proceed without, warn recovery won't work. Cannot
-read or stale → validate against git state, start fresh if invalid.
-
 For issues you cannot resolve autonomously, inform user with clear options and context.
 Never swallow errors silently. </error-recovery>
 
@@ -335,7 +275,6 @@ Never swallow errors silently. </error-recovery>
 - Feature branch workflow: Work on branch, deliver via PR
 - Complexity scaling: Effort matches task scope
 - Context preservation: Delegate exploration, orchestrate at top level
-- State persistence: File-based state survives compaction
 - Mandatory completion: Task not done until bot feedback addressed
 - Smart environment detection: Auto-detect when worktree needed
 - Git hooks do validation: Leverage existing infrastructure
@@ -364,4 +303,3 @@ Adapts to project structure:
 - Environment auto-detected; asks when ambiguous
 - Recognizes multi-repo workflows and existing worktrees
 - Bot feedback handling is autonomous and mandatory
-- State file enables recovery after context compaction
