@@ -68,3 +68,55 @@ filtering verbose test output to just what's needed for fixes.
 
 [Rest of agent prompt...]
 ```
+
+## Reviewer Agent Structure
+
+Reviewer agents (agents that analyze code and report findings) should include two
+additional sections:
+
+### Review Signals
+
+Replace prose "What I Look For" sections with scannable bullet lists. These prime the
+LLM to pattern-match against specific signals.
+
+```markdown
+## Review Signals
+
+These patterns warrant investigation:
+
+**Category name**
+
+- Specific pattern to look for
+- Another specific pattern
+- Concrete example of the smell
+
+**Another category**
+
+- Pattern
+- Pattern
+```
+
+Bullet structure primes the LLM to look for these specific signals. Each bullet becomes
+a micro-prompt. Not exhaustive—representative signals that train attention in the right
+direction.
+
+### Handoff
+
+Reviewer agents typically run as subagents called by an orchestrator (like
+multi-review). Add context so the agent understands its output goes to another LLM, not
+a human.
+
+```markdown
+## Handoff
+
+You're a subagent reporting to an orchestrating LLM (typically multi-review). The
+orchestrator will synthesize findings from multiple parallel reviewers, deduplicate
+across agents, and decide what to fix immediately vs. decline vs. defer.
+
+Optimize your output for that receiver. It needs to act on your findings, not read a
+report.
+```
+
+Do NOT prescribe output format in the Handoff section. Given context about who receives
+the output and what they'll do with it, the agent can determine the most effective
+format itself. Avoid over-specification.
