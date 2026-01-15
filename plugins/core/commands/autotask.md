@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Execute development task autonomously from description to PR-ready - handles implementation, testing, and git workflow without supervision"
-version: 2.0.2
+version: 2.0.3
 ---
 
 # /autotask - Autonomous Task Execution
@@ -268,6 +268,18 @@ WONTFIX and rationale where bot lacks context. Iterate until critical issues res
 
 Update autotask-state.md to mark bot feedback complete. </bot-feedback-loop>
 
+<cleanup>
+Remove `autotask-state.md` from the project root. This file served its purpose during
+execution and should not persist after completion. Leaving it creates stale state that
+confuses future sessions.
+
+```bash
+rm autotask-state.md
+```
+
+This cleanup happens after bot feedback is resolved but before reporting completion.
+</cleanup>
+
 <completion-verification>
 Autotask is complete when ALL are true:
 
@@ -297,10 +309,9 @@ Report format:
 - Fixed: [count]
 - Declined: [count with reasons]
 
-**State file:** autotask-state.md
+**State file:** Cleaned up (was autotask-state.md)
 ```
 
-After reporting, delete `autotask-state.md` to prevent stale state in future sessions.
 </completion-verification>
 
 <error-recovery>
