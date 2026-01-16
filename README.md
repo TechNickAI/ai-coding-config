@@ -2,6 +2,10 @@
   <img src="assets/logo.png" alt="AI Coding Configuration" width="200">
 </p>
 
+<p align="center">
+  <a href="https://claude.ai"><img src="https://img.shields.io/badge/Claude_Code-D97757?logo=claude&logoColor=fff" alt="Claude Code"></a>
+</p>
+
 # AI Coding Configuration
 
 Curated commands, agents, and rules for Claude Code, Cursor, Windsurf, and Cline.
