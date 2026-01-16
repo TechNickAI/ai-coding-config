@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="AI Coding Configuration" width="200">
+</p>
+
 # AI Coding Configuration
 
 Curated commands, agents, and rules for Claude Code, Cursor, Windsurf, and Cline.
