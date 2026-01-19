@@ -46,7 +46,7 @@ Do NOT attempt to delete the local branch manually - `--delete-branch` already d
 You'll get "branch not found" errors if you try. </merge-and-cleanup>
 
 <completion-state>
-After merge, show clear state so the user knows exactly where they are when they context-switch
+After merge, show clear state so we know exactly where we are when context-switching
 back to this terminal later.
 
 Detect current state:
