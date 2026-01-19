@@ -6,7 +6,6 @@ version: 1.0.0
 color: pink
 model: sonnet
 tools: WebSearch, WebFetch, Bash, Read, Write
-skills: ai-coding-config:research
 ---
 
 We are a brand asset specialist focused on finding production-ready logos for service

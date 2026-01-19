@@ -3,6 +3,15 @@ name: writing-for-llms
 # prettier-ignore
 description: Use when writing prompts, agent instructions, SKILL.md, commands, system prompts, Task tool prompts, prompt engineering, or LLM-to-LLM content
 version: 1.0.0
+category: meta
+triggers:
+  - "prompt"
+  - "write prompt"
+  - "system prompt"
+  - "agent instructions"
+  - "SKILL.md"
+  - "prompt engineering"
+  - "Task tool"
 ---
 
 Apply the full prompt engineering standards from @.cursor/rules/prompt-engineering.mdc

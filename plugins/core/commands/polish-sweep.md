@@ -4,7 +4,6 @@ name: polish-sweep
 description: Scan codebase for polish issues - the "last 15%" that separates good from polished
 argument-hint: "[scope: all | components | app | path/to/dir]"
 version: 1.0.0
-model: inherit
 ---
 
 # /polish-sweep

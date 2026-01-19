@@ -1,23 +1,30 @@
 ---
 name: mcp-debug
 # prettier-ignore
-description: "Debug and test MCP servers directly from Claude Code - call tools, list capabilities, diagnose issues without going through the full LLM stack"
+description: "Use when testing MCP servers, debugging MCP tool responses, exploring MCP capabilities, or diagnosing why an MCP tool returns unexpected data"
 version: 1.0.0
+category: debugging
+triggers:
+  - "mcp"
+  - "test mcp"
+  - "debug mcp"
+  - "mcp tool"
+  - "mcp server"
+  - "mcptools"
 ---
 
 <objective>
-Enable Claude to directly test and debug MCP servers during development sessions. This
-skill bypasses the full Carmenta LLM stack to call MCP tools directly, see raw responses,
-and diagnose issues in real-time.
+Enable Claude to directly test and debug MCP servers during development sessions. Call
+MCP tools directly, see raw responses, and diagnose issues in real-time.
 </objective>
 
 <when-to-use>
 Use this skill when:
-- Testing an MCP server during development (like machina)
+- Testing an MCP server during development
 - Debugging why an MCP tool isn't returning expected data
 - Exploring what operations an MCP server supports
 - Verifying MCP server connectivity and auth
-- Working across both Carmenta and MCP server repos simultaneously
+- Working across application and MCP server repos simultaneously
 </when-to-use>
 
 <prerequisites>
@@ -65,10 +72,10 @@ See what tools/operations an MCP server provides:
 
 ```bash
 # HTTP server with bearer auth
-mcp tools http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp tools http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Using an alias
-mcp tools machina
+mcp tools server-alias
 
 # Pretty JSON output
 mcp tools --format pretty http://localhost:9900
@@ -81,11 +88,11 @@ Execute an MCP tool directly with parameters:
 ```bash
 # Call with JSON params
 mcp call describe --params '{"action":"describe"}' http://localhost:9900 \
-  --headers "Authorization=Bearer $MACHINA_TOKEN"
+  --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Gateway-style (single tool with action param)
-mcp call machina --params '{"action":"messages_recent","params":{"limit":5}}' \
-  http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp call server-tool --params '{"action":"messages_recent","params":{"limit":5}}' \
+  http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Format output as pretty JSON
 mcp call tool_name --params '{}' --format pretty http://localhost:9900
@@ -96,7 +103,7 @@ mcp call tool_name --params '{}' --format pretty http://localhost:9900
 Open persistent connection for multiple commands:
 
 ```bash
-mcp shell http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp shell http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Then in shell:
 # mcp> tools
@@ -108,65 +115,48 @@ mcp shell http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
 Visual debugging in browser:
 
 ```bash
-mcp web http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp web http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 # Opens http://localhost:41999
 ```
 
 </commands>
 
-<machina-specific>
+<example-server>
 
-## Machina MCP Server
+## Example: Gateway Pattern MCP Server
 
-Machina runs on Nick's Mac and exposes macOS capabilities via MCP.
-
-**Default endpoint**: `http://localhost:9900` (or via Tailscale) **Auth**: Bearer token
-from `MACHINA_TOKEN` env var
-
-### Gateway Pattern
-
-Machina uses progressive disclosure - single `machina` tool with `action` parameter:
+Many MCP servers use a gateway pattern - a single tool with an `action` parameter for
+progressive disclosure:
 
 ```bash
 # List all operations
-mcp call machina --params '{"action":"describe"}' http://localhost:9900 \
-  --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp call server-tool --params '{"action":"describe"}' http://localhost:9900 \
+  --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Call specific operation
-mcp call machina --params '{"action":"messages_recent","params":{"limit":5}}' \
-  http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp call server-tool --params '{"action":"resource_list","params":{"limit":5}}' \
+  http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 ```
-
-### Available Operations (31 total)
-
-**Messages**: send, read, recent, search, conversations **Notes**: list, read, create,
-search **Reminders**: list, create, complete **Contacts**: search, get **WhatsApp**:
-send, chats, messages, search, contacts, status, raw_sql **System**: update, status
-**Advanced**: raw_applescript
 
 ### Common Debug Commands
 
 ```bash
-# Check if machina is responding
+# Check if server is responding
 curl -s http://localhost:9900/health
 
 # List all tools via mcptools
-mcp tools http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp tools http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 
 # Get operation descriptions
-mcp call machina --params '{"action":"describe"}' --format pretty \
-  http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+mcp call server-tool --params '{"action":"describe"}' --format pretty \
+  http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 
-# Test messages (requires Full Disk Access)
-mcp call machina --params '{"action":"messages_recent","params":{"limit":3}}' \
-  --format pretty http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
-
-# Test contacts (requires Contacts permission)
-mcp call machina --params '{"action":"contacts_search","params":{"query":"Mom"}}' \
-  --format pretty http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+# Test a specific operation
+mcp call server-tool --params '{"action":"resource_list","params":{"limit":3}}' \
+  --format pretty http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
 ```
 
-</machina-specific>
+</example-server>
 
 <troubleshooting>
 
@@ -175,25 +165,25 @@ mcp call machina --params '{"action":"contacts_search","params":{"query":"Mom"}}
 **Connection refused**
 
 - Check if server is running: `curl http://localhost:9900/health`
-- Check LaunchD: `launchctl list | grep machina`
-- Check logs: `tail -20 ~/machina/logs/gateway-stderr.log`
+- Check if process is running (e.g., `ps aux | grep mcp-server`)
+- Check logs: `tail -20 /path/to/server/logs/error.log`
 
 **401 Unauthorized**
 
-- Verify token: `echo $MACHINA_TOKEN`
+- Verify token: `echo $AUTH_TOKEN`
 - Check mcptools header syntax: `Authorization=Bearer` (mcptools uses `=`, HTTP uses
   `:`)
 
 **Tool not found**
 
-- Machina uses gateway pattern - call `machina` tool with `action` param
-- Not direct tool names like `messages_send`
+- Gateway pattern servers use a single tool with `action` param
+- Not direct tool names - check server documentation for tool name
 
 **Empty/error results**
 
-- Check macOS permissions (Full Disk Access, Automation)
-- Run `~/machina/test-permissions.ts` to diagnose
-- Check server logs for AppleScript errors
+- Check server permissions and configuration
+- Run server-specific diagnostics if available
+- Check server logs for errors
 
 **mcptools not found**
 
@@ -215,26 +205,26 @@ mcp call machina --params '{"action":"contacts_search","params":{"query":"Mom"}}
 2. **List available tools**
 
    ```bash
-   mcp tools http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+   mcp tools http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
    ```
 
 3. **Get operation descriptions**
 
    ```bash
-   mcp call machina --params '{"action":"describe"}' --format pretty \
-     http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+   mcp call server-tool --params '{"action":"describe"}' --format pretty \
+     http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
    ```
 
 4. **Test specific operation**
 
    ```bash
-   mcp call machina --params '{"action":"messages_recent","params":{"limit":3}}' \
-     --format pretty http://localhost:9900 --headers "Authorization=Bearer $MACHINA_TOKEN"
+   mcp call server-tool --params '{"action":"resource_list","params":{"limit":3}}' \
+     --format pretty http://localhost:9900 --headers "Authorization=Bearer $AUTH_TOKEN"
    ```
 
 5. **If issues, check logs**
    ```bash
-   tail -50 ~/machina/logs/gateway-stderr.log
+   tail -50 /path/to/server/logs/error.log
    ```
 
 </workflow>
@@ -260,8 +250,8 @@ The inner `text` field contains the actual result, often as a JSON string that n
 parsing. Use `jq` to extract:
 
 ```bash
-mcp call machina --params '...' --format json http://localhost:9900 \
-  --headers "Authorization=Bearer $MACHINA_TOKEN" \
+mcp call server-tool --params '...' --format json http://localhost:9900 \
+  --headers "Authorization=Bearer $AUTH_TOKEN" \
   | jq -r '.content[0].text' | jq .
 ```
 
