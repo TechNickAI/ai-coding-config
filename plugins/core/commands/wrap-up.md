@@ -3,7 +3,7 @@
 description: "Merge PR, sync local to main, clean up branch - the satisfying end to a feature workflow"
 argument-hint: "[pr-number]"
 model: haiku
-version: 1.0.1
+version: 1.0.0
 ---
 
 # /wrap-up - Complete the Feature Workflow
