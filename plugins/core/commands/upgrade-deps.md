@@ -1,8 +1,7 @@
 ---
-name: upgrade-deps
 # prettier-ignore
-description: Scan dependencies for updates, discover new features from changelogs, implement quick wins, create issues for larger opportunities - transforms maintenance into capability expansion
-argument-hint: [package-name?]
+description: "Scan dependencies for updates, discover new features from changelogs, implement quick wins, create issues for larger opportunities - transforms maintenance into capability expansion"
+argument-hint: "[package-name?]"
 version: 1.0.0
 ---
 

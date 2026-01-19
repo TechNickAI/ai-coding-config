@@ -1,8 +1,7 @@
 ---
-name: do-issue
 # prettier-ignore
-description: Autonomously triage and resolve a GitHub issue from analysis to merged PR - handles investigation, fixes, testing, and PR workflow
-argument-hint: [issue-number]
+description: "Autonomously triage and resolve a GitHub issue from analysis to merged PR - handles investigation, fixes, testing, and PR workflow"
+argument-hint: "[issue-number]"
 version: 1.0.0
 ---
 
@@ -41,8 +40,6 @@ core request, user impact, and requirements. Add 👀 reaction.
 </fetch-and-analyze>
 
 <triage>
-Evaluate the issue following @.cursor/rules/issue-triage.mdc guidelines.
-
 Decide autonomously: Fix, Won't Fix, Need More Info, or Invalid.
 
 Show your decision and rationale briefly. Be professional and thoughtful - these are
@@ -119,5 +116,4 @@ Uses existing commands:
 
 Follows existing rules:
 
-- `@.cursor/rules/issue-triage.mdc` - Triage decisions
-- `@.cursor/rules/git-commit-message.mdc` - Commit formatting (via /autotask)
+- `@rules/git-commit-message.mdc` - Commit formatting (via /autotask)

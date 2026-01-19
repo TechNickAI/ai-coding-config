@@ -1,8 +1,7 @@
 ---
-name: wrap-up
 # prettier-ignore
 description: "Merge PR, sync local to main, clean up branch - the satisfying end to a feature workflow"
-argument-hint: [pr-number]
+argument-hint: "[pr-number]"
 model: haiku
 version: 1.0.1
 ---
@@ -47,7 +46,7 @@ Do NOT attempt to delete the local branch manually - `--delete-branch` already d
 You'll get "branch not found" errors if you try. </merge-and-cleanup>
 
 <completion-state>
-After merge, show clear state so Nick knows exactly where he is when he context-switches
+After merge, show clear state so the user knows exactly where they are when they context-switch
 back to this terminal later.
 
 Detect current state:
