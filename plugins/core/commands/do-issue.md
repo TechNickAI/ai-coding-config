@@ -39,10 +39,6 @@ Match patterns in order (extract first capture group):
 If no match or not on a branch, prompt user for issue number. Validate it's a positive integer before proceeding.
 </branch-detection>
 
-## Input Validation
-
-Before using issue/PR numbers in commands, verify it's a positive integer. Always pass as quoted arguments to prevent command injection: `gh issue view "$issue_num"`. Never use unquoted variables or string interpolation.
-
 ## GitHub Interaction
 
 Use `gh` CLI for all GitHub operations. Use reactions to communicate progress: 👀 when

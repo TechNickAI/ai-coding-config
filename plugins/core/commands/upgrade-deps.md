@@ -34,14 +34,6 @@ $ARGUMENTS
 
 If no argument provided, scan all dependencies.
 
-## Input Validation
-
-Before using package names in commands, validate format and always quote:
-- **JavaScript**: `^(@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*$`
-- **Python**: `^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$`
-
-Always pass as quoted arguments: `pnpm update "$pkg_name"`. Never use unquoted variables to prevent command injection.
-
 ## Ecosystem Detection
 
 <ecosystem-detection>

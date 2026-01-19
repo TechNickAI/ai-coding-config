@@ -20,10 +20,6 @@ accomplishment. This is the final step after /autotask and /address-pr-comments.
 /wrap-up 123    - Wrap up PR #123
 ```
 
-## Input Validation
-
-Before using PR numbers in commands, verify it's a positive integer. Always pass as quoted arguments: `gh pr view "$pr_num"`. Never use unquoted variables to prevent command injection.
-
 <pr-detection>
 Find the PR from the argument or current branch. If no PR exists or it's already closed,
 inform user and exit.
