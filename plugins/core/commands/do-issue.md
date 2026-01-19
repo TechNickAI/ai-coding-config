@@ -27,6 +27,22 @@ Either a PR ready for merge resolving the issue, or a well-explained triage deci
 /do-issue 123       # Explicit issue number
 ```
 
+<branch-detection>
+If no issue number provided, extract from current branch name using `git branch --show-current`.
+
+Match patterns in order (extract first capture group):
+- `do-issue-(\d+)`
+- `fix-issue-(\d+)`
+- `issue-(\d+)`
+- `fix-(\d+)`
+
+If no match or not on a branch, prompt user for issue number. Validate it's a positive integer before proceeding.
+</branch-detection>
+
+## Input Validation
+
+Before using issue/PR numbers in commands, verify it's a positive integer. Always pass as quoted arguments to prevent command injection: `gh issue view "$issue_num"`. Never use unquoted variables or string interpolation.
+
 ## GitHub Interaction
 
 Use `gh` CLI for all GitHub operations. Use reactions to communicate progress: 👀 when
@@ -51,8 +67,7 @@ appropriate. Done.
 For Fix: continue to implementation. </triage>
 
 <prepare>
-When proceeding with a fix: self-assign the issue, add in-progress label if available,
-add 🚀 reaction, and comment with your implementation approach (2-3 bullets).
+When proceeding with a fix: add 🚀 reaction, add in-progress label if available, and comment with your implementation approach (2-3 bullets). Note: AI assistants cannot assign issues to themselves via the GitHub API.
 </prepare>
 
 <implement>

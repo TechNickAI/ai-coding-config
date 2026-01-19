@@ -20,6 +20,10 @@ accomplishment. This is the final step after /autotask and /address-pr-comments.
 /wrap-up 123    - Wrap up PR #123
 ```
 
+## Input Validation
+
+Before using PR numbers in commands, verify it's a positive integer. Always pass as quoted arguments: `gh pr view "$pr_num"`. Never use unquoted variables to prevent command injection.
+
 <pr-detection>
 Find the PR from the argument or current branch. If no PR exists or it's already closed,
 inform user and exit.
@@ -33,17 +37,17 @@ If blocked by conflicts or missing approvals, tell user what's blocking and exit
 </merge-readiness>
 
 <merge-and-cleanup>
-Use `gh pr merge --merge --delete-branch` for the merge.
+Use `gh pr merge --merge --delete-branch` to merge with a merge commit and delete the remote branch.
 
-This single command handles everything:
+The local branch remains - clean it up after merge:
 
-1. Merges the PR with a merge commit
-2. Deletes the remote branch
-3. Switches to main and pulls merged changes
-4. Deletes the local branch automatically
+```bash
+git checkout main
+git pull
+git branch -d {branch-name}  # Safe delete - ensures already merged
+```
 
-Do NOT attempt to delete the local branch manually - `--delete-branch` already did it.
-You'll get "branch not found" errors if you try. </merge-and-cleanup>
+If currently in a worktree, the worktree directory persists for manual cleanup when ready. </merge-and-cleanup>
 
 <completion-state>
 After merge, show clear state so we know exactly where we are when context-switching

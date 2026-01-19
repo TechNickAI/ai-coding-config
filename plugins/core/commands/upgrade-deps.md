@@ -34,6 +34,14 @@ $ARGUMENTS
 
 If no argument provided, scan all dependencies.
 
+## Input Validation
+
+Before using package names in commands, validate format and always quote:
+- **JavaScript**: `^(@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*$`
+- **Python**: `^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$`
+
+Always pass as quoted arguments: `pnpm update "$pkg_name"`. Never use unquoted variables to prevent command injection.
+
 ## Ecosystem Detection
 
 <ecosystem-detection>
@@ -133,7 +141,12 @@ For each package (or batch of related packages), update it then verify with type
 checking and tests. If either verification fails, stop immediately—report which package
 caused the failure and the specific errors. The user needs to decide how to proceed.
 
-If checks pass, continue to the next package. </update-loop>
+If checks pass, continue to the next package.
+
+After all updates complete, run a final batch verification (type check + tests) with all
+updates applied together. This catches cross-package conflicts that sequential testing
+missed—package A might pass alone, package B might pass alone, but A+B together could be
+incompatible. </update-loop>
 
 <feature-implementation>
 After successful updates, evaluate discovered opportunities:
