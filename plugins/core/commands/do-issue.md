@@ -1,6 +1,6 @@
 ---
 # prettier-ignore
-description: "Autonomously triage and resolve a GitHub issue from analysis to merged PR - handles investigation, fixes, testing, and PR workflow"
+description: "Autonomously triage and resolve a GitHub issue from analysis to PR ready for merge - handles investigation, fixes, testing, and PR workflow"
 argument-hint: "[issue-number]"
 version: 1.0.0
 ---
@@ -8,7 +8,7 @@ version: 1.0.0
 # /do-issue - Autonomous Issue Resolution
 
 <objective>
-Take a GitHub issue from initial triage to merged PR, handling the complete lifecycle autonomously. Triage professionally, implement efficiently, deliver production-ready code.
+Take a GitHub issue from initial triage to PR ready for merge, handling the complete lifecycle autonomously. Triage professionally, implement efficiently, deliver production-ready code.
 </objective>
 
 <user-provides>
@@ -16,7 +16,7 @@ Issue number (or auto-detect from current branch)
 </user-provides>
 
 <command-delivers>
-Either a merged PR resolving the issue, or a well-explained triage decision closing it.
+Either a PR ready for merge resolving the issue, or a well-explained triage decision closing it.
 </command-delivers>
 
 ## Usage
