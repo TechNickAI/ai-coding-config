@@ -119,7 +119,6 @@ installs relevant rules.
 ### Other Commands
 
 - `/cleanup-worktree` - Clean up worktrees after PR merge
-- `/create-prompt` - Create optimized prompts following prompt engineering principles
 - `/generate-AGENTS-file` - Generate AGENTS.md for AI context
 - `/generate-llms-txt` - Generate llms.txt for LLM navigation
 - `/knowledge` - AI Product Manager - maintain living product understanding

@@ -119,8 +119,8 @@ the right level. </context-preservation>
 
 <task-preparation>
 Ensure task clarity before implementation. If the task description is unclear or
-ambiguous, use /create-prompt to ask clarifying questions. If clear, proceed to planning
-or implementation based on complexity level.
+ambiguous, use AskUserQuestion to clarify requirements. If clear, proceed to planning or
+implementation based on complexity level.
 </task-preparation>
 
 <planning>

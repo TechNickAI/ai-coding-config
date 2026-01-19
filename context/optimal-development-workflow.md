@@ -33,11 +33,7 @@ One command that handles everything from task to PR-ready state.
 
 Analyzes task complexity:
 
-- **Complex** (multi-step, unclear, major feature) → Run `/create-prompt` first
-  - Ask clarifying questions with AskUserQuestion
-  - Create structured prompt
-  - Save to `.created-prompts/`
-  - Get your confirmation before proceeding
+- **Complex** (multi-step, unclear, major feature) → Ask clarifying questions with AskUserQuestion, then proceed to planning
 - **Straightforward** → Skip directly to execution
 
 ### Phase 2: Worktree Setup
@@ -197,12 +193,10 @@ When you're ready:
 $ /autotask "add user authentication with OAuth2"
 
 📋 Analyzing task complexity...
-🤔 This looks complex. Creating structured prompt first.
+🤔 This looks complex. Let me clarify requirements.
 
-[Uses /create-prompt]
-✓ Saved to .created-prompts/Add-User-Authentication-OAuth2.md
-
-Execute this prompt? (y/n) y
+[Asks clarifying questions via AskUserQuestion]
+✓ Requirements confirmed
 
 🚀 Creating worktree...
 ✓ .gitworktrees/add-user-auth created
