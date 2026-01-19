@@ -35,6 +35,8 @@ Parse the scope argument:
 - **"app"**: Scan only `app/` directory
 - **Specific path**: Scan the provided directory
 
+Note: Default directories are optimized for Next.js/React projects. For other frameworks (Vue, Angular, etc.), specify a custom path like `src/components`.
+
 Communicate the scope to each agent. </scope-handling>
 
 <execution>

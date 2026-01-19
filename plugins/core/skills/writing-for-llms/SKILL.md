@@ -14,7 +14,7 @@ triggers:
   - "Task tool"
 ---
 
-Apply the full prompt engineering standards from @.cursor/rules/prompt-engineering.mdc
+Apply the full prompt engineering standards from @rules/prompt-engineering.mdc
 
 <key-principles>
 - Show correct patterns only - never show anti-patterns, even labeled "wrong"

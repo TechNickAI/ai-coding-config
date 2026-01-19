@@ -3,7 +3,7 @@ name: logo-fetcher
 # prettier-ignore
 description: Use when finding, downloading, or fetching service logos, brand icons, official SVG assets, or adding integration logos
 version: 1.0.0
-color: pink
+color: purple
 model: sonnet
 tools: WebSearch, WebFetch, Bash, Read, Write
 ---
