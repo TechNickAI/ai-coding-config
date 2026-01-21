@@ -40,6 +40,22 @@ Then run the interactive setup:
 
 This detects your stack and installs relevant configurations.
 
+## Todo Persistence Across Compaction
+
+**The problem**: Claude Code's context compaction summarizes conversation history to stay
+within token limits. When this happens, your todo list vanishes - you lose track of
+what you were working on.
+
+**The solution**: This plugin automatically saves todos to disk via hooks. After
+compaction, restore them:
+
+```bash
+cat ~/.claude/projects/$(echo $PWD | sed 's|/|-|g')/todos.md
+```
+
+Then use TodoWrite to restore your progress. Your todos survive compaction, session
+restarts, and even `--resume` across days.
+
 ## Example Usage
 
 ```bash
@@ -272,7 +288,8 @@ ai-coding-config/
 │   ├── core/                         # Main plugin
 │   │   ├── commands/                 # 18 workflow commands
 │   │   ├── agents/                   # 24 specialized agents
-│   │   └── skills/                   # 6 autonomous capabilities
+│   │   ├── skills/                   # 6 autonomous capabilities
+│   │   └── hooks/                    # Todo persistence hooks
 │   └── personalities/                # 7 personality variants
 ├── .cursor/rules/                    # 33 coding standards (.mdc)
 ├── docs/                             # Guides
