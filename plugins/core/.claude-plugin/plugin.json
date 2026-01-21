@@ -9,5 +9,6 @@
   "homepage": "https://github.com/TechNickAI/ai-coding-config",
   "repository": "https://github.com/TechNickAI/ai-coding-config",
   "license": "MIT",
-  "keywords": ["commands", "agents", "skills", "workflows", "essential"]
+  "keywords": ["commands", "agents", "skills", "workflows", "essential"],
+  "hooks": "./hooks/hooks.json"
 }
