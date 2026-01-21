@@ -1,6 +1,6 @@
 {
   "name": "ai-coding-config",
-  "version": "9.14.0",
+  "version": "9.15.0",
   "description": "Commands, agents, skills, and context for AI-assisted development workflows",
   "author": {
     "name": "TechNickAI",
@@ -9,5 +9,6 @@
   "homepage": "https://github.com/TechNickAI/ai-coding-config",
   "repository": "https://github.com/TechNickAI/ai-coding-config",
   "license": "MIT",
-  "keywords": ["commands", "agents", "skills", "workflows", "essential"]
+  "keywords": ["commands", "agents", "skills", "workflows", "essential"],
+  "hooks": "./hooks/hooks.json"
 }

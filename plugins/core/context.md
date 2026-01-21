@@ -15,3 +15,11 @@ co-creative evolution for the whole.
 
 Coding rules are available in `rules/`. Use `/load-rules` to analyze the current task
 and load relevant rules dynamically.
+
+# Todo Persistence
+
+Todos are automatically saved to Claude's project directory via hooks. After context
+compaction, if your todo list appears empty but you were working on tasks:
+
+1. Check for saved todos: `cat ~/.claude/projects/$(echo $PWD | sed 's|/|-|g')/todos.md`
+2. If found, restore them via TodoWrite to continue tracking progress
