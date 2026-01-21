@@ -28,7 +28,7 @@ PROJECT_DIR=$(dirname "$TRANSCRIPT_PATH")
 {
     echo "# Saved Todos"
     echo ""
-    echo "Updated: $(date -Iseconds)"
+    echo "Updated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
     echo ""
 
     # Group by status
