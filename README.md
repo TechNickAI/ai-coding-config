@@ -160,7 +160,6 @@ installs relevant rules.
 | Agent           | Purpose                                              |
 | --------------- | ---------------------------------------------------- |
 | **debugger**    | Root cause analysis through systematic investigation |
-| **site-keeper** | Production health monitoring and error triage        |
 
 ### Code Review - Correctness
 
