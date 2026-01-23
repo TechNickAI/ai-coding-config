@@ -1,287 +1,361 @@
-# BMAD-METHOD Integration Opportunity
+# BMAD-METHOD + ai-coding-config: Unified Development Lifecycle
 
-A proposal for combining ai-coding-config with BMAD-METHOD to create a more comprehensive AI development framework.
-
-## Executive Summary
-
-Two complementary frameworks exist in the AI-assisted development space:
-
-- **ai-coding-config**: An "operating system layer" for AI coding tools focused on consistency, persistence, and workflow automation
-- **BMAD-METHOD**: An agile development methodology with structured planning, architectural guidance, and scale-adaptive intelligence
-
-These frameworks solve different problems at different abstraction levels. Combining them could create a unified system that handles the entire development lifecycle—from strategic planning to code-level execution.
+A two-phase development system where BMAD handles planning and ai-coding-config handles execution—completely isolated, connected only by documentation.
 
 ---
 
-## Framework Comparison
+## The Architecture
 
-### ai-coding-config
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Your Project Repository                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   .bmad/                          .ai-coding-config/                    │
+│   └── (submodule)                 └── (submodule)                       │
+│       ↓                               ↓                                 │
+│       Fork of BMAD-METHOD             Fork of ai-coding-config          │
+│       github.com/you/bmad             github.com/you/ai-coding-config   │
+│                                                                         │
+│   docs/                           src/                                  │
+│   ├── strategy.md        ───→     ├── components/                       │
+│   ├── architecture.md    ───→     ├── services/                         │
+│   ├── brand-guidelines.md         └── ...                               │
+│   ├── user-stories.md                                                   │
+│   └── tech-decisions.md                                                 │
+│                                                                         │
+│         BMAD WRITES                    AI-CODING-CONFIG READS           │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-**Focus**: Tooling standardization and execution-layer automation
+### Core Principle
 
-| Component | Count | Purpose |
-|-----------|-------|---------|
-| Commands | 18 | Automated workflows (PR review, session management, debugging) |
-| Agents | 24 | Specialized reviewers (security, performance, UX, architecture) |
-| Rules | 33 | Coding standards (.mdc format) |
-| Skills | 6 | Multi-step autonomous capabilities |
-| Personalities | 7 | Communication style variants |
+**Complete isolation. Document-based handoff.**
 
-**Core Problems Solved**:
-- Context loss during compaction (todo persistence)
-- Inconsistent code standards across projects
-- Repetitive workflow tasks
-- Tool fragmentation between Cursor, Claude Code, Windsurf
-
-**Philosophy**: Plugin-first architecture with single-source-of-truth maintenance. Encode patterns once, apply everywhere.
-
-### BMAD-METHOD
-
-**Focus**: Agile methodology and decision-making process
-
-| Component | Count | Purpose |
-|-----------|-------|---------|
-| Specialized Agents | 21 | Domain experts (PM, Architect, Developer, UX, Scrum Master) |
-| Guided Workflows | 50+ | Structured processes across development phases |
-| Development Phases | 4 | Analysis, Planning, Architecture, Implementation |
-| Scale Levels | 5 | Complexity tiers (0-4) adapting planning depth |
-
-**Core Problems Solved**:
-- Shallow AI decisions from "thinking-for-you" tools
-- Lack of structured planning process
-- No methodology scaling based on project complexity
-- Missing agile best practices in AI workflows
-
-**Philosophy**: AI as expert collaborator guiding methodical decision-making. Process rigor over automation.
+- BMAD and ai-coding-config never communicate directly
+- BMAD produces documentation artifacts
+- ai-coding-config consumes those artifacts to guide implementation
+- Each framework lives in its own submodule, pulls upstream updates independently
 
 ---
 
-## Key Differences
+## Phase 1: Planning (BMAD)
 
-| Dimension | ai-coding-config | BMAD-METHOD |
-|-----------|------------------|-------------|
-| **Abstraction Level** | Tooling/config layer | Methodology layer |
-| **Primary Question** | "How do we write code consistently?" | "What should we build and how?" |
-| **Decision Scope** | Code standards, formatting, PR flow | Architecture, feature design, project structure |
-| **When It Helps** | During implementation | Before implementation |
-| **Scaling Approach** | Rule sets per tech stack | Planning depth per project complexity |
+BMAD owns everything before code gets written.
 
-### Concrete Examples
+### What BMAD Produces
 
-**Scenario: "Add user authentication"**
+| Document | Purpose |
+|----------|---------|
+| `docs/strategy.md` | Project vision, goals, success metrics |
+| `docs/requirements.md` | User stories, acceptance criteria |
+| `docs/architecture.md` | System design, data models, tech stack decisions |
+| `docs/brand-guidelines.md` | Voice, tone, visual identity, naming conventions |
+| `docs/api-contracts.md` | Endpoint definitions, request/response schemas |
+| `docs/tech-decisions.md` | ADRs (Architecture Decision Records) |
 
-- BMAD-METHOD asks: "OAuth vs JWT? Session-based vs stateless? What's the threat model?"
-- ai-coding-config ensures: Consistent error handling, proper logging, security review checklist
+### BMAD Workflow
 
-**Scenario: "Fix the login bug"**
+```
+/bmad:start              → Scale assessment, project classification
+/bmad:analyze            → Requirements gathering, user research
+/bmad:plan               → Sprint structure, milestones, priorities
+/bmad:architect          → Tech stack, data models, system design
+/bmad:brand              → Guidelines, voice, naming conventions
+/bmad:finalize           → Review all docs, mark planning complete
+```
 
-- BMAD-METHOD: Quick Flow track (~10-30 min structured process)
-- ai-coding-config: `/troubleshoot` command with systematic debugging framework
+### Planning Complete Checklist
+
+Before handing off to ai-coding-config:
+
+- [ ] Strategy document defines clear success metrics
+- [ ] All user stories have acceptance criteria
+- [ ] Architecture decisions are documented with rationale
+- [ ] Tech stack is chosen and justified
+- [ ] Data models are defined
+- [ ] API contracts are specified
+- [ ] Brand/style guidelines exist (if applicable)
 
 ---
 
-## The Integration Opportunity
+## Phase 2: Execution (ai-coding-config)
 
-These frameworks are complementary, not competing. They operate at different layers:
+ai-coding-config owns everything once code starts.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    BMAD-METHOD Layer                        │
-│                                                             │
-│   Scale Assessment → Analysis → Planning → Architecture    │
-│                                                             │
-│   "Should we use microservices? What's the data model?"    │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              │ Decisions feed into
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  ai-coding-config Layer                     │
-│                                                             │
-│   Rules → Commands → Agents → Session Persistence          │
-│                                                             │
-│   "Use conventional commits. Run security review on PR."   │
-└─────────────────────────────────────────────────────────────┘
-```
+### What ai-coding-config Consumes
 
-### Natural Handoff Points
-
-1. **BMAD Planning → ai-coding-config Execution**
-   - BMAD completes architecture phase with decisions documented
-   - ai-coding-config `/autotask` implements features following those decisions
-   - Rules enforce the architectural patterns chosen during planning
-
-2. **ai-coding-config Persistence → BMAD Context**
-   - Session save/resume preserves architectural decisions
-   - Todo persistence maintains planning artifacts
-   - BMAD agents can reference prior decisions without context loss
-
-3. **Scale-Adaptive Planning → Stack-Specific Rules**
-   - BMAD Level 0-1 (quick fixes) → Minimal rule loading
-   - BMAD Level 2-3 (features/products) → Full stack rules
-   - BMAD Level 4 (enterprise) → Additional compliance rules
-
-### Combined Agent Roster
-
-| Category | BMAD Agents | ai-coding-config Agents |
-|----------|-------------|-------------------------|
-| **Planning** | PM, Scrum Master | - |
-| **Architecture** | Architect, Tech Lead | architecture-reviewer |
-| **Development** | Developer, Engineer | autonomous-developer, test-engineer |
-| **Quality** | QA Lead | logic-reviewer, robustness-reviewer |
-| **Security** | - | security-reviewer |
-| **UX** | UX Designer | ux-reviewer (mobile, desktop) |
-| **Performance** | - | performance-reviewer |
-| **Documentation** | Doc Writer | doc-reviewer |
-
-Total: ~45 specialized agents covering the full development lifecycle.
-
----
-
-## Potential Integration Approaches
-
-### Option A: Sequential Workflow
-
-Use BMAD for early phases, switch to ai-coding-config for implementation.
-
-```
-Project Start
-     │
-     ▼
-┌─────────────────────┐
-│  BMAD: /bmad-help   │  "What kind of project is this?"
-│  Scale Assessment   │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  BMAD: Analysis     │  Requirements, user stories, constraints
-│  BMAD: Planning     │  Sprint structure, milestones
-│  BMAD: Architecture │  Tech decisions, data models
-└─────────┬───────────┘
-          │
-          │ Architecture decisions documented
-          ▼
-┌─────────────────────┐
-│  ai-coding-config:  │  Load rules for chosen stack
-│  /load-rules        │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  ai-coding-config:  │  Implement features following rules
-│  /autotask          │  Session persistence across work
-│  /session save      │  PR automation with reviews
-└─────────────────────┘
-```
-
-**Pros**: Clear separation, minimal conflicts, easy to adopt incrementally
-**Cons**: Manual handoff, context may need re-establishment
-
-### Option B: Unified Command Namespace
-
-Merge command sets under a single namespace with phase prefixes.
-
-```
-/plan:start          → BMAD scale assessment
-/plan:analyze        → BMAD analysis phase
-/plan:architect      → BMAD architecture phase
-/build:autotask      → ai-coding-config autonomous implementation
-/build:review        → ai-coding-config PR review
-/session:save        → ai-coding-config persistence
-```
-
-**Pros**: Single mental model, clear phase boundaries
-**Cons**: Significant integration work, namespace management
-
-### Option C: Adapter Layer
-
-Create a thin adapter that routes to appropriate framework based on context.
+The execution phase reads BMAD's output:
 
 ```typescript
-// Pseudo-code for unified entry point
-async function handleCommand(command: string, context: ProjectContext) {
-  const phase = detectPhase(context);  // planning vs implementation
-
-  if (phase === 'planning' || command.startsWith('plan')) {
-    return bmadMethod.execute(command, context);
-  } else {
-    return aiCodingConfig.execute(command, context);
-  }
-}
+// ai-coding-config looks for planning docs in standard locations
+const PLANNING_DOCS = [
+  'docs/architecture.md',    // Tech decisions guide implementation
+  'docs/requirements.md',    // User stories become tasks
+  'docs/api-contracts.md',   // Contracts enforce interfaces
+  'docs/brand-guidelines.md' // Style guides inform UI code
+];
 ```
 
-**Pros**: Transparent routing, preserves both systems intact
-**Cons**: Additional complexity, potential edge cases
+### ai-coding-config Workflow
+
+```
+/build:load-context      → Ingest planning docs, understand project
+/build:autotask          → Implement features per requirements
+/build:review            → Multi-agent code review
+/build:troubleshoot      → Debug issues using documented architecture
+/session:save            → Persist progress
+/session:resume          → Continue work with full context
+```
+
+### Execution Standards
+
+ai-coding-config enforces:
+
+- Code standards from `.ai-coding-config/rules/`
+- Commit conventions
+- PR review checklists
+- Test coverage requirements
+- Security review gates
 
 ---
 
-## Challenges to Address
+## Submodule Setup
 
-### 1. Agent Overlap
+### Initial Installation
 
-Both frameworks define specialized agents. Resolution strategies:
+```bash
+# Fork both repos to your org first, then:
 
-- **Namespace prefixing**: `bmad:architect` vs `acc:architecture-reviewer`
-- **Role clarity**: BMAD agents for decisions, ai-coding-config agents for reviews
-- **Consolidation**: Merge overlapping agents where functionality is identical
+# Add BMAD as submodule
+git submodule add https://github.com/YOUR-ORG/bmad-method .bmad
+git submodule update --init --recursive
 
-### 2. Command Conflicts
+# Add ai-coding-config as submodule
+git submodule add https://github.com/YOUR-ORG/ai-coding-config .ai-coding-config
+git submodule update --init --recursive
+```
 
-Both use slash commands. Mitigation:
+### Directory Structure
 
-- Audit both command sets for conflicts
-- Establish naming conventions (verbs vs nouns, phases vs actions)
-- Consider hierarchical namespacing
+```
+your-project/
+├── .bmad/                      # BMAD submodule (forked)
+│   ├── agents/
+│   ├── workflows/
+│   └── ...
+├── .ai-coding-config/          # ai-coding-config submodule (forked)
+│   ├── commands/
+│   ├── agents/
+│   ├── rules/
+│   └── ...
+├── docs/                       # BMAD writes here
+│   ├── strategy.md
+│   ├── architecture.md
+│   └── ...
+├── src/                        # ai-coding-config builds here
+└── ...
+```
 
-### 3. Cognitive Overhead
+### Pulling Upstream Updates
 
-Two systems means two mental models. Approaches:
+```bash
+# Update BMAD from upstream
+cd .bmad
+git fetch upstream
+git merge upstream/main
+cd ..
+git add .bmad
+git commit -m "🔄 Update BMAD submodule"
 
-- Clear documentation on when to use which
-- Guided onboarding that introduces concepts gradually
-- Smart defaults that auto-select the right tool
-
-### 4. Maintenance Burden
-
-Upstream changes in both repos require reconciliation:
-
-- Pin to specific versions for stability
-- Maintain a changelog of integration-relevant changes
-- Consider contributing upstream to align approaches
-
----
-
-## Recommended Next Steps
-
-1. **Pilot Integration**: Try sequential workflow (Option A) on a real project
-2. **Document Friction**: Note where handoffs are awkward or context is lost
-3. **Identify Quick Wins**: Find low-effort, high-value integration points
-4. **Community Discussion**: Engage BMAD-METHOD maintainers about alignment interest
-5. **Prototype Adapter**: Build minimal adapter layer to test Option C feasibility
-
----
-
-## Conclusion
-
-ai-coding-config and BMAD-METHOD address different parts of the development lifecycle:
-
-- **BMAD-METHOD** excels at structured planning and architectural decision-making
-- **ai-coding-config** excels at consistent execution and workflow automation
-
-Combining them creates a comprehensive system:
-
-| Phase | Framework | Value |
-|-------|-----------|-------|
-| Project Assessment | BMAD | Scale-adaptive planning depth |
-| Analysis & Planning | BMAD | Methodical requirements, agile process |
-| Architecture | BMAD | Structured tech decisions |
-| Implementation | ai-coding-config | Consistent code, automated workflows |
-| Code Review | ai-coding-config | Multi-dimensional quality checks |
-| Session Management | ai-coding-config | Context persistence across work |
-
-The opportunity is real. The frameworks are complementary. The question is whether the integration complexity is worth the combined power.
+# Update ai-coding-config from upstream
+cd .ai-coding-config
+git fetch upstream
+git merge upstream/main
+cd ..
+git add .ai-coding-config
+git commit -m "🔄 Update ai-coding-config submodule"
+```
 
 ---
 
-*This document is a proposal for discussion, not a commitment to implementation.*
+## The Handoff
+
+The transition from planning to execution is explicit and documented.
+
+### Handoff Trigger
+
+When BMAD completes planning:
+
+```
+/bmad:finalize
+```
+
+This command:
+1. Validates all required docs exist
+2. Runs completeness checks
+3. Generates a `docs/PLANNING_COMPLETE.md` summary
+4. Signals readiness for execution phase
+
+### Handoff Artifact
+
+```markdown
+<!-- docs/PLANNING_COMPLETE.md -->
+# Planning Phase Complete
+
+## Summary
+- Project: [Name]
+- Scale Level: [0-4]
+- Tech Stack: [Chosen technologies]
+
+## Documents Ready
+- [x] strategy.md
+- [x] requirements.md
+- [x] architecture.md
+- [x] api-contracts.md
+
+## Key Decisions
+1. Using PostgreSQL for persistence (see tech-decisions.md#database)
+2. React + TypeScript frontend (see tech-decisions.md#frontend)
+3. REST API with OpenAPI spec (see api-contracts.md)
+
+## Ready for Execution
+Planning is complete. Run `/build:load-context` to begin implementation.
+```
+
+### Starting Execution
+
+```
+/build:load-context docs/
+```
+
+ai-coding-config:
+1. Reads all planning documents
+2. Extracts requirements as actionable tasks
+3. Loads appropriate rules for the tech stack
+4. Begins implementation following documented architecture
+
+---
+
+## Why This Works
+
+### Complete Isolation
+
+| Aspect | Benefit |
+|--------|---------|
+| Separate submodules | Each framework updates independently |
+| No runtime coupling | No complex integration code to maintain |
+| Forked repos | Customize without losing upstream connection |
+| Document contract | Clear interface between phases |
+
+### Clear Responsibilities
+
+| Phase | Owner | Artifacts |
+|-------|-------|-----------|
+| Planning | BMAD | Markdown docs in `docs/` |
+| Execution | ai-coding-config | Code in `src/`, tests, PRs |
+
+### Upstream Maintenance
+
+Both frameworks evolve independently:
+
+- Pull BMAD updates for new planning workflows
+- Pull ai-coding-config updates for new review agents
+- Your forks let you customize while staying connected
+- Submodules pin to specific commits for stability
+
+---
+
+## Unified Command Namespace
+
+While the systems are isolated, the developer experience is unified through namespaced commands:
+
+### Planning Commands (BMAD)
+
+```
+/bmad:help               → Show available planning workflows
+/bmad:start              → Begin new project planning
+/bmad:analyze            → Requirements and analysis phase
+/bmad:plan               → Sprint and milestone planning
+/bmad:architect          → Technical architecture
+/bmad:brand              → Brand and style guidelines
+/bmad:finalize           → Complete planning, prepare handoff
+```
+
+### Execution Commands (ai-coding-config)
+
+```
+/build:load-context      → Ingest planning docs
+/build:autotask          → Autonomous implementation
+/build:review            → Code review workflow
+/build:troubleshoot      → Debugging assistance
+/session:save            → Persist current state
+/session:resume          → Restore previous session
+/load-rules              → Load stack-specific rules
+```
+
+### The Mental Model
+
+```
+Am I deciding WHAT to build?     → /bmad:*
+Am I writing HOW to build it?    → /build:*
+```
+
+---
+
+## Getting Started
+
+### 1. Fork Both Repos
+
+- Fork `bmad-code-org/BMAD-METHOD` → `your-org/bmad-method`
+- Fork `Light-Brands/ai-coding-config` → `your-org/ai-coding-config`
+
+### 2. Add Submodules to Your Project
+
+```bash
+git submodule add https://github.com/your-org/bmad-method .bmad
+git submodule add https://github.com/your-org/ai-coding-config .ai-coding-config
+```
+
+### 3. Start Planning
+
+```
+/bmad:start
+```
+
+### 4. Complete Planning Docs
+
+Work through BMAD workflows until all docs are ready.
+
+### 5. Finalize and Hand Off
+
+```
+/bmad:finalize
+```
+
+### 6. Begin Execution
+
+```
+/build:load-context docs/
+/build:autotask "Implement user authentication per docs/architecture.md"
+```
+
+---
+
+## Summary
+
+| Question | Answer |
+|----------|--------|
+| Are they integrated? | No—completely isolated |
+| How do they communicate? | Through documentation only |
+| Can I update them independently? | Yes—separate submodules, forked repos |
+| What's the handoff? | BMAD writes docs, ai-coding-config reads them |
+| When do I use BMAD? | Before writing code |
+| When do I use ai-coding-config? | When writing code |
+
+**BMAD answers:** "What are we building and why?"
+
+**ai-coding-config answers:** "How do we build it correctly?"
+
+One plans. One executes. Documentation is the contract.
