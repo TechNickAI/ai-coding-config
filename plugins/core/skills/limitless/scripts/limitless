@@ -34,21 +34,28 @@ ENV_LOCATIONS = [
 
 
 def load_api_key() -> str | None:
-    """Load API key from environment or .env files."""
-    # First, load any .env files
+    """Load API key from environment or .env files.
+
+    Priority (later overrides earlier):
+    1. ~/.env
+    2. ~/.clawdbot/clawdbot.json
+    3. ./.env
+    4. ./.env.local
+    5. Environment variable (highest priority)
+    """
+    # Load all sources into environment (later overrides earlier)
     for env_path in ENV_LOCATIONS:
         if env_path.exists():
             if env_path.suffix == ".json":
-                # Handle JSON config files (like clawdbot.json)
                 try:
                     config = json.loads(env_path.read_text())
                     env_vars = config.get("env", {})
                     if "LIMITLESS_API_KEY" in env_vars:
-                        return env_vars["LIMITLESS_API_KEY"]
-                except (json.JSONDecodeError, KeyError):
-                    pass
+                        os.environ["LIMITLESS_API_KEY"] = env_vars["LIMITLESS_API_KEY"]
+                except (json.JSONDecodeError, KeyError) as e:
+                    console.print(f"[yellow]Warning: Failed to parse {env_path}: {e}[/yellow]", file=sys.stderr)
             else:
-                load_dotenv(env_path)
+                load_dotenv(env_path, override=True)
 
     return os.environ.get("LIMITLESS_API_KEY")
 
@@ -116,6 +123,9 @@ def call_api(endpoint: str, params: dict | None = None) -> dict | None:
         if e.response.status_code == 401:
             error("Invalid API key. Please check your LIMITLESS_API_KEY.")
             console.print("[dim]Run 'limitless help' for setup instructions.[/dim]")
+        elif e.response.status_code == 429:
+            error("Rate limit exceeded. Limitless API allows 180 requests/minute.")
+            console.print("[dim]Wait a moment before retrying.[/dim]")
         else:
             error(f"API error: {e.response.status_code} - {e.response.text}")
         return None
@@ -164,6 +174,13 @@ def cmd_today() -> None:
 
 def cmd_date(date_str: str) -> None:
     """Get conversations for a specific date."""
+    # Validate date format
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        error(f"Invalid date format: '{date_str}'. Use YYYY-MM-DD (e.g., 2026-01-28)")
+        sys.exit(1)
+
     data = call_api(
         "/lifelogs",
         {"date": date_str, "timezone": TIMEZONE, "limit": 10, "includeContents": "false"},
