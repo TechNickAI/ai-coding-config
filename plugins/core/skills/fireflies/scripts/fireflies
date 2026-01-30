@@ -34,7 +34,15 @@ ENV_LOCATIONS = [
 
 
 def load_api_key() -> str | None:
-    """Load API key from environment or .env files."""
+    """Load API key from environment or .env files.
+
+    Priority (later overrides earlier):
+    1. ~/.env
+    2. ~/.clawdbot/clawdbot.json
+    3. ./.env
+    4. ./.env.local
+    5. Environment variable (highest priority)
+    """
     for env_path in ENV_LOCATIONS:
         if env_path.exists():
             if env_path.suffix == ".json":
@@ -42,11 +50,11 @@ def load_api_key() -> str | None:
                     config = json.loads(env_path.read_text())
                     env_vars = config.get("env", {})
                     if "FIREFLIES_API_KEY" in env_vars:
-                        return env_vars["FIREFLIES_API_KEY"]
-                except (json.JSONDecodeError, KeyError):
-                    pass
+                        os.environ["FIREFLIES_API_KEY"] = env_vars["FIREFLIES_API_KEY"]
+                except (json.JSONDecodeError, KeyError) as e:
+                    console.print(f"[yellow]Warning: Failed to parse {env_path}: {e}[/yellow]", file=sys.stderr)
             else:
-                load_dotenv(env_path)
+                load_dotenv(env_path, override=True)
 
     return os.environ.get("FIREFLIES_API_KEY")
 
@@ -173,11 +181,18 @@ def graphql(query: str, variables: dict | None = None) -> dict | None:
             timeout=30.0,
         )
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        # Check for GraphQL errors in response
+        if "errors" in result:
+            error(f"GraphQL error: {result['errors'][0].get('message', 'Unknown error')}")
+            return None
+        return result
     except httpx.HTTPStatusError as e:
         if e.response.status_code == 401:
             error("Invalid API key. Please check your FIREFLIES_API_KEY.")
             console.print("[dim]Run 'fireflies help' for setup instructions.[/dim]")
+        elif e.response.status_code == 429:
+            error("Rate limit exceeded. Please wait before retrying.")
         else:
             error(f"API error: {e.response.status_code} - {e.response.text}")
         return None
@@ -306,6 +321,13 @@ def cmd_today() -> None:
 
 def cmd_date(date_str: str) -> None:
     """Get meetings for a specific date."""
+    # Validate date format
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        error(f"Invalid date format: '{date_str}'. Use YYYY-MM-DD (e.g., 2026-01-28)")
+        sys.exit(1)
+
     from_date = f"{date_str}T00:00:00.000Z"
     to_date = f"{date_str}T23:59:59.999Z"
     data = graphql(
@@ -393,7 +415,11 @@ def main() -> None:
 
     match cmd:
         case "recent":
-            limit = int(args[1]) if len(args) > 1 else 5
+            try:
+                limit = int(args[1]) if len(args) > 1 else 5
+            except ValueError:
+                error(f"Invalid limit: '{args[1]}'. Must be a number.")
+                sys.exit(1)
             cmd_recent(limit)
         case "today":
             cmd_today()
