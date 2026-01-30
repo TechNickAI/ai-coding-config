@@ -1,0 +1,428 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["httpx", "rich", "python-dotenv"]
+# ///
+"""
+Fireflies.ai CLI - Query your meeting transcripts.
+
+Requires FIREFLIES_API_KEY environment variable.
+Get your key from: https://app.fireflies.ai → Integrations → Fireflies API
+"""
+
+import json
+import os
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+import httpx
+from dotenv import load_dotenv
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+
+console = Console()
+
+# Load .env files in priority order (later overrides earlier)
+ENV_LOCATIONS = [
+    Path.home() / ".env",
+    Path.home() / ".clawdbot" / "clawdbot.json",
+    Path.cwd() / ".env",
+    Path.cwd() / ".env.local",
+]
+
+
+def load_api_key() -> str | None:
+    """Load API key from environment or .env files."""
+    for env_path in ENV_LOCATIONS:
+        if env_path.exists():
+            if env_path.suffix == ".json":
+                try:
+                    config = json.loads(env_path.read_text())
+                    env_vars = config.get("env", {})
+                    if "FIREFLIES_API_KEY" in env_vars:
+                        return env_vars["FIREFLIES_API_KEY"]
+                except (json.JSONDecodeError, KeyError):
+                    pass
+            else:
+                load_dotenv(env_path)
+
+    return os.environ.get("FIREFLIES_API_KEY")
+
+
+def show_setup_instructions() -> None:
+    """Display friendly setup instructions when API key is missing."""
+    instructions = """
+[bold red]API Key Required[/bold red]
+
+To use the Fireflies CLI, you need an API key from your Fireflies.ai account.
+
+[bold cyan]Step 1: Get your API key[/bold cyan]
+1. Go to [link=https://app.fireflies.ai]app.fireflies.ai[/link]
+2. Click Integrations → Fireflies API
+3. Generate or copy your API key
+
+[bold cyan]Step 2: Set your API key[/bold cyan]
+
+Option A: Environment variable (recommended for temporary use)
+[dim]export FIREFLIES_API_KEY=your-api-key-here[/dim]
+
+Option B: Add to ~/.env (recommended for persistent use)
+[dim]echo "FIREFLIES_API_KEY=your-api-key-here" >> ~/.env[/dim]
+
+Option C: Add to project .env or .env.local
+[dim]echo "FIREFLIES_API_KEY=your-api-key-here" >> .env[/dim]
+
+[bold cyan]Searched locations:[/bold cyan]
+"""
+    console.print(Panel(instructions, title="🔥 Fireflies Setup", border_style="yellow"))
+
+    for loc in ENV_LOCATIONS:
+        status = "✓" if loc.exists() else "✗"
+        color = "green" if loc.exists() else "dim"
+        console.print(f"  [{color}]{status} {loc}[/{color}]")
+
+    console.print()
+
+
+API_KEY = load_api_key()
+API_URL = "https://api.fireflies.ai/graphql"
+
+# GraphQL Queries
+LIST_QUERY = """
+query($limit: Int, $skip: Int, $keyword: String, $scope: String, $fromDate: DateTime, $toDate: DateTime, $mine: Boolean) {
+  transcripts(limit: $limit, skip: $skip, keyword: $keyword, scope: $scope, fromDate: $fromDate, toDate: $toDate, mine: $mine) {
+    id
+    title
+    date
+    duration
+    host_email
+    participants
+    organizer_email
+    summary {
+      overview
+      short_summary
+      keywords
+      action_items
+    }
+  }
+}
+"""
+
+FULL_QUERY = """
+query($id: String!) {
+  transcript(id: $id) {
+    id
+    title
+    date
+    duration
+    host_email
+    participants
+    organizer_email
+    sentences {
+      speaker_name
+      text
+      start_time
+      end_time
+    }
+    summary {
+      keywords
+      action_items
+      outline
+      overview
+      bullet_gist
+      short_summary
+      topics_discussed
+    }
+  }
+}
+"""
+
+USER_QUERY = """
+query {
+  user {
+    user_id
+    email
+    name
+    num_transcripts
+    minutes_consumed
+  }
+}
+"""
+
+
+def error(msg: str) -> None:
+    console.print(f"[red]Error:[/red] {msg}", file=sys.stderr)
+
+
+def graphql(query: str, variables: dict | None = None) -> dict | None:
+    """Execute GraphQL query against Fireflies API."""
+    if not API_KEY:
+        show_setup_instructions()
+        sys.exit(1)
+
+    try:
+        response = httpx.post(
+            API_URL,
+            json={"query": query, "variables": variables or {}},
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {API_KEY}",
+            },
+            timeout=30.0,
+        )
+        response.raise_for_status()
+        return response.json()
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == 401:
+            error("Invalid API key. Please check your FIREFLIES_API_KEY.")
+            console.print("[dim]Run 'fireflies help' for setup instructions.[/dim]")
+        else:
+            error(f"API error: {e.response.status_code} - {e.response.text}")
+        return None
+    except httpx.RequestError as e:
+        error(f"Request failed: {e}")
+        return None
+
+
+def format_list(data: dict) -> None:
+    """Format and display transcript list as markdown."""
+    transcripts = data.get("data", {}).get("transcripts", [])
+    if not transcripts:
+        console.print("[yellow]No transcripts found[/yellow]")
+        return
+
+    for t in transcripts:
+        title = t.get("title") or "Untitled"
+        tid = t.get("id", "")
+        duration = (t.get("duration") or 0) // 60
+        host = t.get("host_email") or "unknown"
+        participants = ", ".join(t.get("participants") or [])
+        summary = t.get("summary") or {}
+        overview = summary.get("overview") or summary.get("short_summary") or "No summary available"
+        action_items = summary.get("action_items") or "None"
+
+        output = f"""## {title}
+**ID:** {tid}
+**Duration:** {duration}m
+**Host:** {host}
+**Participants:** {participants}
+
+### Summary
+{overview}
+
+### Action Items
+{action_items}
+
+---
+"""
+        console.print(Markdown(output))
+
+
+def format_transcript(data: dict) -> None:
+    """Format and display full transcript as markdown."""
+    t = data.get("data", {}).get("transcript")
+    if not t:
+        console.print("[yellow]Transcript not found[/yellow]")
+        return
+
+    title = t.get("title") or "Untitled"
+    duration = (t.get("duration") or 0) // 60
+    host = t.get("host_email") or "unknown"
+    participants = ", ".join(t.get("participants") or [])
+    summary = t.get("summary") or {}
+    overview = summary.get("overview") or summary.get("short_summary") or "No summary"
+    keywords = ", ".join(summary.get("keywords") or [])
+    action_items = summary.get("action_items") or "None"
+    topics = ", ".join(summary.get("topics_discussed") or [])
+
+    sentences = t.get("sentences") or []
+    transcript_text = "\n".join(
+        f"{s.get('speaker_name', 'Speaker')}: {s.get('text', '')}" for s in sentences
+    )
+
+    output = f"""# {title}
+**Duration:** {duration} minutes
+**Host:** {host}
+**Participants:** {participants}
+
+## Summary
+{overview}
+
+## Keywords
+{keywords}
+
+## Action Items
+{action_items}
+
+## Topics Discussed
+{topics}
+
+## Transcript
+{transcript_text}
+"""
+    console.print(Markdown(output))
+
+
+def format_user(data: dict) -> None:
+    """Format and display user info."""
+    user = data.get("data", {}).get("user")
+    if not user:
+        console.print("[yellow]User info not found[/yellow]")
+        return
+
+    output = f"""**User:** {user.get('name')} ({user.get('email')})
+**ID:** {user.get('user_id')}
+**Total Transcripts:** {user.get('num_transcripts')}
+**Minutes Used:** {user.get('minutes_consumed')}
+"""
+    console.print(output)
+
+
+def cmd_recent(limit: int = 5) -> None:
+    """Get N most recent transcripts."""
+    data = graphql(LIST_QUERY, {"limit": limit, "mine": True})
+    if data:
+        format_list(data)
+
+
+def cmd_today() -> None:
+    """Get today's meetings."""
+    today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    tomorrow = today + timedelta(days=1)
+    data = graphql(
+        LIST_QUERY,
+        {
+            "fromDate": today.isoformat().replace("+00:00", ".000Z"),
+            "toDate": tomorrow.isoformat().replace("+00:00", ".000Z"),
+            "limit": 20,
+            "mine": True,
+        },
+    )
+    if data:
+        format_list(data)
+
+
+def cmd_date(date_str: str) -> None:
+    """Get meetings for a specific date."""
+    from_date = f"{date_str}T00:00:00.000Z"
+    to_date = f"{date_str}T23:59:59.999Z"
+    data = graphql(
+        LIST_QUERY,
+        {"fromDate": from_date, "toDate": to_date, "limit": 20, "mine": True},
+    )
+    if data:
+        format_list(data)
+
+
+def cmd_search(keyword: str) -> None:
+    """Search transcripts by keyword."""
+    data = graphql(
+        LIST_QUERY,
+        {"keyword": keyword, "scope": "all", "limit": 10, "mine": True},
+    )
+    if data:
+        format_list(data)
+
+
+def cmd_get(transcript_id: str) -> None:
+    """Get full transcript by ID."""
+    data = graphql(FULL_QUERY, {"id": transcript_id})
+    if data:
+        format_transcript(data)
+
+
+def cmd_me() -> None:
+    """Get user info."""
+    data = graphql(USER_QUERY)
+    if data:
+        format_user(data)
+
+
+def cmd_raw(query: str, variables: str = "{}") -> None:
+    """Raw GraphQL query."""
+    try:
+        vars_dict = json.loads(variables)
+    except json.JSONDecodeError:
+        error("Invalid JSON for variables")
+        sys.exit(1)
+
+    data = graphql(query, vars_dict)
+    if data:
+        console.print_json(data=data)
+
+
+def show_help() -> None:
+    """Display help message."""
+    help_text = """
+# Fireflies CLI - Query your meeting transcripts
+
+## Commands
+- `recent [N]` - Get N most recent transcripts (default: 5)
+- `today` - Get today's meetings
+- `date YYYY-MM-DD` - Get meetings for a specific date
+- `search "query"` - Search transcripts by keyword
+- `get <id>` - Get full transcript by ID
+- `me` - Get your user info
+- `raw <query> [vars]` - Raw GraphQL query
+
+## Environment
+- `FIREFLIES_API_KEY` - Required - your API key
+
+## Examples
+```
+fireflies recent 3
+fireflies today
+fireflies date 2026-01-28
+fireflies search "product roadmap"
+fireflies get abc123xyz
+fireflies me
+```
+"""
+    console.print(Markdown(help_text))
+
+    if not API_KEY:
+        console.print()
+        show_setup_instructions()
+
+
+def main() -> None:
+    args = sys.argv[1:]
+    cmd = args[0] if args else "help"
+
+    match cmd:
+        case "recent":
+            limit = int(args[1]) if len(args) > 1 else 5
+            cmd_recent(limit)
+        case "today":
+            cmd_today()
+        case "date":
+            if len(args) < 2:
+                error("Usage: fireflies date YYYY-MM-DD")
+                sys.exit(1)
+            cmd_date(args[1])
+        case "search":
+            if len(args) < 2:
+                error('Usage: fireflies search "query"')
+                sys.exit(1)
+            cmd_search(args[1])
+        case "get":
+            if len(args) < 2:
+                error("Usage: fireflies get <transcript_id>")
+                sys.exit(1)
+            cmd_get(args[1])
+        case "me":
+            cmd_me()
+        case "raw":
+            if len(args) < 2:
+                error("Usage: fireflies raw <query> [variables_json]")
+                sys.exit(1)
+            variables = args[2] if len(args) > 2 else "{}"
+            cmd_raw(args[1], variables)
+        case "help" | "-h" | "--help" | _:
+            show_help()
+
+
+if __name__ == "__main__":
+    main()
