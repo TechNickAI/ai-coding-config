@@ -2,7 +2,7 @@
 name: kungfu
 # prettier-ignore
 description: "Use when finding new AI agent skills, discovering capabilities, installing skills from GitHub, searching skill marketplaces, or expanding what Claude can do - like Neo downloading martial arts in The Matrix"
-version: 1.0.0
+version: 1.2.0
 category: meta
 triggers:
   - "kungfu"
@@ -18,51 +18,61 @@ triggers:
 ---
 
 <objective>
-Discover, evaluate, and install AI agent skills from the ecosystem. Like Neo downloading kung fu in The Matrix - autonomously expand capabilities by finding and integrating new skills.
+Discover, evaluate, and install AI agent skills from the ecosystem. Like Neo downloading kung fu in The Matrix - expand capabilities by finding and integrating new skills.
 </objective>
 
-<when-to-use>
-- Need a skill that doesn't exist yet
-- Want to discover what's available
-- Installing skills from external sources
-- Auditing or updating installed skills
-</when-to-use>
+<discovery-strategy>
+Search GitHub for skill collections using:
+- Repos matching "awesome*skills" or "claude*skills"
+- Repos containing SKILL.md files (query: `path:SKILL.md claude`)
+- Topics: claude-code, ai-skills, agent-skills
 
-<discovery-sources>
-Search these GitHub repos for curated skill collections:
-- VoltAgent/awesome-agent-skills (200+ skills)
+Known curated collections (verify availability before citing):
+- VoltAgent/awesome-agent-skills
 - composioHQ/awesome-claude-code-skills
-- sickn33/antigravity-awesome-skills (500+ skills)
-- numman-ali/openskills
-- rohitg00/skillkit
-- alirezarezvani/claude-skills
+- sickn33/antigravity-awesome-skills
 
-Also search GitHub directly for repos containing SKILL.md files.
-</discovery-sources>
+If curated lists are unavailable, search GitHub directly. Prioritize repos updated within 6 months with meaningful star counts.
+</discovery-strategy>
 
 <skill-format>
-Valid skills have:
-```
-skill-name/
-  SKILL.md           # Required - YAML frontmatter + content
-  scripts/tool       # Optional - executable
-```
-
-Required frontmatter: name, description ("Use when..."), triggers
+Valid skills: SKILL.md with frontmatter (name, "Use when..." description, triggers). Optional scripts/tool for executables (require user approval before install).
 </skill-format>
 
 <quality-signals>
-Evaluate on: GitHub stars, recent activity, SKILL.md quality, documentation, relevance to user's need.
+**Evaluate:** GitHub stars, recent activity, SKILL.md quality, documentation, relevance to user's need.
 
-Skip: No SKILL.md, abandoned (>1 year stale), <10 stars (unless trusted source), duplicates existing skill.
+**Skip:** No SKILL.md, abandoned (no commits in 1+ year AND unresponsive), <10 stars (unless from trusted source), duplicates already-installed skill.
 </quality-signals>
 
+<security>
+If a skill includes executable scripts in `scripts/`, ALWAYS:
+1. Show the user the script contents
+2. Explain what the script does
+3. Get explicit approval before installing
+
+Never auto-execute downloaded scripts.
+</security>
+
+<installation>
+Install to the project's `.claude/skills/<skill-name>/` directory. For global installation, use `~/.claude/skills/`.
+
+**Before installing:**
+- Check for existing skill with same name
+- If conflict: ask user to overwrite, rename, or skip
+
+**After downloading:**
+- Validate SKILL.md parses without YAML errors
+- Confirm required frontmatter (name, description, triggers) exists
+- Test with `/skill <name>` or a natural trigger phrase
+
+**If install fails:** Remove any partially downloaded files and report the specific failure.
+</installation>
+
 <workflows>
-**Search**: Query awesome lists and GitHub, evaluate candidates, present top 3-5 with install instructions.
+<search>Query GitHub and curated lists, evaluate candidates against quality signals, present top 3-5 options with name, description, star count, last update, and install instructions.</search>
 
-**Install**: Fetch skill, validate SKILL.md format, download to skills directory, verify it loads.
+<install>Fetch skill, run security review if scripts present, validate format, install to skills directory, verify it loads.</install>
 
-**Audit**: List installed skills, check for updates, identify unused candidates for removal.
-
-**Harvest**: Check awesome lists for new additions, find trending skill repos, queue promising discoveries.
+<audit>List installed skills from `.claude/skills/`, check source repos for updates, identify unused skills for removal.</audit>
 </workflows>
