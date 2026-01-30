@@ -68,5 +68,16 @@ Speaker names show as "Unknown" unless voice profiles are trained in the Limitle
 <api-notes>
 - Rate limit: 180 requests/minute
 - Requires Limitless Pendant hardware
-- API docs: [docs.limitless.ai](https://docs.limitless.ai)
+- Developer portal: [limitless.ai/developers](https://www.limitless.ai/developers)
+- API examples: [github.com/limitless-ai-inc/limitless-api-examples](https://github.com/limitless-ai-inc/limitless-api-examples)
 </api-notes>
+
+<llm-api-reference>
+If you need to look up API details beyond this skill's commands, use Context7:
+```
+resolve-library-id: limitless → /websites/help_limitless_ai_en
+query-docs: /websites/help_limitless_ai_en with "lifelogs API" query
+```
+
+Or fetch current docs directly from https://www.limitless.ai/developers
+</llm-api-reference>
