@@ -71,5 +71,15 @@ fireflies me
 <api-notes>
 - Works with Zoom, Google Meet, Microsoft Teams
 - Speaker names from calendar invites
-- API docs: [docs.fireflies.ai](https://docs.fireflies.ai)
+- GraphQL API docs: [docs.fireflies.ai](https://docs.fireflies.ai)
 </api-notes>
+
+<llm-api-reference>
+If you need to look up API details beyond this skill's commands, use Context7:
+```
+resolve-library-id: fireflies → /websites/fireflies_ai
+query-docs: /websites/fireflies_ai with "GraphQL transcripts query"
+```
+
+Context7 has full GraphQL schema documentation with code examples in Python, JavaScript, and cURL.
+</llm-api-reference>
