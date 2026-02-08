@@ -1,0 +1,276 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["httpx", "rich", "python-dotenv"]
+# ///
+"""
+Limitless CLI - Query your Pendant lifelogs.
+
+Requires LIMITLESS_API_KEY environment variable.
+Get your key from: https://app.limitless.ai → Settings → Developer
+"""
+
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import httpx
+from dotenv import load_dotenv
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+
+console = Console()
+
+# Load .env files in priority order (later overrides earlier)
+ENV_LOCATIONS = [
+    Path.home() / ".env",
+    Path.home() / ".clawdbot" / "clawdbot.json",
+    Path.cwd() / ".env",
+    Path.cwd() / ".env.local",
+]
+
+
+def load_api_key() -> str | None:
+    """Load API key from environment or .env files.
+
+    Priority (later overrides earlier):
+    1. ~/.env
+    2. ~/.clawdbot/clawdbot.json
+    3. ./.env
+    4. ./.env.local
+    5. Environment variable (highest priority)
+    """
+    # Load all sources into environment (later overrides earlier)
+    for env_path in ENV_LOCATIONS:
+        if env_path.exists():
+            if env_path.suffix == ".json":
+                try:
+                    config = json.loads(env_path.read_text())
+                    env_vars = config.get("env", {})
+                    if "LIMITLESS_API_KEY" in env_vars:
+                        os.environ["LIMITLESS_API_KEY"] = env_vars["LIMITLESS_API_KEY"]
+                except (json.JSONDecodeError, KeyError) as e:
+                    console.print(f"[yellow]Warning: Failed to parse {env_path}: {e}[/yellow]", file=sys.stderr)
+            else:
+                load_dotenv(env_path, override=True)
+
+    return os.environ.get("LIMITLESS_API_KEY")
+
+
+def show_setup_instructions() -> None:
+    """Display friendly setup instructions when API key is missing."""
+    instructions = """
+[bold red]API Key Required[/bold red]
+
+To use the Limitless CLI, you need an API key from your Limitless account.
+
+[bold cyan]Step 1: Get your API key[/bold cyan]
+1. Go to [link=https://app.limitless.ai]app.limitless.ai[/link]
+2. Click Settings → Developer
+3. Generate or copy your API key
+
+[bold cyan]Step 2: Set your API key[/bold cyan]
+
+Option A: Environment variable (recommended for temporary use)
+[dim]export LIMITLESS_API_KEY=your-api-key-here[/dim]
+
+Option B: Add to ~/.env (recommended for persistent use)
+[dim]echo "LIMITLESS_API_KEY=your-api-key-here" >> ~/.env[/dim]
+
+Option C: Add to project .env or .env.local
+[dim]echo "LIMITLESS_API_KEY=your-api-key-here" >> .env[/dim]
+
+[bold cyan]Searched locations:[/bold cyan]
+"""
+    console.print(Panel(instructions, title="🎙️ Limitless Setup", border_style="yellow"))
+
+    for loc in ENV_LOCATIONS:
+        status = "✓" if loc.exists() else "✗"
+        color = "green" if loc.exists() else "dim"
+        console.print(f"  [{color}]{status} {loc}[/{color}]")
+
+    console.print()
+
+
+API_KEY = load_api_key()
+BASE_URL = "https://api.limitless.ai/v1"
+TIMEZONE = os.environ.get("LIMITLESS_TIMEZONE", "America/Chicago")
+
+
+def error(msg: str) -> None:
+    console.print(f"[red]Error:[/red] {msg}", file=sys.stderr)
+
+
+def call_api(endpoint: str, params: dict | None = None) -> dict | None:
+    """Make authenticated API call to Limitless."""
+    if not API_KEY:
+        show_setup_instructions()
+        sys.exit(1)
+
+    try:
+        response = httpx.get(
+            f"{BASE_URL}{endpoint}",
+            params=params,
+            headers={"X-API-Key": API_KEY},
+            timeout=30.0,
+        )
+        response.raise_for_status()
+        return response.json()
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == 401:
+            error("Invalid API key. Please check your LIMITLESS_API_KEY.")
+            console.print("[dim]Run 'limitless help' for setup instructions.[/dim]")
+        elif e.response.status_code == 429:
+            error("Rate limit exceeded. Limitless API allows 180 requests/minute.")
+            console.print("[dim]Wait a moment before retrying.[/dim]")
+        else:
+            error(f"API error: {e.response.status_code} - {e.response.text}")
+        return None
+    except httpx.RequestError as e:
+        error(f"Request failed: {e}")
+        return None
+
+
+def format_lifelogs(data: dict) -> None:
+    """Format and display lifelogs as markdown."""
+    lifelogs = data.get("data", {}).get("lifelogs", [])
+    if not lifelogs:
+        console.print("[yellow]No lifelogs found[/yellow]")
+        return
+
+    for log in lifelogs:
+        title = log.get("title", "Untitled")
+        start = log.get("startTime", "")
+        end = log.get("endTime", "")
+        markdown_content = log.get("markdown", "")
+
+        output = f"## {title}\n**{start} - {end}**\n\n{markdown_content}\n\n---\n"
+        console.print(Markdown(output))
+
+
+def cmd_recent(limit: int = 5) -> None:
+    """Get N most recent lifelogs."""
+    data = call_api(
+        "/lifelogs",
+        {"limit": limit, "timezone": TIMEZONE, "includeContents": "false"},
+    )
+    if data:
+        format_lifelogs(data)
+
+
+def cmd_today() -> None:
+    """Get today's conversations."""
+    today = datetime.now().strftime("%Y-%m-%d")
+    data = call_api(
+        "/lifelogs",
+        {"date": today, "timezone": TIMEZONE, "limit": 10, "includeContents": "false"},
+    )
+    if data:
+        format_lifelogs(data)
+
+
+def cmd_date(date_str: str) -> None:
+    """Get conversations for a specific date."""
+    # Validate date format
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        error(f"Invalid date format: '{date_str}'. Use YYYY-MM-DD (e.g., 2026-01-28)")
+        sys.exit(1)
+
+    data = call_api(
+        "/lifelogs",
+        {"date": date_str, "timezone": TIMEZONE, "limit": 10, "includeContents": "false"},
+    )
+    if data:
+        format_lifelogs(data)
+
+
+def cmd_search(query: str) -> None:
+    """Semantic search across all lifelogs."""
+    data = call_api(
+        "/lifelogs",
+        {"search": query, "timezone": TIMEZONE, "limit": 10, "includeContents": "false"},
+    )
+    if data:
+        format_lifelogs(data)
+
+
+def cmd_raw(params: str) -> None:
+    """Raw API call with custom params."""
+    param_dict = {}
+    if params:
+        for pair in params.split("&"):
+            if "=" in pair:
+                key, value = pair.split("=", 1)
+                param_dict[key] = value
+
+    data = call_api("/lifelogs", param_dict)
+    if data:
+        console.print_json(data=data)
+
+
+def show_help() -> None:
+    """Display help message."""
+    help_text = """
+# Limitless CLI - Query your Pendant lifelogs
+
+## Commands
+- `recent [N]` - Get N most recent lifelogs (default: 5)
+- `today` - Get today's conversations
+- `date YYYY-MM-DD` - Get conversations for a specific date
+- `search "query"` - Semantic search across all lifelogs
+- `raw <params>` - Raw API call with custom params
+
+## Environment
+- `LIMITLESS_API_KEY` - Required - your API key
+- `LIMITLESS_TIMEZONE` - Optional - timezone (default: America/Chicago)
+
+## Examples
+```
+limitless recent 3
+limitless today
+limitless date 2026-01-28
+limitless search "meeting with john"
+limitless raw "limit=5&isStarred=true"
+```
+"""
+    console.print(Markdown(help_text))
+
+    if not API_KEY:
+        console.print()
+        show_setup_instructions()
+
+
+def main() -> None:
+    args = sys.argv[1:]
+    cmd = args[0] if args else "help"
+
+    match cmd:
+        case "recent":
+            limit = int(args[1]) if len(args) > 1 else 5
+            cmd_recent(limit)
+        case "today":
+            cmd_today()
+        case "date":
+            if len(args) < 2:
+                error("Usage: limitless date YYYY-MM-DD")
+                sys.exit(1)
+            cmd_date(args[1])
+        case "search":
+            if len(args) < 2:
+                error('Usage: limitless search "query"')
+                sys.exit(1)
+            cmd_search(args[1])
+        case "raw":
+            params = args[1] if len(args) > 1 else ""
+            cmd_raw(params)
+        case "help" | "-h" | "--help" | _:
+            show_help()
+
+
+if __name__ == "__main__":
+    main()
