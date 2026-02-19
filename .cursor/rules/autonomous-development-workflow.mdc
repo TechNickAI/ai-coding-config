@@ -1,7 +1,7 @@
 ---
 description: When completing tasks autonomously without human supervision
 alwaysApply: false
-version: 2.0.0
+version: 3.0.0
 ---
 
 # Autonomous Development Workflow
@@ -9,9 +9,20 @@ version: 2.0.0
 For AI agents completing tasks without human supervision. The goal: deliver a clean pull
 request that passes all checks and gets merged without back-and-forth.
 
+## Spec Quality Is the Bottleneck
+
+Invest more time understanding the problem than writing the implementation. A precise
+understanding of the problem produces better code than any amount of iteration on an
+ambiguous one. If the task description is ambiguous, clarify before spending tokens on
+implementation.
+
 ## Before Implementation
 
-Read all cursor rules in `rules/`. These define the project's standards. Every
+Assess whether you have enough clarity to implement correctly. Can you articulate the
+problem being solved, what "done" looks like, the edge cases, and the assumptions you're
+making? If not, ask before proceeding.
+
+Load project standards via `/load-rules` or read rules in `.cursor/rules/`. Every
 applicable rule must be followed.
 
 If `CLAUDE.md` or `AGENTS.md` exist in the project root, read those for additional
@@ -41,20 +52,22 @@ ruff format .         # Auto-format code
 pytest                # Run tests
 ```
 
-If we added functionality, we add tests following project patterns. Aim for 95%
-coverage - solid testing without obsessing over every edge case.
+If we added functionality, we add tests following project patterns. Aim for 95% coverage
+-- solid testing without obsessing over every edge case.
 
-Only commit and push when all validation passes. Green checks make for happy merges! ✅
+Only commit and push when all validation passes.
 
-## Self-Review
+## Evaluate Outcomes
 
-Run `git diff` and review every change, as a senior developer would.
+Verify the implementation delivers what was asked for -- not just technically correct, but
+useful. Consider whether a user would understand the resulting behavior without
+explanation. Check that no unnecessary complexity was introduced.
 
-Read through ALL cursor rules again and verify our code follows each applicable
-guideline.
+Run `git diff` and review the changes at the feature level. The question isn't "is every
+line correct" -- it's "does this changeset solve the problem cleanly?"
 
-Would we approve this in code review? If not, keep iterating until it's something we're
-pleased with.
+Read through applicable rules and verify compliance. Document any assumptions or choices
+the reviewer needs to understand.
 
 ## Submission
 
@@ -72,6 +85,6 @@ Ask first: major architectural changes, changes that would result in data loss, 
 
 ## Success
 
-A successful autonomous PR means: all automated checks pass, code follows all cursor
-rules, tests are green, and the developer merges it without requesting changes. Use the
-tooling to get there - it's our friend! 🎉
+A successful autonomous PR means: the implementation solves the stated problem, all
+automated checks pass, code follows project standards, and the developer merges it
+without requesting changes.

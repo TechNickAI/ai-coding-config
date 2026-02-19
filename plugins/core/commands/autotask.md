@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Execute development task autonomously from description to PR-ready - handles implementation, testing, and git workflow without supervision"
-version: 2.1.0
+version: 2.2.0
 ---
 
 # /autotask - Autonomous Task Execution
@@ -118,9 +118,31 @@ Doing exploratory work yourself fills context with raw data. This is about worki
 the right level. </context-preservation>
 
 <task-preparation>
-Ensure task clarity before implementation. If the task description is unclear or
-ambiguous, use AskUserQuestion to clarify requirements. If clear, proceed to planning or
-implementation based on complexity level.
+Spec quality determines implementation quality. Ambiguous specs produce software that
+fills gaps with AI guesses instead of customer-centric decisions.
+
+Before implementation, evaluate the task description:
+
+- **Problem clarity**: Can you articulate what user pain this solves? If not, you don't
+  understand the task yet.
+- **Acceptance criteria**: What does "done" look like? Not "it works" — specific
+  behavioral expectations.
+- **Edge cases**: What inputs, states, or conditions could break the expected behavior?
+- **Unstated assumptions**: What are you assuming about the system, the user, or the
+  context? Document them.
+
+**quick**: If the task changes a single file with no behavioral impact (typo fixes,
+comment updates, config tweaks), proceed without deep evaluation.
+
+**balanced**: Verify you can describe the expected behavior in concrete terms before
+writing code. If you can't, clarify with the user.
+
+**deep**: Write a brief spec (problem, expected behavior, edge cases, acceptance
+criteria) and validate it before implementation. This is the most valuable step in the
+entire workflow — a precise spec saves rewrites.
+
+If the task description is unclear or ambiguous, use AskUserQuestion to clarify
+requirements. If clear, proceed to planning or implementation based on complexity level.
 </task-preparation>
 
 <planning>
@@ -233,6 +255,11 @@ Autotask is complete when ALL are true:
 - Review bots have completed (or confirmed none configured)
 - /address-pr-comments executed
 - All "Fix" items resolved or documented
+- The implementation solves the stated problem (not just passes tests)
+
+Before reporting completion, step back and evaluate: If a user encounters this feature
+tomorrow, will it make sense? Does it do what was asked, or did implementation drift
+from the original intent? Tests verify correctness — this final check verifies value.
 
 Report format:
 
