@@ -65,7 +65,7 @@ measured benefits. Ask for confirmation before introducing async patterns.
 
 DO NOT SWALLOW ERRORS. This is the hill we die on.
 
-Default: let exceptions bubble up. We use Sentry/Honeybadger for centralized error
+Default: let exceptions bubble up. We use Sentry for centralized error
 tracking, so exceptions that bubble up get caught and reported automatically - we get
 alerted and can fix them. Write functions with NO try/except:
 
@@ -77,7 +77,7 @@ def process_payment(order_id: str):
     return result
 ```
 
-See? No try/except. If it fails, it crashes, Sentry/Honeybadger alerts us, and we fix
+See? No try/except. If it fails, it crashes, Sentry alerts us, and we fix
 the actual problem.
 
 WHY THIS MATTERS: When you catch an exception and just log it, we don't get alerted. The
@@ -110,12 +110,18 @@ for order_id in order_ids:
 try:
     result = external_api.call()
 except APIException as e:
-    honeybadger.notify(e, error_class="ExternalAPIError", context={"operation": "payment"})
+    sentry_sdk.set_context("api_error", {"operation": "payment"})
+    sentry_sdk.capture_exception(e)
     raise
 ```
 
 Ask ourselves: "Do we have specific alternative behavior for this error?" If yes, use
 try/except with specific exception type. If no, write the function with no try/except.
+
+**Important: batch loops should only catch transient failures** (network errors, rate
+limits, API timeouts). Do not catch data integrity errors (KeyError, missing fields) in
+loops. If the data is structurally wrong for one item, it's wrong for all of them —
+catching and continuing silently skips every broken item. Let it crash.
 
 If you catch an exception and just log it, or return None, or pass silently - you're
 doing it wrong. That's hiding errors, not handling them. Let it crash so we can fix the
@@ -138,6 +144,20 @@ Broken and visible is WAY better than broken and wrong.
 
 Use .get() with defaults only for genuinely optional data: configuration settings,
 optional metadata.
+
+Do not wrap bracket access in try/except. This is `.get()` with more steps:
+
+```python
+# Wrong — same silent failure, more code
+try:
+    status = data["status"]
+except KeyError:
+    logger.error("status missing")
+    sentry_sdk.capture_exception(...)
+```
+
+Sentry catches unhandled exceptions automatically. Adding try/except to log and report
+to Sentry does exactly what Sentry already does.
 
 ## Financial Data
 
