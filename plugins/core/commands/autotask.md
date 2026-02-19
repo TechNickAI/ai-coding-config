@@ -131,7 +131,7 @@ Before implementation, evaluate the task description:
 - **Unstated assumptions**: What are you assuming about the system, the user, or the
   context? Document them.
 
-**quick**: If the task changes a single file with no behavioral impact (typo fixes,
+**quick**: If the task has no behavioral impact and is a localized change (typo fixes,
 comment updates, config tweaks), proceed without deep evaluation.
 
 **balanced**: Verify you can describe the expected behavior in concrete terms before
@@ -141,8 +141,7 @@ writing code. If you can't, clarify with the user.
 criteria) and validate it before implementation. This is the most valuable step in the
 entire workflow — a precise spec saves rewrites.
 
-If the task description is unclear or ambiguous, use AskUserQuestion to clarify
-requirements. If clear, proceed to planning or implementation based on complexity level.
+If ambiguity remains after evaluation, use AskUserQuestion before proceeding.
 </task-preparation>
 
 <planning>

@@ -22,8 +22,8 @@ Assess whether you have enough clarity to implement correctly. Can you articulat
 problem being solved, what "done" looks like, the edge cases, and the assumptions you're
 making? If not, ask before proceeding.
 
-Load project standards via `/load-rules` or read rules in `.cursor/rules/`. Every
-applicable rule must be followed.
+Load project standards via `/load-rules`. If that's not available, fall back to reading
+rules in `.cursor/rules/` directly. Every applicable rule must be followed.
 
 If `CLAUDE.md` or `AGENTS.md` exist in the project root, read those for additional
 context.
@@ -66,8 +66,8 @@ explanation. Check that no unnecessary complexity was introduced.
 Run `git diff` and review the changes at the feature level. The question isn't "is every
 line correct" -- it's "does this changeset solve the problem cleanly?"
 
-Read through applicable rules and verify compliance. Document any assumptions or choices
-the reviewer needs to understand.
+Read through applicable rules and verify compliance. Document any assumptions or
+non-obvious choices in the PR description so reviewers understand the decisions made.
 
 ## Submission
 
