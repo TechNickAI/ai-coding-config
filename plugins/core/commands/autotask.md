@@ -119,7 +119,7 @@ the right level. </context-preservation>
 
 <task-preparation>
 Spec quality determines implementation quality. Ambiguous specs produce software that
-fills gaps with AI guesses instead of customer-centric decisions.
+fills gaps with AI guesses instead of user-centric decisions.
 
 Before implementation, evaluate the task description:
 
@@ -132,7 +132,7 @@ Before implementation, evaluate the task description:
   context? Document them.
 
 **quick**: If the task has no behavioral impact and is a localized change (typo fixes,
-comment updates, config tweaks), proceed without deep evaluation.
+comment updates), proceed without deep evaluation.
 
 **balanced**: Verify you can describe the expected behavior in concrete terms before
 writing code. If you can't, clarify with the user.

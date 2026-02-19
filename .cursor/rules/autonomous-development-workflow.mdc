@@ -13,8 +13,8 @@ request that passes all checks and gets merged without back-and-forth.
 
 Invest more time understanding the problem than writing the implementation. A precise
 understanding of the problem produces better code than any amount of iteration on an
-ambiguous one. If the task description is ambiguous, clarify before spending tokens on
-implementation.
+ambiguous one. If the task description is ambiguous, clarify before implementing. Quick,
+localized changes with no behavioral impact may proceed directly.
 
 ## Before Implementation
 
@@ -59,12 +59,11 @@ Only commit and push when all validation passes.
 
 ## Evaluate Outcomes
 
-Verify the implementation delivers what was asked for -- not just technically correct, but
-useful. Consider whether a user would understand the resulting behavior without
-explanation. Check that no unnecessary complexity was introduced.
-
 Run `git diff` and review the changes at the feature level. The question isn't "is every
 line correct" -- it's "does this changeset solve the problem cleanly?"
+
+Verify the implementation delivers what was asked for -- not just technically correct, but
+useful. Check that no unnecessary complexity was introduced.
 
 Read through applicable rules and verify compliance. Document any assumptions or
 non-obvious choices in the PR description so reviewers understand the decisions made.
