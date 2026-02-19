@@ -132,7 +132,7 @@ Before implementation, evaluate the task description:
   context? Document them.
 
 **quick**: If the task has no behavioral impact and is a localized change (typo fixes,
-comment updates), proceed without deep evaluation.
+comment updates), proceed without deep evaluation. Otherwise, treat as balanced.
 
 **balanced**: Verify you can describe the expected behavior in concrete terms before
 writing code. If you can't, clarify with the user.

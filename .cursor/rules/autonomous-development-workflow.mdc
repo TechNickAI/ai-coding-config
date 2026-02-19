@@ -23,7 +23,7 @@ problem being solved, what "done" looks like, the edge cases, and the assumption
 making? If not, ask before proceeding.
 
 Load project standards via `/load-rules`. If that's not available, fall back to reading
-rules in `.cursor/rules/` directly. Every applicable rule must be followed.
+applicable rules directly. Every applicable rule must be followed.
 
 If `CLAUDE.md` or `AGENTS.md` exist in the project root, read those for additional
 context.
