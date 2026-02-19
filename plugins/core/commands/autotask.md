@@ -1,7 +1,7 @@
 ---
 # prettier-ignore
 description: "Execute development task autonomously from description to PR-ready - handles implementation, testing, and git workflow without supervision"
-version: 2.2.0
+version: 2.3.0
 ---
 
 # /autotask - Autonomous Task Execution
@@ -59,7 +59,7 @@ Signals: "quick fix", "simple change", trivial scope, typo, single function
 Standard multi-file implementation, some design decisions.
 
 - Light planning with /load-rules
-- Delegate exploration to sub-agents
+- Delegate exploration to agents
 - Targeted testing for changed code
 - /multi-review with 2-3 domain-relevant agents
 - Create PR → /address-pr-comments → completion
@@ -70,7 +70,7 @@ Signals: Most tasks land here when auto-detected
 
 Architectural changes, new patterns, high-risk, multiple valid approaches.
 
-- Full exploration via sub-agents
+- Full exploration via agents
 - Use /brainstorm-synthesis for hard architectural decisions during exploration
 - Create detailed plan document incorporating synthesis results
 - **Review the PLAN with /multi-review** before implementation (architecture-auditor,
@@ -107,13 +107,13 @@ For worktree creation, use /setup-environment. When the right choice isn't obvio
 <context-preservation>
 Your context window is precious. Preserve it through delegation.
 
-Delegate to sub-agents: codebase exploration, pattern searching, documentation research,
+Delegate to agents: codebase exploration, pattern searching, documentation research,
 multi-file analysis, any task requiring multiple search/read rounds.
 
 Keep in main context: orchestration, decision-making, user communication, synthesizing
 results, state management, phase transitions.
 
-Sub-agents work with fresh context optimized for their task and return concise results.
+Agents work with fresh context optimized for their task and return concise results.
 Doing exploratory work yourself fills context with raw data. This is about working at
 the right level. </context-preservation>
 
@@ -149,20 +149,21 @@ Scale planning to complexity:
 
 **quick**: Skip to implementation.
 
-**balanced**: Load relevant rules with /load-rules. Brief exploration via sub-agent if
+**balanced**: Load relevant rules with /load-rules. Brief exploration via agent if
 needed. Create implementation outline.
 
-**deep**: Full exploration via sub-agents. Create detailed plan document. Run
-/multi-review on the PLAN with architecture-focused agents. Incorporate feedback before
-writing code. Document design decisions with rationale. </planning>
+**deep**: Full exploration via agents. Create detailed plan document. Run /multi-review
+on the PLAN with architecture-focused agents. Incorporate feedback before writing code.
+Document design decisions with rationale. </planning>
 
 <implementation>
 Execute using appropriate agents based on task type:
 
 - debugger: Root cause analysis, reproduces issues
 - autonomous-developer: Implementation work, writes tests
-- ux-designer: User-facing text, accessibility, UX consistency
-- code-reviewer: Architecture review, design patterns, security
+- ux-designer: User-facing text, UX consistency
+- architecture-auditor: Architecture review, design patterns
+- security-reviewer: Security analysis, injection, auth
 - prompt-engineer: Prompt optimization
 - Explore: Investigation, research, trade-off evaluation
 
@@ -229,7 +230,9 @@ Why this approach.
 **Validation Performed**: Tests run. Verification steps taken. </create-pr>
 
 <bot-feedback-loop>
-This phase is MANDATORY. Autotask is not complete without it.
+Bot feedback catches issues the author missed — security vulnerabilities, real bugs,
+style violations. Addressing it before declaring completion prevents shipping known
+defects. This phase completes the autotask workflow.
 
 After PR creation, poll for bot analysis using `gh pr checks`:
 
@@ -240,10 +243,9 @@ After PR creation, poll for bot analysis using `gh pr checks`:
 If checks complete sooner, proceed immediately. If timeout reached with checks still
 pending, proceed with available feedback and note incomplete checks.
 
-Execute /address-pr-comments on the PR. This is not optional.
-
-Fix valuable feedback (security issues, real bugs, good suggestions). Decline with
-WONTFIX and rationale where bot lacks context. Iterate until critical issues resolved.
+Execute /address-pr-comments on the PR. Fix valuable feedback (security issues, real
+bugs, good suggestions). Decline with WONTFIX and rationale where bot lacks context.
+Iterate until critical issues resolved.
 
 </bot-feedback-loop>
 
@@ -284,48 +286,9 @@ Report format:
 </completion-verification>
 
 <error-recovery>
-**Git failures**: Merge conflicts → pause for user resolution. Push rejected → pull and
-rebase if safe, ask if not. Hook failures → fix the issue, never use --no-verify.
+Recover from failures without bypassing safety checks. Never use --no-verify. Never
+silently swallow errors. Retry once before escalating.
 
-**GitHub CLI failures**: Auth issues → run `gh auth status`, inform user. Rate limits →
-log and suggest waiting. PR creation fails → check branch exists remotely, retry once.
-
-**Sub-agent failures**: Log which agent failed. Retry once with simplified scope. If
-still fails, continue without that input and note the gap.
-
-For issues you cannot resolve autonomously, inform user with clear options and context.
-Never swallow errors silently. </error-recovery>
-
-## Key Principles
-
-- Feature branch workflow: Work on branch, deliver via PR
-- Complexity scaling: Effort matches task scope
-- Context preservation: Delegate exploration, orchestrate at top level
-- Mandatory completion: Task not done until bot feedback addressed
-- Smart environment detection: Auto-detect when worktree needed
-- Git hooks do validation: Leverage existing infrastructure
-- PR-centric: Everything leads to mergeable pull request
-- Decision transparency: Every autonomous choice documented in PR
-
-## Requirements
-
-- GitHub CLI (`gh`) installed and authenticated
-- Node.js/npm
-- Project standards accessible via /load-rules
-
-## Configuration
-
-Adapts to project structure:
-
-- Detects git hooks (husky, pre-commit)
-- Detects test runners (jest, mocha, vitest, etc.)
-- Finds linting configs (eslint, prettier, etc.)
-- Uses available build scripts
-- Respects project-specific conventions
-
-## Notes
-
-- Creates real commits and PRs
-- Environment auto-detected; asks when ambiguous
-- Recognizes multi-repo workflows and existing worktrees
-- Bot feedback handling is autonomous and mandatory
+When blocked on something you cannot resolve autonomously (merge conflicts requiring
+human judgment, auth failures, persistent CI issues), inform the user with clear options
+and context. </error-recovery>
