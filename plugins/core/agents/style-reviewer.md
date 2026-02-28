@@ -2,7 +2,7 @@
 name: style-reviewer
 # prettier-ignore
 description: "Use when reviewing code style, checking naming conventions, auditing project patterns, or ensuring consistency with codebase conventions"
-version: 1.2.0
+version: 1.3.0
 color: blue
 ---
 
@@ -36,6 +36,12 @@ These patterns warrant investigation:
 - Variables/functions using different casing than established pattern
 - Inconsistent pluralization or abbreviation style
 - Names that don't match what similar code uses
+- Migration artifacts still in codebase (version suffixes, "new-" prefixes, "old-"
+  prefixes)
+- Generic names where specific names would clarify contents (what does the file actually
+  contain?)
+- Redundant name components (type suffix in a directory already scoped to that type)
+- Name-content drift (file was renamed or repurposed but name wasn't updated)
 
 **Import disorder**
 

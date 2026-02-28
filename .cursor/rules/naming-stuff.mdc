@@ -1,7 +1,7 @@
 ---
 description: When naming things - files, functions, urls, etc
 alwaysApply: false
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Naming Conventions
@@ -28,6 +28,26 @@ The more permanent/harder to change, the more time to spend on naming:
 - Defining key variables that appear throughout codebase
 
 Notably, don't spend excessive time on naming for simple things that are easy to change.
+
+## Naming Signals
+
+Names that accurately describe their contents:
+
+- `string-helpers.ts` over a generic catch-all name
+- `user-profile.tsx` matching the directory's casing convention
+- `auth.ts` as the final name, not a migration artifact with version suffixes
+
+Names that belong in their context:
+
+- Files matching their directory's established convention (kebab-case, PascalCase, etc.)
+- Consistent suffixes where the project uses them (`.service.ts`, `.controller.ts`)
+- Singular vs plural matching sibling files in the same directory
+
+Names that stay current:
+
+- Rename when the original purpose changes rather than letting name drift from contents
+- Remove temporary prefixes/suffixes once migration is complete
+- Consolidate when a file has outgrown its original name
 
 ## When Names Aren't Obvious
 
