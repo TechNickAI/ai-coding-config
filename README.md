@@ -19,31 +19,37 @@ patterns.
 
 ## Quick Start
 
-**Claude Code:**
+### One-line install
 
-```bash
-/plugin marketplace add https://github.com/TechNickAI/ai-coding-config
-/plugin install ai-coding-config skills
-```
-
-**Cursor, Windsurf, Cline, or others:**
+Run this in your terminal — it auto-detects your tools (Claude Code, Cursor, etc.) and
+sets everything up:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash
 ```
 
-Then run the interactive setup:
+Then configure for your project:
 
 ```
 /ai-coding-config
 ```
 
-This detects your stack and installs relevant configurations.
+### Manual install (Claude Code)
+
+If you prefer to install manually, run these in Claude Code:
+
+```
+/plugin marketplace add https://github.com/TechNickAI/ai-coding-config
+```
+
+```
+/plugin install ai-coding-config
+```
 
 ## Todo Persistence Across Compaction
 
-**The problem**: Claude Code's context compaction summarizes conversation history to stay
-within token limits. When this happens, your todo list vanishes - you lose track of
+**The problem**: Claude Code's context compaction summarizes conversation history to
+stay within token limits. When this happens, your todo list vanishes - you lose track of
 what you were working on.
 
 **The solution**: This plugin automatically saves todos to disk via hooks. After
@@ -157,9 +163,9 @@ installs relevant rules.
 
 ### Debugging
 
-| Agent           | Purpose                                              |
-| --------------- | ---------------------------------------------------- |
-| **debugger**    | Root cause analysis through systematic investigation |
+| Agent        | Purpose                                              |
+| ------------ | ---------------------------------------------------- |
+| **debugger** | Root cause analysis through systematic investigation |
 
 ### Code Review - Correctness
 
