@@ -32,12 +32,12 @@ Core project rules that apply to all tasks:
 
 **Setup and Installation:**
 
-- `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config` - Add this
-  marketplace
-- `/plugin install <name>` - Install specific plugin
-- `/ai-coding-config` - Interactive setup for projects
 - `curl -fsSL https://raw.githubusercontent.com/TechNickAI/ai-coding-config/main/scripts/bootstrap.sh | bash` -
-  Bootstrap for Cursor
+  One-line install (auto-detects Claude Code, Cursor, etc.)
+- `/ai-coding-config` - Interactive setup for projects
+- `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config` - Manual
+  marketplace add
+- `/plugin install ai-coding-config` - Manual plugin install
 
 ## Code Conventions
 
