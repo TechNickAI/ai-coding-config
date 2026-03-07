@@ -23,7 +23,7 @@ if command -v claude &> /dev/null; then
     echo "✓ Found Claude Code"
 fi
 
-if [ -d ".cursor" ] || command -v cursor &> /dev/null || [ -d "/Applications/Cursor.app" ]; then
+if command -v cursor &> /dev/null || [ -d "/Applications/Cursor.app" ]; then
     HAS_CURSOR=true
     echo "✓ Found Cursor"
 fi
@@ -71,7 +71,8 @@ if [ "$HAS_CURSOR" = true ] || [ "$HAS_CLAUDE" = false ]; then
     # Check if we're in a git repository (needed for file-copy approach)
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
         if [ "$HAS_CLAUDE" = true ]; then
-            # Claude setup already succeeded above, just skip Cursor setup
+            # Claude plugin setup succeeded above. Cursor file-copy setup requires a git
+            # repo, but we don't need it — exit cleanly rather than erroring.
             exit 0
         fi
         echo "❌ Error: You're not in a git repository."
@@ -84,7 +85,7 @@ if [ "$HAS_CURSOR" = true ] || [ "$HAS_CLAUDE" = false ]; then
     fi
 
     echo "📁 Setting up for Cursor / other AI tools..."
-    echo "✓ In git repository: $(basename $(git rev-parse --show-toplevel))"
+    echo "✓ In git repository: $(basename "$(git rev-parse --show-toplevel)")"
     echo ""
 
     # Clone or update ai-coding-config
