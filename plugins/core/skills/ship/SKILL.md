@@ -2,11 +2,11 @@
 name: ship
 # prettier-ignore
 description: "Use when shipping code - complete workflow: merge main, run tests, multi-review with auto-fix, commit, push, create PR. Replaces manual commit-push-pr flows."
-version: 1.0.0
+version: 1.1.0
+category: workflow
 triggers:
   - "ship"
   - "ship it"
-  - "create a PR"
   - "push and PR"
   - "ready to ship"
   - "land this"
@@ -34,10 +34,13 @@ from review, or errors.
 2. **Detect base branch**: Check `git remote show origin` or common names (main, master,
    develop). This is the merge target.
 
-3. **Check for uncommitted changes**: If there are unstaged/staged changes, they'll be
-   committed as part of the workflow. Note what will be included.
+3. **Check for uncommitted changes**: If there are unstaged/staged changes, note what
+   will be included. Stash them before merging if git would refuse the merge, then
+   unstash after.
 
 ## Step 1: Merge latest base branch
+
+Use `git rev-parse --abbrev-ref origin/HEAD` (fast, local) to detect the base branch.
 
 ```
 git fetch origin <base>
@@ -69,19 +72,18 @@ Run the detected test command. If tests fail:
 
 If no test runner is detected, skip with a note.
 
+Skip this step if `--skip-tests` or `--quick` was passed.
+
 ## Step 3: Multi-review with fix-first
 
 Invoke `/multi-review balanced` (or `deep` for changes touching 10+ files).
 
-The multi-review will:
+Multi-review runs parallel agents, automatically fixes unambiguous issues, and reports
+what was Fixed, Wontfix, and Deferred. Any auto-fixed changes will be included in the
+commit.
 
-- Run parallel review agents
-- AUTO-FIX obvious issues (unused imports, missing await, etc.)
-- Present ASK items for user decision
-- Report summary
-
-If review finds nothing, continue. If AUTO-FIX items were applied, they'll be included
-in the commit.
+If review surfaces items requiring user decision (ASK tier), STOP and present them
+before continuing.
 
 Skip this step if `--skip-review` or `--quick` was passed.
 
@@ -116,7 +118,7 @@ For small changesets, one commit is fine.
 Always include:
 
 ```
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 ## Step 6: Push
@@ -129,10 +131,11 @@ If push fails due to divergence, report it. Do not force-push.
 
 ## Step 7: Create PR
 
-Use `gh pr create` with a comprehensive body:
+First check if a PR already exists: `gh pr view --json url`. If it exists, skip creation
+and output the existing PR URL. Otherwise create with `--base <base>`:
 
 ```
-gh pr create --title "<concise title>" --body "$(cat <<'EOF'
+gh pr create --title "<concise title>" --base <base> --body "$(cat <<'EOF'
 ## Summary
 <1-3 bullet points describing what this PR does>
 
