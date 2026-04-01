@@ -85,21 +85,23 @@ After agents complete, apply the fix-first synthesis workflow:
 1. **Collect**: Gather all findings, deduplicate across agents, group by severity, note
    which agent caught each issue
 
-2. **Classify** each finding as AUTO-FIX or ASK:
+2. **Classify** each finding as AUTO-FIX, ASK, or DEFER:
 
    **AUTO-FIX** — Apply immediately without asking. High confidence, unambiguous, low
-   risk of changing behavior in unexpected ways:
+   risk of changing behavior in unexpected ways. In test files, only apply AUTO-FIX for
+   import/formatting issues — route logic changes to ASK:
    - Unused imports, dead code flagged by multiple agents
-   - Missing `await` on async calls
+   - Missing `await` where the return value is used or error must be caught (not
+     fire-and-forget patterns — those require judgment and belong in ASK)
    - Obvious null/undefined checks where crash is certain
    - Wrong casing or naming convention violations
    - Missing error propagation (empty catch blocks, swallowed errors)
    - Import ordering, formatting issues
    - Straightforward type fixes (wrong type annotation, missing return type)
-   - Duplicate code that multiple agents independently flagged
 
    **ASK** — Batch into a single question for the user. Needs judgment, multiple valid
-   approaches, or risk of unintended behavior change:
+   approaches, or risk of unintended behavior change. **When in doubt, classify as
+   ASK.**
    - Architectural restructuring or pattern changes
    - Performance optimizations with trade-offs
    - Security-sensitive changes (auth, crypto, input validation)
@@ -107,11 +109,18 @@ After agents complete, apply the fix-first synthesis workflow:
    - Suggestions where the "right" answer depends on product context
    - Anything that touches test assertions or expected values
    - Changes where reasonable engineers would disagree
+   - Missing `await` on fire-and-forget patterns (behavior change, not just style)
+   - Deduplication requiring abstraction design decisions (where does it live?)
+
+   **DEFER** — Valid but out of scope for this PR. Create a follow-up task and note it:
+   - Improvements to shared utilities used across many files
+   - Refactors that touch unrelated code
+   - Suggestions that would significantly expand PR scope
 
 3. **Fix**: Apply all AUTO-FIX items immediately. Keep a running list of what was fixed.
 
 4. **Ask**: If any ASK items exist, present them in a single batch with context and a
-   recommendation for each. Format:
+   recommendation for each. Use the actual agent name that caught the issue:
 
    ```
    Review found N items needing your input:
@@ -124,8 +133,9 @@ After agents complete, apply the fix-first synthesis workflow:
 
 5. **Apply user decisions**: Fix items the user approves, mark others as wontfix.
 
-6. **Report**: Summary of everything — auto-fixed, user-approved fixes, and declined
-   items with reasons. </execution>
+6. **Report**: Summary of everything — auto-fixed, user-approved fixes, declined items
+   with reasons, and deferred items with task references. Omit empty sections.
+   </execution>
 
 <dynamic-agents>
 When code requires domain expertise no existing agent provides, create a focused
@@ -142,7 +152,7 @@ After completing the fix-first workflow, provide a summary:
 
 - Issue description → what was changed (agent that caught it)
 
-**User-approved fixes** (N issues, only if ASK items were presented):
+**User-approved fixes** (N issues, only if ASK items were presented and approved):
 
 - Issue description → what was changed
 
