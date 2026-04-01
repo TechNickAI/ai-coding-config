@@ -17,20 +17,18 @@ fi
 SESSION_DIR="$HOME/.claude/sessions"
 mkdir -p "$SESSION_DIR"
 
-# Touch this session's file
-touch "$SESSION_DIR/$SESSION_ID"
+# Sanitize session_id to prevent path traversal — use only the basename
+SESSION_FILE="$SESSION_DIR/$(basename "$SESSION_ID")"
+touch "$SESSION_FILE"
 
-# Count sessions modified in last 2 hours
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    ACTIVE_COUNT=$(find "$SESSION_DIR" -type f -mmin -120 2>/dev/null | wc -l | tr -d ' ')
-else
-    ACTIVE_COUNT=$(find "$SESSION_DIR" -type f -mmin -120 2>/dev/null | wc -l | tr -d ' ')
-fi
+# Count sessions modified in last 2 hours (find -mmin works on both macOS and Linux)
+ACTIVE_COUNT=$(find "$SESSION_DIR" -type f -mmin -120 2>/dev/null | wc -l | tr -d ' ')
 
 # Clean up sessions older than 24 hours
 find "$SESSION_DIR" -type f -mmin +1440 -delete 2>/dev/null
 
-# When 3+ sessions active, add context re-grounding reminder
+# Threshold: 3+ sessions is where context-juggling becomes error-prone.
+# Below 3, a user can reasonably track what each window is doing.
 if [ "$ACTIVE_COUNT" -ge 3 ]; then
     echo "Multi-session mode: $ACTIVE_COUNT active Claude Code sessions detected. The user is juggling multiple windows — always include explicit context (repo name, branch, what we're working on) when reporting status or completing work."
 fi
