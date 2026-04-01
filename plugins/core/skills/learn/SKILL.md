@@ -2,8 +2,9 @@
 name: learn
 # prettier-ignore
 description: "Use when managing project learnings - view, add, search, prune, or export operational knowledge that persists across sessions"
-version: 1.0.0
+version: 1.1.0
 category: meta
+color: magenta
 triggers:
   - "learn"
   - "learnings"
@@ -26,21 +27,29 @@ Learnings live in plain markdown files alongside the project's memory directory:
 
 ```
 ~/.claude/projects/{project-hash}/learnings/
-├── index.md         # Quick-reference summary (auto-loaded at session start)
+├── index.md         # Quick-reference summary (briefing for new sessions)
 ├── patterns.md      # "This codebase does X because Y"
 ├── pitfalls.md      # "Don't do X, it breaks Y"
 ├── operational.md   # "Build requires Z, deploy needs W"
 └── decisions.md     # "We chose X over Y because Z"
 ```
 
+> **Note:** `/learn` is a skill trigger — not a registered slash command. Invoke it by
+> saying "show learnings", "add a learning", etc. The index is not auto-loaded at
+> session start. To load it automatically, add this line to your project's CLAUDE.md:
+>
+> ```
+> @~/.claude/projects/{project-hash}/learnings/index.md
+> ```
+
 ## Usage
 
-- `/learn` — Show the index (quick reference of all learnings)
-- `/learn add` — Add a new learning interactively
-- `/learn search <query>` — Search all learnings files for a term
-- `/learn prune` — Check for stale entries (referenced files that no longer exist)
-- `/learn export` — Export learnings as a block suitable for CLAUDE.md
-- `/learn stats` — Show counts by category
+- `show learnings` — Show the index (quick reference of all learnings)
+- `add a learning` — Add a new learning interactively
+- `search learnings <query>` — Search all learnings files for a term
+- `prune learnings` — Check for stale entries (referenced files that no longer exist)
+- `export learnings` — Export learnings as a block suitable for CLAUDE.md
+- `learning stats` — Show counts by category (total + per file)
 
 ## Adding a Learning
 
@@ -143,22 +152,62 @@ confusion or prevent a real mistake.
 
 ## Pruning
 
-`/learn prune` checks each learning for staleness:
+`prune learnings` checks each learning for staleness:
 
-- File paths mentioned → do they still exist?
-- Commands mentioned → do they still work?
+- File paths mentioned → do they still exist? (`ls <path>`)
+- Commands mentioned → is the binary still available? (`which <cmd>`)
 - Dependencies mentioned → are they still in package.json / requirements.txt?
 - Decisions → has the approach been reversed since the decision date?
 
 Mark stale entries with `[STALE]` prefix rather than deleting — they may contain
 historical context worth keeping. Let the user decide whether to remove.
 
+## Stats
+
+`learning stats` counts H2 headings (entries) per file:
+
+```
+Patterns:     8 entries
+Pitfalls:     5 entries
+Operational:  3 entries
+Decisions:    4 entries
+─────────────────────────
+Total:       20 entries
+```
+
+## Export
+
+`export learnings` renders all files as a single markdown block suitable for pasting
+into CLAUDE.md or sharing with another AI session. Example output:
+
+```markdown
+## Project Learnings
+
+### Patterns
+
+[contents of patterns.md]
+
+### Pitfalls
+
+[contents of pitfalls.md]
+
+### Operational
+
+[contents of operational.md]
+
+### Decisions
+
+[contents of decisions.md]
+```
+
 ## Bootstrapping
 
-When the learnings directory doesn't exist yet, create it with empty files on first
-`/learn add`. Don't create files speculatively — only when there's something to write.
+The learnings directory is created on first use — don't create files speculatively. Only
+create the directory and the relevant category file when there's an actual learning to
+write.
 
 The directory path is: `~/.claude/projects/{project-hash}/learnings/`
 
-To find the project hash, use the current working directory path with forward slashes
-replaced by hyphens (matching Claude Code's project directory naming convention).
+To find the project hash: take the absolute path of the working directory, replace every
+`/` with `-`. The leading `/` becomes a leading `-`, so the hash always starts with `-`.
+Example: `/Users/nick/src/myapp` → `-Users-nick-src-myapp`.
