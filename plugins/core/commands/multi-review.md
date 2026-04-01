@@ -2,7 +2,7 @@
 # prettier-ignore
 description: "Multi-agent code review with diverse perspectives - run multiple specialized reviewers in parallel for comprehensive analysis"
 argument-hint: "[count|depth]"
-version: 2.2.0
+version: 3.0.0
 model: inherit
 ---
 
@@ -80,14 +80,62 @@ recent modifications). Analyze what domains the code touches. Select N agents en
 diversity across domains. Launch all agents in parallel using multiple Task tool calls
 in a single message.
 
-After agents complete:
+After agents complete, apply the fix-first synthesis workflow:
 
-1. Synthesize results: deduplicate, group by severity, note which agent caught each
-   issue
-2. For each issue, determine: fix now, wontfix (with reason), or large scope (create
-   task)
-3. Fix all "fix now" issues immediately
-4. Report summary of what was fixed and what was declined (with reasons) </execution>
+1. **Collect**: Gather all findings, deduplicate across agents, group by severity, note
+   which agent caught each issue
+
+2. **Classify** each finding as AUTO-FIX, ASK, or DEFER:
+
+   **AUTO-FIX** — Apply immediately without asking. High confidence, unambiguous, low
+   risk of changing behavior in unexpected ways. In test files, only apply AUTO-FIX for
+   import/formatting issues — route logic changes to ASK:
+   - Unused imports, dead code flagged by multiple agents
+   - Missing `await` where the return value is used or error must be caught (not
+     fire-and-forget patterns — those require judgment and belong in ASK)
+   - Obvious null/undefined checks where crash is certain
+   - Wrong casing or naming convention violations
+   - Missing error propagation (empty catch blocks, swallowed errors)
+   - Import ordering, formatting issues
+   - Straightforward type fixes (wrong type annotation, missing return type)
+
+   **ASK** — Batch into a single question for the user. Needs judgment, multiple valid
+   approaches, or risk of unintended behavior change. **When in doubt, classify as
+   ASK.**
+   - Architectural restructuring or pattern changes
+   - Performance optimizations with trade-offs
+   - Security-sensitive changes (auth, crypto, input validation)
+   - Changes that alter public API or user-facing behavior
+   - Suggestions where the "right" answer depends on product context
+   - Anything that touches test assertions or expected values
+   - Changes where reasonable engineers would disagree
+   - Missing `await` on fire-and-forget patterns (behavior change, not just style)
+   - Deduplication requiring abstraction design decisions (where does it live?)
+
+   **DEFER** — Valid but out of scope for this PR. Create a follow-up task and note it:
+   - Improvements to shared utilities used across many files
+   - Refactors that touch unrelated code
+   - Suggestions that would significantly expand PR scope
+
+3. **Fix**: Apply all AUTO-FIX items immediately. Keep a running list of what was fixed.
+
+4. **Ask**: If any ASK items exist, present them in a single batch with context and a
+   recommendation for each. Use the actual agent name that caught the issue:
+
+   ```
+   Review found N items needing your input:
+
+   1. [Agent: security-reviewer] SQL query in user-search.ts:42 uses string
+      interpolation → RECOMMENDATION: parameterize, because user input flows here
+   2. [Agent: architecture-auditor] Service layer bypasses repository pattern
+      → RECOMMENDATION: keep as-is, this is a one-off admin endpoint
+   ```
+
+5. **Apply user decisions**: Fix items the user approves, mark others as wontfix.
+
+6. **Report**: Summary of everything — auto-fixed, user-approved fixes, declined items
+   with reasons, and deferred items with task references. Omit empty sections.
+   </execution>
 
 <dynamic-agents>
 When code requires domain expertise no existing agent provides, create a focused
@@ -98,9 +146,13 @@ Common domains: Temporal workflows, GraphQL, database migrations, rate limiting,
 authentication, caching, streaming, real-time updates. </dynamic-agents>
 
 <output-format>
-After fixing issues, provide a summary:
+After completing the fix-first workflow, provide a summary:
 
-**Fixed** (N issues):
+**Auto-fixed** (N issues):
+
+- Issue description → what was changed (agent that caught it)
+
+**User-approved fixes** (N issues, only if ASK items were presented and approved):
 
 - Issue description → what was changed
 
@@ -112,4 +164,6 @@ After fixing issues, provide a summary:
 
 - Issue description → follow-up task created
 
-If all agents return no issues, note this explicitly. </output-format>
+If all agents return no issues, note this explicitly. When called from /ship or
+/autotask, keep the summary concise — the caller will incorporate it into the PR body.
+</output-format>
