@@ -78,6 +78,41 @@ Core principle: If you can't explain WHY it's broken, you're not ready to fix it
 [Rest of skill content...]
 ```
 
+## Composition Fields (Optional)
+
+These fields let skills declare their place in a workflow. The Claude Code harness
+ignores them; the LLM reads and acts on them as part of the skill content.
+
+**`next-skill`**: The skill or command to invoke after this one completes. Use the bare
+name (same as the slash command without `/`).
+
+```yaml
+next-skill: ship
+```
+
+**`requires`**: Prerequisites, as a list of `skill:name`, `tool:name`, or `mcp:name`
+entries.
+
+```yaml
+requires:
+  - skill:brainstorming
+  - tool:Bash
+```
+
+**`model-hint`**: Preferred model tier when this skill runs as a delegated subagent.
+Options: `sonnet`, `opus`, `haiku`.
+
+```yaml
+model-hint: opus
+```
+
+**`stability`**: Maturity marker. Omit for `stable` (default). Mark `experimental` when
+behavior may change or the skill is under active development.
+
+```yaml
+stability: experimental
+```
+
 ## Critical Constraints
 
 - **Single line descriptions** - Claude Code doesn't parse block scalars (`>` or `|`)
