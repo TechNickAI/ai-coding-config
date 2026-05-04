@@ -565,8 +565,10 @@ Read `~/.claude/settings.json` and check for plugin enablement:
 
 For each directory: `.claude/commands`, `.claude/agents`, `.claude/skills`:
 
+Use Bash with absolute paths anchored to `$(pwd)`:
+
 ```bash
-ls -la .claude/commands .claude/agents .claude/skills
+ls -la "$(pwd)/.claude/commands" "$(pwd)/.claude/agents" "$(pwd)/.claude/skills"
 ```
 
 - ✅ Each is a symlink pointing to the corresponding `plugins/core/` subdirectory
@@ -575,7 +577,7 @@ ls -la .claude/commands .claude/agents .claude/skills
 Check `rules/` → `.cursor/rules/`:
 
 ```bash
-ls -la rules
+ls -la "$(pwd)/rules"
 ```
 
 - ✅ `rules` is a symlink to `.cursor/rules`
@@ -583,11 +585,8 @@ ls -la rules
 
 ### Hook Scripts
 
-Read `plugins/core/hooks/hooks.json` to get declared hooks. For each hook script:
-
-```bash
-ls -la plugins/core/hooks/*.sh
-```
+Read `plugins/core/hooks/hooks.json` with the Read tool to get declared hooks. Use Glob
+to list `plugins/core/hooks/*.sh`, then check each file individually:
 
 - ✅ File exists, executable (`-x`), and first line is `#!/bin/bash`
 - ⚠️ Exists but not executable → offer to auto-fix: `chmod +x <path>`
@@ -631,8 +630,10 @@ For each SKILL.md, read and verify:
 - ✅ File has `---` YAML frontmatter block
 - ✅ `name`, `description`, and `triggers` fields present
 - ⚠️ Missing `triggers` → skill won't auto-activate on natural language
-- If `next-skill` declared: ✅ that skill name exists in the skills directory or
-  `.claude/commands/` → ⚠️ if target not found
+- If `next-skill` declared: check by directory name first (fast path — the directory
+  name should match the skill name); if not found, fall back to scanning `name` fields
+  in each SKILL.md. Also check `.claude/commands/` for commands. ✅ target found,
+  ⚠️ target not found anywhere
 
 Report a single summary line per skill (not per field) to keep output scannable.
 
@@ -641,9 +642,9 @@ Report a single summary line per skill (not per field) to keep output scannable.
 <auto-fix>
 Hook permissions are the only thing doctor auto-fixes (with user confirmation):
 
-"⚠️ verify-deliverables.sh is not executable. Fix now? [y/N]"
+"⚠️ todo-persist.sh is not executable. Fix now? [y/N]"
 
-If yes: `chmod +x plugins/core/hooks/verify-deliverables.sh`
+If yes: `chmod +x plugins/core/hooks/todo-persist.sh`
 
 For all other issues, report and direct to the appropriate fix command. Don't modify
 JSON files, settings, or symlinks without explicit user instruction.
