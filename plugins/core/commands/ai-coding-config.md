@@ -585,21 +585,23 @@ ls -la "$(pwd)/rules"
 
 ### Hook Scripts
 
-Read `plugins/core/hooks/hooks.json` with the Read tool to get declared hooks. Use Glob
-to list `plugins/core/hooks/*.sh`, then check each file individually:
+**Source repo:** Read `plugins/core/hooks/hooks.json` with the Read tool to get
+declared hooks. Use Glob to list `plugins/core/hooks/*.sh`, then check each file:
 
 - ✅ File exists, executable (`-x`), and first line is `#!/bin/bash`
 - ⚠️ Exists but not executable → offer to auto-fix: `chmod +x <path>`
 - ❌ File missing → note as broken
 
-Check that hooks are registered in project or global settings:
+**User project:** Hook script files are managed by the plugin cache — skip the script
+file checks. Instead, verify hooks are registered in settings (see below).
 
-```bash
-jq . .claude/settings.json > /dev/null 2>&1 && echo "valid" || echo "invalid"
-```
+Check that hooks are registered in project or global settings. Read `.claude/settings.json`
+if it exists; otherwise fall back to `~/.claude/settings.json`:
 
-- ✅ `settings.json` parses as valid JSON
-- ❌ Invalid JSON → note the parse error from jq output
+- ✅ Settings file parses as valid JSON and contains hook entries
+- ⚠️ Valid JSON but no hooks registered → hooks won't fire; suggest running `/ai-coding-config update`
+- ❌ Invalid JSON → note the parse error
+- ℹ️ No local `.claude/settings.json` and global settings has no hooks → hooks rely on plugin marketplace loading
 
 ### Marketplace JSON Consistency (source repo only)
 
@@ -640,7 +642,8 @@ Report a single summary line per skill (not per field) to keep output scannable.
 </checks>
 
 <auto-fix>
-Hook permissions are the only thing doctor auto-fixes (with user confirmation):
+Hook permissions are the only thing doctor auto-fixes (with user confirmation), and
+only in source-repo context where the script files are present:
 
 "⚠️ todo-persist.sh is not executable. Fix now? [y/N]"
 
