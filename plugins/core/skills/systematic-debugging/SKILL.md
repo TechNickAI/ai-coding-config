@@ -2,8 +2,10 @@
 name: systematic-debugging
 # prettier-ignore
 description: "Use when debugging bugs, test failures, unexpected behavior, or needing to find root cause before fixing"
-version: 1.2.0
+version: 1.3.0
 category: debugging
+model-hint: opus
+next-skill: verify-fix
 triggers:
   - "debug"
   - "investigate"

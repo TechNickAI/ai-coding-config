@@ -2,8 +2,10 @@
 name: brainstorming
 # prettier-ignore
 description: "Use when rough ideas need design before code, requirements are fuzzy, multiple approaches exist, or you need to explore options before implementation"
-version: 0.4.0
+version: 0.5.0
 category: planning
+model-hint: sonnet
+next-skill: brainstorm-synthesis
 triggers:
   - "brainstorm"
   - "design session"

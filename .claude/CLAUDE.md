@@ -77,6 +77,49 @@ triggers:
 
 Include: keywords users say, questions they ask, symptoms they describe, tool names.
 
+## Skill Composition Frontmatter
+
+Optional fields for declarative composition. The Claude Code harness ignores them;
+the LLM reads them as part of the skill content and acts accordingly.
+
+| Field | Type | Purpose |
+|---|---|---|
+| `next-skill` | string | Happy-path handoff — the skill or command to invoke after this one completes |
+| `requires` | YAML sequence | Prerequisites; each entry is `skill:name`, `tool:name`, or `mcp:name` |
+| `model-hint` | string | Preferred model tier when delegated as a subagent: `sonnet`, `opus`, or `haiku` |
+| `stability` | string | `stable` (default) or `experimental` — signals maturity for opt-in gating |
+
+All fields are optional. Skills without them work unchanged.
+
+**Example — planning chain:**
+
+```yaml
+---
+name: brainstorm-synthesis
+version: 1.1.0
+category: planning
+model-hint: opus
+next-skill: ship
+requires:
+  - skill:brainstorming
+triggers:
+  - "synthesize approaches"
+---
+```
+
+**`next-skill` convention:** Use the bare skill/command name (same as the slash command
+without the `/`). Commands and skills are both valid targets. The LLM reads this and
+invokes the next skill when its task is complete — no new infrastructure required.
+
+**`requires` convention:** Use `skill:name` for skill dependencies, `tool:name` for
+Claude Code tools (Read, Bash, etc.), `mcp:name` for MCP servers. Informational for
+now; `/ai-coding-config doctor` can validate these in the future.
+
+**Annotated chains in this repo:**
+
+- `brainstorming → brainstorm-synthesis → ship` (planning)
+- `systematic-debugging → verify-fix` (debugging)
+
 ## Command Update Protocol
 
 When a user runs `/ai-coding-config update`, after pulling the latest changes from this
