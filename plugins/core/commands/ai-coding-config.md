@@ -530,8 +530,8 @@ If nothing changed (already up to date, no reset needed), skip the restart messa
 <objective>
 Run a diagnostic battery and report as a ✅ / ⚠️ / ❌ checklist. Group by category.
 End with a suggested-fixes section. Read-only except for hook permission repair (safe,
-reversible, no content change). Work conversationally — print results as you go rather
-than collecting everything silently before reporting.
+reversible, no content change). Print each category header as you complete that group of
+checks so the user sees progress — don't collect everything silently before reporting.
 </objective>
 
 <context-detection>
@@ -596,11 +596,11 @@ ls -la plugins/core/hooks/*.sh
 Check that hooks are registered in project or global settings:
 
 ```bash
-cat .claude/settings.json 2>/dev/null | python3 -m json.tool > /dev/null && echo "valid"
+jq . .claude/settings.json > /dev/null 2>&1 && echo "valid" || echo "invalid"
 ```
 
 - ✅ `settings.json` parses as valid JSON
-- ❌ Invalid JSON → note the file and line (use `python3 -m json.tool` output)
+- ❌ Invalid JSON → note the parse error from jq output
 
 ### Marketplace JSON Consistency (source repo only)
 
@@ -619,12 +619,13 @@ the YAML frontmatter of:
 
 - ✅ Versions match
 - ⚠️ Source is newer → suggest `/ai-coding-config update`
-- ⚠️ Source repo not found at `~/.ai_coding_config` → suggest cloning it
+- ℹ️ Source repo not found at `~/.ai_coding_config` — normal for plugin-only users (no action needed)
 
 ### Skill Frontmatter
 
-Use Glob to list `plugins/core/skills/*/SKILL.md` (source repo) or
-`~/.claude/plugins/cache/ai-coding-config/skills/*/SKILL.md` (user project).
+Use Glob to list `plugins/core/skills/*/SKILL.md` (source repo only — the plugin cache
+uses flat `.md` files without subdirectories, so this check applies only in the source
+repo context).
 
 For each SKILL.md, read and verify:
 - ✅ File has `---` YAML frontmatter block
@@ -686,7 +687,7 @@ Context: source repo (plugins/core/ detected)
 
 ---
 ## Summary
-11 passed ✅  1 warning ⚠️  1 failure ❌
+1 failure ❌  2 warnings ⚠️  11 passed ✅
 
 ## Suggested Fixes
 ❌ rules/ symlink missing:
@@ -696,6 +697,8 @@ Context: source repo (plugins/core/ detected)
    chmod +x plugins/core/hooks/todo-persist.sh
    (or confirm above to auto-fix)
 ```
+
+All-green output ends with: "All checks passed — your setup is healthy."
 
 Keep the summary tight. Users should be able to skim it in 10 seconds.
 </output-format>
