@@ -25,7 +25,10 @@ command -v jq >/dev/null 2>&1 || exit 0
 INPUT=$(cat)
 [ -z "$INPUT" ] && exit 0
 
-TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
+# SubagentStop provides agent_transcript_path (subagent's own log); fall back
+# to transcript_path for callers that only set the session-level field.
+TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.agent_transcript_path // empty' 2>/dev/null)
+[ -z "$TRANSCRIPT_PATH" ] && TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
 STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false' 2>/dev/null)
 CWD=$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
 [ -z "$CWD" ] && CWD="$(pwd)"
@@ -46,8 +49,13 @@ RECENT=$(tail -n 200 "$TRANSCRIPT_PATH" 2>/dev/null)
 
 # --- Extract signals ---
 
-LAST_ASSISTANT=$(echo "$RECENT" | jq -c 'select(.type == "assistant")' 2>/dev/null | tail -n 1)
-LAST_MSG=$(echo "$LAST_ASSISTANT" | jq -r '.message.content[]? | select(.type == "text") | .text' 2>/dev/null)
+# last_assistant_message is provided directly in the SubagentStop payload;
+# fall back to JSONL parsing when running against older harness versions.
+LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // empty' 2>/dev/null)
+if [ -z "$LAST_MSG" ]; then
+    LAST_ASSISTANT=$(echo "$RECENT" | jq -c 'select(.type == "assistant")' 2>/dev/null | tail -n 1)
+    LAST_MSG=$(echo "$LAST_ASSISTANT" | jq -r '.message.content[]? | select(.type == "text") | .text' 2>/dev/null)
+fi
 
 # Mutating tool calls in the recent slice.
 MUTATING_CALLS=$(echo "$RECENT" | jq -r '
@@ -79,13 +87,13 @@ if [ -n "$LAST_MSG" ] && [ "$MUTATING_CALLS" = "0" ]; then
     # false negatives, so we only fire on strong signals. Trailing
     # boundary keeps "fixed it" from matching inside "fixed itself"
     # and "all tests pass" from matching inside "passenger".
-    if echo "$LAST_MSG" | grep -qiE '(^|[^a-z])(✅|done\.|complete\.|completed\.|finished\.|implemented |fixed it|created the |wrote the |added the |saved the |all tests pass(ed)?)([^a-zA-Z]|$)'; then
+    if echo "$LAST_MSG" | grep -qiE '(^|[^a-z])(done\.|complete\.|completed\.|finished\.|implemented |fixed it|created the |wrote the |added the |saved the |all tests pass(ed)?)([^a-zA-Z]|$)'; then
         # Reject negated phrasing — "not all tests pass" should not trigger.
-        if ! echo "$LAST_MSG" | grep -qiE '(not|n.?t|cannot|couldn.?t|didn.?t|haven.?t|hasn.?t|wasn.?t)([[:space:]]+(yet|fully|quite|all|even))?[[:space:]]+(✅|done|complete|completed|finished|implemented|fixed|added|wrote|created|saved|all tests pass)'; then
+        if ! echo "$LAST_MSG" | grep -qiE "(not|n't|cannot|couldn't|didn't|haven't|hasn't|wasn't)([[:space:]]+(yet|fully|quite|all|even))?[[:space:]]+(done|complete|completed|finished|implemented|fixed|added|wrote|created|saved|all tests pass)"; then
             # Require a file-path-shaped token. Pure analysis output
             # ("found 3 patterns in the codebase") shouldn't trigger.
             if echo "$LAST_MSG" | grep -qE '[a-zA-Z0-9_/-]+\.[a-zA-Z]{1,5}'; then
-                ISSUES="${ISSUES}- Subagent claims completion but made no file changes (Write/Edit/MultiEdit/NotebookEdit count: 0).\n"
+                ISSUES="${ISSUES}- Subagent claims completion but made no file changes (Write/Edit/MultiEdit/NotebookEdit count: 0)."$'\n'
             fi
         fi
     fi
@@ -104,7 +112,7 @@ if [ -n "$CALLED_PATHS" ]; then
         # `-L` catches the symlink itself — tool created it successfully
         # even if the target moved.
         if [ ! -e "$full_path" ] && [ ! -L "$full_path" ]; then
-            ISSUES="${ISSUES}- Tool call recorded Write/Edit to '$path' but the file is not present on disk.\n"
+            ISSUES="${ISSUES}- Tool call recorded Write/Edit to '$path' but the file is not present on disk."$'\n'
         fi
     done <<EOF
 $CALLED_PATHS
@@ -117,7 +125,8 @@ if [ -z "$ISSUES" ]; then
     exit 0
 fi
 
-MESSAGE=$(printf "[verify-deliverables] Subagent completion check found discrepancies:\n%bReview before treating the subagent's result as final." "$ISSUES")
+MESSAGE="[verify-deliverables] Subagent completion check found discrepancies:
+${ISSUES}Review before treating the subagent's result as final."
 
 # Wrap so a jq failure (OOM, missing binary slipping past the early guard)
 # cannot leak a non-zero exit to the harness.

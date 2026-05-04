@@ -16,8 +16,8 @@ if [ ! -x "$HOOK" ]; then
     exit 2
 fi
 
-TMPDIR=$(mktemp -d)
-trap 'rm -rf "$TMPDIR"' EXIT
+TEST_DIR=$(mktemp -d)
+trap 'rm -rf "$TEST_DIR"' EXIT
 
 PASS=0
 FAIL=0
@@ -73,7 +73,7 @@ run_case() {
 }
 
 write_transcript() {
-    local file="$TMPDIR/$1.jsonl"
+    local file="$TEST_DIR/$1.jsonl"
     shift
     : > "$file"
     for line in "$@"; do
@@ -86,16 +86,16 @@ make_payload() {
     local transcript="$1"
     local stop_hook_active="${2:-false}"
     cat <<EOF
-{"transcript_path":"$transcript","stop_hook_active":$stop_hook_active,"cwd":"$TMPDIR","hook_event_name":"SubagentStop","session_id":"test-session"}
+{"transcript_path":"$transcript","agent_transcript_path":"$transcript","stop_hook_active":$stop_hook_active,"cwd":"$TEST_DIR","hook_event_name":"SubagentStop","session_id":"test-session"}
 EOF
 }
 
 # --- Fixtures ---
 
 # An honest write: tool call to foo.ts AND foo.ts exists on disk.
-echo "content" > "$TMPDIR/foo.ts"
+echo "content" > "$TEST_DIR/foo.ts"
 TX_HONEST=$(write_transcript "honest" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TMPDIR/foo.ts\",\"content\":\"content\"}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TEST_DIR/foo.ts\",\"content\":\"content\"}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Created `foo.ts` as requested."}]}}'
 )
 
@@ -107,7 +107,7 @@ TX_LIAR_NO_ACTION=$(write_transcript "liar-no-action" \
 
 # A ghost: tool call recorded but file is not on disk.
 TX_GHOST=$(write_transcript "ghost" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TMPDIR/ghost.md\",\"content\":\"x\"}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TEST_DIR/ghost.md\",\"content\":\"x\"}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"All set."}]}}'
 )
 
@@ -122,24 +122,31 @@ TX_TRIVIAL=$(write_transcript "trivial" \
 )
 
 # Edit (not Write) to existing file. Should pass — Edit counts as mutating.
-echo "before" > "$TMPDIR/edited.ts"
+echo "before" > "$TEST_DIR/edited.ts"
 TX_EDIT=$(write_transcript "edit-honest" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Edit\",\"input\":{\"file_path\":\"$TMPDIR/edited.ts\",\"old_string\":\"before\",\"new_string\":\"after\"}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Edit\",\"input\":{\"file_path\":\"$TEST_DIR/edited.ts\",\"old_string\":\"before\",\"new_string\":\"after\"}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Updated `edited.ts`."}]}}'
 )
 
 # tool_input shape (alternative payload format) for Write.
-echo "alt-content" > "$TMPDIR/alt.ts"
+echo "alt-content" > "$TEST_DIR/alt.ts"
 TX_ALT_SHAPE=$(write_transcript "alt-shape" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"tool_input\":{\"file_path\":\"$TMPDIR/alt.ts\"}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"tool_input\":{\"file_path\":\"$TEST_DIR/alt.ts\"}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Wrote alt.ts."}]}}'
 )
 
 # MultiEdit should count as mutating.
-echo "before" > "$TMPDIR/multi.ts"
+echo "before" > "$TEST_DIR/multi.ts"
 TX_MULTIEDIT=$(write_transcript "multi-edit" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"MultiEdit\",\"input\":{\"file_path\":\"$TMPDIR/multi.ts\",\"edits\":[]}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"MultiEdit\",\"input\":{\"file_path\":\"$TEST_DIR/multi.ts\",\"edits\":[]}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Updated multi.ts in several places."}]}}'
+)
+
+# NotebookEdit should count as mutating.
+echo "before" > "$TEST_DIR/nb.ipynb"
+TX_NOTEBOOK=$(write_transcript "notebook-edit" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"NotebookEdit\",\"input\":{\"file_path\":\"$TEST_DIR/nb.ipynb\",\"cell_number\":0,\"new_source\":\"x\"}}]}}" \
+    '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Updated the notebook."}]}}'
 )
 
 # Negation: "not all tests pass" should not flag.
@@ -155,26 +162,26 @@ TX_FIXED_ITSELF=$(write_transcript "fixed-itself" \
 )
 
 # Broken symlink: tool created the symlink, target is gone. -L catches it.
-ln -s "/nonexistent/target" "$TMPDIR/broken-link"
+ln -s "/nonexistent/target" "$TEST_DIR/broken-link"
 TX_BROKEN_SYMLINK=$(write_transcript "broken-symlink" \
-    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TMPDIR/broken-link\"}}]}}" \
+    "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TEST_DIR/broken-link\"}}]}}" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done."}]}}'
 )
 
 # Long transcript: Write at start, final message after many Read calls.
 # Confirms the 200-line slice catches Writes that the old 50-line window missed.
-echo "long-content" > "$TMPDIR/long.ts"
+echo "long-content" > "$TEST_DIR/long.ts"
 {
-    printf '%s\n' "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TMPDIR/long.ts\",\"content\":\"x\"}}]}}"
+    printf '%s\n' "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Write\",\"input\":{\"file_path\":\"$TEST_DIR/long.ts\",\"content\":\"x\"}}]}}"
     for i in $(seq 1 60); do
         printf '%s\n' "{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Read\",\"input\":{\"file_path\":\"src/file-$i.ts\"}}]}}"
     done
     printf '%s\n' '{"type":"assistant","message":{"content":[{"type":"text","text":"Done. Implemented in long.ts."}]}}'
-} > "$TMPDIR/long-transcript.jsonl"
-TX_LONG="$TMPDIR/long-transcript.jsonl"
+} > "$TEST_DIR/long-transcript.jsonl"
+TX_LONG="$TEST_DIR/long-transcript.jsonl"
 
 # Relative file_path with cwd — must resolve to $CWD/relative.ts.
-echo "relative-content" > "$TMPDIR/relative.ts"
+echo "relative-content" > "$TEST_DIR/relative.ts"
 TX_RELATIVE=$(write_transcript "relative" \
     '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Write","input":{"file_path":"relative.ts"}}]}}' \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Done."}]}}'
@@ -185,6 +192,7 @@ TX_RELATIVE=$(write_transcript "relative" \
 run_case "honest completion (write + file exists)" "$(make_payload "$TX_HONEST")" silent
 run_case "edit + file exists" "$(make_payload "$TX_EDIT")" silent
 run_case "MultiEdit counts as mutating" "$(make_payload "$TX_MULTIEDIT")" silent
+run_case "NotebookEdit counts as mutating" "$(make_payload "$TX_NOTEBOOK")" silent
 run_case "alt payload shape (.tool_input.file_path)" "$(make_payload "$TX_ALT_SHAPE")" silent
 run_case "pure analyst (no claim, no mutations)" "$(make_payload "$TX_ANALYST")" silent
 run_case "trivial chatter (claim word but no file token)" "$(make_payload "$TX_TRIVIAL")" silent
