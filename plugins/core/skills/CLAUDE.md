@@ -90,8 +90,9 @@ name (same as the slash command without `/`).
 next-skill: ship
 ```
 
-**`requires`**: Prerequisites, as a list of `skill:name`, `tool:name`, or `mcp:name`
-entries.
+**`requires`**: Prerequisites, as a YAML sequence of `skill:name`, `tool:name`, or
+`mcp:name` entries. Note: `next-skill` can target both skills and commands; commands
+(`.claude/commands/*.md`) don't have SKILL.md files and can't declare `requires` back.
 
 ```yaml
 requires:

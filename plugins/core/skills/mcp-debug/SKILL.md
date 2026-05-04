@@ -2,8 +2,9 @@
 name: mcp-debug
 # prettier-ignore
 description: "Use when testing MCP servers, debugging MCP tool responses, exploring MCP capabilities, or diagnosing why an MCP tool returns unexpected data"
-version: 1.0.0
+version: 1.1.0
 category: debugging
+stability: experimental
 triggers:
   - "mcp"
   - "test mcp"

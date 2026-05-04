@@ -85,7 +85,7 @@ the LLM reads them as part of the skill content and acts accordingly.
 | Field | Type | Purpose |
 |---|---|---|
 | `next-skill` | string | Happy-path handoff — the skill or command to invoke after this one completes |
-| `requires` | list | Prerequisites in `skill:name`, `tool:name`, or `mcp:name` format |
+| `requires` | YAML sequence | Prerequisites; each entry is `skill:name`, `tool:name`, or `mcp:name` |
 | `model-hint` | string | Preferred model tier when delegated as a subagent: `sonnet`, `opus`, or `haiku` |
 | `stability` | string | `stable` (default) or `experimental` — signals maturity for opt-in gating |
 
