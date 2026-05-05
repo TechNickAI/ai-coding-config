@@ -118,7 +118,9 @@ next skill without user awareness.
 Claude Code tools (Read, Bash, etc.), `mcp:name` for MCP servers. Informational for now;
 `/ai-coding-config doctor` can validate these in the future.
 
-**Annotated chains in this repo:**
+**Annotated chains in this repo** (source skills only — downstream commands like
+`verify-fix` can't declare `requires` back, and terminal skills like `ship` are
+invokable standalone):
 
 - `brainstorming → brainstorm-synthesis → ship` (planning)
 - `systematic-debugging → verify-fix` (debugging)
