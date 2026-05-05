@@ -16,6 +16,14 @@ tools. The marketplace lives at `https://github.com/TechNickAI/ai-coding-config`
 - `/ai-coding-config update` - Update plugins and configs to latest versions
 - `/ai-coding-config doctor` - Diagnose plugin health, hook state, and config drift
 
+## Mode Routing
+
+- No argument → setup mode
+- `update` → update mode
+- `doctor` → doctor mode
+- Unrecognized argument (typo, unknown subcommand) → setup mode; mention available
+  subcommands (`update`, `doctor`) at the start of output
+
 ## Interaction Guidelines
 
 Use AskUserQuestion when presenting discrete choices that save the user time (selecting
@@ -549,9 +557,13 @@ Report which context was detected at the top of output.
 
 ### Plugin Install State
 
+These checks mirror the ones in `<marketplace-doctor>` (update-mode). If either section
+is updated (e.g., a new settings key), keep both in sync.
+
 Read `~/.claude/plugins/known_marketplaces.json` with the Read tool:
 - ✅ ai-coding-config marketplace entry present
-- ❌ Not found → suggest `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
+- ❌ File not found → marketplace never initialized; suggest `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
+- ❌ File exists but ai-coding-config entry missing → suggest `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
 
 Check `~/.claude/plugins/cache/ai-coding-config/` for plugin content using Glob:
 - ✅ Cache directory exists with agents, commands, and skills subdirectories
@@ -636,6 +648,8 @@ For each SKILL.md, read and verify:
   name should match the skill name); if not found, fall back to scanning `name` fields
   in each SKILL.md. Also check `.claude/commands/` for commands. ✅ target found,
   ⚠️ target not found anywhere
+- If `stability: experimental` declared: ℹ️ note as informational (expected for new or
+  actively-changing skills — not a problem, just surfaced for awareness)
 
 Report a single summary line per skill (not per field) to keep output scannable.
 
