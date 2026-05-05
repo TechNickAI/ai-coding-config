@@ -84,10 +84,12 @@ ISSUES=""
 
 if [ -n "$LAST_MSG" ] && [ "$MUTATING_CALLS" = "0" ]; then
     # Conservative completion patterns. False positives are noisier than
-    # false negatives, so we only fire on strong signals. Trailing
-    # boundary keeps "fixed it" from matching inside "fixed itself"
-    # and "all tests pass" from matching inside "passenger".
-    if echo "$LAST_MSG" | grep -qiE '(^|[^a-z])(done\.|complete\.|completed\.|finished\.|implemented |fixed it|created the |wrote the |added the |saved the |all tests pass(ed)?)([^a-zA-Z]|$)'; then
+    # false negatives, so we only fire on strong signals.
+    # Two groups: (1) patterns needing a trailing boundary to avoid
+    # substring matches ("fixed it" vs "fixed itself"), and
+    # (2) space-terminated patterns where the space IS the boundary.
+    if echo "$LAST_MSG" | grep -qiE '(^|[^a-z])(done\.|complete\.|completed\.|finished\.|fixed it|all tests pass(ed)?)([^a-zA-Z]|$)' ||
+       echo "$LAST_MSG" | grep -qiE '(^|[^a-z])(implemented |created the |wrote the |added the |saved the )'; then
         # Reject negated phrasing — "not all tests pass" should not trigger.
         if ! echo "$LAST_MSG" | grep -qiE "(not|n't|cannot|couldn't|didn't|haven't|hasn't|wasn't)([[:space:]]+(yet|fully|quite|all|even))?[[:space:]]+(done|complete|completed|finished|implemented|fixed|added|wrote|created|saved|all tests pass)"; then
             # Require a file-path-shaped token. Pure analysis output

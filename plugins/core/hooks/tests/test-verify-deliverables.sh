@@ -155,6 +155,12 @@ TX_NEGATION=$(write_transcript "negated" \
     '{"type":"assistant","message":{"content":[{"type":"text","text":"Investigated src/foo.ts — not all tests pass yet."}]}}'
 )
 
+# Space-terminated pattern: "Implemented the fix in src/x.ts" should trigger.
+TX_IMPLEMENTED=$(write_transcript "implemented-space" \
+    '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"src/x.ts"}}]}}' \
+    '{"type":"assistant","message":{"content":[{"type":"text","text":"Implemented the fix in src/x.ts to resolve the issue."}]}}'
+)
+
 # Trailing boundary: "fixed itself" should not match "fixed it".
 TX_FIXED_ITSELF=$(write_transcript "fixed-itself" \
     '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"src/x.ts"}}]}}' \
@@ -197,6 +203,7 @@ run_case "alt payload shape (.tool_input.file_path)" "$(make_payload "$TX_ALT_SH
 run_case "pure analyst (no claim, no mutations)" "$(make_payload "$TX_ANALYST")" silent
 run_case "trivial chatter (claim word but no file token)" "$(make_payload "$TX_TRIVIAL")" silent
 run_case "negated 'not all tests pass' (no flag)" "$(make_payload "$TX_NEGATION")" silent
+run_case "space-terminated 'implemented' triggers advisory" "$(make_payload "$TX_IMPLEMENTED")" "made no file changes"
 run_case "'fixed itself' does not match 'fixed it'" "$(make_payload "$TX_FIXED_ITSELF")" silent
 run_case "broken symlink counts as present" "$(make_payload "$TX_BROKEN_SYMLINK")" silent
 run_case "long transcript (Write at line 1, msg after 60 Reads)" "$(make_payload "$TX_LONG")" silent
