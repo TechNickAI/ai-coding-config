@@ -659,9 +659,9 @@ Report a single summary line per skill (not per field) to keep output scannable.
 Hook permissions are the only thing doctor auto-fixes (with user confirmation), and
 only in source-repo context where the script files are present:
 
-"⚠️ todo-persist.sh is not executable. Fix now? [y/N]"
+"⚠️ <hook-name>.sh is not executable. Fix now? [y/N]"
 
-If yes: `chmod +x plugins/core/hooks/todo-persist.sh`
+If yes: `chmod +x plugins/core/hooks/<hook-name>.sh`
 
 For all other issues, report and direct to the appropriate fix command. Don't modify
 JSON files, settings, or symlinks without explicit user instruction.
@@ -701,7 +701,7 @@ Context: source repo (plugins/core/ detected)
 ### Skill Frontmatter
 ✅ brainstorming — name, description, triggers, next-skill: brainstorm-synthesis (found)
 ✅ systematic-debugging — name, description, triggers, next-skill: verify-fix (found)
-⚠️ mcp-debug — triggers field present, stability: experimental
+ℹ️ mcp-debug — triggers field present, stability: experimental
 
 ---
 ## Summary
