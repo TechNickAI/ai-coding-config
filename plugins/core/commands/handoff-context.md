@@ -78,13 +78,12 @@ services running or broken, migrations applied, feature flags set, env vars requ
 </critical_context>
 
 <exact_next_step> [The ONE most important action to take on resume. Precise enough that
-starting requires zero thinking. Singular and concrete, e.g., "In
-app/api/auth/login/route.ts line 42, set the JWT as httpOnly cookie via
-cookies().set(...), then curl the endpoint to verify Set-Cookie header is present."]
-</exact_next_step>
+starting requires zero thinking. Singular and concrete, e.g., "In auth/login.ts line 42,
+add httpOnly flag to the session cookie configuration, then test with curl to verify the
+Set-Cookie header includes HttpOnly."] </exact_next_step>
 
 <recommendations>
-[Actionable next steps in priority order, as a backup to exact_next_step.]
+[Additional actionable next steps beyond exact_next_step, in priority order.]
 </recommendations>
 
 </context_handoff>
