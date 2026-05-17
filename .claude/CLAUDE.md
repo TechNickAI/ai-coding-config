@@ -79,15 +79,15 @@ Include: keywords users say, questions they ask, symptoms they describe, tool na
 
 ## Skill Composition Frontmatter
 
-Optional fields for declarative composition. The Claude Code harness ignores them;
-the LLM reads them as part of the skill content and acts accordingly.
+Optional fields for declarative composition. The Claude Code harness ignores them; the
+LLM reads them as part of the skill content and acts accordingly.
 
-| Field | Type | Purpose |
-|---|---|---|
-| `next-skill` | string | Happy-path handoff — the skill or command to invoke after this one completes |
-| `requires` | YAML sequence | Prerequisites; each entry is `skill:name`, `tool:name`, or `mcp:name` |
-| `model-hint` | string | Preferred model tier when delegated as a subagent: `sonnet`, `opus`, or `haiku` |
-| `stability` | string | `stable` (default) or `experimental` — signals maturity for opt-in gating |
+| Field        | Type          | Purpose                                                                         |
+| ------------ | ------------- | ------------------------------------------------------------------------------- |
+| `next-skill` | string        | Happy-path handoff — the skill or command to invoke after this one completes    |
+| `requires`   | YAML sequence | Prerequisites; each entry is `skill:name`, `tool:name`, or `mcp:name`           |
+| `model-hint` | string        | Preferred model tier when delegated as a subagent: `sonnet`, `opus`, or `haiku` |
+| `stability`  | string        | `stable` (default) or `experimental` — signals maturity for opt-in gating       |
 
 All fields are optional. Skills without them work unchanged.
 
@@ -96,9 +96,10 @@ All fields are optional. Skills without them work unchanged.
 ```yaml
 ---
 name: brainstorm-synthesis
-version: 1.1.0
+version: 1.1.1
 category: planning
 model-hint: opus
+stability: experimental
 next-skill: ship
 requires:
   - skill:brainstorming
@@ -109,13 +110,17 @@ triggers:
 
 **`next-skill` convention:** Use the bare skill/command name (same as the slash command
 without the `/`). Commands and skills are both valid targets. The LLM reads this and
-invokes the next skill when its task is complete — no new infrastructure required.
+offers the handoff when its task is complete — the user confirms before the next skill
+runs. This is a suggestion, not an auto-chain; the LLM should never silently invoke the
+next skill without user awareness.
 
 **`requires` convention:** Use `skill:name` for skill dependencies, `tool:name` for
-Claude Code tools (Read, Bash, etc.), `mcp:name` for MCP servers. Informational for
-now; `/ai-coding-config doctor` can validate these in the future.
+Claude Code tools (Read, Bash, etc.), `mcp:name` for MCP servers. Informational for now;
+`/ai-coding-config doctor` can validate these in the future.
 
-**Annotated chains in this repo:**
+**Annotated chains in this repo** (source skills only — downstream commands like
+`verify-fix` can't declare `requires` back, and terminal skills like `ship` are
+invokable standalone):
 
 - `brainstorming → brainstorm-synthesis → ship` (planning)
 - `systematic-debugging → verify-fix` (debugging)

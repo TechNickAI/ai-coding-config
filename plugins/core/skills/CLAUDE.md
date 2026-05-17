@@ -83,8 +83,9 @@ Core principle: If you can't explain WHY it's broken, you're not ready to fix it
 These fields let skills declare their place in a workflow. The Claude Code harness
 ignores them; the LLM reads and acts on them as part of the skill content.
 
-**`next-skill`**: The skill or command to invoke after this one completes. Use the bare
-name (same as the slash command without `/`).
+**`next-skill`**: The skill or command to offer as a handoff after this one completes.
+Use the bare name (same as the slash command without `/`). The LLM surfaces this as a
+suggestion — the user confirms before the next skill runs. Never auto-invoke silently.
 
 ```yaml
 next-skill: ship
@@ -107,8 +108,9 @@ Options: `sonnet`, `opus`, `haiku`.
 model-hint: opus
 ```
 
-**`stability`**: Maturity marker. Omit for `stable` (default). Mark `experimental` when
-behavior may change or the skill is under active development.
+**`stability`**: Maturity marker — `stable` (default) or `experimental`. Omit for stable
+skills. Mark `experimental` when behavior may change or the skill is under active
+development.
 
 ```yaml
 stability: experimental
