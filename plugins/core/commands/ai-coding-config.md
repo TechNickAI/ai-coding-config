@@ -705,7 +705,7 @@ Context: source repo (plugins/core/ detected)
 
 ---
 ## Summary
-1 failure ❌  2 warnings ⚠️  11 passed ✅
+1 failure ❌  1 warning ⚠️  11 passed ✅
 
 ## Suggested Fixes
 ❌ rules/ symlink missing:
