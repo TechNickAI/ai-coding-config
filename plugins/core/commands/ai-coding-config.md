@@ -550,8 +550,7 @@ Determine environment before running checks:
 - **User project**: `plugins/core/` absent. Skip source-repo checks; focus on plugin
   install state, settings, and hooks.
 
-Report which context was detected at the top of output.
-</context-detection>
+Report which context was detected at the top of output. </context-detection>
 
 <checks>
 
@@ -561,15 +560,20 @@ These checks mirror the ones in `<marketplace-doctor>` (update-mode). If either 
 is updated (e.g., a new settings key), keep both in sync.
 
 Read `~/.claude/plugins/known_marketplaces.json` with the Read tool:
+
 - ✅ ai-coding-config marketplace entry present
-- ❌ File not found → marketplace never initialized; suggest `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
-- ❌ File exists but ai-coding-config entry missing → suggest `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
+- ❌ File not found → marketplace never initialized; suggest
+  `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
+- ❌ File exists but ai-coding-config entry missing → suggest
+  `/plugin marketplace add https://github.com/TechNickAI/ai-coding-config`
 
 Check `~/.claude/plugins/cache/ai-coding-config/` for plugin content using Glob:
+
 - ✅ Cache directory exists with agents, commands, and skills subdirectories
 - ❌ Cache missing or empty → suggest `/plugin install ai-coding-config`
 
 Read `~/.claude/settings.json` and check for plugin enablement:
+
 - ✅ ai-coding-config appears in plugins/enabled list
 - ⚠️ Not listed → plugin may be disabled; run `/plugin` to check status
 
@@ -597,8 +601,8 @@ ls -la "$(pwd)/rules"
 
 ### Hook Scripts
 
-**Source repo:** Read `plugins/core/hooks/hooks.json` with the Read tool to get
-declared hooks. Use Glob to list `plugins/core/hooks/*.sh`, then check each file:
+**Source repo:** Read `plugins/core/hooks/hooks.json` with the Read tool to get declared
+hooks. Use Glob to list `plugins/core/hooks/*.sh`, then check each file:
 
 - ✅ File exists, executable (`-x`), and first line is `#!/bin/bash`
 - ⚠️ Exists but not executable → offer to auto-fix: `chmod +x <path>`
@@ -607,17 +611,21 @@ declared hooks. Use Glob to list `plugins/core/hooks/*.sh`, then check each file
 **User project:** Hook script files are managed by the plugin cache — skip the script
 file checks. Instead, verify hooks are registered in settings (see below).
 
-Check that hooks are registered in project or global settings. Read `.claude/settings.json`
-if it exists; otherwise fall back to `~/.claude/settings.json`:
+Check that hooks are registered in project or global settings. Read
+`.claude/settings.json` if it exists; otherwise fall back to `~/.claude/settings.json`:
 
 - ✅ Settings file parses as valid JSON and contains hook entries
-- ⚠️ Valid JSON but no hooks registered → hooks won't fire; suggest running `/ai-coding-config update`
+- ⚠️ Valid JSON but no hooks registered → hooks won't fire; suggest running
+  `/ai-coding-config update`
 - ❌ Invalid JSON → note the parse error
-- ℹ️ No local `.claude/settings.json` and global settings has no hooks → hooks rely on plugin marketplace loading
+- ℹ️ No local `.claude/settings.json` and global settings has no hooks → hooks rely on
+  plugin marketplace loading
 
 ### Marketplace JSON Consistency (source repo only)
 
-Read both `.claude-plugin/marketplace.json` and `plugins/core/.claude-plugin/plugin.json`:
+Read both `.claude-plugin/marketplace.json` and
+`plugins/core/.claude-plugin/plugin.json`:
+
 - ✅ Both parse as valid JSON
 - ✅ `metadata.version` == `plugins[0].version` == `plugin.json version`
 - ⚠️ Version mismatch → "Bump all three per `.claude-plugin/CLAUDE.md`"
@@ -628,11 +636,13 @@ Compare installed command version vs source repo version. Read the `version` fie
 the YAML frontmatter of:
 
 1. This command file (currently executing)
-2. `~/.ai_coding_config/plugins/core/commands/ai-coding-config.md` (source, if it exists)
+2. `~/.ai_coding_config/plugins/core/commands/ai-coding-config.md` (source, if it
+   exists)
 
 - ✅ Versions match
 - ⚠️ Source is newer → suggest `/ai-coding-config update`
-- ℹ️ Source repo not found at `~/.ai_coding_config` — normal for plugin-only users (no action needed)
+- ℹ️ Source repo not found at `~/.ai_coding_config` — normal for plugin-only users (no
+  action needed)
 
 ### Skill Frontmatter
 
@@ -641,13 +651,14 @@ uses flat `.md` files without subdirectories, so this check applies only in the 
 repo context).
 
 For each SKILL.md, read and verify:
+
 - ✅ File has `---` YAML frontmatter block
 - ✅ `name`, `description`, and `triggers` fields present
 - ⚠️ Missing `triggers` → skill won't auto-activate on natural language
 - If `next-skill` declared: check by directory name first (fast path — the directory
   name should match the skill name); if not found, fall back to scanning `name` fields
-  in each SKILL.md. Also check `.claude/commands/` for commands. ✅ target found,
-  ⚠️ target not found anywhere
+  in each SKILL.md. Also check `.claude/commands/` for commands. ✅ target found, ⚠️
+  target not found anywhere
 - If `stability: experimental` declared: ℹ️ note as informational (expected for new or
   actively-changing skills — not a problem, just surfaced for awareness)
 
@@ -664,8 +675,7 @@ only in source-repo context where the script files are present:
 If yes: `chmod +x plugins/core/hooks/<hook-name>.sh`
 
 For all other issues, report and direct to the appropriate fix command. Don't modify
-JSON files, settings, or symlinks without explicit user instruction.
-</auto-fix>
+JSON files, settings, or symlinks without explicit user instruction. </auto-fix>
 
 <output-format>
 Print category headers as the checks complete. Example final output:
@@ -705,7 +715,7 @@ Context: source repo (plugins/core/ detected)
 
 ---
 ## Summary
-1 failure ❌  2 warnings ⚠️  11 passed ✅
+1 failure ❌  1 warning ⚠️  11 passed ✅
 
 ## Suggested Fixes
 ❌ rules/ symlink missing:
@@ -718,8 +728,7 @@ Context: source repo (plugins/core/ detected)
 
 All-green output ends with: "All checks passed — your setup is healthy."
 
-Keep the summary tight. Users should be able to skim it in 10 seconds.
-</output-format>
+Keep the summary tight. Users should be able to skim it in 10 seconds. </output-format>
 
 </doctor-mode>
 
