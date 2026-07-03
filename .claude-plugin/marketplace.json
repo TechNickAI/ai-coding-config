@@ -16,7 +16,28 @@
       "source": "./plugins/core",
       "description": "Commands, agents, skills, and context for AI-assisted development workflows",
       "version": "9.22.0",
-      "tags": ["commands", "agents", "skills", "workflows", "essential"]
+      "tags": [
+        "commands",
+        "agents",
+        "skills",
+        "workflows",
+        "essential"
+      ]
+    },
+    {
+      "name": "hermes-tweet",
+      "source": "./plugins/hermes-tweet",
+      "description": "Hermes Agent X/Twitter plugin for research, profile and post reads, and gated write actions through Xquik.",
+      "version": "0.1.6",
+      "tags": [
+        "hermes-agent",
+        "hermes-plugin",
+        "xquik",
+        "twitter",
+        "x",
+        "social-media",
+        "automation"
+      ]
     }
   ]
 }

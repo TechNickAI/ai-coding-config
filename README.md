@@ -44,9 +44,14 @@ If you prefer to install manually, run these in Claude Code:
 
 ```
 /plugin install ai-coding-config
+/plugin install hermes-tweet
 ```
 
 ## Todo Persistence Across Compaction
+
+### Hermes Tweet Plugin
+
+Hermes Tweet adds X/Twitter research, profile reads, post reads, and gated action tools for Hermes Agent users. Exploratory catalog access works without a key; read tools require `XQUIK_API_KEY`, and action tools also require `HERMES_TWEET_ENABLE_ACTIONS=true`.
 
 **The problem**: Claude Code's context compaction summarizes conversation history to
 stay within token limits. When this happens, your todo list vanishes - you lose track of
