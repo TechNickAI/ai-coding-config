@@ -31,11 +31,12 @@
       "version": "0.1.6",
       "tags": [
         "hermes-agent",
-        "x",
-        "twitter",
+        "hermes-plugin",
         "xquik",
+        "twitter",
+        "x",
         "social-media",
-        "external-integration"
+        "automation"
       ]
     }
   ]
