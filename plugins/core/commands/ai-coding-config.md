@@ -2,7 +2,7 @@
 # prettier-ignore
 description: "Set up or update AI coding configurations - interactive setup for Claude Code, Cursor, and other AI coding tools"
 argument-hint: "[update|doctor]"
-version: 4.2.0
+version: 4.3.0
 ---
 
 # AI Coding Configuration
@@ -129,7 +129,8 @@ Before installing, detect what already exists:
 
 1. **Fresh project** (no existing configs)
    - Create `.cursor/rules/` and `.cursor/commands/` directories
-   - Create `AGENTS.md`, symlink `CLAUDE.md` → `AGENTS.md`
+   - Create `AGENTS.md` (Claude Code and Cursor both read it directly — no symlink
+     needed)
 
 2. **Existing rules, no AI coding config yet**
    - Has `.cursor/rules/` as real directory
@@ -628,7 +629,7 @@ Read both `.claude-plugin/marketplace.json` and
 
 - ✅ Both parse as valid JSON
 - ✅ `metadata.version` == `plugins[0].version` == `plugin.json version`
-- ⚠️ Version mismatch → "Bump all three per `.claude-plugin/CLAUDE.md`"
+- ⚠️ Version mismatch → "Bump all three per `.claude-plugin/AGENTS.md`"
 
 ### Version Drift
 

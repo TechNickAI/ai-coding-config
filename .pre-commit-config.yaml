@@ -57,4 +57,4 @@ repos:
             \.cursor/rules/.*\.mdc$
           )
         # Exclude documentation files without frontmatter
-        exclude: CLAUDE\.md$
+        exclude: (CLAUDE|AGENTS)\.md$

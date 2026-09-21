@@ -2,7 +2,7 @@
 # prettier-ignore
 description: "Generate or update AGENTS.md with project context for AI assistants - creates universal context for Claude Code, Cursor, Copilot"
 model: opus
-version: 0.2.1
+version: 0.3.0
 ---
 
 # Generate AGENTS.md
@@ -156,16 +156,6 @@ After generating content, review and optimize:
 
 Target conciseness over arbitrary size limits. </optimize-for-tokens>
 
-<create-symlink>
-Create a symlink from `CLAUDE.md` to `AGENTS.md`:
-
-```bash
-ln -sf AGENTS.md CLAUDE.md
-```
-
-This ensures both filenames work while maintaining a single source of truth without any
-token overhead. </create-symlink>
-
 <report>
 After creating the root AGENTS.md, STOP. Show the user what was created. Then use
 AskUserQuestion to ask if they want to review subdirectories. Do not proceed to
@@ -304,14 +294,6 @@ Don't create subdirectory AGENTS.md when:
 - `.cursor/` or `.claude/` already have AGENTS.md from ai-coding-config (these explain
   how to write rules/commands and reference prompt-engineering.mdc)
 
-## Symlinks
-
-Create `CLAUDE.md` symlink in each subdirectory too:
-
-```bash
-cd path/to/subdir && ln -sf AGENTS.md CLAUDE.md
-```
-
 </subdirectory-agents>
 
 <final-checklist>
@@ -320,6 +302,5 @@ cd path/to/subdir && ln -sf AGENTS.md CLAUDE.md
 - No generic descriptions or README-style content
 - @ references to rules rather than duplicating content
 - Each item passes: "Would AI make a mistake without this?"
-- Created CLAUDE.md symlink
 - Offered subdirectory review
 </final-checklist>
